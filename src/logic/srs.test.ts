@@ -23,13 +23,22 @@ describe('review (Leitner boxes)', () => {
     m = review(m, true, m.due)
     expect(m.box).toBe(3)
   })
-  it('sends a missed word back to box 1 and makes it due now', () => {
+  it('sends a missed word back to box 0 and makes it due now', () => {
     let m = review(undefined, true, T0)
     m = review(m, true, m.due)
     m = review(m, false, T0 + 5 * DAY)
-    expect(m.box).toBe(1)
+    expect(m.box).toBe(0)
     expect(m.due).toBe(T0 + 5 * DAY)
     expect(m.wrong).toBe(1)
+  })
+  it('never schedules a missed word later than a word that was always right', () => {
+    const missed = review(review(undefined, false, T0), true, T0 + 1000)
+    const known = review(undefined, true, T0 + 1000)
+    expect(missed.due).toBeLessThanOrEqual(known.due)
+  })
+  it('does not count a just-missed word as learned', () => {
+    const m = review(review(undefined, true, T0), false, T0 + DAY)
+    expect(countLearned({ m })).toBe(0)
   })
   it('never goes above the top box', () => {
     let m = newMemory(T0)
@@ -44,9 +53,10 @@ describe('practice selection', () => {
     weakDue: { box: 1, due: T0 - 1, correct: 1, wrong: 3, lastSeen: T0 },
     okDue: { box: 2, due: T0 - 1, correct: 3, wrong: 1, lastSeen: T0 },
     notDue: { box: 1, due: T0 + DAY, correct: 1, wrong: 0, lastSeen: T0 },
+    justMissed: { box: 0, due: T0 + 10, correct: 2, wrong: 1, lastSeen: T0 },
   }
   it('picks due words first, weakest first', () => {
-    expect(pickPracticeWords(memory, T0, 3)).toEqual(['weakDue', 'okDue', 'notDue'])
+    expect(pickPracticeWords(memory, T0, 3)).toEqual(['weakDue', 'okDue', 'justMissed'])
   })
   it('counts due and learned words', () => {
     expect(countDue(memory, T0)).toBe(2)

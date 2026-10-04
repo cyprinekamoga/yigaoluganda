@@ -3,7 +3,8 @@
  * Box 0 = brand new or just missed, box 5 = well known.
  * A correct answer moves a word up one box, but only when the word was due, so answering the
  * same word five times in one lesson doesn't count as five days of practice.
- * A wrong answer sends it back to box 1 and makes it due straight away.
+ * A wrong answer sends it back to box 0 and makes it due straight away, so it is reviewed
+ * like a new word (never scheduled later than a word the child always gets right).
  */
 
 export interface WordMemory {
@@ -29,7 +30,7 @@ export function newMemory(now: number): WordMemory {
 export function review(memory: WordMemory | undefined, correct: boolean, now: number): WordMemory {
   const m = memory ?? newMemory(now)
   if (correct && m.due > now) return { ...m, correct: m.correct + 1, lastSeen: now }
-  const box = correct ? Math.min(m.box + 1, MAX_BOX) : 1
+  const box = correct ? Math.min(m.box + 1, MAX_BOX) : 0
   // A missed word is due again straight away (it should come back in the next practice).
   const due = correct ? now + BOX_INTERVAL_DAYS[box] * DAY : now
   return {
@@ -65,7 +66,7 @@ export function countDue(memory: MemoryMap, now: number): number {
   return Object.values(memory).filter((m) => m.due <= now).length
 }
 
-/** Words the child has answered right at least once since they last missed them. */
+/** Words the child has answered right since they last missed them (box 1 or higher). */
 export function countLearned(memory: MemoryMap): number {
-  return Object.values(memory).filter((m) => m.box >= 1 && m.correct > 0).length
+  return Object.values(memory).filter((m) => m.box >= 1).length
 }

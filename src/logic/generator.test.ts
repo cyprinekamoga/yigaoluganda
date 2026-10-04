@@ -85,4 +85,12 @@ describe('session', () => {
     expect(s.mistakes).toBe(1)
     expect(current(s)).toBeUndefined()
   })
+  it('does not repeat an exercise more than once, even if the retry is missed too', () => {
+    const ex = generateLesson('u01-l1', { lang: 'sv', seed: 2 })
+    let s = startSession(ex.slice(0, 1))
+    s = next(answer(s, false))
+    s = next(answer(s, false))
+    expect(isFinished(s)).toBe(true)
+    expect(s.mistakes).toBe(2)
+  })
 })

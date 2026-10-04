@@ -70,7 +70,7 @@ A single Luganda word can be a whole English sentence: *Ndya* = "I eat", *Tulye!
 ### 2.2 Spaced repetition
 - The spacing effect (Ebbinghaus; many later replications) shows that reviewing material at increasing intervals beats massed practice.
 - Duolingo's published model is half-life regression (Settles & Meeder, ACL 2016). It estimates each word's memory "half-life" from a learner's history.
-- For an MVP with no server, a **Leitner box system** is simpler, transparent and good enough. Each word sits in box 0–5. A correct answer moves it up one box; a wrong answer moves it back to box 1. Review intervals are 0, 1, 2, 4, 8 and 16 days. "Practice" picks words that are due, weakest first.
+- For an MVP with no server, a **Leitner box system** is simpler, transparent and good enough. Each word sits in box 0–5. A correct answer moves it up one box (only when it was due, so many repeats in one lesson count as one review); a wrong answer moves it back to box 0 and makes it due straight away. Review intervals are 0, 1, 2, 4, 8 and 16 days. "Practice" picks words that are due, weakest first.
 
 ### 2.3 Gamification that motivates without dark patterns
 Kids are more vulnerable to manipulative design. Guidance such as the UK ICO's *Age Appropriate Design Code* (a UK code, but a useful benchmark for EU products) warns against "nudge techniques" that push children to stay longer. Our choices:

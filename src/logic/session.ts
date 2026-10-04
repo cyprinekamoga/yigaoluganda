@@ -31,12 +31,14 @@ export function answer(s: Session, correct: boolean): Session {
   const ex = current(s)
   if (!ex) return s
   if (correct) return { ...s, correct: s.correct + 1 }
-  const canRetry = !s.retried.includes(ex.id)
+  // Retries carry an "-again" suffix; only the original may be queued again, and only once.
+  const baseId = ex.id.replace(/-again$/, '')
+  const canRetry = !s.retried.includes(baseId)
   return {
     ...s,
     mistakes: s.mistakes + 1,
-    queue: canRetry ? [...s.queue, { ...ex, id: `${ex.id}-again` }] : s.queue,
-    retried: canRetry ? [...s.retried, ex.id] : s.retried,
+    queue: canRetry ? [...s.queue, { ...ex, id: `${baseId}-again` }] : s.queue,
+    retried: canRetry ? [...s.retried, baseId] : s.retried,
   }
 }
 
