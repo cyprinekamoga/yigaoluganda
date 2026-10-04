@@ -30,6 +30,7 @@ npm run test:e2e   # end-to-end-tester i webbläsare (Playwright), mobil + dator
 npm run build      # bygger en färdig version i mappen dist/
 npm run preview    # visar den byggda versionen
 npm run content    # kontrollerar innehållsfilerna och skapar AUDIO_TODO.md
+npm run preview:file  # bygger hela appen som EN html-fil (dist-artifact/) att dela som förhandsvisning
 ```
 
 ### Lägga till ord, lektioner och ljud (utan att programmera)
@@ -114,6 +115,7 @@ npm run test:e2e   # browser end-to-end tests (Playwright), mobile + desktop
 npm run build      # production build into dist/
 npm run preview    # serve the production build
 npm run content    # check the content files and regenerate AUDIO_TODO.md
+npm run preview:file  # build the whole app as ONE html file (dist-artifact/) for sharing a preview
 ```
 
 ### Adding words, lessons and audio (no programming needed)

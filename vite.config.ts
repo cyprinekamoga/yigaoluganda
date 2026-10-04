@@ -3,14 +3,21 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath } from 'node:url'
 
-export default defineConfig({
+// `vite build --mode artifact` makes a single-file preview (see scripts/build-artifact.mjs):
+// no service worker, and every font/image inlined.
+export default defineConfig(({ mode }) => ({
   // Relative base so the build works from any folder or static host.
   base: './',
+  ...(mode === 'artifact' && {
+    resolve: { alias: { 'virtual:pwa-register': fileURLToPath(new URL('./src/pwa-stub.ts', import.meta.url)) } },
+    build: { outDir: 'dist-artifact', assetsInlineLimit: 100_000_000, cssCodeSplit: false },
+  }),
   plugins: [
     react(),
     tailwindcss(),
-    VitePWA({
+    mode !== 'artifact' && VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'audio/*.mp3'],
       manifest: {
@@ -40,4 +47,4 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
   },
-})
+}))

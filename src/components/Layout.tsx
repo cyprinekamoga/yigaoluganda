@@ -16,7 +16,7 @@ export function Layout({ children, title }: { children: ReactNode; title?: strin
   const { t } = useApp()
   return (
     <div className="min-h-dvh pb-28">
-      <header className="sticky top-0 z-30 border-b-2 border-line bg-mist/95 backdrop-blur">
+      <header className="sticky top-[env(safe-area-inset-top,0px)] z-30 border-b-2 border-line bg-mist/95 backdrop-blur">
         <div className="mx-auto flex max-w-xl items-center justify-between gap-2 px-4 py-2">
           <span className="font-display text-xl font-bold text-lake">{title ?? t('app.name')}</span>
           <StatChips />

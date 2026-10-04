@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { HashRouter, MemoryRouter, Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AppStateProvider, useApp } from './state/AppState'
 import { BadgesScreen } from './screens/BadgesScreen'
@@ -44,13 +44,16 @@ function AppRoutes() {
   )
 }
 
+// Hash routing works on any static host without server rewrites. The single-file preview
+// (artifact build) keeps navigation in memory, because its viewer controls the address.
+const Router = import.meta.env.MODE === 'artifact' ? MemoryRouter : HashRouter
+
 export default function App() {
   return (
     <AppStateProvider>
-      {/* Hash routing works on any static host without server rewrites. */}
-      <HashRouter>
+      <Router>
         <AppRoutes />
-      </HashRouter>
+      </Router>
     </AppStateProvider>
   )
 }
