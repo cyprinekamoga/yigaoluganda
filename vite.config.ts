@@ -1,0 +1,43 @@
+/// <reference types="vitest/config" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { VitePWA } from 'vite-plugin-pwa'
+
+export default defineConfig({
+  // Relative base so the build works from any folder or static host.
+  base: './',
+  plugins: [
+    react(),
+    tailwindcss(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['icon.svg', 'audio/*.mp3'],
+      manifest: {
+        name: 'Yiga Oluganda',
+        short_name: 'Yiga',
+        description: 'Learn Luganda with Ngaali the crane',
+        lang: 'sv',
+        start_url: './',
+        scope: './',
+        display: 'standalone',
+        background_color: '#EEF5FB',
+        theme_color: '#0B5CAD',
+        icons: [
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,mp3}'],
+        navigateFallback: 'index.html',
+      },
+    }),
+  ],
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
+  },
+})

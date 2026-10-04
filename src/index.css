@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* Yiga Oluganda palette: Ugandan flag (black, yellow, red) + Swedish/lake blue + leaf green. */
+@theme {
+  --color-sun: #ffc72c;
+  --color-sun-soft: #fff3cc;
+  --color-ink: #1e1b18;
+  --color-ink-soft: #4a4540;
+  --color-crane: #c8102e;
+  --color-crane-soft: #fde4e8;
+  --color-lake: #0b5cad;
+  --color-lake-dark: #08457f;
+  --color-lake-soft: #dcebfa;
+  --color-leaf: #1e7b34;
+  --color-leaf-dark: #155c26;
+  --color-leaf-soft: #ddf3e2;
+  --color-mist: #eef5fb;
+  --color-cloud: #ffffff;
+  --color-line: #cfdbe7;
+  --color-stone: #5d6977;
+
+  --font-display: "Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, system-ui, sans-serif;
+
+  --animate-bob: bob 2.6s ease-in-out infinite;
+  --animate-pop: pop 0.35s ease-out;
+  --animate-wiggle: wiggle 0.45s ease-in-out;
+  --animate-rise: rise 0.3s ease-out;
+  --animate-flap: flap 0.5s ease-in-out 2;
+}
+
+@keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-5px) } }
+@keyframes pop { 0% { transform: scale(0.85) } 60% { transform: scale(1.06) } 100% { transform: scale(1) } }
+@keyframes wiggle { 0%, 100% { transform: translateX(0) } 25% { transform: translateX(-4px) } 75% { transform: translateX(4px) } }
+@keyframes rise { from { transform: translateY(100%) } to { transform: translateY(0) } }
+@keyframes flap { 0%, 100% { transform: rotate(0deg) } 50% { transform: rotate(-22deg) } }
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1 }
+  100% { transform: translateY(110vh) rotate(540deg); opacity: 0.8 }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 4px solid var(--color-lake);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* Luganda text gets a slightly heavier weight so it stands out from the translation. */
+[lang="lg"] {
+  font-weight: 700;
+}
+
+/* 3D-ish "press" buttons: a solid bottom edge that collapses when pressed. */
+.btn-3d {
+  box-shadow: 0 5px 0 var(--edge, rgba(0, 0, 0, 0.18));
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--edge, rgba(0, 0, 0, 0.18));
+}
+
+.confetti {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  border-radius: 3px;
+  animation: confetti-fall 1.8s ease-in forwards;
+  pointer-events: none;
+  z-index: 60;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .confetti { display: none; }
+}

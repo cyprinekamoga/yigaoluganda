@@ -1,0 +1,371 @@
+[
+  {
+    "id": "u01",
+    "emoji": "🧳",
+    "pages": "5–8",
+    "lgTitle": "Okwetegekera olugendo",
+    "title": { "en": "Packing for the trip", "sv": "Att packa för resan" },
+    "story": "ch01",
+    "lessons": [
+      { "id": "u01-l1", "title": { "en": "In my bag", "sv": "I min väska" }, "words": ["ensawo", "engoye", "paasipooti", "tikiti", "ssente"] },
+      { "id": "u01-l2", "title": { "en": "My room", "sv": "Mitt rum" }, "words": ["maapu", "ekitabo", "ennyonyi", "eddirisa", "ekitanda", "emeeza"] },
+      { "id": "u01-l3", "title": { "en": "Travel things", "sv": "Resesaker" }, "words": ["ensawo-y-okumugongo", "galubindi", "waleti", "kyaja"] },
+      {
+        "id": "u01-l4", "title": { "en": "Pack it!", "sv": "Packa!" }, "words": ["kkamera", "essanduuko", "ttawulo", "eggaali-y-omukka"],
+        "questions": [
+          { "image": "🧳", "page": 8, "prompt": { "en": "Which word is right?", "sv": "Vilket ord är rätt?" }, "options": [{ "lg": "essanduuko" }, { "lg": "bbaasi" }, { "lg": "entebe" }] },
+          { "image": "🗺️", "page": 8, "prompt": { "en": "Which word is right?", "sv": "Vilket ord är rätt?" }, "options": [{ "lg": "maapu" }, { "lg": "kasasiro" }, { "lg": "ekkalaamu" }] }
+        ]
+      },
+      { "id": "u01-l5", "title": { "en": "Introduce yourself", "sv": "Presentera dig själv" }, "words": ["gyebale-ko", "erinnya", "erinnya-lyange", "emyaka", "njagala", "ssaagala", "nva", "njogera", "nsoma"] }
+    ]
+  },
+  {
+    "id": "u02",
+    "emoji": "✈️",
+    "pages": "9–11",
+    "lgTitle": "Okubuuka okugenda e Uganda",
+    "title": { "en": "The flight to Uganda", "sv": "Flyget till Uganda" },
+    "story": "ch02",
+    "lessons": [
+      { "id": "u02-l1", "title": { "en": "Lunch on the plane", "sv": "Lunch på planet" }, "words": ["ekifo", "omugaati", "ekibala", "amazzi", "ekikopo"] },
+      { "id": "u02-l2", "title": { "en": "Landing", "sv": "Landning" }, "words": ["ejiko", "wuuma", "olutimbe", "amadaala", "ennyanja-nalubaale"] },
+      { "id": "u02-l3", "title": { "en": "Welcome, Alex!", "sv": "Välkommen, Alex!" }, "words": ["tukusanyukidde", "weebale", "ssenga", "kojja", "oli-otya", "gyendi-bulungi", "mwana-wange", "yee"] },
+      {
+        "id": "u02-l4", "title": { "en": "How was the trip?", "sv": "Hur var resan?" }, "words": ["tugende-ewaka", "olugendo-lwali-lutya", "lwali-lulungi-nnyo", "okooye", "siikooye-nnyo"],
+        "questions": [
+          { "page": 11, "prompt": { "en": "They ask “Oli otya?”. What does Alex answer?", "sv": "De frågar ”Oli otya?”. Vad svarar Alex?" }, "options": [{ "lg": "Gyendi bulungi." }, { "lg": "Siikooye nnyo." }, { "lg": "Tugende ewaka." }] },
+          { "page": 11, "prompt": { "en": "They ask “Olugendo lwali lutya?”. What does Alex answer?", "sv": "De frågar ”Olugendo lwali lutya?”. Vad svarar Alex?" }, "options": [{ "lg": "Lwali lulungi nnyo." }, { "lg": "Gyendi bulungi." }, { "lg": "Yee, enjala enuma." }] },
+          { "page": 11, "prompt": { "en": "They ask “Okooye?”. What does Alex answer?", "sv": "De frågar ”Okooye?”. Vad svarar Alex?" }, "options": [{ "lg": "Siikooye nnyo." }, { "lg": "Lwali lulungi nnyo." }, { "lg": "Tukusanyukidde!" }] }
+        ]
+      },
+      {
+        "id": "u02-l5", "title": { "en": "Hungry and thirsty", "sv": "Hungrig och törstig" }, "words": ["enjala-ekuluma", "yee-enjala-enuma", "oyagala-okunywa-amazzi", "yee-neyanziza-nnyo"],
+        "questions": [
+          { "page": 11, "prompt": { "en": "They ask “Enjala ekuluma?”. What does Alex answer?", "sv": "De frågar ”Enjala ekuluma?”. Vad svarar Alex?" }, "options": [{ "lg": "Yee, enjala enuma." }, { "lg": "Siikooye nnyo." }, { "lg": "Gyendi bulungi." }] },
+          { "page": 11, "prompt": { "en": "They ask “Oyagala okunywa amazzi?”. What does Alex answer?", "sv": "De frågar ”Oyagala okunywa amazzi?”. Vad svarar Alex?" }, "options": [{ "lg": "Yee, neyanziza nnyo." }, { "lg": "Lwali lulungi nnyo." }, { "lg": "Tugende ewaka." }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u03",
+    "emoji": "🏍️",
+    "pages": "12–14",
+    "lgTitle": "Oluguudo lw'e Kampala",
+    "title": { "en": "The road to Kampala", "sv": "Vägen till Kampala" },
+    "story": "ch03",
+    "lessons": [
+      { "id": "u03-l1", "title": { "en": "On the road", "sv": "På vägen" }, "words": ["emmotoka", "oluguudo", "bodaboda", "omuti", "omusana"] },
+      { "id": "u03-l2", "title": { "en": "In the city", "sv": "I staden" }, "words": ["akatale", "ekkubo", "akasozi", "ebitaala", "omugoba", "eggaali"] },
+      {
+        "id": "u03-l3", "title": { "en": "Buckle up!", "sv": "Spänn fast dig!" }, "words": ["ekisumuluzo", "olukooba", "ettaka"],
+        "fillIns": [
+          { "page": 14, "text": { "en": "A motorcycle taxi in Kampala is a ___.", "sv": "En motorcykeltaxi i Kampala är en ___." }, "answer": "bodaboda", "options": ["bodaboda", "ekkubo", "eggaali", "akasozi"] },
+          { "page": 14, "text": { "en": "People walk on the ___ next to the road.", "sv": "Människor går på ___ bredvid vägen." }, "answer": "ekkubo", "options": ["ekkubo", "bodaboda", "eggaali", "omuti"] },
+          { "page": 14, "text": { "en": "You ride a ___ with two wheels and pedals.", "sv": "Man cyklar på en ___ med två hjul och pedaler." }, "answer": "eggaali", "options": ["eggaali", "emmotoka", "ekkubo", "bodaboda"] }
+        ],
+        "questions": [
+          { "page": 14, "prompt": { "en": "Kampala is built on many …", "sv": "Kampala är byggt på många …" }, "options": [{ "lg": "Akasozi" }, { "lg": "Amazzi" }, { "lg": "Ennyonyi" }] },
+          { "page": 14, "prompt": { "en": "Which word means “traffic lights”?", "sv": "Vilket ord betyder ”trafikljus”?" }, "options": [{ "lg": "Ebitaala" }, { "lg": "Ekikopo" }, { "lg": "Omukeeka" }] },
+          { "page": 14, "prompt": { "en": "Who drives the car?", "sv": "Vem kör bilen?" }, "options": [{ "lg": "Omugoba" }, { "lg": "Omwana" }, { "lg": "Omuti" }] },
+          { "page": 14, "prompt": { "en": "Where do you buy fruit by the road?", "sv": "Var köper man frukt vid vägen?" }, "options": [{ "lg": "Akatale" }, { "lg": "Eddirisa" }, { "lg": "Enku" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u04",
+    "emoji": "🔢",
+    "pages": "15",
+    "lgTitle": "Namba",
+    "title": { "en": "Numbers 0–10", "sv": "Siffror 0–10" },
+    "lessons": [
+      { "id": "u04-l1", "title": { "en": "One to five", "sv": "Ett till fem" }, "words": ["emu", "bbiri", "ssatu", "nnya", "ttaano"] },
+      { "id": "u04-l2", "title": { "en": "Six to ten", "sv": "Sex till tio" }, "words": ["mukaaga", "musanvu", "munaana", "mwenda", "kkumi", "zeero"] }
+    ]
+  },
+  {
+    "id": "u05",
+    "emoji": "👵🏾",
+    "pages": "16–18",
+    "lgTitle": "Ewa Jjaja",
+    "title": { "en": "Visiting Jjaja", "sv": "Hos Jjaja" },
+    "story": "ch04",
+    "culture": {
+      "en": "In many Baganda families, children kneel on a mat to greet elders as a sign of respect (empisa). Families do this in different ways.",
+      "sv": "I många familjer i Buganda knäböjer barn på en matta när de hälsar på äldre, som ett tecken på respekt (empisa). Familjer gör olika."
+    },
+    "lessons": [
+      { "id": "u05-l1", "title": { "en": "Jjaja's house", "sv": "Jjajas hus" }, "words": ["jjaja", "ennyumba", "oluggi", "ekimuli", "omukeeka"] },
+      { "id": "u05-l2", "title": { "en": "Greeting with respect", "sv": "Hälsa med respekt" }, "words": ["osiibye-otya", "nsiibye-bulungi", "ssebo", "nnyabo", "omwana"] },
+      {
+        "id": "u05-l3", "title": { "en": "Home at last", "sv": "Äntligen hemma" }, "words": ["empisa", "amaka", "olujja"],
+        "fillIns": [
+          { "page": 18, "text": { "en": "Good manners are called ___.", "sv": "Gott uppförande kallas ___." }, "answer": "empisa", "options": ["empisa", "omwana", "ssebo", "nnyabo", "amaka"] },
+          { "page": 18, "text": { "en": "Alex is a ten-year-old ___.", "sv": "Alex är ett tioårigt ___." }, "answer": "omwana", "options": ["omwana", "empisa", "ssebo", "amaka"] },
+          { "page": 18, "text": { "en": "You say ___ when you speak politely to a woman.", "sv": "Man säger ___ när man talar artigt till en kvinna." }, "answer": "nnyabo", "options": ["nnyabo", "ssebo", "omwana", "empisa"] },
+          { "page": 18, "text": { "en": "You say ___ when you speak politely to a man.", "sv": "Man säger ___ när man talar artigt till en man." }, "answer": "ssebo", "options": ["ssebo", "nnyabo", "omwana", "amaka"] },
+          { "page": 18, "text": { "en": "The family's home is called ___.", "sv": "Familjens hem kallas ___." }, "answer": "amaka", "options": ["amaka", "empisa", "ssebo", "omwana"] }
+        ],
+        "questions": [
+          { "page": 18, "prompt": { "en": "How does Alex greet Jjaja?", "sv": "Hur hälsar Alex på Jjaja?" }, "options": [{ "lg": "Osiibye otya?" }, { "lg": "Emmotoka" }, { "lg": "Enku" }] },
+          { "page": 18, "prompt": { "en": "Jjaja answers …", "sv": "Jjaja svarar …" }, "options": [{ "lg": "Nsiibye bulungi" }, { "lg": "Ssente" }, { "lg": "Akambe" }] },
+          { "page": 18, "prompt": { "en": "Alex kneels on the …", "sv": "Alex knäböjer på …" }, "options": [{ "lg": "Omukeeka" }, { "lg": "Eddirisa" }, { "lg": "Eggaali" }] },
+          { "page": 18, "prompt": { "en": "“Ekimuli” means …", "sv": "”Ekimuli” betyder …" }, "options": [{ "en": "Flower", "sv": "Blomma" }, { "en": "Fire", "sv": "Eld" }, { "en": "Fork", "sv": "Gaffel" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u06",
+    "emoji": "🍌",
+    "pages": "20–22",
+    "lgTitle": "Emmere mu Lusuku",
+    "title": { "en": "Lunch in the garden", "sv": "Lunch i köksträdgården" },
+    "story": "ch05",
+    "lessons": [
+      { "id": "u06-l1", "title": { "en": "Cooking matooke", "sv": "Laga matooke" }, "words": ["amatooke", "akambe", "endagala", "sseffuliya", "enku"] },
+      {
+        "id": "u06-l2", "title": { "en": "Kiwooma!", "sv": "Kiwooma!" }, "words": ["omuliro", "omukka", "ebinyeebwa", "ejjinja", "kiwooma"],
+        "fillIns": [
+          { "page": 22, "text": { "en": "Jjaja and Alex go into the banana garden and pick ___.", "sv": "Jjaja och Alex går in i bananträdgården och plockar ___." }, "answer": "endagala", "options": ["endagala", "enku", "omukka", "kiwooma"] },
+          { "page": 22, "text": { "en": "Uncle Musisi lights dry ___ under the pot.", "sv": "Morbror Musisi tänder torr ___ under grytan." }, "answer": "enku", "options": ["enku", "omukka", "ebinyeebwa", "kiwooma"] },
+          { "page": 22, "text": { "en": "When you light a fire, up comes ___.", "sv": "När man tänder eld kommer det upp ___." }, "answer": "omukka", "options": ["omukka", "enku", "endagala", "ebinyeebwa"] },
+          { "page": 22, "text": { "en": "Jjaja mixes groundnuts into ___.", "sv": "Jjaja mixar jordnötter till ___." }, "answer": "ebinyeebwa", "options": ["ebinyeebwa", "enku", "omukka", "kiwooma"] },
+          { "page": 22, "text": { "en": "After the first bite, Alex says ___", "sv": "Efter första tuggan säger Alex ___" }, "answer": "kiwooma", "options": ["kiwooma", "enku", "omukka", "ebinyeebwa"] }
+        ],
+        "questions": [
+          { "page": 22, "prompt": { "en": "What does Jjaja cut down in the garden?", "sv": "Vad skär Jjaja ner i trädgården?" }, "options": [{ "lg": "Matooke" }, { "lg": "Emmotoka" }, { "lg": "Omukeeka" }] },
+          { "page": 22, "prompt": { "en": "The bananas are wrapped in …", "sv": "Bananerna slås in i …" }, "options": [{ "lg": "Endagala" }, { "lg": "Ettaka" }, { "lg": "Amazzi" }] },
+          { "page": 22, "prompt": { "en": "The pot stands on three …", "sv": "Grytan står på tre …" }, "options": [{ "lg": "Amayinja" }, { "lg": "Amazzi" }, { "lg": "Ennyonyi" }] },
+          { "page": 22, "prompt": { "en": "“Ebinyeebwa” is …", "sv": "”Ebinyeebwa” är …" }, "options": [{ "en": "Groundnut sauce", "sv": "Jordnötssås" }, { "en": "Firewood", "sv": "Ved" }, { "en": "A door", "sv": "En dörr" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u07",
+    "emoji": "⏰",
+    "pages": "23",
+    "lgTitle": "Essaawa",
+    "title": { "en": "Telling the time", "sv": "Klockan" },
+    "culture": {
+      "en": "Luganda counts the hours from sunrise! Ssaawa emu (hour one) is 7 o'clock in the morning. Add 6 to the Luganda number to get the clock time.",
+      "sv": "På luganda räknar man timmarna från soluppgången! Ssaawa emu (timme ett) är klockan sju på morgonen. Lägg till 6 till lugandatalet så får du klockslaget."
+    },
+    "lessons": [
+      { "id": "u07-l1", "title": { "en": "Morning hours", "sv": "Morgontimmar" }, "words": ["ssaawa-mmeka", "ssaawa-emu", "ssaawa-bbiri", "ssaawa-ssatu", "ssaawa-nnya"] },
+      { "id": "u07-l2", "title": { "en": "Afternoon hours", "sv": "Eftermiddagstimmar" }, "words": ["ssaawa-mukaaga", "ssaawa-munaana", "ssaawa-mwenda", "ssaawa-kkumi-n-emu", "ssaawa-kkumi-na-bbiri"] }
+    ]
+  },
+  {
+    "id": "u08",
+    "emoji": "🐄",
+    "pages": "24",
+        "title": { "en": "Farm animals", "sv": "Djuren på gården" },
+    "lessons": [
+      { "id": "u08-l1", "title": { "en": "On the farm", "sv": "På gården" }, "words": ["ente", "enkoko", "embuzi", "embizi", "endiga", "embaata"] },
+      { "id": "u08-l2", "title": { "en": "More animals", "sv": "Fler djur" }, "words": ["embalaasi", "akaana-k-enkoko", "akamyu", "endogoyi", "sseggwanga"] }
+    ]
+  },
+  {
+    "id": "u09",
+    "emoji": "👑",
+    "pages": "25–27",
+    "lgTitle": "Olubiri lw'e Mmengo",
+    "title": { "en": "The king's palace", "sv": "Kungapalatset" },
+    "story": "ch06",
+    "lessons": [
+      { "id": "u09-l1", "title": { "en": "At the palace", "sv": "Vid palatset" }, "words": ["olubiri", "kabaka", "engoma", "engabo", "effumu", "wankaaki"] },
+      {
+        "id": "u09-l2", "title": { "en": "The royal drums", "sv": "De kungliga trummorna" }, "words": ["geeti", "namulondo", "mujaguzo", "bendera", "omukulembeze", "ekitiibwa"],
+        "fillIns": [
+          { "page": 27, "text": { "en": "The Kabaka's royal throne is called ___.", "sv": "Kabakas kungliga tron kallas ___." }, "answer": "namulondo", "options": ["namulondo", "ekitiibwa", "bendera", "olubiri"] },
+          { "page": 27, "text": { "en": "The king's home is called ___.", "sv": "Kungens hem kallas ___." }, "answer": "olubiri", "options": ["olubiri", "namulondo", "bendera", "omukulembeze"] },
+          { "page": 27, "text": { "en": "A cloth that waves on a pole is a ___.", "sv": "Ett tyg som vajar på en stång är en ___." }, "answer": "bendera", "options": ["bendera", "ekitiibwa", "olubiri", "namulondo"] },
+          { "page": 27, "text": { "en": "A person who leads others is a ___.", "sv": "En person som leder andra är en ___." }, "answer": "omukulembeze", "options": ["omukulembeze", "bendera", "namulondo", "ekitiibwa"] },
+          { "page": 27, "text": { "en": "Honour and glory in Luganda is ___.", "sv": "Ära och glans på luganda är ___." }, "answer": "ekitiibwa", "options": ["ekitiibwa", "omukulembeze", "olubiri", "bendera"] }
+        ],
+        "questions": [
+          { "page": 27, "prompt": { "en": "Which hill is the palace on?", "sv": "Vilken kulle står palatset på?" }, "options": [{ "lg": "Mengo" }, { "lg": "Nakasero" }, { "lg": "Entebbe" }] },
+          { "page": 27, "prompt": { "en": "The royal fire burns …", "sv": "Den kungliga elden brinner …" }, "options": [{ "en": "Day and night", "sv": "Dag och natt" }, { "en": "Only on Sundays", "sv": "Bara på söndagar" }, { "en": "Once a year", "sv": "En gång om året" }] },
+          { "page": 27, "prompt": { "en": "The big royal drums are called …", "sv": "De stora kungliga trummorna kallas …" }, "options": [{ "lg": "Mujaguzo" }, { "lg": "Minzaani" }, { "lg": "Namulondo" }] },
+          { "page": 27, "prompt": { "en": "The drummers used the drums to …", "sv": "Trummisarna använde trummorna för att …" }, "options": [{ "en": "Send messages", "sv": "Skicka meddelanden" }, { "en": "Cook food", "sv": "Laga mat" }, { "en": "Open the gate", "sv": "Öppna grinden" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u10",
+    "emoji": "📅",
+    "pages": "28",
+    "lgTitle": "Emyezi gy'omwaka",
+    "title": { "en": "Months of the year", "sv": "Årets månader" },
+    "lessons": [
+      { "id": "u10-l1", "title": { "en": "January to June", "sv": "Januari till juni" }, "words": ["gatonnya", "mukutulansanja", "mugulansigo", "kafuumulampawu", "muzigo", "ssebaaseka"] },
+      {
+        "id": "u10-l2", "title": { "en": "July to December", "sv": "Juli till december" }, "words": ["kasambula", "muwakanya", "mutunda", "mukulukusabitungotungo", "museenene", "ntenvu"],
+        "questions": [
+          { "page": 28, "prompt": { "en": "Which month comes after January?", "sv": "Vilken månad kommer efter januari?" }, "options": [{ "lg": "Mukutulansanja" }, { "lg": "Muzigo" }, { "lg": "Ssebaaseka" }] },
+          { "page": 28, "prompt": { "en": "Which month comes after May?", "sv": "Vilken månad kommer efter maj?" }, "options": [{ "lg": "Ssebaaseka" }, { "lg": "Museenene" }, { "lg": "Ntenvu" }] },
+          { "page": 28, "prompt": { "en": "Which month comes before September?", "sv": "Vilken månad kommer före september?" }, "options": [{ "lg": "Muwakanya" }, { "lg": "Ntenvu" }, { "lg": "Mukulukusabitungotungo" }] },
+          { "page": 28, "prompt": { "en": "Which is the last month of the year?", "sv": "Vilken är årets sista månad?" }, "options": [{ "lg": "Ntenvu" }, { "lg": "Museenene" }, { "lg": "Kafuumulampawu" }] },
+          { "page": 28, "prompt": { "en": "Which month comes after October?", "sv": "Vilken månad kommer efter oktober?" }, "options": [{ "lg": "Museenene" }, { "lg": "Ntenvu" }, { "lg": "Gatonnya" }] },
+          { "page": 28, "prompt": { "en": "Which is the first month of the year?", "sv": "Vilken är årets första månad?" }, "options": [{ "lg": "Gatonnya" }, { "lg": "Muzigo" }, { "lg": "Museenene" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u11",
+    "emoji": "🥭",
+    "pages": "29–31",
+    "lgTitle": "Mu Katale k'e Nakasero",
+    "title": { "en": "At Nakasero market", "sv": "På Nakasero-marknaden" },
+    "story": "ch07",
+    "lessons": [
+      { "id": "u11-l1", "title": { "en": "Fruit stalls", "sv": "Fruktstånd" }, "words": ["omuyembe", "enanansi", "minzaani", "ekisero", "akatale", "ssente"] },
+      {
+        "id": "u11-l2", "title": { "en": "How much?", "sv": "Hur mycket?" }, "words": ["mmeka-zino", "ssebo-mmeka-zino", "za-lukumi", "kendezaako-ko", "weebale-nnyo", "weebale-nnyo-ssebo"],
+        "fillIns": [
+          { "page": 31, "text": { "en": "To ask the price you say ___", "sv": "För att fråga om priset säger man ___" }, "answer": "mmeka-zino", "options": ["mmeka-zino", "kendezaako-ko", "ssente", "akatale"] },
+          { "page": 31, "text": { "en": "To ask for a lower price you say ___", "sv": "För att be om ett lägre pris säger man ___" }, "answer": "kendezaako-ko", "options": ["kendezaako-ko", "mmeka-zino", "ssebo", "ssente"] },
+          { "page": 31, "text": { "en": "You pay with ___.", "sv": "Man betalar med ___." }, "answer": "ssente", "options": ["ssente", "akatale", "ssebo", "mmeka-zino"] },
+          { "page": 31, "text": { "en": "You buy fruit at the ___.", "sv": "Man köper frukt på ___." }, "answer": "akatale", "options": ["akatale", "ssente", "ssebo", "kendezaako-ko"] },
+          { "page": 31, "text": { "en": "You politely call a man ___.", "sv": "Man tilltalar en man artigt ___." }, "answer": "ssebo", "options": ["ssebo", "akatale", "ssente", "mmeka-zino"] }
+        ],
+        "questions": [
+          { "page": 31, "prompt": { "en": "Which market did Alex visit?", "sv": "Vilken marknad besökte Alex?" }, "options": [{ "lg": "Nakasero" }, { "lg": "Mengo" }, { "lg": "Entebbe" }] },
+          { "page": 31, "prompt": { "en": "How many mangoes did Alex buy?", "sv": "Hur många mango köpte Alex?" }, "options": [{ "lg": "Ettaano (5)" }, { "lg": "Emu (1)" }, { "lg": "Ebbiri (2)" }] },
+          { "page": 31, "prompt": { "en": "“Weebale nnyo” means …", "sv": "”Weebale nnyo” betyder …" }, "options": [{ "en": "Thank you very much", "sv": "Tack så mycket" }, { "en": "Goodbye", "sv": "Hejdå" }, { "en": "How much?", "sv": "Hur mycket?" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u12",
+    "emoji": "🌦️",
+    "pages": "32",
+    "lgTitle": "Embeera y'obudde",
+    "title": { "en": "The weather", "sv": "Vädret" },
+    "lessons": [
+      { "id": "u12-l1", "title": { "en": "Sun and rain", "sv": "Sol och regn" }, "words": ["obudde-bwa-musana", "obudde-bwa-nkuba", "obudde-bwa-mpewo", "obudde-bwa-kidede", "obudde-bwa-muzira", "enkuba-eya-kibuyaga"] }
+    ]
+  },
+  {
+    "id": "u13",
+    "emoji": "🦒",
+    "pages": "33–35",
+    "lgTitle": "Okulambula mu Murchison Falls",
+    "title": { "en": "Safari at Murchison Falls", "sv": "Safari i Murchison Falls" },
+    "story": "ch08",
+    "lessons": [
+      { "id": "u13-l1", "title": { "en": "On the savannah", "sv": "På savannen" }, "words": ["savanna", "entulege", "enjovu", "envubu", "goonya", "empologoma"] },
+      {
+        "id": "u13-l2", "title": { "en": "On the Nile", "sv": "På Nilen" }, "words": ["ekiyiriro", "eryato", "omugga", "omuddo", "ensolo-z-omunsiko"],
+        "fillIns": [
+          { "page": 35, "text": { "en": "All wild animals together are called ___.", "sv": "Alla vilda djur kallas tillsammans ___." }, "answer": "ensolo-z-omunsiko", "options": ["ensolo-z-omunsiko", "eryato", "omugga", "omuddo"] },
+          { "page": 35, "text": { "en": "The family travelled on the Nile in a ___.", "sv": "Familjen reste på Nilen i en ___." }, "answer": "eryato", "options": ["eryato", "omugga", "omuddo", "amazzi"] },
+          { "page": 35, "text": { "en": "The Nile is a big ___.", "sv": "Nilen är en stor ___." }, "answer": "omugga", "options": ["omugga", "eryato", "omuddo", "ensolo-z-omunsiko"] },
+          { "page": 35, "text": { "en": "Elephants and giraffes eat green ___.", "sv": "Elefanter och giraffer äter grönt ___." }, "answer": "omuddo", "options": ["omuddo", "amazzi", "eryato", "omugga"] },
+          { "page": 35, "text": { "en": "The waterfall is made of falling ___.", "sv": "Vattenfallet består av fallande ___." }, "answer": "amazzi", "options": ["amazzi", "omuddo", "eryato", "omugga"] }
+        ],
+        "questions": [
+          { "page": 35, "prompt": { "en": "What did the giraffe eat?", "sv": "Vad åt giraffen?" }, "options": [{ "en": "Acacia thorns", "sv": "Akaciatörne" }, { "en": "Fish", "sv": "Fisk" }, { "en": "Bananas", "sv": "Bananer" }] },
+          { "page": 35, "prompt": { "en": "What arched over the mist?", "sv": "Vad bågade sig över dimman?" }, "options": [{ "en": "A rainbow", "sv": "En regnbåge" }, { "en": "A bridge", "sv": "En bro" }, { "en": "A bird", "sv": "En fågel" }] },
+          { "page": 35, "prompt": { "en": "How wide is the gorge at the falls?", "sv": "Hur bred är klyftan vid fallen?" }, "options": [{ "en": "Seven metres", "sv": "Sju meter" }, { "en": "Seven kilometres", "sv": "Sju kilometer" }, { "en": "Seventy metres", "sv": "Sjuttio meter" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u14",
+    "emoji": "💬",
+    "pages": "36",
+        "title": { "en": "Everyday phrases", "sv": "Vardagliga uttryck" },
+    "lessons": [
+      { "id": "u14-l1", "title": { "en": "Yes, no, please", "sv": "Ja, nej, snälla" }, "words": ["nedda", "weeraba", "bambi", "nsonyiwa", "nnyamba", "sitegeera"] },
+      { "id": "u14-l2", "title": { "en": "Asking questions", "sv": "Ställa frågor" }, "words": ["tooyi", "tooyi-eri-wa", "oyogera-oluzungu", "erinnya-lyo-ggwe-ani", "muli-mutya"] },
+      { "id": "u14-l3", "title": { "en": "Getting to know you", "sv": "Lära känna varandra" }, "words": ["ova-wa", "obeera-wa", "olina-emyaka-emmeka", "ssente-mmeka", "ogambye-ki"] }
+    ]
+  },
+  {
+    "id": "u15",
+    "emoji": "🥁",
+    "pages": "37–40",
+    "lgTitle": "Embaga y'Obuwangwa",
+    "title": { "en": "The Kwanjula party", "sv": "Kwanjula-festen" },
+    "story": "ch09",
+    "lessons": [
+      { "id": "u15-l1", "title": { "en": "Party clothes", "sv": "Festkläder" }, "words": ["kwanjula", "kanzu", "gomesi", "ekitambala", "olubugo"] },
+      {
+        "id": "u15-l2", "title": { "en": "Dance and sing", "sv": "Dansa och sjung" }, "words": ["amazina", "okuzina", "oluyimba", "akabaga", "essanyu"],
+        "fillIns": [
+          { "page": 40, "text": { "en": "A big family party is called an ___.", "sv": "Ett stort familjekalas kallas ett ___." }, "answer": "akabaga", "options": ["akabaga", "essanyu", "olubugo", "kanzu", "okuzina"] },
+          { "page": 40, "text": { "en": "Alex wore a long, cream-white ___.", "sv": "Alex bar en lång, gräddvit ___." }, "answer": "kanzu", "options": ["kanzu", "olubugo", "akabaga", "essanyu"] },
+          { "page": 40, "text": { "en": "Cloth made from tree bark is ___.", "sv": "Tyg gjort av trädbark är ___." }, "answer": "olubugo", "options": ["olubugo", "kanzu", "okuzina", "akabaga"] },
+          { "page": 40, "text": { "en": "Moving your feet to the drums is ___.", "sv": "Att röra fötterna till trummorna är ___." }, "answer": "okuzina", "options": ["okuzina", "essanyu", "olubugo", "kanzu"] },
+          { "page": 40, "text": { "en": "The happy feeling at the party is ___.", "sv": "Den glada känslan på festen är ___." }, "answer": "essanyu", "options": ["essanyu", "akabaga", "okuzina", "olubugo"] }
+        ],
+        "questions": [
+          { "page": 40, "prompt": { "en": "A Kwanjula is …", "sv": "En Kwanjula är …" }, "options": [{ "en": "An introduction ceremony", "sv": "En introduktionsceremoni" }, { "en": "A market", "sv": "En marknad" }, { "en": "A school test", "sv": "Ett skolprov" }] },
+          { "page": 40, "prompt": { "en": "Bark cloth comes from …", "sv": "Barktyg kommer från …" }, "options": [{ "en": "The Mutuba fig tree", "sv": "Mutuba-fikonträdet" }, { "en": "The banana plant", "sv": "Bananplantan" }, { "en": "The acacia tree", "sv": "Akaciaträdet" }] },
+          { "page": 40, "prompt": { "en": "What colour was Aunt Namubiru's gomesi?", "sv": "Vilken färg hade faster Namubirus gomesi?" }, "options": [{ "en": "Blue", "sv": "Blå" }, { "en": "Green", "sv": "Grön" }, { "en": "Black", "sv": "Svart" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u16",
+    "emoji": "🧍🏾",
+    "pages": "39",
+        "title": { "en": "Parts of the body", "sv": "Kroppens delar" },
+    "lessons": [
+      { "id": "u16-l1", "title": { "en": "My face", "sv": "Mitt ansikte" }, "words": ["omutwe", "enviiri", "eriiso", "okutu", "ennyindo", "akamwa", "erinnyo"] },
+      { "id": "u16-l2", "title": { "en": "Arms and legs", "sv": "Armar och ben" }, "words": ["ensingo", "omukono", "engalo", "olunwe", "olubuto", "evviivi", "ekigere"] }
+    ]
+  },
+  {
+    "id": "u17",
+    "emoji": "🔥",
+    "pages": "41–43",
+    "lgTitle": "Engero z'Ekiro n'Okugenda",
+    "title": { "en": "Fireside stories and going home", "sv": "Eldberättelser och resan hem" },
+    "story": "ch10",
+    "lessons": [
+      { "id": "u17-l1", "title": { "en": "Under the stars", "sv": "Under stjärnorna" }, "words": ["omuliro", "emmunyeenye", "olugero", "eggulu", "omwezi", "ente"] },
+      {
+        "id": "u17-l2", "title": { "en": "Goodbye for now", "sv": "Hej då så länge" }, "words": ["weeraba", "mweerabe", "olugendo-olulungi", "tunaalabagana-nate"],
+        "fillIns": [
+          { "page": 43, "text": { "en": "You say ___ when you leave a friend.", "sv": "Man säger ___ när man lämnar en vän." }, "answer": "weeraba", "options": ["weeraba", "mweerabe", "olugendo-olulungi", "olugero"] },
+          { "page": 43, "text": { "en": "You say ___ when you leave many people.", "sv": "Man säger ___ när man lämnar många personer." }, "answer": "mweerabe", "options": ["mweerabe", "weeraba", "emmunyeenye", "olugero"] },
+          { "page": 43, "text": { "en": "You wish a traveller ___", "sv": "Man önskar en resenär ___" }, "answer": "olugendo-olulungi", "options": ["olugendo-olulungi", "weeraba", "olugero", "emmunyeenye"] },
+          { "page": 43, "text": { "en": "Jjaja told the family an old ___.", "sv": "Jjaja berättade en gammal ___ för familjen." }, "answer": "olugero", "options": ["olugero", "emmunyeenye", "mweerabe", "weeraba"] },
+          { "page": 43, "text": { "en": "The night sky was full of ___.", "sv": "Nattens himmel var full av ___." }, "answer": "emmunyeenye", "options": ["emmunyeenye", "olugero", "weeraba", "olugendo-olulungi"] }
+        ],
+        "questions": [
+          { "page": 43, "prompt": { "en": "Where did the family sit in the evening?", "sv": "Var satt familjen på kvällen?" }, "options": [{ "en": "Around the fire", "sv": "Runt elden" }, { "en": "In the car", "sv": "I bilen" }, { "en": "At the market", "sv": "På marknaden" }] },
+          { "page": 43, "prompt": { "en": "Who told the story?", "sv": "Vem berättade sagan?" }, "options": [{ "lg": "Jjaja" }, { "en": "Uncle Musisi", "sv": "Morbror Musisi" }, { "lg": "Alex" }] },
+          { "page": 43, "prompt": { "en": "“Weebale nnyo” means …", "sv": "”Weebale nnyo” betyder …" }, "options": [{ "en": "Thank you very much", "sv": "Tack så mycket" }, { "en": "Good night", "sv": "God natt" }, { "en": "Come back", "sv": "Kom tillbaka" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "u18",
+    "emoji": "🪶",
+    "pages": "44–47",
+    "lgTitle": "Emmere ey'omu Buganda",
+    "title": { "en": "Food and clans of Buganda", "sv": "Mat och klaner i Buganda" },
+    "culture": {
+      "en": "Buganda has many clans (ebika). Each clan has a totem (omuziro), often an animal or plant, which clan members respect and do not eat.",
+      "sv": "Buganda har många klaner (ebika). Varje klan har ett totem (omuziro), ofta ett djur eller en växt, som klanens medlemmar respekterar och inte äter."
+    },
+    "lessons": [
+      { "id": "u18-l1", "title": { "en": "Food from Buganda", "sv": "Mat från Buganda" }, "words": ["luwombo", "nsenene", "katogo", "amatooke", "ebinyeebwa"] },
+      { "id": "u18-l2", "title": { "en": "Clan totems I", "sv": "Klantotem I" }, "words": ["ngaali", "njovu-clan", "mpologoma-clan", "nkima-clan", "mbwa-clan"] },
+      { "id": "u18-l3", "title": { "en": "Clan totems II", "sv": "Klantotem II" }, "words": ["ngo-clan", "nvubu-clan", "mbogo-clan", "butiiko-clan", "mutima-clan"] }
+    ]
+  }
+]

@@ -1,0 +1,208 @@
+{
+  "title": { "en": "Alex's journey to Buganda", "sv": "Alex resa till Buganda" },
+  "lgTitle": "Olugendo lwa Alex",
+  "speakers": {
+    "alex": { "name": "Alex", "emoji": "🧒🏾" },
+    "namubiru": { "name": "Ssenga Namubiru", "emoji": "👩🏾" },
+    "musisi": { "name": "Kojja Musisi", "emoji": "👨🏾" },
+    "jjaja": { "name": "Jjaja", "emoji": "👵🏾" },
+    "seller": { "name": { "en": "Seller", "sv": "Säljaren" }, "emoji": "🧑🏾‍🌾" }
+  },
+  "chapters": [
+    {
+      "id": "ch01", "unit": "u01", "page": 5,
+      "lgTitle": "Okwetegekera olugendo",
+      "title": { "en": "Packing for the trip", "sv": "Att packa för resan" },
+      "scenes": [
+        { "scene": "bedroom", "props": ["🧒🏾", "🛏️"], "text": { "en": "Morning in Sweden. Ten-year-old Alex jumps out of {ekitanda}. Today Alex flies to Uganda!", "sv": "Morgon i Sverige. Tioåriga Alex hoppar upp ur {ekitanda}. Idag flyger Alex till Uganda!" } },
+        { "scene": "bedroom", "props": ["👕", "👜"], "text": { "en": "Alex packs {engoye} in a big green {ensawo}. Mum asks: “Do you have all your travel things?”", "sv": "Alex packar {engoye} i en stor grön {ensawo}. Mamma frågar: ”Har du alla resesaker?”" } },
+        { "scene": "bedroom", "props": ["🛂", "🎫", "🗺️"], "text": { "en": "First the most important things: the {paasipooti} and the {tikiti} to Entebbe. Dad gives Alex a {maapu} of Africa.", "sv": "Först det viktigaste: {paasipooti} och {tikiti} till Entebbe. Pappa ger Alex en {maapu} över Afrika." } },
+        { "scene": "bedroom", "props": ["🕶️", "💵", "📘"], "text": { "en": "Sunglasses ({galubindi}), {ssente} and an {ekitabo} to read on the {ennyonyi}. The trip to Buganda can begin!", "sv": "Solglasögon ({galubindi}), {ssente} och en {ekitabo} att läsa på {ennyonyi}. Resan till Buganda kan börja!" } }
+      ],
+      "questions": [
+        { "added": true, "prompt": { "en": "What does Alex pack the clothes in?", "sv": "Vad packar Alex kläderna i?" }, "options": [{ "lg": "ensawo" }, { "lg": "ekitanda" }, { "lg": "maapu" }] },
+        { "added": true, "prompt": { "en": "Where is Alex flying to?", "sv": "Vart flyger Alex?" }, "options": [{ "en": "Uganda", "sv": "Uganda" }, { "en": "Norway", "sv": "Norge" }, { "en": "Japan", "sv": "Japan" }] },
+        { "added": true, "prompt": { "en": "What is “paasipooti”?", "sv": "Vad är ”paasipooti”?" }, "options": [{ "en": "A passport", "sv": "Ett pass" }, { "en": "A map", "sv": "En karta" }, { "en": "Money", "sv": "Pengar" }] }
+      ]
+    },
+    {
+      "id": "ch02", "unit": "u02", "page": 9,
+      "lgTitle": "Okubuuka okugenda e Uganda",
+      "title": { "en": "The flight to Uganda", "sv": "Flyget till Uganda" },
+      "scenes": [
+        { "scene": "sky", "props": ["✈️"], "text": { "en": "The big white {ennyonyi} takes off towards Uganda. Alex sits on an {ekifo} by the {eddirisa}.", "sv": "Det stora vita {ennyonyi} lyfter mot Uganda. Alex sitter på ett {ekifo} vid {eddirisa}." } },
+        { "scene": "sky", "props": ["🍞", "🍎", "💧"], "text": { "en": "Lunch! Rice, chicken, warm {omugaati} and a sweet {ekibala}. Alex asks for cold {amazzi}.", "sv": "Lunch! Ris, kyckling, varmt {omugaati} och en söt {ekibala}. Alex ber om kallt {amazzi}." } },
+        { "scene": "airport", "props": ["🌊"], "text": { "en": "Below the wings, the blue water of {ennyanja-nalubaale} sparkles. Alex walks down the {amadaala}.", "sv": "Under vingarna glittrar {ennyanja-nalubaale}. Alex går ner för {amadaala}." } },
+        {
+          "scene": "airport", "props": ["👩🏾", "👨🏾"],
+          "text": { "en": "Aunt Namubiru and Uncle Musisi are waiting with big smiles.", "sv": "Faster Namubiru och morbror Musisi väntar med stora leenden." },
+          "lines": [
+            { "speaker": "namubiru", "lg": "Tukusanyukidde, Alex!", "en": "Welcome, Alex!", "sv": "Välkommen, Alex!", "page": 11 },
+            { "speaker": "alex", "lg": "Webale, ssenga!", "en": "Thank you, auntie!", "sv": "Tack, faster!", "page": 11 },
+            { "speaker": "musisi", "lg": "Oli otya, mwana wange?", "en": "How are you, my child?", "sv": "Hur mår du, mitt barn?", "page": 11 },
+            { "speaker": "alex", "lg": "Gyendi bulungi, kojja!", "en": "I'm fine, uncle!", "sv": "Jag mår bra, morbror!", "page": 11 },
+            { "speaker": "namubiru", "lg": "Tugende ewaka.", "en": "Let's go home.", "sv": "Nu åker vi hem.", "page": 11 },
+            { "speaker": "alex", "lg": "Yee!", "en": "Yes!", "sv": "Ja!", "page": 11 }
+          ]
+        }
+      ],
+      "questions": [
+        { "added": true, "prompt": { "en": "What does “Tukusanyukidde” mean?", "sv": "Vad betyder ”Tukusanyukidde”?" }, "options": [{ "en": "Welcome!", "sv": "Välkommen!" }, { "en": "Goodbye!", "sv": "Hej då!" }, { "en": "Help!", "sv": "Hjälp!" }] },
+        { "added": true, "prompt": { "en": "What did Alex drink on the plane?", "sv": "Vad drack Alex på planet?" }, "options": [{ "lg": "amazzi" }, { "lg": "omugaati" }, { "lg": "ekifo" }] },
+        { "added": true, "prompt": { "en": "Uncle Musisi asks “Oli otya?”. Alex answers …", "sv": "Morbror Musisi frågar ”Oli otya?”. Alex svarar …" }, "options": [{ "lg": "Gyendi bulungi" }, { "lg": "Tugende ewaka" }, { "lg": "Tukusanyukidde" }] }
+      ]
+    },
+    {
+      "id": "ch03", "unit": "u03", "page": 12,
+      "lgTitle": "Oluguudo lw'e Kampala",
+      "title": { "en": "The road to Kampala", "sv": "Vägen till Kampala" },
+      "scenes": [
+        { "scene": "road", "props": ["🚗", "🔑"], "text": { "en": "Uncle Musisi lifts the bag into the {emmotoka}. “Fasten your {olukooba}!” he says, and turns the {ekisumuluzo}.", "sv": "Morbror Musisi lyfter in väskan i {emmotoka}. ”Spänn {olukooba}!” säger han och vrider om {ekisumuluzo}." } },
+        { "scene": "road", "props": ["🌳", "🛣️"], "text": { "en": "Outside the window: red {ettaka} and green {omuti}. The {oluguudo} gets busier and busier.", "sv": "Utanför fönstret: röd {ettaka} och gröna {omuti}. {oluguudo} blir livligare och livligare." } },
+        { "scene": "road", "props": ["🏍️", "🍌", "🏪"], "text": { "en": "Everywhere there are {bodaboda}! At a colourful {akatale} people sell sweet fruit, and people walk on the {ekkubo} in the {omusana}.", "sv": "Överallt finns {bodaboda}! Vid ett färgglatt {akatale} säljs söta frukter och folk går på {ekkubo} i {omusana}." } },
+        { "scene": "road", "props": ["⛰️", "🚦"], "text": { "en": "“Look at that {akasozi}!” says Aunt Namubiru. “Kampala is built on many hills.” Alex watches the red {ebitaala}.", "sv": "”Titta på den {akasozi}!” säger faster Namubiru. ”Kampala är byggt på många kullar.” Alex tittar på de röda {ebitaala}." } }
+      ],
+      "questions": [
+        { "page": 14, "prompt": { "en": "Kampala is built on many …", "sv": "Kampala är byggt på många …" }, "options": [{ "lg": "Akasozi" }, { "lg": "Amazzi" }, { "lg": "Ennyonyi" }] },
+        { "page": 14, "prompt": { "en": "Who drives the car?", "sv": "Vem kör bilen?" }, "options": [{ "lg": "Omugoba" }, { "lg": "Omwana" }, { "lg": "Omuti" }] },
+        { "added": true, "prompt": { "en": "What are the motorcycle taxis called?", "sv": "Vad heter motorcykeltaxibilarna?" }, "options": [{ "lg": "bodaboda" }, { "lg": "emmotoka" }, { "lg": "ennyonyi" }] }
+      ]
+    },
+    {
+      "id": "ch04", "unit": "u05", "page": 16,
+      "lgTitle": "Ewa Jjaja",
+      "title": { "en": "Visiting Jjaja", "sv": "Hos Jjaja" },
+      "scenes": [
+        { "scene": "yard", "props": ["🏠", "🌺"], "text": { "en": "The car stops at a welcoming {ennyumba} with a tin roof. Pink {ekimuli} flowers grow all around.", "sv": "Bilen stannar vid ett välkomnande {ennyumba} med plåttak. Rosa {ekimuli} blommar runt gården." } },
+        { "scene": "yard", "props": ["👵🏾"], "text": { "en": "{jjaja} sits on the shady veranda with a big smile.", "sv": "{jjaja} sitter på den skuggiga verandan med ett strålande leende." } },
+        { "scene": "yard", "props": ["🧒🏾", "🧶"], "text": { "en": "Remembering {empisa}, Alex doesn't run or shout. Alex walks calmly and kneels on the {omukeeka}.", "sv": "Alex minns {empisa} och springer eller skriker inte. Alex går lugnt fram och knäböjer på {omukeeka}." },
+          "lines": [
+            { "speaker": "alex", "lg": "Osiibye otya, Jjaja?", "en": "Good afternoon, Jjaja! (How has your day been?)", "sv": "God dag, Jjaja! (Hur har din dag varit?)", "page": 16 },
+            { "speaker": "jjaja", "lg": "Nsiibye bulungi, mwana wange!", "en": "My day has been good, my child!", "sv": "Min dag har varit bra, mitt barn!", "page": 16 }
+          ]
+        },
+        { "scene": "yard", "props": ["🚪", "🥤"], "text": { "en": "Uncle Musisi comes out of the {oluggi} with a cold drink. For the first time that day, Alex feels truly at home.", "sv": "Morbror Musisi kommer ut genom {oluggi} med en kall dryck. För första gången den dagen känner sig Alex verkligen hemma." } }
+      ],
+      "questions": [
+        { "page": 18, "prompt": { "en": "How does Alex greet Jjaja?", "sv": "Hur hälsar Alex på Jjaja?" }, "options": [{ "lg": "Osiibye otya?" }, { "lg": "Emmotoka" }, { "lg": "Enku" }] },
+        { "page": 18, "prompt": { "en": "Jjaja answers …", "sv": "Jjaja svarar …" }, "options": [{ "lg": "Nsiibye bulungi" }, { "lg": "Ssente" }, { "lg": "Akambe" }] },
+        { "page": 18, "prompt": { "en": "Alex kneels on the …", "sv": "Alex knäböjer på …" }, "options": [{ "lg": "Omukeeka" }, { "lg": "Eddirisa" }, { "lg": "Eggaali" }] }
+      ]
+    },
+    {
+      "id": "ch05", "unit": "u06", "page": 20,
+      "lgTitle": "Emmere mu Lusuku",
+      "title": { "en": "Lunch in the garden", "sv": "Lunch i köksträdgården" },
+      "scenes": [
+        { "scene": "garden", "props": ["🐓", "🍌"], "text": { "en": "Cock-a-doodle-doo! Alex follows {jjaja} into the garden behind the house, under tall banana plants.", "sv": "Kuckeliku! Alex följer {jjaja} ut i trädgården bakom huset, under höga bananplantor." } },
+        { "scene": "garden", "props": ["🔪", "🍌"], "text": { "en": "Jjaja cuts down a heavy bunch of {amatooke} with a sharp {akambe}. Alex peels them.", "sv": "Jjaja skär ner en tung klase {amatooke} med en vass {akambe}. Alex skalar dem." } },
+        { "scene": "garden", "props": ["🍃", "🍲", "🪵"], "text": { "en": "Alex lays {endagala} in a big {sseffuliya}. Uncle Musisi lights the {enku}, and {omukka} rises into the morning air.", "sv": "Alex lägger {endagala} i en stor {sseffuliya}. Morbror Musisi tänder {enku} och {omukka} stiger upp i morgonluften." } },
+        { "scene": "garden", "props": ["🥜", "😋"], "text": { "en": "Jjaja roasts groundnuts and grinds them into smooth {ebinyeebwa}. At lunchtime, Alex takes the first bite…", "sv": "Jjaja rostar jordnötter och mal dem till len {ebinyeebwa}. Vid lunchtid tar Alex första tuggan…" },
+          "lines": [
+            { "speaker": "alex", "lg": "Kiwooma!", "en": "It's delicious!", "sv": "Det är gott!", "page": 20 }
+          ]
+        }
+      ],
+      "questions": [
+        { "page": 22, "prompt": { "en": "What does Jjaja cut down in the garden?", "sv": "Vad skär Jjaja ner i trädgården?" }, "options": [{ "lg": "Matooke" }, { "lg": "Emmotoka" }, { "lg": "Omukeeka" }] },
+        { "page": 22, "prompt": { "en": "The bananas are wrapped in …", "sv": "Bananerna slås in i …" }, "options": [{ "lg": "Endagala" }, { "lg": "Ettaka" }, { "lg": "Amazzi" }] },
+        { "page": 22, "prompt": { "en": "The pot stands on three …", "sv": "Grytan står på tre …" }, "options": [{ "lg": "Amayinja" }, { "lg": "Amazzi" }, { "lg": "Ennyonyi" }] }
+      ]
+    },
+    {
+      "id": "ch06", "unit": "u09", "page": 25,
+      "lgTitle": "Olubiri lw'e Mmengo",
+      "title": { "en": "The king's palace", "sv": "Kungapalatset" },
+      "scenes": [
+        { "scene": "palace", "props": ["🏰"], "text": { "en": "After breakfast the family drives to Mengo hill to visit the king's palace, the {olubiri}.", "sv": "Efter frukost kör familjen till Mengo-kullen för att besöka kungens palats, {olubiri}." } },
+        { "scene": "palace", "props": ["🔥"], "text": { "en": "“Look at that flame,” says Uncle Musisi. “It is the royal fire ({omuliro}). It burns day and night.”", "sv": "”Titta på den lågan”, säger morbror Musisi. ”Det är den kungliga elden ({omuliro}). Den brinner dag och natt.”" } },
+        { "scene": "palace", "props": ["🛡️", "🪑"], "text": { "en": "In the museum Alex sees old spears and carved {engabo}. In the middle stands the holy throne, {namulondo}.", "sv": "I museet ser Alex gamla spjut och snidade {engabo}. I mitten står den heliga tronen, {namulondo}." } },
+        { "scene": "palace", "props": ["🥁", "🥁"], "text": { "en": "Next to the throne stand giant {engoma} called {mujaguzo}. Long ago, drummers sent messages from hill to hill!", "sv": "Bredvid tronen står jättehöga {engoma} som kallas {mujaguzo}. Förr skickade trumslagare meddelanden från kulle till kulle!" } }
+      ],
+      "questions": [
+        { "page": 27, "prompt": { "en": "Which hill is the palace on?", "sv": "Vilken kulle står palatset på?" }, "options": [{ "lg": "Mengo" }, { "lg": "Nakasero" }, { "lg": "Entebbe" }] },
+        { "page": 27, "prompt": { "en": "The royal fire burns …", "sv": "Den kungliga elden brinner …" }, "options": [{ "en": "Day and night", "sv": "Dag och natt" }, { "en": "Only on Sundays", "sv": "Bara på söndagar" }, { "en": "Once a year", "sv": "En gång om året" }] },
+        { "page": 27, "prompt": { "en": "The drummers used the drums to …", "sv": "Trummisarna använde trummorna för att …" }, "options": [{ "en": "Send messages", "sv": "Skicka meddelanden" }, { "en": "Cook food", "sv": "Laga mat" }, { "en": "Open the gate", "sv": "Öppna grinden" }] }
+      ]
+    },
+    {
+      "id": "ch07", "unit": "u11", "page": 29,
+      "lgTitle": "Mu Katale k'e Nakasero",
+      "title": { "en": "At Nakasero market", "sv": "På Nakasero-marknaden" },
+      "scenes": [
+        { "scene": "market", "props": ["🥭", "🍉", "🍍"], "text": { "en": "Aunt Namubiru takes Alex to Nakasero market. There are piles of {omuyembe}, big watermelons and yellow {enanansi}.", "sv": "Faster Namubiru tar med Alex till Nakasero-marknaden. Där finns högar av {omuyembe}, stora vattenmeloner och gula {enanansi}." } },
+        { "scene": "market", "props": ["💵"], "text": { "en": "She gives Alex some {ssente}. “Today you buy our fruit, but you may only speak Luganda!”", "sv": "Hon ger Alex några {ssente}. ”Idag köper du vår frukt, men du får bara prata luganda!”" } },
+        { "scene": "market", "props": ["⚖️", "🥭"], "text": { "en": "A seller weighs fruit on a {minzaani}. Alex takes a deep breath.", "sv": "En säljare väger frukt på en {minzaani}. Alex tar ett djupt andetag." },
+          "lines": [
+            { "speaker": "alex", "lg": "Ssebo, mmeka zino?", "en": "Sir, how much are these?", "sv": "Herrn, hur mycket kostar dessa?", "page": 29 },
+            { "speaker": "seller", "lg": "Za lukumi, mwana wange.", "en": "They cost a thousand, my child.", "sv": "De kostar tusen, mitt barn.", "page": 29 },
+            { "speaker": "alex", "lg": "Kendezaako ko, ssebo!", "en": "Lower the price a little, sir!", "sv": "Sänk priset lite, herrn!", "page": 29 }
+          ]
+        },
+        { "scene": "market", "props": ["🥭", "🥭", "🥭", "🥭", "🥭"], "text": { "en": "The seller laughs and weighs five big mangoes. Alex counts the money proudly.", "sv": "Säljaren skrattar och väger fem stora mango. Alex räknar sedlarna stolt." },
+          "lines": [
+            { "speaker": "alex", "lg": "Weebale nnyo, ssebo!", "en": "Thank you very much, sir!", "sv": "Tack så mycket, herrn!", "page": 29 }
+          ]
+        }
+      ],
+      "questions": [
+        { "page": 31, "prompt": { "en": "Which market did Alex visit?", "sv": "Vilken marknad besökte Alex?" }, "options": [{ "lg": "Nakasero" }, { "lg": "Mengo" }, { "lg": "Entebbe" }] },
+        { "page": 31, "prompt": { "en": "How many mangoes did Alex buy?", "sv": "Hur många mango köpte Alex?" }, "options": [{ "lg": "Ettaano (5)" }, { "lg": "Emu (1)" }, { "lg": "Ebbiri (2)" }] },
+        { "page": 31, "prompt": { "en": "“Weebale nnyo” means …", "sv": "”Weebale nnyo” betyder …" }, "options": [{ "en": "Thank you very much", "sv": "Tack så mycket" }, { "en": "Goodbye", "sv": "Hejdå" }, { "en": "How much?", "sv": "Hur mycket?" }] }
+      ]
+    },
+    {
+      "id": "ch08", "unit": "u13", "page": 33,
+      "lgTitle": "Okulambula mu Murchison Falls",
+      "title": { "en": "Safari at Murchison Falls", "sv": "Safari i Murchison Falls" },
+      "scenes": [
+        { "scene": "savanna", "props": ["🚙"], "text": { "en": "At dawn the family drives north to Murchison Falls National Park, into the golden {savanna}.", "sv": "Vid gryningen kör familjen norrut till Murchison Falls nationalpark, in i den guldiga {savanna}." } },
+        { "scene": "savanna", "props": ["🦒", "🐘"], "text": { "en": "A tall {entulege} chews green thorns. Behind it, giant grey {enjovu} cross the road.", "sv": "En högrest {entulege} tuggar gröna törnen. Bakom den korsar jättestora grå {enjovu} vägen." } },
+        { "scene": "river", "props": ["⛵", "🦛", "🐊"], "text": { "en": "Later they board an {eryato} on the mighty Nile ({omugga}). Alex sees {envubu} splashing and {goonya} lying in the sun.", "sv": "Senare kliver de på en {eryato} på den mäktiga Nilen ({omugga}). Alex ser {envubu} som plaskar och {goonya} som solar sig." } },
+        { "scene": "river", "props": ["💦", "🌈"], "text": { "en": "The Nile squeezes through a gap only seven metres wide and crashes down as a thundering {ekiyiriro}, with a rainbow in the mist!", "sv": "Nilen trycker sig genom en klyfta som bara är sju meter bred och forsar ner i ett dundrande {ekiyiriro}, med en regnbåge i dimman!" } }
+      ],
+      "questions": [
+        { "page": 35, "prompt": { "en": "What did the giraffe eat?", "sv": "Vad åt giraffen?" }, "options": [{ "en": "Acacia thorns", "sv": "Akaciatörne" }, { "en": "Fish", "sv": "Fisk" }, { "en": "Bananas", "sv": "Bananer" }] },
+        { "page": 35, "prompt": { "en": "What arched over the mist?", "sv": "Vad bågade sig över dimman?" }, "options": [{ "en": "A rainbow", "sv": "En regnbåge" }, { "en": "A bridge", "sv": "En bro" }, { "en": "A bird", "sv": "En fågel" }] },
+        { "page": 35, "prompt": { "en": "How wide is the gorge at the falls?", "sv": "Hur bred är klyftan vid fallen?" }, "options": [{ "en": "Seven metres", "sv": "Sju meter" }, { "en": "Seven kilometres", "sv": "Sju kilometer" }, { "en": "Seventy metres", "sv": "Sjuttio meter" }] }
+      ]
+    },
+    {
+      "id": "ch09", "unit": "u15", "page": 37,
+      "lgTitle": "Embaga y'Obuwangwa",
+      "title": { "en": "The Kwanjula party", "sv": "Kwanjula-festen" },
+      "scenes": [
+        { "scene": "party", "props": ["💍", "🎉"], "text": { "en": "On Saturday there is a big party: a {kwanjula}, an introduction ceremony.", "sv": "På lördagen är det stor fest: en {kwanjula}, en introduktionsceremoni." } },
+        { "scene": "party", "props": ["🥻", "👗"], "text": { "en": "Alex tries on a {kanzu}. Aunt Namubiru wears a bright blue {gomesi} with a wide silk {ekitambala}.", "sv": "Alex provar en {kanzu}. Faster Namubiru bär en klarblå {gomesi} med ett brett silkes{ekitambala}." } },
+        { "scene": "party", "props": ["🟫", "🌳"], "text": { "en": "An elder holds a roll of earth-red {olubugo}. “It is made from the bark of the Mutuba fig tree,” says Uncle Musisi.", "sv": "En äldre håller en rulle jordrött {olubugo}. ”Det är gjort av barken från Mutuba-fikonträdet”, säger morbror Musisi." } },
+        { "scene": "party", "props": ["🥁", "💃🏾", "🕺🏾"], "text": { "en": "Suddenly the drums start! Dancers step onto the grass, and Alex learns the {amazina} too.", "sv": "Plötsligt börjar trummorna! Dansare kliver ut på gräset och Alex lär sig {amazina} också." } }
+      ],
+      "questions": [
+        { "page": 40, "prompt": { "en": "A Kwanjula is …", "sv": "En Kwanjula är …" }, "options": [{ "en": "An introduction ceremony", "sv": "En introduktionsceremoni" }, { "en": "A market", "sv": "En marknad" }, { "en": "A school test", "sv": "Ett skolprov" }] },
+        { "page": 40, "prompt": { "en": "Bark cloth comes from …", "sv": "Barktyg kommer från …" }, "options": [{ "en": "The Mutuba fig tree", "sv": "Mutuba-fikonträdet" }, { "en": "The banana plant", "sv": "Bananplantan" }, { "en": "The acacia tree", "sv": "Akaciaträdet" }] },
+        { "page": 40, "prompt": { "en": "What colour was Aunt Namubiru's gomesi?", "sv": "Vilken färg hade faster Namubirus gomesi?" }, "options": [{ "en": "Blue", "sv": "Blå" }, { "en": "Green", "sv": "Grön" }, { "en": "Black", "sv": "Svart" }] }
+      ]
+    },
+    {
+      "id": "ch10", "unit": "u17", "page": 41,
+      "lgTitle": "Engero z'Ekiro n'Okugenda",
+      "title": { "en": "Fireside stories and going home", "sv": "Eldberättelser och resan hem" },
+      "scenes": [
+        { "scene": "night", "props": ["🔥"], "text": { "en": "On the last evening everyone sits around a glowing {omuliro}. The {eggulu} is full of {emmunyeenye}.", "sv": "Den sista kvällen sitter alla runt en glödande {omuliro}. {eggulu} är full av {emmunyeenye}." } },
+        { "scene": "night", "props": ["👵🏾", "📖"], "text": { "en": "Jjaja tells an {olugero}: “Long ago, the first man on earth was Kintu. He lived alone with a faithful {ente}.”", "sv": "Jjaja berättar en {olugero}: ”För länge sedan hette den första mannen på jorden Kintu. Han bodde ensam med en trogen {ente}.”" } },
+        { "scene": "night", "props": ["☁️", "🐄", "🍌"], "text": { "en": "“Up in the sky lived Gulu the creator and his brave daughter Nambi. Nambi came down to earth with Kintu, bringing cattle, banana plants and tools.”", "sv": "”Uppe i himlen bodde Gulu skaparen och hans modiga dotter Nambi. Nambi kom ner till jorden med Kintu och tog med sig boskap, bananplantor och verktyg.”" } },
+        { "scene": "airport", "props": ["🤗", "✈️"], "text": { "en": "The next morning at Entebbe airport, Alex hugs Jjaja tightly.", "sv": "Nästa morgon på Entebbe flygplats kramar Alex Jjaja hårt." },
+          "lines": [
+            { "speaker": "alex", "lg": "Weebale nnyo, Jjaja. Tunaalabagana nate!", "en": "Thank you very much, Jjaja. We'll see each other again!", "sv": "Tack så mycket, Jjaja. Vi ses igen!", "page": 41 }
+          ]
+        },
+        { "scene": "sky", "props": ["✈️", "💛"], "text": { "en": "This is not the end. It is the start of a lifelong bond with Buganda.", "sv": "Det här är inte slutet. Det är början på en livslång koppling till Buganda." } }
+      ],
+      "questions": [
+        { "page": 43, "prompt": { "en": "Where did the family sit in the evening?", "sv": "Var satt familjen på kvällen?" }, "options": [{ "en": "Around the fire", "sv": "Runt elden" }, { "en": "In the car", "sv": "I bilen" }, { "en": "At the market", "sv": "På marknaden" }] },
+        { "page": 43, "prompt": { "en": "Who told the story?", "sv": "Vem berättade sagan?" }, "options": [{ "lg": "Jjaja" }, { "en": "Uncle Musisi", "sv": "Morbror Musisi" }, { "lg": "Alex" }] },
+        { "page": 43, "prompt": { "en": "“Weebale nnyo” means …", "sv": "”Weebale nnyo” betyder …" }, "options": [{ "en": "Thank you very much", "sv": "Tack så mycket" }, { "en": "Good night", "sv": "God natt" }, { "en": "Come back", "sv": "Kom tillbaka" }] }
+      ]
+    }
+  ]
+}

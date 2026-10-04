@@ -1,0 +1,246 @@
+{
+  "app": {
+    "name": "Yiga Oluganda",
+    "tagline": "Lär dig luganda med tranan {mascot}"
+  },
+  "common": {
+    "continue": "Fortsätt",
+    "check": "Kolla",
+    "start": "Starta",
+    "back": "Tillbaka",
+    "close": "Stäng",
+    "next": "Nästa",
+    "done": "Klar",
+    "skip": "Hoppa över",
+    "listen": "Lyssna",
+    "cancel": "Avbryt",
+    "lessons": "Lektioner",
+    "xp": "XP",
+    "loading": "Laddar…"
+  },
+  "lang": {
+    "en": "English",
+    "sv": "Svenska",
+    "lg": "Luganda"
+  },
+  "onboarding": {
+    "welcome": "Hej! Jag är en krontrana från Uganda.",
+    "pickUi": "Vilket språk vill du ha på knappar och menyer?",
+    "pickTrack": "Från vilket språk vill du lära dig luganda?",
+    "trackSv": "Svenska → Luganda",
+    "trackEn": "Engelska → Luganda",
+    "pickName": "Ge mig ett namn!",
+    "nameHint": "Mitt namn på luganda är Ngaali. Du kan behålla det eller välja ett eget. (Använd inte ditt eget namn.)",
+    "nameLabel": "Tranans namn",
+    "ready": "Nu kör vi, {mascot}!"
+  },
+  "nav": {
+    "learn": "Lär dig",
+    "practice": "Öva",
+    "stories": "Berättelser",
+    "badges": "Märken",
+    "settings": "Inställningar"
+  },
+  "home": {
+    "greeting": "Gyebale ko! Redo för lite luganda?",
+    "greetingDone": "Weebale nnyo! Du har klarat hela boken!",
+    "unit": "Del {n}",
+    "bookPages": "Boken s. {pages}",
+    "start": "Starta",
+    "locked": "Gör klart lektionen innan för att öppna den här",
+    "story": "Berättelse",
+    "storyLocked": "Gör klart den här delen för att öppna berättelsen",
+    "didYouKnow": "Visste du?"
+  },
+  "stats": {
+    "streak": "{n} dagar i rad",
+    "hearts": "{n} hjärtan",
+    "xp": "{n} XP",
+    "nextHeart": "Nästa hjärta om {min} min",
+    "heartsFull": "Hjärtana är fulla"
+  },
+  "exercise": {
+    "wordToPicture": "Tryck på rätt bild",
+    "pictureToWord": "Vad heter det här på luganda?",
+    "translateFromLuganda": "Vad betyder det här?",
+    "translateToLuganda": "Hur säger man det här på luganda?",
+    "listen": "Lyssna och tryck på det du hör",
+    "pairs": "Tryck på paren som hör ihop",
+    "build": "Bygg meningen",
+    "buildHint": "Tryck på orden i rätt ordning",
+    "fill": "Fyll i ordet som saknas",
+    "question": "Välj rätt svar",
+    "type": "Skriv det på luganda",
+    "typePlaceholder": "Skriv på luganda…",
+    "typeHint": "Det börjar med ”{letter}”",
+    "newWord": "Nytt ord",
+    "clear": "Rensa",
+    "playAudio": "Spela upp ordet",
+    "tapWord": "Tryck på ett ord för att se vad det betyder",
+    "newWordHint": "Det betyder: {meaning}"
+  },
+  "feedback": {
+    "correct": [
+      "Bra!",
+      "Snyggt!",
+      "Super!",
+      "Kirungi!",
+      "Ja!"
+    ],
+    "almost": "Nästan! Svaret är:",
+    "nearDoubles": "Så nära! Titta på dubbelbokstäverna:",
+    "meaning": "Betyder:",
+    "keepGoing": "Fortsätt, du lär dig!"
+  },
+  "lesson": {
+    "quitTitle": "Avsluta lektionen?",
+    "quitBody": "Det du har gjort i den här lektionen sparas inte.",
+    "quitYes": "Avsluta",
+    "quitNo": "Fortsätt lära",
+    "complete": "Lektionen är klar!",
+    "practiceComplete": "Övningen är klar!",
+    "storyComplete": "Kapitlet är klart!",
+    "xpEarned": "+{n} XP",
+    "perfect": "Perfekt, inga misstag!",
+    "mistakes": "{n} att öva på igen",
+    "newBadge": "Nytt märke!",
+    "noHeartsTitle": "Hjärtana är slut",
+    "noHeartsBody": "Hjärtana vilar. Gör en övning för att fylla på dem igen, eller kom tillbaka senare.",
+    "goPractice": "Öva och fyll på hjärtan",
+    "heartsRefilled": "Hjärtana är fulla igen!"
+  },
+  "practice": {
+    "title": "Öva",
+    "intro": "Öva på ord som behöver lite extra kärlek. Det fyller på alla dina hjärtan!",
+    "due": "{n} ord redo att öva",
+    "start": "Starta övningen",
+    "empty": "Gör din första lektion och kom sedan tillbaka för att öva.",
+    "fromWeak": "Vi har valt ord som du tyckte var kluriga."
+  },
+  "story": {
+    "title": "Berättelser",
+    "subtitle": "Följ med Alex på en resa från Sverige till Buganda.",
+    "chapter": "Kapitel {n}",
+    "showTranslation": "Visa översättning",
+    "hideTranslation": "Dölj översättning",
+    "questions": "Frågor",
+    "startQuestions": "Svara på frågorna",
+    "locked": "Gör klart del {n} för att öppna",
+    "done": "Läst"
+  },
+  "badges": {
+    "title": "Märken",
+    "earned": "{n} av {total} klara",
+    "locked": "Inte än",
+    "firstLesson": {
+      "title": "Första stegen",
+      "desc": "Gör klart din första lektion"
+    },
+    "packed": {
+      "title": "Packat och klart",
+      "desc": "Gör klart delen om att packa"
+    },
+    "landed": {
+      "title": "Tukusanyukidde!",
+      "desc": "Gör klart delen om flyget"
+    },
+    "counter": {
+      "title": "Sifferstjärna",
+      "desc": "Gör klart delen om siffror"
+    },
+    "respect": {
+      "title": "Empisa",
+      "desc": "Gör klart delen hos Jjaja"
+    },
+    "fiveLessons": {
+      "title": "High five",
+      "desc": "Gör klart 5 lektioner"
+    },
+    "twentyLessons": {
+      "title": "Superlärare",
+      "desc": "Gör klart 20 lektioner"
+    },
+    "perfect": {
+      "title": "Perfekt!",
+      "desc": "Gör en lektion utan misstag"
+    },
+    "firstStory": {
+      "title": "Sagostund",
+      "desc": "Läs ett kapitel i berättelsen"
+    },
+    "allStories": {
+      "title": "Hela resan",
+      "desc": "Läs alla kapitel i berättelsen"
+    },
+    "streak3": {
+      "title": "Het",
+      "desc": "Lär dig 3 dagar i rad"
+    },
+    "streak7": {
+      "title": "Lysande stjärna",
+      "desc": "Lär dig 7 dagar i rad"
+    },
+    "xp100": {
+      "title": "100 XP",
+      "desc": "Samla 100 XP"
+    },
+    "xp500": {
+      "title": "500 XP",
+      "desc": "Samla 500 XP"
+    },
+    "practice5": {
+      "title": "Starkt minne",
+      "desc": "Gör 5 övningar"
+    },
+    "words50": {
+      "title": "Ordsamlare",
+      "desc": "Lär dig 50 ord"
+    }
+  },
+  "settings": {
+    "title": "Inställningar",
+    "uiLang": "Appens språk",
+    "track": "Jag lär mig luganda från",
+    "mascotName": "Tranans namn",
+    "sound": "Ljudeffekter",
+    "on": "På",
+    "off": "Av",
+    "parents": "För föräldrar",
+    "saved": "Sparat"
+  },
+  "parent": {
+    "gateTitle": "Bara för vuxna",
+    "gateBody": "Svara på frågan för att fortsätta.",
+    "gateQuestion": "Vad är {a} × {b}?",
+    "gateWrong": "Det stämmer inte. Försök igen.",
+    "title": "Föräldrasida",
+    "privacyTitle": "Integritet",
+    "privacy": "Yiga Oluganda har inga konton, ingen reklam och ingen spårning. Framstegen sparas bara i den här webbläsaren på den här enheten. Ingenting skickas någonstans.",
+    "progress": "Framsteg",
+    "lessonsDone": "Klara lektioner",
+    "storiesDone": "Lästa kapitel",
+    "wordsLearned": "Inlärda ord",
+    "streak": "Dagar i rad nu",
+    "bestStreak": "Flest dagar i rad",
+    "xp": "Totalt XP",
+    "weakWords": "Ord att öva på",
+    "noWeakWords": "Inga kluriga ord än.",
+    "unitProgress": "Delar",
+    "reset": "Radera alla framsteg",
+    "resetConfirm": "Detta raderar alla framsteg på den här enheten. Det går inte att ångra. Är du säker?",
+    "resetYes": "Ja, radera allt",
+    "resetDone": "Alla framsteg är raderade.",
+    "about": "Om innehållet",
+    "aboutBody": "Ord, övningar och berättelsen kommer från boken ”Luganda för beginners” av Cyprine Kamoga. Vissa stavningar kontrolleras fortfarande av modersmålstalare.",
+    "audioNote": "Ljudinspelningar läggs till när modersmålstalare spelar in dem. Ingen datorröst används för luganda.",
+    "days": "{n} dagar"
+  },
+  "a11y": {
+    "progress": "Lektionens framsteg",
+    "close": "Stäng lektionen",
+    "correct": "Rätt",
+    "incorrect": "Inte riktigt",
+    "mascot": "Tranan {mascot}"
+  },
+  "notFound": "Sidan finns inte."
+}

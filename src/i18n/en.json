@@ -1,0 +1,246 @@
+{
+  "app": {
+    "name": "Yiga Oluganda",
+    "tagline": "Learn Luganda with {mascot} the crane"
+  },
+  "common": {
+    "continue": "Continue",
+    "check": "Check",
+    "start": "Start",
+    "back": "Back",
+    "close": "Close",
+    "next": "Next",
+    "done": "Done",
+    "skip": "Skip",
+    "listen": "Listen",
+    "cancel": "Cancel",
+    "lessons": "Lessons",
+    "xp": "XP",
+    "loading": "Loading…"
+  },
+  "lang": {
+    "en": "English",
+    "sv": "Svenska",
+    "lg": "Luganda"
+  },
+  "onboarding": {
+    "welcome": "Hello! I'm a crested crane from Uganda.",
+    "pickUi": "Which language do you want for buttons and menus?",
+    "pickTrack": "Which language do you want to learn Luganda from?",
+    "trackSv": "Swedish → Luganda",
+    "trackEn": "English → Luganda",
+    "pickName": "Give me a name!",
+    "nameHint": "My Luganda name is Ngaali. You can keep it or choose your own. (Don't use your own name.)",
+    "nameLabel": "Crane's name",
+    "ready": "Let's go, {mascot}!"
+  },
+  "nav": {
+    "learn": "Learn",
+    "practice": "Practice",
+    "stories": "Stories",
+    "badges": "Badges",
+    "settings": "Settings"
+  },
+  "home": {
+    "greeting": "Gyebale ko! Ready for a little Luganda?",
+    "greetingDone": "Weebale nnyo! You finished the whole book!",
+    "unit": "Unit {n}",
+    "bookPages": "Book p. {pages}",
+    "start": "Start",
+    "locked": "Finish the lesson before to open this one",
+    "story": "Story",
+    "storyLocked": "Finish this unit to open the story",
+    "didYouKnow": "Did you know?"
+  },
+  "stats": {
+    "streak": "{n} day streak",
+    "hearts": "{n} hearts",
+    "xp": "{n} XP",
+    "nextHeart": "Next heart in {min} min",
+    "heartsFull": "Hearts are full"
+  },
+  "exercise": {
+    "wordToPicture": "Tap the right picture",
+    "pictureToWord": "What is this in Luganda?",
+    "translateFromLuganda": "What does this mean?",
+    "translateToLuganda": "How do you say this in Luganda?",
+    "listen": "Listen and tap what you hear",
+    "pairs": "Tap the matching pairs",
+    "build": "Build the sentence",
+    "buildHint": "Tap the words in the right order",
+    "fill": "Fill in the missing word",
+    "question": "Choose the right answer",
+    "type": "Write it in Luganda",
+    "typePlaceholder": "Type in Luganda…",
+    "typeHint": "It starts with “{letter}”",
+    "newWord": "New word",
+    "clear": "Clear",
+    "playAudio": "Play the word",
+    "tapWord": "Tap a word to see what it means",
+    "newWordHint": "It means: {meaning}"
+  },
+  "feedback": {
+    "correct": [
+      "Great!",
+      "Well done!",
+      "Super!",
+      "Kirungi!",
+      "Yes!"
+    ],
+    "almost": "Almost! The answer is:",
+    "nearDoubles": "So close! Look at the double letters:",
+    "meaning": "Meaning:",
+    "keepGoing": "Keep going, you're learning!"
+  },
+  "lesson": {
+    "quitTitle": "Stop the lesson?",
+    "quitBody": "Your progress in this lesson will not be saved.",
+    "quitYes": "Stop",
+    "quitNo": "Keep learning",
+    "complete": "Lesson complete!",
+    "practiceComplete": "Practice complete!",
+    "storyComplete": "Chapter complete!",
+    "xpEarned": "+{n} XP",
+    "perfect": "Perfect, no mistakes!",
+    "mistakes": "{n} to practise again",
+    "newBadge": "New badge!",
+    "noHeartsTitle": "Out of hearts",
+    "noHeartsBody": "Your hearts are resting. Do a practice round to fill them up again, or come back later.",
+    "goPractice": "Practise and refill hearts",
+    "heartsRefilled": "Hearts are full again!"
+  },
+  "practice": {
+    "title": "Practice",
+    "intro": "Practise words that need a little more love. It refills all your hearts!",
+    "due": "{n} words ready to practise",
+    "start": "Start practice",
+    "empty": "Finish your first lesson, then come back to practise.",
+    "fromWeak": "We picked words you found tricky."
+  },
+  "story": {
+    "title": "Story mode",
+    "subtitle": "Follow Alex on a trip from Sweden to Buganda.",
+    "chapter": "Chapter {n}",
+    "showTranslation": "Show translation",
+    "hideTranslation": "Hide translation",
+    "questions": "Questions",
+    "startQuestions": "Answer the questions",
+    "locked": "Finish unit {n} to open",
+    "done": "Read"
+  },
+  "badges": {
+    "title": "Badges",
+    "earned": "{n} of {total} earned",
+    "locked": "Not yet",
+    "firstLesson": {
+      "title": "First steps",
+      "desc": "Finish your first lesson"
+    },
+    "packed": {
+      "title": "Bags packed",
+      "desc": "Finish the packing unit"
+    },
+    "landed": {
+      "title": "Tukusanyukidde!",
+      "desc": "Finish the flight unit"
+    },
+    "counter": {
+      "title": "Number star",
+      "desc": "Finish the numbers unit"
+    },
+    "respect": {
+      "title": "Empisa",
+      "desc": "Finish the unit at Jjaja's"
+    },
+    "fiveLessons": {
+      "title": "High five",
+      "desc": "Finish 5 lessons"
+    },
+    "twentyLessons": {
+      "title": "Super learner",
+      "desc": "Finish 20 lessons"
+    },
+    "perfect": {
+      "title": "Perfect!",
+      "desc": "Finish a lesson with no mistakes"
+    },
+    "firstStory": {
+      "title": "Story time",
+      "desc": "Read a story chapter"
+    },
+    "allStories": {
+      "title": "The whole journey",
+      "desc": "Read every story chapter"
+    },
+    "streak3": {
+      "title": "On fire",
+      "desc": "Learn 3 days in a row"
+    },
+    "streak7": {
+      "title": "Shining star",
+      "desc": "Learn 7 days in a row"
+    },
+    "xp100": {
+      "title": "100 XP",
+      "desc": "Collect 100 XP"
+    },
+    "xp500": {
+      "title": "500 XP",
+      "desc": "Collect 500 XP"
+    },
+    "practice5": {
+      "title": "Strong memory",
+      "desc": "Do 5 practice rounds"
+    },
+    "words50": {
+      "title": "Word collector",
+      "desc": "Learn 50 words"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "uiLang": "App language",
+    "track": "I learn Luganda from",
+    "mascotName": "Crane's name",
+    "sound": "Sound effects",
+    "on": "On",
+    "off": "Off",
+    "parents": "For parents",
+    "saved": "Saved"
+  },
+  "parent": {
+    "gateTitle": "Grown-ups only",
+    "gateBody": "Answer this question to continue.",
+    "gateQuestion": "What is {a} × {b}?",
+    "gateWrong": "That's not right. Try again.",
+    "title": "Parent page",
+    "privacyTitle": "Privacy",
+    "privacy": "Yiga Oluganda has no accounts, no ads and no tracking. Progress is saved only in this browser on this device. Nothing is sent anywhere.",
+    "progress": "Progress",
+    "lessonsDone": "Lessons finished",
+    "storiesDone": "Story chapters read",
+    "wordsLearned": "Words learned",
+    "streak": "Current streak",
+    "bestStreak": "Best streak",
+    "xp": "Total XP",
+    "weakWords": "Words to practise",
+    "noWeakWords": "No tricky words yet.",
+    "unitProgress": "Units",
+    "reset": "Erase all progress",
+    "resetConfirm": "This erases all progress on this device. It can't be undone. Are you sure?",
+    "resetYes": "Yes, erase everything",
+    "resetDone": "All progress is erased.",
+    "about": "About the content",
+    "aboutBody": "Words, exercises and the story come from the book “Luganda för beginners” by Cyprine Kamoga. Some spellings are still being checked by native speakers.",
+    "audioNote": "Sound recordings are added as native speakers record them. No computer voice is used for Luganda.",
+    "days": "{n} days"
+  },
+  "a11y": {
+    "progress": "Lesson progress",
+    "close": "Close lesson",
+    "correct": "Correct",
+    "incorrect": "Not quite",
+    "mascot": "{mascot} the crane"
+  },
+  "notFound": "This page doesn't exist."
+}
