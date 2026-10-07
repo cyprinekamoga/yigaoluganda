@@ -56,7 +56,7 @@
   if (page === 'landing') {
     $$('[data-buy]').forEach((button) =>
       button.addEventListener('click', async () => {
-        const errorEl = button.parentElement.querySelector('[data-buy-error]') || $('[data-buy-error]')
+        const errorEl = button.closest('.card, .hero')?.querySelector('[data-buy-error]') || $('[data-buy-error]')
         showMsg(errorEl, '')
         $$('[data-buy]').forEach((b) => (b.disabled = true))
         const r = await api('checkout')
