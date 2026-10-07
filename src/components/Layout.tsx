@@ -6,6 +6,7 @@ import { StatChips } from './StatChips'
 const TABS = [
   { to: '/', key: 'nav.learn', icon: '🗺️', end: true },
   { to: '/practice', key: 'nav.practice', icon: '💪🏾' },
+  { to: '/duel', key: 'nav.duel', icon: '⚔️' },
   { to: '/stories', key: 'nav.stories', icon: '📖' },
   { to: '/badges', key: 'nav.badges', icon: '🏅' },
   { to: '/settings', key: 'nav.settings', icon: '⚙️' },
@@ -24,7 +25,7 @@ export function Layout({ children, title }: { children: ReactNode; title?: strin
       </header>
       <main className="mx-auto max-w-xl px-4 pt-4">{children}</main>
       <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-line bg-cloud pb-[env(safe-area-inset-bottom)]">
-        <ul className="mx-auto grid max-w-xl grid-cols-5">
+        <ul className="mx-auto grid max-w-xl grid-cols-6">
           {TABS.map((tab) => (
             <li key={tab.to}>
               <NavLink

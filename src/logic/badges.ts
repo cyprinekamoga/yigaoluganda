@@ -30,6 +30,9 @@ export const BADGES: BadgeDef[] = [
   { id: 'xp500', emoji: '🌠', test: (s) => s.xp >= 500 },
   { id: 'practice5', emoji: '💪🏾', test: (s) => s.practiceCount >= 5 },
   { id: 'words50', emoji: '🗣️', test: (s) => countLearned(s.memory) >= 50 },
+  { id: 'firstDuel', emoji: '⚔️', test: (s) => (s.duelsPlayed ?? 0) >= 1 },
+  { id: 'duelWin', emoji: '🥇', test: (s) => (s.duelWins ?? 0) >= 1 },
+  { id: 'duelChampion', emoji: '👑', test: (s) => (s.duelWins ?? 0) >= 5 },
 ]
 
 /** Adds any newly earned badges. Returns the new state and the ids that were just earned. */

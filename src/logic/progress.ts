@@ -1,7 +1,7 @@
 import type { Lang } from '../content/types'
 import { review, type MemoryMap } from './srs'
 
-/** Everything the app remembers. Stored only on this device (localStorage). */
+/** Everything the app remembers. Kept on this device (localStorage) and, when opened as a shared Claude artifact, also online per person. */
 export interface ProgressState {
   version: 1
   settings: {
@@ -11,6 +11,10 @@ export interface ProgressState {
     mascotName: string
     onboarded: boolean
     sound: boolean
+    /** Name shown to family members in duels and on the leaderboard (never the child's real name). */
+    nickname: string
+    /** Emoji picture shown next to the nickname. */
+    avatar: string
   }
   xp: number
   hearts: number
@@ -26,6 +30,8 @@ export interface ProgressState {
   practiceCount: number
   perfectCount: number
   badges: Record<string, number>
+  duelsPlayed: number
+  duelWins: number
 }
 
 export const MAX_HEARTS = 5
@@ -37,6 +43,9 @@ export const XP = {
   perfectBonus: 5,
   practiceComplete: 5,
   storyComplete: 15,
+  duelWin: 15,
+  duelDraw: 10,
+  duelPlayed: 5,
 } as const
 
 export const DEFAULT_MASCOT_NAME = 'Ngaali'
@@ -44,7 +53,7 @@ export const DEFAULT_MASCOT_NAME = 'Ngaali'
 export function initialState(now: number, uiLang: Lang = 'sv'): ProgressState {
   return {
     version: 1,
-    settings: { uiLang, track: uiLang, mascotName: DEFAULT_MASCOT_NAME, onboarded: false, sound: true },
+    settings: { uiLang, track: uiLang, mascotName: DEFAULT_MASCOT_NAME, onboarded: false, sound: true, nickname: '', avatar: '🦁' },
     xp: 0,
     hearts: MAX_HEARTS,
     heartsUpdatedAt: now,
@@ -57,6 +66,8 @@ export function initialState(now: number, uiLang: Lang = 'sv'): ProgressState {
     practiceCount: 0,
     perfectCount: 0,
     badges: {},
+    duelsPlayed: 0,
+    duelWins: 0,
   }
 }
 
@@ -162,6 +173,20 @@ export function completeStory(state: ProgressState, chapterId: string, now: Date
     ...state,
     xp: state.xp + (first ? XP.storyComplete : XP.practiceComplete),
     completedStories: { ...state.completedStories, [chapterId]: state.completedStories[chapterId] ?? now.getTime() },
+  }
+  return registerActivity(next, now)
+}
+
+export type DuelOutcome = 'win' | 'draw' | 'loss'
+
+/** After a duel: XP for taking part (more for winning) and the duel counters. */
+export function completeDuel(state: ProgressState, outcome: DuelOutcome, now: Date): ProgressState {
+  const xp = outcome === 'win' ? XP.duelWin : outcome === 'draw' ? XP.duelDraw : XP.duelPlayed
+  const next = {
+    ...state,
+    xp: state.xp + xp,
+    duelsPlayed: state.duelsPlayed + 1,
+    duelWins: state.duelWins + (outcome === 'win' ? 1 : 0),
   }
   return registerActivity(next, now)
 }

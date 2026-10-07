@@ -26,7 +26,7 @@ function Segmented<T extends string>({ value, options, onChange, name }: { value
 }
 
 export function SettingsScreen() {
-  const { t, state, update } = useApp()
+  const { t, state, update, cloudSaving } = useApp()
   const s = state.settings
   const [name, setName] = useState(s.mascotName)
   const set = (patch: Partial<typeof s>) => update((st) => ({ ...st, settings: { ...st.settings, ...patch } }))
@@ -38,6 +38,9 @@ export function SettingsScreen() {
   return (
     <Layout title={t('settings.title')}>
       <h1 className="mb-5 font-display text-3xl font-bold">{t('settings.title')}</h1>
+      <p className="mb-5 rounded-2xl bg-cloud p-3 font-bold text-ink-soft" data-testid="cloud-status">
+        {t(cloudSaving ? 'settings.cloudOn' : 'settings.cloudOff')}
+      </p>
       <div className="grid gap-6">
         <section>
           <h2 className="mb-2 text-lg font-bold">{t('settings.uiLang')}</h2>

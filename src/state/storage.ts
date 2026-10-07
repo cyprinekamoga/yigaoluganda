@@ -8,12 +8,17 @@ export function loadState(now: number): ProgressState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return fresh
-    const saved = JSON.parse(raw) as Partial<ProgressState>
-    if (saved.version !== 1) return fresh
-    return { ...fresh, ...saved, settings: { ...fresh.settings, ...saved.settings } }
+    return revive(JSON.parse(raw) as Partial<ProgressState>, now) ?? fresh
   } catch {
     return fresh
   }
+}
+
+/** Fills in anything an older saved copy is missing. Null if the data isn't usable. */
+export function revive(saved: Partial<ProgressState> | null | undefined, now: number): ProgressState | null {
+  if (!saved || saved.version !== 1) return null
+  const fresh = initialState(now, saved.settings?.uiLang ?? guessLang())
+  return { ...fresh, ...saved, settings: { ...fresh.settings, ...saved.settings } }
 }
 
 export function saveState(state: ProgressState): void {

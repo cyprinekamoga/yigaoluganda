@@ -94,7 +94,7 @@ export function pickDistractors(
   return chosen.map((w) => w.id)
 }
 
-function choiceSet(word: Word, rng: Rng, known: string[], lang: Lang, needPicture = false): string[] {
+export function choiceSet(word: Word, rng: Rng, known: string[], lang: Lang, needPicture = false): string[] {
   return shuffle([word.id, ...pickDistractors(word, rng, { known, needPicture, lang })], rng)
 }
 

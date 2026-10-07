@@ -39,7 +39,8 @@
     "practice": "Practice",
     "stories": "Stories",
     "badges": "Badges",
-    "settings": "Settings"
+    "settings": "Settings",
+    "duel": "Duel"
   },
   "home": {
     "greeting": "Gyebale ko! Ready for a little Luganda?",
@@ -195,6 +196,18 @@
     "words50": {
       "title": "Word collector",
       "desc": "Learn 50 words"
+    },
+    "firstDuel": {
+      "title": "First duel",
+      "desc": "Play a duel"
+    },
+    "duelWin": {
+      "title": "Winner",
+      "desc": "Win a duel"
+    },
+    "duelChampion": {
+      "title": "Duel champion",
+      "desc": "Win 5 duels"
     }
   },
   "settings": {
@@ -206,7 +219,9 @@
     "on": "On",
     "off": "Off",
     "parents": "For parents",
-    "saved": "Saved"
+    "saved": "Saved",
+    "cloudOn": "☁️ Your progress is saved online, so it follows you to any device.",
+    "cloudOff": "💾 Progress is saved on this device."
   },
   "parent": {
     "gateTitle": "Grown-ups only",
@@ -242,5 +257,42 @@
     "incorrect": "Not quite",
     "mascot": "{mascot} the crane"
   },
-  "notFound": "This page doesn't exist."
+  "notFound": "This page doesn't exist.",
+  "duel": {
+    "title": "Duel",
+    "intro": "Challenge someone in your family to a Luganda quiz. Fast, right answers win!",
+    "unavailable": "Duels work when you open Yiga Oluganda from its shared Claude link and are signed in.",
+    "setupTitle": "Choose your duel name",
+    "nickLabel": "Nickname",
+    "nickHint": "Use a fun nickname, not your real name.",
+    "pickAvatar": "Pick your animal",
+    "save": "Save",
+    "edit": "Change",
+    "you": "you",
+    "online": "Online now",
+    "nobody": "Nobody else is here right now. Ask someone in your family to open Yiga Oluganda and tap Duel!",
+    "challenge": "Challenge",
+    "busy": "Busy",
+    "waiting": "Waiting for {name} to answer…",
+    "invited": "{name} challenges you to a duel!",
+    "accept": "Let's duel!",
+    "decline": "Not now",
+    "declined": "{name} can't duel right now.",
+    "getReady": "Get ready!",
+    "vs": "vs",
+    "noShow": "{name} didn't join the duel.",
+    "question": "Question {n} of {total}",
+    "waitOpponent": "Waiting for {name} to finish…",
+    "youWin": "You won!",
+    "youLose": "{name} won this time",
+    "draw": "It's a draw!",
+    "opponentLeft": "{name} left the duel.",
+    "points": "{n} points",
+    "correct": "{n} of {total} right",
+    "again": "Back to the lobby",
+    "leaderboard": "Family leaderboard",
+    "wins": "{n} wins",
+    "noBoard": "No duels yet. Be the first!",
+    "xpEarned": "+{n} XP"
+  }
 }

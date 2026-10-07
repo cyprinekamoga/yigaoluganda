@@ -2,6 +2,7 @@ import { HashRouter, MemoryRouter, Navigate, Route, Routes, useParams } from 're
 import { Layout } from './components/Layout'
 import { AppStateProvider, useApp } from './state/AppState'
 import { BadgesScreen } from './screens/BadgesScreen'
+import { DuelScreen } from './screens/DuelScreen'
 import { Home } from './screens/Home'
 import { LessonScreen } from './screens/LessonScreen'
 import { Onboarding } from './screens/Onboarding'
@@ -34,6 +35,7 @@ function AppRoutes() {
       <Route path="/welcome" element={<Navigate to="/" replace />} />
       <Route path="/lesson/:lessonId" element={<KeyedLesson />} />
       <Route path="/practice" element={<PracticeScreen />} />
+      <Route path="/duel" element={<DuelScreen />} />
       <Route path="/stories" element={<StoriesScreen />} />
       <Route path="/story/:chapterId" element={<KeyedStory />} />
       <Route path="/badges" element={<BadgesScreen />} />

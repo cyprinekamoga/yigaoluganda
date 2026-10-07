@@ -39,7 +39,8 @@
     "practice": "Öva",
     "stories": "Berättelser",
     "badges": "Märken",
-    "settings": "Inställningar"
+    "settings": "Inställningar",
+    "duel": "Duell"
   },
   "home": {
     "greeting": "Gyebale ko! Redo för lite luganda?",
@@ -195,6 +196,18 @@
     "words50": {
       "title": "Ordsamlare",
       "desc": "Lär dig 50 ord"
+    },
+    "firstDuel": {
+      "title": "Första duellen",
+      "desc": "Spela en duell"
+    },
+    "duelWin": {
+      "title": "Vinnare",
+      "desc": "Vinn en duell"
+    },
+    "duelChampion": {
+      "title": "Duellmästare",
+      "desc": "Vinn 5 dueller"
     }
   },
   "settings": {
@@ -206,7 +219,9 @@
     "on": "På",
     "off": "Av",
     "parents": "För föräldrar",
-    "saved": "Sparat"
+    "saved": "Sparat",
+    "cloudOn": "☁️ Dina framsteg sparas online och följer med dig till alla enheter.",
+    "cloudOff": "💾 Framstegen sparas på den här enheten."
   },
   "parent": {
     "gateTitle": "Bara för vuxna",
@@ -242,5 +257,42 @@
     "incorrect": "Inte riktigt",
     "mascot": "Tranan {mascot}"
   },
-  "notFound": "Sidan finns inte."
+  "notFound": "Sidan finns inte.",
+  "duel": {
+    "title": "Duell",
+    "intro": "Utmana någon i familjen i ett Luganda-quiz. Snabba, rätta svar vinner!",
+    "unavailable": "Dueller fungerar när du öppnar Yiga Oluganda via den delade Claude-länken och är inloggad.",
+    "setupTitle": "Välj ditt duellnamn",
+    "nickLabel": "Smeknamn",
+    "nickHint": "Använd ett roligt smeknamn, inte ditt riktiga namn.",
+    "pickAvatar": "Välj ditt djur",
+    "save": "Spara",
+    "edit": "Ändra",
+    "you": "du",
+    "online": "Online nu",
+    "nobody": "Ingen annan är här just nu. Be någon i familjen öppna Yiga Oluganda och trycka på Duell!",
+    "challenge": "Utmana",
+    "busy": "Upptagen",
+    "waiting": "Väntar på att {name} ska svara…",
+    "invited": "{name} utmanar dig på duell!",
+    "accept": "Kör!",
+    "decline": "Inte nu",
+    "declined": "{name} kan inte duellera just nu.",
+    "getReady": "Gör dig redo!",
+    "vs": "mot",
+    "noShow": "{name} kom inte till duellen.",
+    "question": "Fråga {n} av {total}",
+    "waitOpponent": "Väntar på att {name} blir klar…",
+    "youWin": "Du vann!",
+    "youLose": "{name} vann den här gången",
+    "draw": "Oavgjort!",
+    "opponentLeft": "{name} lämnade duellen.",
+    "points": "{n} poäng",
+    "correct": "{n} av {total} rätt",
+    "again": "Tillbaka till lobbyn",
+    "leaderboard": "Familjens topplista",
+    "wins": "{n} vinster",
+    "noBoard": "Inga dueller än. Bli först!",
+    "xpEarned": "+{n} XP"
+  }
 }

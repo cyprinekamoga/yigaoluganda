@@ -3,6 +3,7 @@ import type { Lang } from '../content/types'
 import { makeT, translateList, type TFunction } from '../i18n'
 import { awardBadges } from '../logic/badges'
 import { currentHearts, initialState, type ProgressState } from '../logic/progress'
+import { connectCloud, preferRemote, type Cloud } from './cloud'
 import { clearState, loadState, saveState } from './storage'
 
 interface AppContextValue {
@@ -17,6 +18,8 @@ interface AppContextValue {
   ui: Lang
   track: Lang
   now: number
+  /** True when progress is also saved online (opened as a shared Claude artifact). */
+  cloudSaving: boolean
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -34,6 +37,33 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => saveState(state), [state])
+
+  // Online saving: pick up progress from another device once, then keep the online copy current.
+  const cloud = useRef<Cloud | null>(null)
+  const [cloudSaving, setCloudSaving] = useState(false)
+  useEffect(() => {
+    let cancelled = false
+    connectCloud().then((c) => {
+      if (cancelled || !c) return
+      cloud.current = c
+      if (preferRemote(latest.current, c.remote) && c.remote) {
+        latest.current = c.remote
+        setState(c.remote)
+      } else {
+        c.save(latest.current).then((ok) => !cancelled && setCloudSaving(ok))
+        return
+      }
+      setCloudSaving(true)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+  useEffect(() => {
+    if (!cloud.current) return
+    const id = setTimeout(() => cloud.current?.save(state).then(setCloudSaving), 1500)
+    return () => clearTimeout(id)
+  }, [state])
 
   useEffect(() => {
     document.documentElement.lang = state.settings.uiLang
@@ -67,8 +97,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       ui,
       track: state.settings.track,
       now,
+      cloudSaving,
     }
-  }, [state, now, update, reset])
+  }, [state, now, update, reset, cloudSaving])
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
