@@ -9,6 +9,7 @@
     "dev": "vite",
     "prebuild": "npm run content",
     "build": "tsc -b && vite build",
+    "build:site": "node scripts/build-site.mjs",
     "preview": "vite preview --port 4173",
     "preview:file": "node scripts/build-artifact.mjs",
     "test": "npm run content && vitest run",

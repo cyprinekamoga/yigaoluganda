@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
+import { LOGIN_REQUIRED } from '../platform/account'
 import { useApp } from '../state/AppState'
 import { StatChips } from './StatChips'
 
-const TABS = [
+const ALL_TABS = [
   { to: '/', key: 'nav.learn', icon: '🗺️', end: true },
   { to: '/practice', key: 'nav.practice', icon: '💪🏾' },
   { to: '/duel', key: 'nav.duel', icon: '⚔️' },
@@ -11,6 +12,9 @@ const TABS = [
   { to: '/badges', key: 'nav.badges', icon: '🏅' },
   { to: '/settings', key: 'nav.settings', icon: '⚙️' },
 ]
+
+// Duels need the live rooms of a shared Claude artifact, so the website version leaves the tab out for now.
+const TABS = LOGIN_REQUIRED ? ALL_TABS.filter((tab) => tab.to !== '/duel') : ALL_TABS
 
 /** Main screens: stats on top, big tab bar at the bottom. */
 export function Layout({ children, title }: { children: ReactNode; title?: string }) {
@@ -25,7 +29,7 @@ export function Layout({ children, title }: { children: ReactNode; title?: strin
       </header>
       <main className="mx-auto max-w-xl px-4 pt-4">{children}</main>
       <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-line bg-cloud pb-[env(safe-area-inset-bottom)]">
-        <ul className="mx-auto grid max-w-xl grid-cols-6">
+        <ul className={`mx-auto grid max-w-xl ${TABS.length === 6 ? 'grid-cols-6' : 'grid-cols-5'}`}>
           {TABS.map((tab) => (
             <li key={tab.to}>
               <NavLink

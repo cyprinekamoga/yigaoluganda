@@ -3,6 +3,7 @@ import type { Lang } from '../content/types'
 import { makeT, translateList, type TFunction } from '../i18n'
 import { awardBadges } from '../logic/badges'
 import { currentHearts, initialState, type ProgressState } from '../logic/progress'
+import { checkSession, goToLogin, LOGIN_REQUIRED, type SessionInfo } from '../platform/account'
 import { connectCloud, preferRemote, type Cloud } from './cloud'
 import { clearState, loadState, saveState } from './storage'
 
@@ -20,6 +21,8 @@ interface AppContextValue {
   now: number
   /** True when progress is also saved online (opened as a shared Claude artifact). */
   cloudSaving: boolean
+  /** The logged-in account on the paid website, or null. */
+  account: SessionInfo | null
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -37,6 +40,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => saveState(state), [state])
+
+  // Paid website: make sure the login is still valid (the app may be opening from the offline cache).
+  const [account, setAccount] = useState<SessionInfo | null>(null)
+  useEffect(() => {
+    if (!LOGIN_REQUIRED) return
+    checkSession().then((r) => {
+      if (r.status === 'login') goToLogin()
+      else if (r.status === 'ok') setAccount(r.info)
+    })
+  }, [])
 
   // Online saving: pick up progress from another device once, then keep the online copy current.
   const cloud = useRef<Cloud | null>(null)
@@ -98,8 +111,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       track: state.settings.track,
       now,
       cloudSaving,
+      account,
     }
-  }, [state, now, update, reset, cloudSaving])
+  }, [state, now, update, reset, cloudSaving, account])
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

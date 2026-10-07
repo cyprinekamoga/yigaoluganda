@@ -221,7 +221,12 @@
     "parents": "For parents",
     "saved": "Saved",
     "cloudOn": "☁️ Your progress is saved online, so it follows you to any device.",
-    "cloudOff": "💾 Progress is saved on this device."
+    "cloudOff": "💾 Progress is saved on this device.",
+    "account": "Account",
+    "loggedInAs": "Logged in as {name}",
+    "manageSubscription": "Subscription and receipts",
+    "portalError": "Couldn't open the subscription page. Please try again later.",
+    "logout": "Log out"
   },
   "parent": {
     "gateTitle": "Grown-ups only",

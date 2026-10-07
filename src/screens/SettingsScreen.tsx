@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Layout } from '../components/Layout'
 import type { Lang } from '../content/types'
 import { DEFAULT_MASCOT_NAME } from '../logic/progress'
+import { logout, openSubscriptionPage } from '../platform/account'
 import { useApp } from '../state/AppState'
 
 function Segmented<T extends string>({ value, options, onChange, name }: { value: T; options: { value: T; label: ReactNode }[]; onChange: (v: T) => void; name: string }) {
@@ -26,7 +27,8 @@ function Segmented<T extends string>({ value, options, onChange, name }: { value
 }
 
 export function SettingsScreen() {
-  const { t, state, update, cloudSaving } = useApp()
+  const { t, state, update, cloudSaving, account } = useApp()
+  const [portalError, setPortalError] = useState(false)
   const s = state.settings
   const [name, setName] = useState(s.mascotName)
   const set = (patch: Partial<typeof s>) => update((st) => ({ ...st, settings: { ...st.settings, ...patch } }))
@@ -83,6 +85,29 @@ export function SettingsScreen() {
             onChange={(v) => set({ sound: v === 'on' })}
           />
         </section>
+        {account && (
+          <section className="rounded-2xl bg-cloud p-4" data-testid="account">
+            <h2 className="text-lg font-bold">{t('settings.account')}</h2>
+            <p className="mb-3 text-ink-soft">{t('settings.loggedInAs', { name: account.username })}</p>
+            <div className="grid gap-3">
+              <button
+                type="button"
+                onClick={() => openSubscriptionPage().then((ok) => setPortalError(!ok))}
+                className="btn-3d min-h-14 rounded-2xl border-2 border-line bg-cloud text-lg font-bold [--edge:var(--color-line)]"
+              >
+                💳 {t('settings.manageSubscription')}
+              </button>
+              {portalError && <p className="text-crane">{t('settings.portalError')}</p>}
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="btn-3d min-h-14 rounded-2xl border-2 border-line bg-cloud text-lg font-bold [--edge:var(--color-line)]"
+              >
+                🚪 {t('settings.logout')}
+              </button>
+            </div>
+          </section>
+        )}
         <Link to="/parent" className="btn-3d flex min-h-14 items-center justify-center rounded-2xl border-2 border-line bg-cloud text-lg font-bold [--edge:var(--color-line)]" data-testid="parent-link">
           👪 {t('settings.parents')}
         </Link>

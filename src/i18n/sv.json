@@ -221,7 +221,12 @@
     "parents": "För föräldrar",
     "saved": "Sparat",
     "cloudOn": "☁️ Dina framsteg sparas online och följer med dig till alla enheter.",
-    "cloudOff": "💾 Framstegen sparas på den här enheten."
+    "cloudOff": "💾 Framstegen sparas på den här enheten.",
+    "account": "Konto",
+    "loggedInAs": "Inloggad som {name}",
+    "manageSubscription": "Prenumeration och kvitton",
+    "portalError": "Det gick inte att öppna prenumerationssidan. Försök igen senare.",
+    "logout": "Logga ut"
   },
   "parent": {
     "gateTitle": "Bara för vuxna",
