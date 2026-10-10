@@ -68,7 +68,6 @@
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg(err, tr('Skriv en giltig e-postadress.', 'Enter a valid email address.'))
       if (a.length < 8) return showMsg(err, tr('Lösenordet behöver minst 8 tecken.', 'The password needs at least 8 characters.'))
       if (a !== b) return showMsg(err, tr('Lösenorden är inte likadana.', "The passwords don't match."))
-      if (!form.consent.checked) return showMsg(err, tr('Kryssa i att du godkänner villkoren för att fortsätta.', 'Please tick the box to accept the terms.'))
       const button = $('button[type=submit]', form)
       button.disabled = true
       const r = await api('signup', { email, password: a })

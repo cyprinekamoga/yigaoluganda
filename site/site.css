@@ -159,8 +159,6 @@ input[type=email] {
 .legal ul { padding-left: 22px; }
 .legal li { margin: 6px 0; }
 .legal code { background: var(--sun-soft); padding: 1px 6px; border-radius: 6px; }
-.consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 18px; font-weight: 600; }
-.consent input { width: 22px; height: 22px; margin-top: 3px; flex: none; accent-color: var(--lake); }
 footer .links a { margin: 0 6px; }
 
 .panel strong[data-username] { overflow-wrap: anywhere; }
