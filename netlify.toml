@@ -7,6 +7,19 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Everyone ends up on the own domain: the old Netlify address and www send people there.
+[[redirects]]
+  from = "https://verdant-cat-ff1f2d.netlify.app/*"
+  to = "https://yigaoluganda.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.yigaoluganda.com/*"
+  to = "https://yigaoluganda.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/app"
   to = "/app/"
