@@ -26,18 +26,18 @@
       <form data-form="login" novalidate>
         <h1><span data-l="sv">Logga in</span><span data-l="en">Log in</span></h1>
         <p class="msg ok" data-bye hidden><span data-l="sv">Du är utloggad. Weraba!</span><span data-l="en">You're logged out. Weraba!</span></p>
-        <label for="username"><span data-l="sv">Användarnamn</span><span data-l="en">Username</span></label>
-        <input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="crane-kampala-482">
+        <label for="username"><span data-l="sv">E-postadress</span><span data-l="en">Email address</span></label>
+        <input id="username" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
         <label for="password"><span data-l="sv">Lösenord</span><span data-l="en">Password</span></label>
         <input id="password" name="password" type="password" autocomplete="current-password" required>
         <p class="msg err" data-error hidden></p>
         <button class="btn go block" type="submit" style="margin-top:20px"><span data-l="sv">Logga in</span><span data-l="en">Log in</span></button>
-        <p class="fine"><span data-l="sv">Inget konto än?</span><span data-l="en">No account yet?</span> <a href="/#pris"><span data-l="sv">Kom igång för 39 kr/mån</span><span data-l="en">Get started for 39 SEK/month</span></a></p>
+        <p class="fine"><span data-l="sv">Inget konto än?</span><span data-l="en">No account yet?</span> <a href="/signup.html"><span data-l="sv">Skapa ett konto</span><span data-l="en">Create an account</span></a></p>
       </form>
 
       <form data-form="change" novalidate hidden>
         <h1><span data-l="sv">Välj ett eget lösenord</span><span data-l="en">Choose your own password</span></h1>
-        <p><span data-l="sv">Det tillfälliga lösenordet slutar fungera nu. Välj ett som du kommer ihåg, minst 8 tecken.</span><span data-l="en">The temporary password stops working now. Pick one you'll remember, at least 8 characters.</span></p>
+        <p><span data-l="sv">Välj ett lösenord som du kommer ihåg, minst 8 tecken.</span><span data-l="en">Pick a password you'll remember, at least 8 characters.</span></p>
         <input type="text" name="username" autocomplete="username" hidden>
         <label for="new1"><span data-l="sv">Nytt lösenord</span><span data-l="en">New password</span></label>
         <input id="new1" name="new1" type="password" autocomplete="new-password" minlength="8" required>

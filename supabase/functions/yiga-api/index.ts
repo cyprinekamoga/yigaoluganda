@@ -1,4 +1,4 @@
-// Yiga Oluganda accounts: checkout, showing the first login after payment, logging in and sessions.
+// Yiga Oluganda accounts: sign up, log in, pay (Stripe Checkout), sessions.
 // Called by the website's /api/* proxy (netlify/edge-functions/api.ts), which keeps the session in an HttpOnly cookie.
 import {
   db,
@@ -6,7 +6,6 @@ import {
   hasAccess,
   json,
   newSessionToken,
-  newTempPassword,
   SESSION_DAYS,
   sha256,
   stripe,
@@ -17,7 +16,7 @@ import {
 
 const MAX_FAILED = 5
 const LOCK_MINUTES = 15
-const CLAIM_WINDOW_HOURS = 48
+const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/
 
 const siteUrl = () => (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '')
 const str = (v: unknown, max = 200) => (typeof v === 'string' ? v.slice(0, max) : '')
@@ -34,57 +33,80 @@ async function sessionAccount(token: string) {
   return { tokenHash: data.token_hash as string, account: data.account as any }
 }
 
+async function newSession(accountId: string) {
+  const token = newSessionToken()
+  await db.from('yiga_sessions').insert({
+    token_hash: await sha256(token),
+    account_id: accountId,
+    expires_at: new Date(Date.now() + SESSION_DAYS * 86_400_000).toISOString(),
+  })
+  return { token, maxAge: SESSION_DAYS * 86_400 }
+}
+
 const actions: Record<string, (body: Record<string, unknown>) => Promise<Response>> = {
-  /** Starts a Stripe Checkout for the monthly subscription. */
-  async checkout() {
+  /** Creates an account (email + password) and logs it in. Payment comes next. */
+  async signup(body) {
+    const email = str(body.email, 254).trim().toLowerCase()
+    const password = str(body.password, 200)
+    if (!EMAIL.test(email)) return json({ error: 'bad_email' }, 400)
+    if (password.length < 8) return json({ error: 'too_short' }, 400)
+    const { data: account, error } = await db
+      .from('yiga_accounts')
+      .insert({ username: email, email, password_hash: await hashPassword(password), must_change_password: false })
+      .select('*')
+      .single()
+    if (error?.code === '23505') return json({ error: 'exists' }, 409)
+    if (error) throw error
+    return json({ ...(await newSession(account.id)), username: email, active: false })
+  },
+
+  /** Who is logged in, and have they paid? */
+  async me(body) {
+    const s = await sessionAccount(str(body.token))
+    if (!s) return json({ error: 'no_session' }, 401)
+    return json({ username: s.account.username, active: hasAccess(s.account) })
+  },
+
+  /** Starts Stripe Checkout for the logged-in account's monthly subscription. */
+  async checkout(body) {
+    const s = await sessionAccount(str(body.token))
+    if (!s) return json({ error: 'no_session' }, 401)
+    if (hasAccess(s.account)) return json({ error: 'already_active' }, 409)
     if (!stripeConfigured() || !Deno.env.get('STRIPE_PRICE_ID') || !siteUrl()) return json({ error: 'not_configured' }, 503)
-    const session = await stripe('POST', 'checkout/sessions', {
+    const params: Record<string, string> = {
       mode: 'subscription',
       'line_items[0][price]': Deno.env.get('STRIPE_PRICE_ID')!,
       'line_items[0][quantity]': '1',
-      success_url: `${siteUrl()}/thanks.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl()}/#pris`,
+      client_reference_id: s.account.id,
+      'subscription_data[metadata][account_id]': s.account.id,
+      success_url: `${siteUrl()}/welcome.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl()}/pay.html`,
       allow_promotion_codes: 'true',
       locale: 'auto',
-    })
+    }
+    if (s.account.stripe_customer_id) params.customer = s.account.stripe_customer_id
+    else params.customer_email = s.account.email ?? s.account.username
+    const session = await stripe('POST', 'checkout/sessions', params)
     return json({ url: session.url })
   },
 
-  /** After payment: shows the username and a temporary password, once. */
-  async claim(body) {
+  /** Back from Stripe: unlock the app straight away (the webhook would do it too, a moment later). */
+  async confirm(body) {
+    const s = await sessionAccount(str(body.token))
+    if (!s) return json({ error: 'no_session' }, 401)
     const sessionId = str(body.sessionId)
     if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(sessionId)) return json({ error: 'bad_request' }, 400)
     if (!stripeConfigured()) return json({ error: 'not_configured' }, 503)
     const cs = await stripe('GET', `checkout/sessions/${sessionId}`)
-    const paid = cs.status === 'complete' && cs.mode === 'subscription' && ['paid', 'no_payment_required'].includes(cs.payment_status)
-    if (!paid || typeof cs.subscription !== 'string') return json({ error: 'not_paid' }, 402)
-    if (Date.now() / 1000 - cs.created > CLAIM_WINDOW_HOURS * 3600) return json({ error: 'expired' }, 410)
-
-    const account = await syncSubscription(cs.subscription, {
-      checkoutSessionId: sessionId,
-      email: cs.customer_details?.email ?? null,
-    })
-    if (account.credentials_revealed_at) return json({ username: account.username, alreadyShown: true })
-
-    // Mark as shown first, so two tabs can't both receive a password.
-    const { data: claimed } = await db
-      .from('yiga_accounts')
-      .update({ credentials_revealed_at: new Date().toISOString() })
-      .eq('id', account.id)
-      .is('credentials_revealed_at', null)
-      .select('id')
-    if (!claimed?.length) return json({ username: account.username, alreadyShown: true })
-
-    const password = newTempPassword()
-    await db
-      .from('yiga_accounts')
-      .update({ password_hash: await hashPassword(password), must_change_password: true })
-      .eq('id', account.id)
-    return json({ username: account.username, password })
+    if (cs.client_reference_id !== s.account.id) return json({ error: 'not_yours' }, 403)
+    const paid = cs.status === 'complete' && ['paid', 'no_payment_required'].includes(cs.payment_status)
+    if (!paid || typeof cs.subscription !== 'string') return json({ error: 'not_paid', active: false }, 402)
+    const account = await syncSubscription(cs.subscription, { accountId: s.account.id, checkoutSessionId: sessionId })
+    return json({ active: hasAccess(account) })
   },
 
   async login(body) {
-    const username = str(body.username, 80).trim().toLowerCase()
+    const username = str(body.username ?? body.email, 254).trim().toLowerCase()
     const password = str(body.password, 200)
     const { data: account } = await db.from('yiga_accounts').select('*').eq('username', username).maybeSingle()
     if (account?.locked_until && new Date(account.locked_until) > new Date()) return json({ error: 'locked' }, 429)
@@ -95,15 +117,7 @@ const actions: Record<string, (body: Record<string, unknown>) => Promise<Respons
       return json({ error: 'wrong_login' }, 401)
     }
     await db.from('yiga_accounts').update({ failed_logins: 0, locked_until: null }).eq('id', account.id)
-    if (!hasAccess(account)) return json({ error: 'inactive' }, 402)
-
-    const token = newSessionToken()
-    await db.from('yiga_sessions').insert({
-      token_hash: await sha256(token),
-      account_id: account.id,
-      expires_at: new Date(Date.now() + SESSION_DAYS * 86_400_000).toISOString(),
-    })
-    return json({ token, username: account.username, mustChange: account.must_change_password, maxAge: SESSION_DAYS * 86_400 })
+    return json({ ...(await newSession(account.id)), username: account.username, mustChange: account.must_change_password, active: hasAccess(account) })
   },
 
   /** Is this session allowed into the app right now? */

@@ -1,30 +1,31 @@
 # Selling Yiga Oluganda: setup guide
 
-This guide sets up the paid website: a landing page, a Stripe subscription (39 SEK a month, renewing automatically), a Uganda-themed login for every buyer, and an app that only opens for people with a valid login.
+This guide sets up the paid website: a landing page, sign-up with email and password, a Stripe subscription (39 SEK a month, renewing automatically), and an app that only opens for people with an active subscription.
 
 ## How it fits together
 
 ```
-Landing page (/)  ──"Kom igång"──▶  Stripe Checkout (39 kr/mån)
-                                         │ paid
+Landing page (/)  ──"Kom igång"──▶  Sign up (/signup.html): email + password
+                                         │
                                          ▼
-Thank-you page (/thanks.html) ◀── shows username + temporary password, once
-     │                                   (e.g. crane-kampala-482 / Matooke-Nile-Kob-7319)
-     ▼
-Login (/login.html) ── first login: choose your own password
-     │
-     ▼
+                              Payment (/pay.html) ──▶ Stripe Checkout (39 kr/mån)
+                                                            │ paid
+                                                            ▼
+                              Welcome (/welcome.html) ── unlocks the account at once
+                                         │
+                                         ▼
 App (/app/) ── served only with a valid login and an active subscription
+Login (/login.html) ── on other devices; unpaid accounts are sent to /pay.html
 ```
 
 | Part | Where it runs | Files |
 |---|---|---|
-| Landing, thank-you and login pages | Netlify | `site/` |
+| Landing, sign-up, payment, welcome and login pages | Netlify | `site/` |
 | The app, under `/app/`, with login required | Netlify | `src/`, built by `npm run build:site` |
 | `/api/*` (keeps the login in a secure cookie) and the `/app/*` gate | Netlify Edge Functions | `netlify/edge-functions/` |
 | Accounts, passwords, sessions, Stripe checks | Supabase project `ilcwxstkuuyydnskobll` | `supabase/functions/`, `supabase/migrations/` |
 
-**Already done:** the database tables and both Supabase functions (`yiga-api` and `yiga-stripe-webhook`) are deployed, and login, sessions, password change, cancellation and the lock after 5 wrong passwords have been tested against the live functions.
+**Already done:** the database tables and both Supabase functions (`yiga-api` and `yiga-stripe-webhook`) are deployed and the website is live on Netlify. Sign-up, login, sessions, "not paid yet" handling, cancellation and the lock after 5 wrong passwords have been tested against the live functions.
 
 **Still to do (about 30 minutes):** steps 1–4 below. They need your own accounts, so only you can do them.
 
@@ -72,10 +73,11 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
 
 ## 4. Test a purchase
 
-1. Open your site and click **Kom igång**.
-2. Pay with the test card `4242 4242 4242 4242`, any future expiry date and any CVC.
-3. The thank-you page shows the username and temporary password. Log in and choose a new password, and the app should open.
-4. In the app, open **Settings → Subscription and receipts → Cancel**. In test mode you can end the subscription right away from the Stripe dashboard. After that, the app should send you back to the login page, which then says "The subscription isn't active".
+1. Open your site, click **Kom igång** and create an account with your email and a password.
+2. On the payment page, click **Betala och börja** and pay with the test card `4242 4242 4242 4242`, any future date and any CVC.
+3. You land back on the welcome page and the app opens straight away.
+4. On another device or browser, log in with the same email and password. You should go straight into the app.
+5. In the app, open **Settings → Subscription and receipts → Cancel**. In test mode you can end the subscription immediately from the Stripe dashboard. Opening the app afterwards sends you to the payment page.
 
 ## 5. Go live
 
@@ -97,13 +99,13 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
   - After 5 wrong passwords, the account is locked for 15 minutes.
   - The app's files are only served to logged-in subscribers.
 - **If a subscription ends** (cancelled or unpaid), access stops within about a minute. The app also checks every time it opens.
-- **The temporary password is shown only once**, on the thank-you page, and buyers must change it at first login. If someone loses it, a new password has to be set for them. Ask Claude in a session that has Supabase connected, or add a "forgot password" email later (see Next steps).
+- **Forgotten passwords:** there is no "forgot password" email yet. Until there is, a new password has to be set for the person. Ask Claude in a session that has Supabase connected, or add the email flow (see Next steps).
 - **Duels** need live rooms. For now they work only in the Claude-shared version, so the website version hides the Duel tab.
 - **Children's progress** is saved on each device. Online sync for website accounts is a possible next step.
 
 ## Next steps (optional)
 
-- Email the login to the buyer as well, for example with Resend, plus a "forgot password" flow.
+- A "forgot password" email (and a welcome email), for example with Resend.
 - A free trial: add `subscription_data[trial_period_days]` to the checkout call in `supabase/functions/yiga-api/index.ts`.
 - Duels and online progress for website accounts, using Supabase Realtime.
 
@@ -111,7 +113,7 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
 
 - Clean up the test account created during setup, and remove the `pg_net` extension that was only used for testing. Run this in the Supabase SQL editor:
   ```sql
-  delete from public.yiga_accounts where username = 'test-kampala-000';
+  delete from public.yiga_accounts where subscription_status = 'test_disabled';
   drop extension if exists pg_net;
   ```
 - To redeploy the functions with the Supabase CLI:

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="sv" data-lang="sv">
+<head>
+<title>Välkommen – Yiga Oluganda</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B5CAD">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="welcome" class="page">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon.svg" alt="">Yiga Oluganda</a>
+    <nav><button class="lang" type="button" data-lang-toggle><span data-l="sv">English</span><span data-l="en">Svenska</span></button></nav>
+  </div>
+</header>
+<main>
+  <div class="wrap narrow">
+    <div class="panel">
+      <img class="mascot" src="/img/icon.svg" alt="">
+      <div data-state="loading">
+        <h1><span data-l="sv">Webale nnyo!</span><span data-l="en">Webale nnyo!</span></h1>
+        <p><span data-l="sv">Vi öppnar appen åt dig…</span><span data-l="en">Opening the app for you…</span></p>
+      </div>
+      <div data-state="error" hidden>
+        <h1><span data-l="sv">Nästan klart</span><span data-l="en">Almost there</span></h1>
+        <p data-error-text></p>
+        <button class="btn block" type="button" data-retry><span data-l="sv">Försök igen</span><span data-l="en">Try again</span></button>
+        <p class="fine"><span data-l="sv">Har du betalat men kommer inte in? Mejla <a href="mailto:info@zaweddeoils.com">info@zaweddeoils.com</a>.</span><span data-l="en">Paid but can't get in? Email <a href="mailto:info@zaweddeoils.com">info@zaweddeoils.com</a>.</span></p>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/site.js" defer></script>
+</body>
+</html>

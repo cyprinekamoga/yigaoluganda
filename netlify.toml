@@ -22,7 +22,7 @@
     Strict-Transport-Security = "max-age=31536000"
 
 [[headers]]
-  for = "/thanks.html"
+  for = "/welcome.html"
   [headers.values]
     Cache-Control = "no-store"
     Referrer-Policy = "no-referrer"

@@ -1,4 +1,4 @@
-// Keeps accounts in step with Stripe: a new subscription creates an account, a cancelled or
+// Keeps accounts in step with Stripe: a paid subscription unlocks the account, a cancelled or
 // unpaid one loses access. Point a Stripe webhook at this function (see DEPLOY.md).
 import { db, json, syncSubscription, timingSafeEqual } from '../_shared/yiga.ts'
 
@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case 'checkout.session.completed':
         if (o.mode === 'subscription' && typeof o.subscription === 'string')
-          await syncSubscription(o.subscription, { checkoutSessionId: o.id, email: o.customer_details?.email ?? null })
+          await syncSubscription(o.subscription, { checkoutSessionId: o.id, accountId: o.client_reference_id ?? null })
         break
       case 'customer.subscription.created':
       case 'customer.subscription.updated':

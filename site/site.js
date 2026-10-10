@@ -52,82 +52,94 @@
 
   const page = document.body.dataset.page
 
-  // ---------- landing: buy ----------
-  if (page === 'landing') {
-    $$('[data-buy]').forEach((button) =>
-      button.addEventListener('click', async () => {
-        const errorEl = button.closest('.card, .hero')?.querySelector('[data-buy-error]') || $('[data-buy-error]')
-        showMsg(errorEl, '')
-        $$('[data-buy]').forEach((b) => (b.disabled = true))
-        const r = await api('checkout')
-        if (r.ok && typeof r.data.url === 'string' && r.data.url.startsWith('https://checkout.stripe.com/')) {
-          window.location.assign(r.data.url)
-          return
-        }
-        $$('[data-buy]').forEach((b) => (b.disabled = false))
-        showMsg(
-          errorEl,
-          r.data.error === 'not_configured'
-            ? tr('Köpet är inte öppnat än. Försök igen snart!', "Purchases aren't open yet. Please try again soon!")
-            : genericError(),
-        )
-      }),
-    )
+  const show = (state) => $$('[data-state]').forEach((el) => (el.hidden = el.dataset.state !== state))
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+
+  // ---------- sign up (step 1) ----------
+  if (page === 'signup') {
+    const form = $('[data-form=signup]')
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const err = $('[data-error]', form)
+      showMsg(err, '')
+      const email = form.email.value.trim().toLowerCase()
+      const a = form.pw1.value
+      const b = form.pw2.value
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg(err, tr('Skriv en giltig e-postadress.', 'Enter a valid email address.'))
+      if (a.length < 8) return showMsg(err, tr('Lösenordet behöver minst 8 tecken.', 'The password needs at least 8 characters.'))
+      if (a !== b) return showMsg(err, tr('Lösenorden är inte likadana.', "The passwords don't match."))
+      const button = $('button[type=submit]', form)
+      button.disabled = true
+      const r = await api('signup', { email, password: a })
+      button.disabled = false
+      if (r.ok) return window.location.assign('/pay.html')
+      if (r.data.error === 'exists')
+        return showMsg(err, tr('Det finns redan ett konto med den e-postadressen. Logga in i stället.', 'There is already an account with that email. Please log in instead.'))
+      showMsg(err, genericError())
+    })
   }
 
-  // ---------- thank-you page: show the new login once ----------
-  if (page === 'thanks') {
+  // ---------- payment (step 2) ----------
+  if (page === 'pay') {
+    const err = $('[data-error]')
+    ;(async () => {
+      const r = await api('me')
+      if (r.status === 401) return window.location.assign('/login.html?next=/pay.html')
+      if (r.ok && r.data.active) return window.location.assign('/app/')
+      if (!r.ok) {
+        show('pay')
+        return showMsg(err, genericError())
+      }
+      $$('[data-username]').forEach((el) => (el.textContent = r.data.username))
+      show('pay')
+    })()
+    $('[data-pay]').addEventListener('click', async (e) => {
+      const button = e.currentTarget
+      showMsg(err, '')
+      button.disabled = true
+      const r = await api('checkout')
+      if (r.ok && typeof r.data.url === 'string' && r.data.url.startsWith('https://checkout.stripe.com/')) return window.location.assign(r.data.url)
+      button.disabled = false
+      if (r.data.error === 'already_active') return window.location.assign('/app/')
+      if (r.status === 401) return window.location.assign('/login.html?next=/pay.html')
+      showMsg(
+        err,
+        r.data.error === 'not_configured'
+          ? tr('Betalningen är inte öppnad än. Försök igen snart!', "Payments aren't open yet. Please try again soon!")
+          : genericError(),
+      )
+    })
+    $('[data-logout]').addEventListener('click', async (e) => {
+      e.preventDefault()
+      await api('logout')
+      window.location.assign('/login.html?bye=1')
+    })
+  }
+
+  // ---------- back from Stripe: unlock and open the app ----------
+  if (page === 'welcome') {
     const params = new URLSearchParams(location.search)
-    const sessionId = params.get('session_id') || sessionStorageGet('yiga-cs') || ''
-    // Keep the id out of the address bar and history, but remember it for "try again" in this tab.
-    if (params.has('session_id')) {
-      sessionStorageSet('yiga-cs', sessionId)
-      history.replaceState(null, '', location.pathname)
-    }
-    const show = (state) => $$('[data-state]').forEach((el) => (el.hidden = el.dataset.state !== state))
-    const fill = (username, password) => {
-      $$('[data-username]').forEach((el) => (el.textContent = username))
-      $$('[data-password]').forEach((el) => (el.textContent = password || ''))
-      $$('[data-login-link]').forEach((a) => (a.href = `/login.html?u=${encodeURIComponent(username)}`))
-    }
-    const claim = async () => {
+    const sessionId = params.get('session_id') || ''
+    if (sessionId) history.replaceState(null, '', location.pathname)
+    const confirm = async () => {
       show('loading')
-      if (!sessionId) {
-        $('[data-error-text]').textContent = tr('Vi hittade inget köp på den här sidan.', "We couldn't find a purchase on this page.")
-        return show('error')
+      if (!sessionId) return window.location.assign('/pay.html')
+      // Stripe can take a few seconds to finish; try for up to ~20 seconds.
+      for (let i = 0; i < 8; i++) {
+        const r = await api('confirm', { sessionId })
+        if (r.ok && r.data.active) return window.location.assign('/app/')
+        if (r.status === 401) return window.location.assign('/login.html?next=/app/')
+        if (r.status !== 402 && !(r.ok && !r.data.active)) break
+        await wait(2500)
       }
-      const r = await api('claim', { sessionId })
-      if (r.ok && r.data.password) {
-        fill(r.data.username, r.data.password)
-        sessionStorageSet('yiga-cs', '')
-        return show('new')
-      }
-      if (r.ok && r.data.alreadyShown) {
-        fill(r.data.username)
-        return show('shown')
-      }
-      const messages = {
-        not_paid: tr('Betalningen är inte klar än. Vänta en liten stund och försök igen.', "The payment isn't finished yet. Wait a moment and try again."),
-        expired: tr('Länken är för gammal. Mejla oss så hjälper vi dig.', 'This link is too old. Email us and we will help.'),
-      }
-      $('[data-error-text]').textContent = messages[r.data.error] || genericError()
+      $('[data-error-text]').textContent = tr(
+        'Vi väntar fortfarande på bekräftelsen från betalningen. Vänta en liten stund och försök igen.',
+        "We're still waiting for the payment confirmation. Wait a moment and try again.",
+      )
       show('error')
     }
-    $('[data-retry]')?.addEventListener('click', claim)
-    $$('[data-copy]').forEach((b) =>
-      b.addEventListener('click', async () => {
-        const text = $(`[data-${b.dataset.copy}]`)?.textContent || ''
-        try {
-          await navigator.clipboard.writeText(text)
-          const old = b.innerHTML
-          b.textContent = tr('Kopierat ✓', 'Copied ✓')
-          setTimeout(() => (b.innerHTML = old), 1500)
-        } catch {
-          /* clipboard blocked: the text is on screen */
-        }
-      }),
-    )
-    claim()
+    $('[data-retry]')?.addEventListener('click', confirm)
+    confirm()
   }
 
   // ---------- login ----------
@@ -137,7 +149,7 @@
     const changeForm = $('[data-form=change]')
     const next = (() => {
       const n = params.get('next') || '/app/'
-      return /^\/app(\/[\w\-./]*)?$/.test(n) ? n : '/app/'
+      return /^\/(app(\/[\w\-./]*)?|pay\.html)$/.test(n) ? n : '/app/'
     })()
     if (params.get('u')) loginForm.username.value = params.get('u')
     if (params.get('bye')) $('[data-bye]').hidden = false
@@ -155,19 +167,18 @@
       showMsg(err, '')
       const username = loginForm.username.value.trim().toLowerCase()
       const password = loginForm.password.value
-      if (!username || !password) return showMsg(err, tr('Fyll i användarnamn och lösenord.', 'Enter your username and password.'))
+      if (!username || !password) return showMsg(err, tr('Fyll i e-postadress och lösenord.', 'Enter your email address and password.'))
       const button = $('button[type=submit]', loginForm)
       button.disabled = true
       const r = await api('login', { username, password })
       button.disabled = false
       if (r.ok) {
         if (r.data.mustChange) return showChange(username)
-        return window.location.assign(next)
+        return window.location.assign(r.data.active ? next : '/pay.html')
       }
       const messages = {
-        wrong_login: tr('Fel användarnamn eller lösenord.', 'Wrong username or password.'),
+        wrong_login: tr('Fel e-postadress eller lösenord.', 'Wrong email address or password.'),
         locked: tr('För många försök. Vänta 15 minuter och försök igen.', 'Too many tries. Wait 15 minutes and try again.'),
-        inactive: tr('Prenumerationen är inte aktiv. Starta den igen på startsidan.', "The subscription isn't active. Start it again on the home page."),
       }
       showMsg(err, messages[r.data.error] || genericError())
     })
@@ -192,21 +203,5 @@
       }
       showMsg(err, genericError())
     })
-  }
-
-  function sessionStorageGet(k) {
-    try {
-      return sessionStorage.getItem(k)
-    } catch {
-      return null
-    }
-  }
-  function sessionStorageSet(k, v) {
-    try {
-      if (v) sessionStorage.setItem(k, v)
-      else sessionStorage.removeItem(k)
-    } catch {
-      /* ignore */
-    }
   }
 })()

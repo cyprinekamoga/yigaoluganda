@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="sv" data-lang="sv">
+<head>
+<title>Betalning – Yiga Oluganda</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B5CAD">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="pay" class="page">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon.svg" alt="">Yiga Oluganda</a>
+    <nav><button class="lang" type="button" data-lang-toggle><span data-l="sv">English</span><span data-l="en">Svenska</span></button></nav>
+  </div>
+</header>
+<main>
+  <div class="wrap narrow">
+    <div class="panel">
+      <img class="mascot" src="/img/icon.svg" alt="">
+      <div data-state="loading"><p><span data-l="sv">Ett ögonblick…</span><span data-l="en">One moment…</span></p></div>
+      <div data-state="pay" hidden>
+        <p class="steps-mini"><span data-l="sv">Steg 2 av 2: Betalning</span><span data-l="en">Step 2 of 2: Payment</span></p>
+        <h1><span data-l="sv">Starta prenumerationen</span><span data-l="en">Start your subscription</span></h1>
+        <p><span data-l="sv">Inloggad som</span><span data-l="en">Logged in as</span> <strong data-username></strong></p>
+        <div class="card price" style="box-shadow:none;margin:18px 0">
+          <div class="amount">39 kr <span data-l="sv">/ månad</span><span data-l="en">/ month</span></div>
+          <ul>
+            <li><span data-l="sv">Alla lektioner, övningar och berättelser</span><span data-l="en">All lessons, practice and stories</span></li>
+            <li><span data-l="sv">Tillgång direkt efter betalningen</span><span data-l="en">Access straight after payment</span></li>
+            <li><span data-l="sv">Förnyas automatiskt varje månad – avsluta när du vill</span><span data-l="en">Renews automatically each month, cancel any time</span></li>
+          </ul>
+        </div>
+        <button class="btn go block" type="button" data-pay><span data-l="sv">Betala och börja</span><span data-l="en">Pay and start</span></button>
+        <p class="msg err" data-error hidden></p>
+        <p class="fine"><span data-l="sv">Du betalar säkert hos Stripe med kort, Apple Pay eller Google Pay.</span><span data-l="en">You pay securely with Stripe by card, Apple Pay or Google Pay.</span>
+          <a href="#" data-logout><span data-l="sv">Logga ut</span><span data-l="en">Log out</span></a></p>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/site.js" defer></script>
+</body>
+</html>

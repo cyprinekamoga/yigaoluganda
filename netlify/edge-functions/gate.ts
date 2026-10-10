@@ -5,7 +5,7 @@ import { backend, readCookie } from '../lib/backend.ts'
 type Context = { next: () => Promise<Response> }
 
 // A short memory of recent checks, so loading the app's files doesn't ask the backend every time.
-const recent = new Map<string, { ok: boolean; mustChange: boolean; until: number }>()
+const recent = new Map<string, { ok: boolean; mustChange: boolean; unpaid?: boolean; until: number }>()
 const REMEMBER_MS = 60_000
 
 async function check(token: string) {
@@ -17,6 +17,8 @@ async function check(token: string) {
     if (res.ok) {
       const data = await res.json()
       result = { ok: true, mustChange: Boolean(data.mustChange), until: Date.now() + REMEMBER_MS }
+    } else if (res.status === 402) {
+      return { ...result, unpaid: true, until: 0 } // logged in, not paid yet
     } else if (res.status >= 500) {
       return { ...result, until: 0 } // backend trouble: don't remember
     }
@@ -42,7 +44,7 @@ export default async (req: Request, context: Context): Promise<Response> => {
   }
   const isPage = req.method === 'GET' && (req.headers.get('accept') ?? '').includes('text/html')
   if (!isPage) return new Response('Login required', { status: 401, headers: { 'cache-control': 'no-store' } })
-  const target = status?.mustChange ? '/login.html?change=1' : '/login.html?next=/app/'
+  const target = status?.unpaid ? '/pay.html' : status?.mustChange ? '/login.html?change=1' : '/login.html?next=/app/'
   return new Response(null, { status: 302, headers: { location: target, 'cache-control': 'no-store' } })
 }
 

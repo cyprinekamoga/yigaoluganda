@@ -2,8 +2,8 @@
 // in an HttpOnly cookie, so page scripts never see the session token.
 import { backend, clearCookie, readCookie, sessionCookie } from '../lib/backend.ts'
 
-const PUBLIC = new Set(['checkout', 'claim', 'login'])
-const WITH_SESSION = new Set(['session', 'change-password', 'logout', 'portal'])
+const PUBLIC = new Set(['signup', 'login'])
+const WITH_SESSION = new Set(['me', 'checkout', 'confirm', 'session', 'change-password', 'logout', 'portal'])
 
 function reply(body: unknown, status: number, cookie?: string): Response {
   const headers = new Headers({ 'content-type': 'application/json', 'cache-control': 'no-store' })
@@ -38,12 +38,12 @@ export default async (req: Request): Promise<Response> => {
   }
   const data = await res.json().catch(() => ({ error: 'server_error' }))
 
-  if (action === 'login' && res.ok && typeof data.token === 'string') {
+  if ((action === 'login' || action === 'signup') && res.ok && typeof data.token === 'string') {
     const { token, maxAge, ...rest } = data
     return reply(rest, 200, sessionCookie(token, Number(maxAge) || 2_592_000))
   }
   if (action === 'logout') return reply({ ok: true }, 200, clearCookie)
-  if (action === 'session' && res.status === 401) return reply(data, 401, clearCookie)
+  if ((action === 'session' || action === 'me') && res.status === 401) return reply(data, 401, clearCookie)
   return reply(data, res.status)
 }
 

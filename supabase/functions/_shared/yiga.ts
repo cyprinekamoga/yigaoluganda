@@ -19,26 +19,6 @@ export function json(body: unknown, status = 200): Response {
 
 const enc = new TextEncoder()
 
-function randomInt(max: number): number {
-  // Rejection sampling, so every value is equally likely.
-  const limit = Math.floor(0x100000000 / max) * max
-  const buf = new Uint32Array(1)
-  do crypto.getRandomValues(buf)
-  while (buf[0] >= limit)
-  return buf[0] % max
-}
-const pick = <T>(list: readonly T[]) => list[randomInt(list.length)]
-const digits = (n: number) => Array.from({ length: n }, () => randomInt(10)).join('')
-const cap = (s: string) => s[0].toUpperCase() + s.slice(1)
-
-const PLACES = ['kampala', 'entebbe', 'jinja', 'gulu', 'mbale', 'mbarara', 'masaka', 'kabale', 'arua', 'lira', 'soroti', 'tororo', 'hoima', 'kasese', 'moroto', 'bwindi', 'rwenzori', 'elgon', 'ssese', 'murchison', 'kidepo', 'nile', 'victoria', 'kyoga'] as const
-const THINGS = ['crane', 'kob', 'gorilla', 'matooke', 'rolex', 'posho', 'gonja', 'nsenene', 'mango', 'drum', 'boda', 'kanzu', 'gomesi', 'coffee', 'cassava', 'jackfruit', 'sunbird', 'shoebill', 'leopard', 'lion', 'hippo', 'elephant', 'chimp', 'mugavu'] as const
-
-/** e.g. crane-kampala-482 */
-export const newUsername = () => `${pick(THINGS)}-${pick(PLACES)}-${digits(3)}`
-/** e.g. Matooke-Nile-Kob-7319 */
-export const newTempPassword = () => `${cap(pick(THINGS))}-${cap(pick(PLACES))}-${cap(pick(THINGS))}-${digits(4)}`
-
 const b64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes))
 const unb64 = (s: string) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))
 const b64url = (bytes: Uint8Array) => b64(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
@@ -115,19 +95,32 @@ export function periodEnd(sub: any): string | null {
 
 export interface AccountSync {
   subscriptionId: string
+  /** Our account id, carried through Stripe as client_reference_id / metadata. */
+  accountId?: string | null
   customerId?: string | null
-  email?: string | null
   checkoutSessionId?: string | null
   status: string
   currentPeriodEnd: string | null
 }
 
-/** Creates the account for a subscription the first time it is seen, otherwise updates it. Returns the account row. */
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/**
+ * Stores the subscription on the account it belongs to (accounts are created at sign-up).
+ * Returns the updated account, or null when no account matches.
+ */
 export async function upsertAccount(s: AccountSync) {
-  const or = [`stripe_subscription_id.eq.${s.subscriptionId}`]
-  if (s.checkoutSessionId) or.push(`checkout_session_id.eq.${s.checkoutSessionId}`)
-  const { data: existing, error } = await db.from('yiga_accounts').select('*').or(or.join(',')).limit(1).maybeSingle()
-  if (error) throw error
+  let existing = null
+  if (s.accountId && UUID.test(s.accountId)) {
+    const { data } = await db.from('yiga_accounts').select('*').eq('id', s.accountId).maybeSingle()
+    existing = data
+  }
+  if (!existing) {
+    const { data, error } = await db.from('yiga_accounts').select('*').eq('stripe_subscription_id', s.subscriptionId).maybeSingle()
+    if (error) throw error
+    existing = data
+  }
+  if (!existing) return null
 
   const fields: Record<string, unknown> = {
     stripe_subscription_id: s.subscriptionId,
@@ -135,23 +128,10 @@ export async function upsertAccount(s: AccountSync) {
     current_period_end: s.currentPeriodEnd,
   }
   if (s.customerId) fields.stripe_customer_id = s.customerId
-  if (s.email) fields.email = s.email
   if (s.checkoutSessionId) fields.checkout_session_id = s.checkoutSessionId
-
-  if (existing) {
-    const { data, error: e } = await db.from('yiga_accounts').update(fields).eq('id', existing.id).select('*').single()
-    if (e) throw e
-    return data
-  }
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const { data, error: e } = await db.from('yiga_accounts').insert({ ...fields, username: newUsername() }).select('*').single()
-    if (!e) return data
-    if (e.code !== '23505') throw e
-    // A unique clash: either the username was taken (try another) or a parallel request created the account.
-    const { data: again } = await db.from('yiga_accounts').select('*').or(or.join(',')).limit(1).maybeSingle()
-    if (again) return again
-  }
-  throw new Error('Could not create a unique username')
+  const { data, error } = await db.from('yiga_accounts').update(fields).eq('id', existing.id).select('*').single()
+  if (error) throw error
+  return data
 }
 
 /** Brings an account up to date from Stripe's copy of the subscription. */
@@ -159,6 +139,7 @@ export async function syncSubscription(subscriptionId: string, extra: Partial<Ac
   const sub = await stripe('GET', `subscriptions/${subscriptionId}`)
   return upsertAccount({
     subscriptionId,
+    accountId: sub.metadata?.account_id ?? null,
     customerId: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id,
     status: sub.status,
     currentPeriodEnd: periodEnd(sub),

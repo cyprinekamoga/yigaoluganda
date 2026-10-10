@@ -3,7 +3,7 @@ import type { Lang } from '../content/types'
 import { makeT, translateList, type TFunction } from '../i18n'
 import { awardBadges } from '../logic/badges'
 import { currentHearts, initialState, type ProgressState } from '../logic/progress'
-import { checkSession, goToLogin, LOGIN_REQUIRED, type SessionInfo } from '../platform/account'
+import { checkSession, goToLogin, goToPayment, LOGIN_REQUIRED, type SessionInfo } from '../platform/account'
 import { connectCloud, preferRemote, type Cloud } from './cloud'
 import { clearState, loadState, saveState } from './storage'
 
@@ -47,6 +47,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     if (!LOGIN_REQUIRED) return
     checkSession().then((r) => {
       if (r.status === 'login') goToLogin()
+      else if (r.status === 'pay') goToPayment()
       else if (r.status === 'ok') setAccount(r.info)
     })
   }, [])

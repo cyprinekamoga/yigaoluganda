@@ -19,8 +19,8 @@ async function api(action: string, body: Record<string, unknown> = {}): Promise<
   })
 }
 
-/** 'ok' with the username, 'login' when access is gone, 'offline' when we can't tell (keep going). */
-export async function checkSession(): Promise<{ status: 'ok'; info: SessionInfo } | { status: 'login' | 'offline' }> {
+/** 'ok' with the username, 'login' / 'pay' when access is gone, 'offline' when we can't tell (keep going). */
+export async function checkSession(): Promise<{ status: 'ok'; info: SessionInfo } | { status: 'login' | 'pay' | 'offline' }> {
   try {
     const res = await api('session')
     if (res.ok) {
@@ -28,7 +28,8 @@ export async function checkSession(): Promise<{ status: 'ok'; info: SessionInfo 
       if (data.mustChange) return { status: 'login' }
       return { status: 'ok', info: { username: String(data.username ?? '') } }
     }
-    return res.status === 401 || res.status === 402 ? { status: 'login' } : { status: 'offline' }
+    if (res.status === 402) return { status: 'pay' }
+    return res.status === 401 ? { status: 'login' } : { status: 'offline' }
   } catch {
     return { status: 'offline' }
   }
@@ -36,6 +37,10 @@ export async function checkSession(): Promise<{ status: 'ok'; info: SessionInfo 
 
 export function goToLogin(): void {
   window.location.assign('/login.html?next=/app/')
+}
+
+export function goToPayment(): void {
+  window.location.assign('/pay.html')
 }
 
 export async function logout(): Promise<void> {
