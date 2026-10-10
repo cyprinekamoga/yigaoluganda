@@ -126,12 +126,13 @@
       show('loading')
       if (!sessionId) return window.location.assign('/pay.html')
       // Stripe can take a few seconds to finish; try for up to ~20 seconds.
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 12; i++) {
         const r = await api('confirm', { sessionId })
         if (r.ok && r.data.active) return window.location.assign('/app/')
         if (r.status === 401) return window.location.assign('/login.html?next=/app/')
+        // 402: Stripe hasn't finished yet; ok-but-not-active: the webhook is on its way. Both settle in seconds.
         if (r.status !== 402 && !(r.ok && !r.data.active)) break
-        await wait(2500)
+        await wait(i < 4 ? 1000 : 2500)
       }
       $('[data-error-text]').textContent = tr(
         'Vi väntar fortfarande på bekräftelsen från betalningen. Vänta en liten stund och försök igen.',
