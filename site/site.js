@@ -251,14 +251,15 @@
     const msgBox = $('[data-r=message]')
     const sendTo = $('[data-r=sendto]')
     let current = null // { username, password, paidUntil, active, subscribed, name, siteUrl }
-    let siteUrl = location.origin
+    // Links in the message always use the own domain, whatever address the seller page was opened on.
+    const siteUrl = 'https://yigaoluganda.com'
 
     const fmtDate = (iso, lang) =>
       new Date(iso).toLocaleDateString(lang === 'en' ? 'en-GB' : 'sv-SE', { day: 'numeric', month: 'long', year: 'numeric' })
 
     const message = (a, lang) => {
-      const login = `${siteUrl}/login.html?u=${encodeURIComponent(a.username)}`
-      const home = `${siteUrl}/hemskarm.html`
+      const login = `${siteUrl}/login?u=${encodeURIComponent(a.username)}`
+      const home = `${siteUrl}/hemskarm`
       const first = (a.name || '').trim().split(/\s+/)[0]
       const paid = a.paidUntil && new Date(a.paidUntil) > new Date()
       if (lang === 'en') {
@@ -429,7 +430,6 @@
       if (r.status === 403) return show('denied')
       show('ready')
       if (!r.ok) return showMsg($('[data-error]', form), genericError())
-      if (r.data.siteUrl) siteUrl = r.data.siteUrl
       render(r.data.accounts || [])
     }
 
@@ -447,7 +447,6 @@
       submit.disabled = false
       if (r.status === 401) return window.location.assign('/login.html?next=/salj.html')
       if (!r.ok) return showMsg(err, genericError())
-      if (r.data.siteUrl) siteUrl = r.data.siteUrl
       showResult(r.data)
       load()
     })
