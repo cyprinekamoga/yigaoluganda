@@ -25,8 +25,8 @@ export default defineConfig(({ mode }) => ({
         short_name: 'Yiga',
         description: 'Learn Luganda with Ngaali the crane',
         lang: 'sv',
-        start_url: './',
-        scope: './',
+        // On the paid website the login pages sit outside /app/: keep them inside the installed app too.
+        ...(process.env.VITE_REQUIRE_LOGIN ? { id: '/app/', start_url: '/app/', scope: '/' } : { start_url: './', scope: './' }),
         display: 'standalone',
         background_color: '#f6efe4',
         theme_color: '#0e6f73',

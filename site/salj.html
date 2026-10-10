@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="sv" data-lang="sv">
+<head>
+<title>Sälj på mässan – Yiga Oluganda</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e6f73">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/grandstander.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="seller" class="page">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/salj.html"><img src="/img/icon.svg" alt="">Yiga · <span data-l="sv">Sälj</span><span data-l="en">Sell</span></a>
+    <nav>
+      <button class="lang" type="button" data-lang-toggle><span data-l="sv">English</span><span data-l="en">Svenska</span></button>
+      <a class="lang" href="#" data-logout style="text-decoration:none"><span data-l="sv">Logga ut</span><span data-l="en">Log out</span></a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="wrap narrow">
+    <div class="panel" data-state="loading"><p><span data-l="sv">Ett ögonblick…</span><span data-l="en">One moment…</span></p></div>
+
+    <div class="panel" data-state="denied" hidden>
+      <h1><span data-l="sv">Bara för säljare</span><span data-l="en">Sellers only</span></h1>
+      <p><span data-l="sv">Du är inloggad med ett vanligt konto. Logga ut och logga in med säljarkontot.</span><span data-l="en">You're logged in with a normal account. Log out and log in with the seller account.</span></p>
+      <button class="btn block" type="button" data-logout><span data-l="sv">Logga ut</span><span data-l="en">Log out</span></button>
+    </div>
+
+    <div data-state="ready" hidden>
+      <!-- 1. New customer -->
+      <form class="panel" data-form="create" novalidate>
+        <h1><span data-l="sv">Ny kund</span><span data-l="en">New customer</span></h1>
+        <label for="cname"><span data-l="sv">Namn</span><span data-l="en">Name</span> <span class="opt">(<span data-l="sv">valfritt</span><span data-l="en">optional</span>)</span></label>
+        <input id="cname" name="cname" type="text" autocomplete="off" maxlength="80">
+        <label for="phone"><span data-l="sv">Mobilnummer</span><span data-l="en">Mobile number</span> <span class="opt">(<span data-l="sv">för SMS/WhatsApp</span><span data-l="en">for SMS/WhatsApp</span>)</span></label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="off" maxlength="30" placeholder="070 123 45 67">
+
+        <p class="label-like"><span data-l="sv">Hur betalar kunden?</span><span data-l="en">How does the customer pay?</span></p>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="paid" value="yes" checked>
+            <span><strong><span data-l="sv">Betalat här (Swish/kontant)</span><span data-l="en">Paid here (Swish/cash)</span></strong>
+            <small><span data-l="sv">Appen öppnas direkt, i 1 månad</span><span data-l="en">The app opens at once, for 1 month</span></small></span></label>
+          <label class="choice"><input type="radio" name="paid" value="no">
+            <span><strong><span data-l="sv">Betalar med kort senare</span><span data-l="en">Pays by card later</span></strong>
+            <small><span data-l="sv">39 kr/mån, betalas när de loggar in</span><span data-l="en">39 kr/month, paid when they log in</span></small></span></label>
+        </div>
+        <p class="msg err" data-error hidden></p>
+        <button class="btn go block" type="submit" style="margin-top:20px"><span data-l="sv">Skapa inloggning</span><span data-l="en">Create login</span></button>
+      </form>
+
+      <!-- 2. The login to send -->
+      <section class="panel" data-result hidden style="margin-top:18px">
+        <h2 class="result-title"><span data-l="sv">Klart! Skicka till kunden</span><span data-l="en">Done! Send it to the customer</span></h2>
+        <div class="cred">
+          <div class="row"><div><div class="k"><span data-l="sv">Användarnamn</span><span data-l="en">Username</span></div><div class="v" data-r="username"></div></div></div>
+          <div class="row"><div><div class="k"><span data-l="sv">Lösenord</span><span data-l="en">Password</span></div><div class="v" data-r="password"></div></div></div>
+        </div>
+        <p class="fine" style="margin-top:-6px" data-r="status"></p>
+
+        <div class="seg" role="radiogroup" aria-label="Språk i meddelandet / Message language">
+          <label><input type="radio" name="msglang" value="sv" checked><span>Svenska</span></label>
+          <label><input type="radio" name="msglang" value="en"><span>English</span></label>
+        </div>
+        <label for="message"><span data-l="sv">Meddelande</span><span data-l="en">Message</span></label>
+        <textarea id="message" rows="11" data-r="message"></textarea>
+        <label for="sendto"><span data-l="sv">Skicka till</span><span data-l="en">Send to</span></label>
+        <input id="sendto" type="tel" inputmode="tel" autocomplete="off" data-r="sendto" placeholder="070 123 45 67">
+
+        <div class="send">
+          <a class="btn" data-send="sms" href="#">💬 SMS</a>
+          <a class="btn wa" data-send="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <button class="btn ghost" type="button" data-copy><span data-l="sv">Kopiera</span><span data-l="en">Copy</span></button>
+        </div>
+        <p class="msg ok" data-copied hidden><span data-l="sv">Kopierat!</span><span data-l="en">Copied!</span></p>
+        <p class="fine"><span data-l="sv">Lösenordet visas bara nu. Tappar kunden det kan du göra ett nytt i listan nedan.</span><span data-l="en">The password is only shown now. If the customer loses it, make a new one in the list below.</span></p>
+        <button class="btn sun block" type="button" data-next style="margin-top:8px"><span data-l="sv">Nästa kund</span><span data-l="en">Next customer</span></button>
+      </section>
+
+      <!-- 3. Customers so far -->
+      <section class="panel" style="margin-top:18px">
+        <h2 class="result-title"><span data-l="sv">Kunder från mässan</span><span data-l="en">Customers from the fair</span> <span class="count" data-count></span></h2>
+        <p class="fine" data-empty hidden><span data-l="sv">Inga kunder än.</span><span data-l="en">No customers yet.</span></p>
+        <ul class="people" data-list></ul>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="/site.js" defer></script>
+</body>
+</html>

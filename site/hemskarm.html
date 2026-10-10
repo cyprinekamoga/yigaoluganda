@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="sv" data-lang="sv">
+<head>
+<title>Lägg på hemskärmen – Yiga Oluganda</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e6f73">
+<meta name="description" content="Så lägger du Yiga Oluganda på hemskärmen, så öppnas den som en app.">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/img/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Yiga">
+<link rel="preload" href="/fonts/grandstander.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="install" class="page">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon.svg" alt="">Yiga Oluganda</a>
+    <nav><button class="lang" type="button" data-lang-toggle><span data-l="sv">English</span><span data-l="en">Svenska</span></button></nav>
+  </div>
+</header>
+<main>
+  <div class="wrap narrow">
+    <div class="panel">
+      <img class="mascot" src="/img/icon.svg" alt="">
+      <h1><span data-l="sv">Lägg appen på hemskärmen</span><span data-l="en">Put the app on your home screen</span></h1>
+      <p><span data-l="sv">Då får du en Yiga-ikon bland dina appar och appen öppnas i helskärm, precis som en vanlig app. Det tar en halv minut.</span><span data-l="en">You get a Yiga icon among your apps and it opens full screen, just like a normal app. It takes half a minute.</span></p>
+
+      <div class="msg ok" data-installed hidden><span data-l="sv">Appen är redan installerad på den här enheten. 🎉</span><span data-l="en">The app is already installed on this device. 🎉</span></div>
+      <button class="btn go block" type="button" data-install hidden style="margin:12px 0"><span data-l="sv">Installera appen</span><span data-l="en">Install the app</span></button>
+
+      <div class="seg tabs" role="tablist">
+        <button type="button" role="tab" data-tab="ios" aria-selected="true">iPhone / iPad</button>
+        <button type="button" role="tab" data-tab="android" aria-selected="false">Android</button>
+      </div>
+
+      <div data-panel="ios">
+        <ol class="howto">
+          <li><span data-l="sv">Öppna <strong>den här sidan i Safari</strong>. Kom du hit från ett SMS, Facebook eller Instagram: tryck på kompassen eller <em>Öppna i Safari</em> först.</span><span data-l="en">Open <strong>this page in Safari</strong>. If you came from an SMS, Facebook or Instagram, tap the compass or <em>Open in Safari</em> first.</span></li>
+          <li><span data-l="sv">Tryck på <strong>Dela</strong>-knappen</span><span data-l="en">Tap the <strong>Share</strong> button</span>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span data-l="sv">längst ner (på iPad uppe till höger). Ser du den inte? Tryck på <strong>•••</strong> först.</span><span data-l="en">at the bottom (top right on iPad). Can't see it? Tap <strong>•••</strong> first.</span></li>
+          <li><span data-l="sv">Rulla ner och tryck på <strong>Lägg till på hemskärmen</strong></span><span data-l="en">Scroll down and tap <strong>Add to Home Screen</strong></span>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></li>
+          <li><span data-l="sv">Tryck på <strong>Lägg till</strong> uppe till höger. Klart! Öppna appen med Yiga-ikonen.</span><span data-l="en">Tap <strong>Add</strong> in the top right. Done! Open the app with the Yiga icon.</span></li>
+        </ol>
+      </div>
+
+      <div data-panel="android" hidden>
+        <ol class="howto">
+          <li><span data-l="sv">Öppna <strong>den här sidan i Chrome</strong>.</span><span data-l="en">Open <strong>this page in Chrome</strong>.</span></li>
+          <li><span data-l="sv">Tryck på menyn <strong>⋮</strong> uppe till höger.</span><span data-l="en">Tap the <strong>⋮</strong> menu in the top right.</span></li>
+          <li><span data-l="sv">Tryck på <strong>Installera app</strong> eller <strong>Lägg till på startskärmen</strong>.</span><span data-l="en">Tap <strong>Install app</strong> or <strong>Add to home screen</strong>.</span></li>
+          <li><span data-l="sv">Tryck på <strong>Installera</strong> / <strong>Lägg till</strong>. Klart! Yiga-ikonen finns nu bland dina appar.</span><span data-l="en">Tap <strong>Install</strong> / <strong>Add</strong>. Done! The Yiga icon is now among your apps.</span></li>
+        </ol>
+        <p class="fine"><span data-l="sv">Samsung Internet: tryck på <strong>≡</strong> längst ner och sedan <strong>Lägg till sida på</strong> → <strong>Startskärm</strong>.</span><span data-l="en">Samsung Internet: tap <strong>≡</strong> at the bottom, then <strong>Add page to</strong> → <strong>Home screen</strong>.</span></p>
+      </div>
+
+      <p class="warn"><span data-l="sv">Första gången du öppnar appen från ikonen kan den be dig logga in igen. Använd samma användarnamn och lösenord som du fick.</span><span data-l="en">The first time you open the app from the icon, it may ask you to log in again. Use the same username and password you were given.</span></p>
+      <a class="btn block" href="/app/" style="margin-top:18px"><span data-l="sv">Öppna appen</span><span data-l="en">Open the app</span></a>
+      <p class="fine"><span data-l="sv">Behöver du hjälp? Mejla <a href="mailto:info@zaweddeoils.com">info@zaweddeoils.com</a>.</span><span data-l="en">Need help? Email <a href="mailto:info@zaweddeoils.com">info@zaweddeoils.com</a>.</span></p>
+    </div>
+  </div>
+</main>
+<script src="/site.js" defer></script>
+</body>
+</html>

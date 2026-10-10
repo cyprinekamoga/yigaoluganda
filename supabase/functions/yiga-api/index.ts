@@ -1,6 +1,7 @@
 // Yiga Oluganda accounts: sign up, log in, pay (Stripe Checkout), sessions.
 // Called by the website's /api/* proxy (netlify/edge-functions/api.ts), which keeps the session in an HttpOnly cookie.
 import {
+  ACTIVE_STATUSES,
   db,
   hashPassword,
   hasAccess,
@@ -77,7 +78,140 @@ function resetEmail(link: string) {
   return { subject, html, text }
 }
 
+// ---------- fair (mässa) accounts, made by the seller ----------
+
+const FAIR_MONTHS = 1
+const PLACES = [
+  'kampala', 'jinja', 'entebbe', 'masaka', 'mbarara', 'gulu', 'mbale', 'kabale', 'lira', 'soroti',
+  'mukono', 'wakiso', 'hoima', 'kasese', 'arua', 'tororo', 'iganga', 'busia', 'masindi', 'kalangala',
+]
+// No 0/o, 1/l/i: easy to read out loud and type from an SMS.
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const PW_CHARS = 'abcdefghjkmnpqrstuvwxyz23456789'
+
+function randomInt(max: number): number {
+  const buf = new Uint32Array(1)
+  const limit = Math.floor(0x1_0000_0000 / max) * max
+  do crypto.getRandomValues(buf)
+  while (buf[0] >= limit)
+  return buf[0] % max
+}
+const fairUsername = () => `${PLACES[randomInt(PLACES.length)]}-${String(100 + randomInt(900))}`
+const fairPassword = () => {
+  const pick = () => Array.from({ length: 4 }, () => PW_CHARS[randomInt(PW_CHARS.length)]).join('')
+  return `${pick()}-${pick()}`
+}
+const addMonths = (from: Date, months: number) => {
+  const d = new Date(from)
+  d.setMonth(d.getMonth() + months)
+  return d
+}
+
+async function sellerSession(body: Record<string, unknown>) {
+  const s = await sessionAccount(str(body.token))
+  if (!s) return { error: json({ error: 'no_session' }, 401) }
+  if (!s.account.is_seller) return { error: json({ error: 'not_seller' }, 403) }
+  return { s }
+}
+
+// deno-lint-ignore no-explicit-any
+const fairRow = (a: any) => ({
+  id: a.id,
+  username: a.username,
+  name: a.customer_name ?? '',
+  phone: a.customer_phone ?? '',
+  createdAt: a.created_at,
+  paidUntil: a.manual_access_until,
+  subscribed: ACTIVE_STATUSES.includes(a.subscription_status),
+  active: hasAccess(a),
+})
+
 const actions: Record<string, (body: Record<string, unknown>) => Promise<Response>> = {
+  /** Seller: makes a username and password for a customer at the fair. The password is shown once. */
+  async 'seller-create'(body) {
+    const { s, error } = await sellerSession(body)
+    if (error) return error
+    const paidAtFair = body.paid === true
+    const name = str(body.name, 80).trim() || null
+    const phone = str(body.phone, 30).replace(/[^\d+ -]/g, '').trim() || null
+    const password = fairPassword()
+    const passwordHash = await hashPassword(password)
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const username = fairUsername()
+      const { data, error: insertError } = await db
+        .from('yiga_accounts')
+        .insert({
+          username,
+          password_hash: passwordHash,
+          must_change_password: false,
+          created_by_seller: true,
+          customer_name: name,
+          customer_phone: phone,
+          manual_access_until: paidAtFair ? addMonths(new Date(), FAIR_MONTHS).toISOString() : null,
+        })
+        .select('*')
+        .single()
+      if (insertError?.code === '23505') continue // that username is taken: try another
+      if (insertError) throw insertError
+      console.log('seller-create', s!.account.username, data.username)
+      return json({ ...fairRow(data), password, siteUrl: siteUrl() })
+    }
+    return json({ error: 'try_again' }, 503)
+  },
+
+  /** Seller: the latest fair accounts. */
+  async 'seller-list'(body) {
+    const { error } = await sellerSession(body)
+    if (error) return error
+    const { data, error: listError } = await db
+      .from('yiga_accounts')
+      .select('*')
+      .eq('created_by_seller', true)
+      .order('created_at', { ascending: false })
+      .limit(100)
+    if (listError) throw listError
+    return json({ accounts: (data ?? []).map(fairRow), siteUrl: siteUrl() })
+  },
+
+  /** Seller: the customer paid another month (Swish/cash). */
+  async 'seller-extend'(body) {
+    const { error } = await sellerSession(body)
+    if (error) return error
+    const id = str(body.id, 40)
+    if (!UUID.test(id)) return json({ error: 'not_found' }, 404)
+    const { data: a } = await db.from('yiga_accounts').select('*').eq('id', id).eq('created_by_seller', true).maybeSingle()
+    if (!a) return json({ error: 'not_found' }, 404)
+    const base = a.manual_access_until && new Date(a.manual_access_until) > new Date() ? new Date(a.manual_access_until) : new Date()
+    const { data, error: updateError } = await db
+      .from('yiga_accounts')
+      .update({ manual_access_until: addMonths(base, FAIR_MONTHS).toISOString() })
+      .eq('id', a.id)
+      .select('*')
+      .single()
+    if (updateError) throw updateError
+    return json(fairRow(data))
+  },
+
+  /** Seller: a new password for a fair account (they have no email for "forgot password"). Logs out its devices. */
+  async 'seller-password'(body) {
+    const { error } = await sellerSession(body)
+    if (error) return error
+    const id = str(body.id, 40)
+    if (!UUID.test(id)) return json({ error: 'not_found' }, 404)
+    const { data: a } = await db.from('yiga_accounts').select('*').eq('id', id).eq('created_by_seller', true).maybeSingle()
+    if (!a) return json({ error: 'not_found' }, 404)
+    const password = fairPassword()
+    const { data, error: updateError } = await db
+      .from('yiga_accounts')
+      .update({ password_hash: await hashPassword(password), failed_logins: 0, locked_until: null })
+      .eq('id', a.id)
+      .select('*')
+      .single()
+    if (updateError) throw updateError
+    await db.from('yiga_sessions').delete().eq('account_id', a.id)
+    return json({ ...fairRow(data), password, siteUrl: siteUrl() })
+  },
+
   /** Creates an account (email + password) and logs it in. Payment comes next. */
   async signup(body) {
     const email = str(body.email, 254).trim().toLowerCase()
@@ -119,7 +253,11 @@ const actions: Record<string, (body: Record<string, unknown>) => Promise<Respons
       locale: 'auto',
     }
     if (s.account.stripe_customer_id) params.customer = s.account.stripe_customer_id
-    else params.customer_email = s.account.email ?? s.account.username
+    else {
+      // Fair accounts have a username, not an email: then Stripe asks for the email itself.
+      const email = s.account.email ?? s.account.username
+      if (EMAIL.test(email)) params.customer_email = email
+    }
     const session = await stripe('POST', 'checkout/sessions', params)
     return json({ url: session.url })
   },
@@ -223,7 +361,13 @@ const actions: Record<string, (body: Record<string, unknown>) => Promise<Respons
       return json({ error: 'wrong_login' }, 401)
     }
     await db.from('yiga_accounts').update({ failed_logins: 0, locked_until: null }).eq('id', account.id)
-    return json({ ...(await newSession(account.id)), username: account.username, mustChange: account.must_change_password, active: hasAccess(account) })
+    return json({
+      ...(await newSession(account.id)),
+      username: account.username,
+      mustChange: account.must_change_password,
+      active: hasAccess(account),
+      seller: Boolean(account.is_seller),
+    })
   },
 
   /** Is this session allowed into the app right now? */

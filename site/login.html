@@ -9,6 +9,11 @@
 <link rel="icon" href="/img/icon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/grandstander.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/site.css">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/img/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Yiga">
 </head>
 <body data-page="login" class="page">
 <header class="top">
@@ -24,14 +29,15 @@
       <form data-form="login" novalidate>
         <h1><span data-l="sv">Logga in</span><span data-l="en">Log in</span></h1>
         <p class="msg ok" data-bye hidden><span data-l="sv">Du är utloggad. Weraba!</span><span data-l="en">You're logged out. Weraba!</span></p>
-        <label for="username"><span data-l="sv">E-postadress</span><span data-l="en">Email address</span></label>
-        <input id="username" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        <label for="username"><span data-l="sv">E-post eller användarnamn</span><span data-l="en">Email or username</span></label>
+        <input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
         <label for="password"><span data-l="sv">Lösenord</span><span data-l="en">Password</span></label>
         <input id="password" name="password" type="password" autocomplete="current-password" required>
         <p class="msg err" data-error hidden></p>
         <button class="btn go block" type="submit" style="margin-top:20px"><span data-l="sv">Logga in</span><span data-l="en">Log in</span></button>
         <p class="fine" style="text-align:right;margin-top:10px"><a href="/forgot.html"><span data-l="sv">Glömt lösenordet?</span><span data-l="en">Forgot your password?</span></a></p>
         <p class="fine"><span data-l="sv">Inget konto än?</span><span data-l="en">No account yet?</span> <a href="/signup.html"><span data-l="sv">Skapa ett konto</span><span data-l="en">Create an account</span></a></p>
+        <p class="fine">📲 <a href="/hemskarm.html"><span data-l="sv">Lägg appen på hemskärmen</span><span data-l="en">Put the app on your home screen</span></a></p>
       </form>
 
       <form data-form="change" novalidate hidden>

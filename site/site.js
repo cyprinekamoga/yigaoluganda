@@ -211,7 +211,7 @@
     const changeForm = $('[data-form=change]')
     const next = (() => {
       const n = params.get('next') || '/app/'
-      return /^\/(app(\/[\w\-./]*)?|pay\.html)$/.test(n) ? n : '/app/'
+      return /^\/(app(\/[\w\-./]*)?|pay\.html|salj\.html)$/.test(n) ? n : '/app/'
     })()
     if (params.get('u')) loginForm.username.value = params.get('u')
     if (params.get('bye')) $('[data-bye]').hidden = false
@@ -229,21 +229,22 @@
       showMsg(err, '')
       const username = loginForm.username.value.trim().toLowerCase()
       const password = loginForm.password.value
-      if (!username || !password) return showMsg(err, tr('Fyll i e-postadress och lösenord.', 'Enter your email address and password.'))
+      if (!username || !password) return showMsg(err, tr('Fyll i e-post eller användarnamn och lösenord.', 'Enter your email or username and your password.'))
       const button = $('button[type=submit]', loginForm)
       button.disabled = true
       const r = await api('login', { username, password })
       button.disabled = false
       if (r.ok) {
         if (r.data.mustChange) return showChange(username)
+        if (r.data.seller) return window.location.assign('/salj.html')
         return window.location.assign(r.data.active ? next : '/pay.html')
       }
       const messages = {
-        wrong_login: tr('Fel e-postadress eller lösenord.', 'Wrong email address or password.'),
+        wrong_login: tr('Fel användarnamn/e-post eller lösenord.', 'Wrong username/email or password.'),
         locked: tr('För många försök. Vänta 15 minuter och försök igen.', 'Too many tries. Wait 15 minutes and try again.'),
       }
       showMsg(err, messages[r.data.error] || genericError())
-      if (r.data.error === 'wrong_login' || r.data.error === 'locked') {
+      if ((r.data.error === 'wrong_login' || r.data.error === 'locked') && username.includes('@')) {
         // Offer the way out right where the problem is.
         const link = document.createElement('a')
         link.href = '/forgot.html'
@@ -279,5 +280,252 @@
       }
       showMsg(err, genericError())
     })
+  }
+
+  // ---------- seller page (fair / mässa): make logins and send them ----------
+  if (page === 'seller') {
+    const form = $('[data-form=create]')
+    const result = $('[data-result]')
+    const list = $('[data-list]')
+    const msgBox = $('[data-r=message]')
+    const sendTo = $('[data-r=sendto]')
+    let current = null // { username, password, paidUntil, active, subscribed, name, siteUrl }
+    let siteUrl = location.origin
+
+    const fmtDate = (iso, lang) =>
+      new Date(iso).toLocaleDateString(lang === 'en' ? 'en-GB' : 'sv-SE', { day: 'numeric', month: 'long', year: 'numeric' })
+
+    const message = (a, lang) => {
+      const login = `${siteUrl}/login.html?u=${encodeURIComponent(a.username)}`
+      const home = `${siteUrl}/hemskarm.html`
+      const first = (a.name || '').trim().split(/\s+/)[0]
+      const paid = a.paidUntil && new Date(a.paidUntil) > new Date()
+      if (lang === 'en') {
+        return [
+          `Hi${first ? ' ' + first : ''}! Welcome to Yiga Oluganda 🪶`,
+          '',
+          `Log in here: ${login}`,
+          `Username: ${a.username}`,
+          `Password: ${a.password}`,
+          '',
+          paid
+            ? `You have access until ${fmtDate(a.paidUntil, 'en')}. After that you can keep going for 39 kr/month by card on the website.`
+            : 'When you log in you go straight to payment (39 kr/month, cancel any time). The app opens right after.',
+          '',
+          `Put the app on your home screen: ${home}`,
+          '',
+          'Webale nnyo!',
+        ].join('\n')
+      }
+      return [
+        `Hej${first ? ' ' + first : ''}! Välkommen till Yiga Oluganda 🪶`,
+        '',
+        `Logga in här: ${login}`,
+        `Användarnamn: ${a.username}`,
+        `Lösenord: ${a.password}`,
+        '',
+        paid
+          ? `Du har tillgång till och med ${fmtDate(a.paidUntil, 'sv')}. Sedan kan du fortsätta för 39 kr/mån med kort på sidan.`
+          : 'När du loggar in kommer du direkt till betalningen (39 kr/mån, avsluta när du vill). Sedan öppnas appen.',
+        '',
+        `Lägg appen på hemskärmen: ${home}`,
+        '',
+        'Webale nnyo!',
+      ].join('\n')
+    }
+
+    // Swedish mobile numbers: 070… → 4670…; +46… / 0046… → 46…
+    const intlDigits = (raw) => {
+      let d = (raw || '').replace(/[^\d+]/g, '')
+      if (d.startsWith('+')) d = d.slice(1)
+      else if (d.startsWith('00')) d = d.slice(2)
+      else if (d.startsWith('0')) d = '46' + d.slice(1)
+      return d.replace(/\D/g, '')
+    }
+    const updateLinks = () => {
+      const text = msgBox.value
+      const digits = intlDigits(sendTo.value)
+      // "?&body=" works on both iPhone and Android.
+      $('[data-send=sms]').href = `sms:${digits ? '+' + digits : ''}?&body=${encodeURIComponent(text)}`
+      $('[data-send=whatsapp]').href = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`
+    }
+    const msgLang = () => ($('input[name=msglang]:checked') || {}).value || 'sv'
+    const showResult = (a) => {
+      current = a
+      $('[data-r=username]').textContent = a.username
+      $('[data-r=password]').textContent = a.password
+      $('[data-r=status]').textContent = a.subscribed
+        ? tr('Prenumererar med kort.', 'Subscribes by card.')
+        : a.paidUntil && new Date(a.paidUntil) > new Date()
+          ? tr(`Betald till och med ${fmtDate(a.paidUntil, 'sv')}.`, `Paid until ${fmtDate(a.paidUntil, 'en')}.`)
+          : tr('Betalar med kort när de loggar in.', 'Pays by card when they log in.')
+      sendTo.value = a.phone || ''
+      msgBox.value = message(a, msgLang())
+      updateLinks()
+      $('[data-copied]').hidden = true
+      result.hidden = false
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    $$('input[name=msglang]').forEach((r) =>
+      r.addEventListener('change', () => {
+        if (!current) return
+        msgBox.value = message(current, msgLang())
+        updateLinks()
+      }),
+    )
+    msgBox.addEventListener('input', updateLinks)
+    sendTo.addEventListener('input', updateLinks)
+    $('[data-send=sms]').addEventListener('click', updateLinks)
+    $('[data-send=whatsapp]').addEventListener('click', updateLinks)
+    $('[data-copy]').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(msgBox.value)
+      } catch {
+        msgBox.select()
+        document.execCommand('copy')
+      }
+      $('[data-copied]').hidden = false
+    })
+    $('[data-next]').addEventListener('click', () => {
+      current = null
+      result.hidden = true
+      form.reset()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      form.cname.focus()
+    })
+
+    const statusChip = (a) => {
+      const chip = document.createElement('span')
+      chip.className = 'chip'
+      if (a.subscribed) {
+        chip.classList.add('ok')
+        chip.textContent = tr('Kort, aktiv', 'Card, active')
+      } else if (a.active) {
+        chip.classList.add('ok')
+        chip.textContent = tr(`Betald t.o.m. ${fmtDate(a.paidUntil, 'sv')}`, `Paid until ${fmtDate(a.paidUntil, 'en')}`)
+      } else if (a.paidUntil) {
+        chip.classList.add('off')
+        chip.textContent = tr('Månaden slut', 'Month ended')
+      } else {
+        chip.classList.add('wait')
+        chip.textContent = tr('Väntar på kortbetalning', 'Waiting for card payment')
+      }
+      return chip
+    }
+    const button = (label, cls, onClick) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.className = `btn small ${cls}`
+      b.textContent = label
+      b.addEventListener('click', onClick)
+      return b
+    }
+    const render = (accounts) => {
+      list.replaceChildren()
+      $('[data-empty]').hidden = accounts.length > 0
+      $('[data-count]').textContent = accounts.length ? String(accounts.length) : ''
+      for (const a of accounts) {
+        const li = document.createElement('li')
+        const who = document.createElement('div')
+        who.className = 'who'
+        const name = document.createElement('strong')
+        name.textContent = a.name || tr('(inget namn)', '(no name)')
+        who.append(name, statusChip(a))
+        const meta = document.createElement('div')
+        meta.className = 'meta'
+        const code = document.createElement('code')
+        code.textContent = a.username
+        meta.append(code, document.createTextNode(`${a.phone ? ' · ' + a.phone : ''} · ${fmtDate(a.createdAt, html.dataset.lang)}`))
+        const acts = document.createElement('div')
+        acts.className = 'acts'
+        if (!a.subscribed)
+          acts.append(
+            button(tr('+1 månad (betalt)', '+1 month (paid)'), 'go', async (e) => {
+              if (!window.confirm(tr(`Har ${a.name || a.username} betalat en månad till (Swish/kontant)?`, `Has ${a.name || a.username} paid for another month (Swish/cash)?`))) return
+              e.currentTarget.disabled = true
+              const r = await api('seller-extend', { id: a.id })
+              if (!r.ok) window.alert(genericError())
+              load()
+            }),
+          )
+        acts.append(
+          button(tr('Nytt lösenord', 'New password'), 'ghost', async (e) => {
+            if (!window.confirm(tr(`Göra ett nytt lösenord för ${a.username}? Det gamla slutar fungera.`, `Make a new password for ${a.username}? The old one stops working.`))) return
+            e.currentTarget.disabled = true
+            const r = await api('seller-password', { id: a.id })
+            if (!r.ok) return window.alert(genericError())
+            showResult(r.data)
+            load()
+          }),
+        )
+        li.append(who, meta, acts)
+        list.append(li)
+      }
+    }
+    async function load() {
+      const r = await api('seller-list')
+      if (r.status === 401) return window.location.assign('/login.html?next=/salj.html')
+      if (r.status === 403) return show('denied')
+      show('ready')
+      if (!r.ok) return showMsg($('[data-error]', form), genericError())
+      if (r.data.siteUrl) siteUrl = r.data.siteUrl
+      render(r.data.accounts || [])
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const err = $('[data-error]', form)
+      showMsg(err, '')
+      const submit = $('button[type=submit]', form)
+      submit.disabled = true
+      const r = await api('seller-create', {
+        name: form.cname.value.trim(),
+        phone: form.phone.value.trim(),
+        paid: form.paid.value === 'yes',
+      })
+      submit.disabled = false
+      if (r.status === 401) return window.location.assign('/login.html?next=/salj.html')
+      if (!r.ok) return showMsg(err, genericError())
+      if (r.data.siteUrl) siteUrl = r.data.siteUrl
+      showResult(r.data)
+      load()
+    })
+    $$('[data-logout]').forEach((el) =>
+      el.addEventListener('click', async (e) => {
+        e.preventDefault()
+        await api('logout')
+        window.location.assign('/login.html?bye=1')
+      }),
+    )
+    load()
+  }
+
+  // ---------- "put the app on your home screen" ----------
+  if (page === 'install') {
+    const ua = navigator.userAgent
+    const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    const isAndroid = /Android/.test(ua)
+    const pick = (tab) => {
+      $$('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)))
+      $$('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== tab))
+    }
+    $$('[data-tab]').forEach((b) => b.addEventListener('click', () => pick(b.dataset.tab)))
+    pick(isAndroid && !isIOS ? 'android' : 'ios')
+    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) $('[data-installed]').hidden = false
+    // Chrome on Android can install with one tap.
+    let promptEvent = null
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault()
+      promptEvent = e
+      $('[data-install]').hidden = false
+    })
+    $('[data-install]').addEventListener('click', async () => {
+      if (!promptEvent) return
+      promptEvent.prompt()
+      await promptEvent.userChoice.catch(() => null)
+      promptEvent = null
+      $('[data-install]').hidden = true
+    })
+    window.addEventListener('appinstalled', () => ($('[data-installed]').hidden = false))
   }
 })()

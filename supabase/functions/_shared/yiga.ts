@@ -147,6 +147,9 @@ export async function syncSubscription(subscriptionId: string, extra: Partial<Ac
   })
 }
 
-export function hasAccess(account: { subscription_status: string } | null): boolean {
-  return Boolean(account && ACTIVE_STATUSES.includes(account.subscription_status))
+/** Paid by subscription, or paid at a fair (Swish/cash) and still inside the paid month. */
+export function hasAccess(account: { subscription_status: string; manual_access_until?: string | null } | null): boolean {
+  if (!account) return false
+  if (ACTIVE_STATUSES.includes(account.subscription_status)) return true
+  return Boolean(account.manual_access_until && new Date(account.manual_access_until) > new Date())
 }

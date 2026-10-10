@@ -3,7 +3,10 @@
 import { backend, clearCookie, readCookie, sessionCookie } from '../lib/backend.ts'
 
 const PUBLIC = new Set(['signup', 'login', 'forgot', 'reset'])
-const WITH_SESSION = new Set(['me', 'checkout', 'confirm', 'session', 'change-password', 'logout', 'portal'])
+const WITH_SESSION = new Set([
+  'me', 'checkout', 'confirm', 'session', 'change-password', 'logout', 'portal',
+  'seller-create', 'seller-list', 'seller-extend', 'seller-password',
+])
 
 function reply(body: unknown, status: number, cookie?: string): Response {
   const headers = new Headers({ 'content-type': 'application/json', 'cache-control': 'no-store' })
@@ -38,7 +41,7 @@ export default async (req: Request): Promise<Response> => {
   }
   const data = await res.json().catch(() => ({ error: 'server_error' }))
 
-  if ((action === 'login' || action === 'signup' || action === 'reset') && res.ok && typeof data.token === 'string') {
+  if ((action === 'login' || action === 'signup' || action === 'reset' || action === 'confirm') && res.ok && typeof data.token === 'string') {
     const { token, maxAge, ...rest } = data
     return reply(rest, 200, sessionCookie(token, Number(maxAge) || 2_592_000))
   }
