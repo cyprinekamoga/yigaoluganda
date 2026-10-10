@@ -88,7 +88,7 @@ export function SettingsScreen() {
         {account && (
           <section className="rounded-2xl bg-cloud p-4" data-testid="account">
             <h2 className="text-lg font-bold">{t('settings.account')}</h2>
-            <p className="mb-3 text-ink-soft">{t('settings.loggedInAs', { name: account.username })}</p>
+            <p className="mb-3 break-all text-ink-soft">{t('settings.loggedInAs', { name: account.username })}</p>
             <div className="grid gap-3">
               <button
                 type="button"

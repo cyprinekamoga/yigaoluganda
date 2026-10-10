@@ -36,7 +36,7 @@ export function Layout({ children, title }: { children: ReactNode; title?: strin
                 to={tab.to}
                 end={tab.end}
                 className={({ isActive }) =>
-                  `flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1 text-xs font-bold sm:text-sm ${isActive ? 'bg-lake-soft text-lake-dark' : 'text-ink-soft'}`
+                  `flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 text-center text-[11px] font-bold leading-tight hyphens-auto break-words sm:text-sm ${isActive ? 'bg-lake-soft text-lake-dark' : 'text-ink-soft'}`
                 }
               >
                 <span aria-hidden="true" className="text-2xl leading-none">

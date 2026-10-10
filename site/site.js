@@ -146,6 +146,12 @@
   // ---------- forgot password ----------
   if (page === 'forgot') {
     const form = $('[data-form=forgot]')
+    try {
+      const prefill = sessionStorage.getItem('yiga-forgot-email')
+      if (prefill) form.email.value = prefill
+    } catch {
+      /* private mode */
+    }
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
       const err = $('[data-error]', form)
@@ -237,6 +243,20 @@
         locked: tr('För många försök. Vänta 15 minuter och försök igen.', 'Too many tries. Wait 15 minutes and try again.'),
       }
       showMsg(err, messages[r.data.error] || genericError())
+      if (r.data.error === 'wrong_login' || r.data.error === 'locked') {
+        // Offer the way out right where the problem is.
+        const link = document.createElement('a')
+        link.href = '/forgot.html'
+        // Hand the email over without putting it in the address.
+        try {
+          sessionStorage.setItem('yiga-forgot-email', username)
+        } catch {
+          /* private mode */
+        }
+        link.textContent = tr('Glömt lösenordet?', 'Forgot your password?')
+        link.style.marginLeft = '6px'
+        err.append(link)
+      }
     })
 
     changeForm.addEventListener('submit', async (e) => {
