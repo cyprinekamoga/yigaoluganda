@@ -2,7 +2,6 @@ import { useMemo, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CompleteScreen } from '../components/CompleteScreen'
 import { LessonPlayer, type Session } from '../components/LessonPlayer'
-import { NoHearts } from '../components/NoHearts'
 import { getLessonRef } from '../content'
 import { generateLesson } from '../logic/generator'
 import { completeLesson } from '../logic/progress'
@@ -12,12 +11,11 @@ import { useApp } from '../state/AppState'
 
 export function LessonScreen() {
   const { lessonId = '' } = useParams()
-  const { state, hearts, track, update, t } = useApp()
+  const { state, track, update, t } = useApp()
   const navigate = useNavigate()
   const ref = getLessonRef(lessonId)
   const startXp = useRef(state.xp)
   const [done, setDone] = useState<{ mistakes: number; badges: string[] } | null>(null)
-  const [outOfHearts, setOutOfHearts] = useState(hearts <= 0)
 
   const exercises = useMemo(
     () => (ref ? generateLesson(lessonId, { lang: track, seed: Date.now(), weakWords: pickPracticeWords(state.memory, Date.now(), 4) }) : []),
@@ -26,7 +24,6 @@ export function LessonScreen() {
   )
 
   if (!ref || !isLessonUnlocked(state, lessonId)) return <Navigate to="/" replace />
-  if (outOfHearts && !done) return <NoHearts />
 
   if (done)
     return (
@@ -44,5 +41,5 @@ export function LessonScreen() {
     setDone({ mistakes: s.mistakes, badges })
   }
 
-  return <LessonPlayer exercises={exercises} mode="lesson" onFinish={finish} onExit={() => navigate('/', { replace: true })} onOutOfHearts={() => setOutOfHearts(true)} />
+  return <LessonPlayer exercises={exercises} mode="lesson" onFinish={finish} onExit={() => navigate('/', { replace: true })} />
 }

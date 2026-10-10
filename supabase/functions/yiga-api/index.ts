@@ -16,6 +16,8 @@ import {
 
 const MAX_FAILED = 5
 const LOCK_MINUTES = 15
+const RESET_MINUTES = 60
+const RESET_COOLDOWN_MS = 2 * 60_000
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/
 
 const siteUrl = () => (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '')
@@ -41,6 +43,37 @@ async function newSession(accountId: string) {
     expires_at: new Date(Date.now() + SESSION_DAYS * 86_400_000).toISOString(),
   })
   return { token, maxAge: SESSION_DAYS * 86_400 }
+}
+
+const escapeHtml = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
+
+/** Sends an email through Resend (https://resend.com). Returns false when email isn't set up. */
+async function sendEmail(to: string, subject: string, html: string, text: string): Promise<boolean> {
+  const key = Deno.env.get('RESEND_API_KEY')
+  if (!key) return false
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ from: Deno.env.get('MAIL_FROM') || 'Yiga Oluganda <onboarding@resend.dev>', to: [to], subject, html, text }),
+  })
+  if (!res.ok) console.error('resend', res.status, await res.text())
+  return res.ok
+}
+
+function resetEmail(link: string) {
+  const subject = 'Nytt lösenord / New password – Yiga Oluganda'
+  const text = `Hej!\n\nKlicka på länken för att välja ett nytt lösenord till Yiga Oluganda. Länken fungerar i ${RESET_MINUTES} minuter och kan bara användas en gång:\n${link}\n\nHar du inte bett om detta kan du strunta i mejlet.\n\n---\n\nHi!\n\nClick the link to choose a new password for Yiga Oluganda. It works for ${RESET_MINUTES} minutes and only once:\n${link}\n\nIf you didn't ask for this, you can ignore this email.\n\nWebale nnyo – Ngaali`
+  const a = `<a href="${escapeHtml(link)}" style="display:inline-block;background:#0e6f73;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">`
+  const html = `<div style="font-family:system-ui,sans-serif;font-size:16px;line-height:1.5;color:#2b1d14;max-width:520px">
+<p><strong>Hej!</strong> Klicka på knappen för att välja ett nytt lösenord till Yiga Oluganda. Länken fungerar i ${RESET_MINUTES} minuter och kan bara användas en gång.</p>
+<p>${a}Välj nytt lösenord</a></p>
+<p style="color:#6b5545">Har du inte bett om detta kan du strunta i mejlet.</p>
+<hr style="border:0;border-top:1px solid #e5d7c3;margin:24px 0">
+<p><strong>Hi!</strong> Click the button to choose a new password for Yiga Oluganda. The link works for ${RESET_MINUTES} minutes and only once.</p>
+<p>${a}Choose a new password</a></p>
+<p style="color:#6b5545">If you didn't ask for this, you can ignore this email.</p>
+<p>Webale nnyo – Ngaali 🪶</p></div>`
+  return { subject, html, text }
 }
 
 const actions: Record<string, (body: Record<string, unknown>) => Promise<Response>> = {
@@ -103,6 +136,65 @@ const actions: Record<string, (body: Record<string, unknown>) => Promise<Respons
     if (!paid || typeof cs.subscription !== 'string') return json({ error: 'not_paid', active: false }, 402)
     const account = await syncSubscription(cs.subscription, { accountId: s.account.id, checkoutSessionId: sessionId })
     return json({ active: hasAccess(account) })
+  },
+
+  /** "Forgot password": emails a one-time link. Always answers the same, so it never reveals who has an account. */
+  async forgot(body) {
+    if (!Deno.env.get('RESEND_API_KEY') || !siteUrl()) return json({ error: 'not_configured' }, 503)
+    const email = str(body.email, 254).trim().toLowerCase()
+    if (!EMAIL.test(email)) return json({ error: 'bad_email' }, 400)
+    const { data: account } = await db.from('yiga_accounts').select('id, email, username').eq('username', email).maybeSingle()
+    if (account) {
+      const { data: recent } = await db
+        .from('yiga_password_resets')
+        .select('created_at')
+        .eq('account_id', account.id)
+        .gt('created_at', new Date(Date.now() - RESET_COOLDOWN_MS).toISOString())
+        .limit(1)
+      if (!recent?.length) {
+        const token = newSessionToken()
+        await db.from('yiga_password_resets').insert({
+          token_hash: await sha256(token),
+          account_id: account.id,
+          expires_at: new Date(Date.now() + RESET_MINUTES * 60_000).toISOString(),
+        })
+        // The token travels after "#", so it never reaches server logs.
+        const mail = resetEmail(`${siteUrl()}/reset.html#token=${token}`)
+        await sendEmail(account.email ?? account.username, mail.subject, mail.html, mail.text)
+      }
+    }
+    return json({ ok: true })
+  },
+
+  /** Sets a new password from the emailed link, logs out every device and logs in this one. */
+  async reset(body) {
+    const resetToken = str(body.resetToken, 100)
+    const password = str(body.newPassword, 200)
+    if (password.length < 8) return json({ error: 'too_short' }, 400)
+    if (!resetToken) return json({ error: 'bad_link' }, 400)
+    const { data: row } = await db
+      .from('yiga_password_resets')
+      .select('token_hash, account_id, expires_at, used_at')
+      .eq('token_hash', await sha256(resetToken))
+      .maybeSingle()
+    if (!row || row.used_at || new Date(row.expires_at) < new Date()) return json({ error: 'bad_link' }, 400)
+    // Use the link up first, so it can't be used twice at the same moment.
+    const { data: used } = await db
+      .from('yiga_password_resets')
+      .update({ used_at: new Date().toISOString() })
+      .eq('token_hash', row.token_hash)
+      .is('used_at', null)
+      .select('token_hash')
+    if (!used?.length) return json({ error: 'bad_link' }, 400)
+    const { data: account, error } = await db
+      .from('yiga_accounts')
+      .update({ password_hash: await hashPassword(password), must_change_password: false, failed_logins: 0, locked_until: null })
+      .eq('id', row.account_id)
+      .select('*')
+      .single()
+    if (error) throw error
+    await db.from('yiga_sessions').delete().eq('account_id', account.id)
+    return json({ ...(await newSession(account.id)), username: account.username, active: hasAccess(account) })
   },
 
   async login(body) {

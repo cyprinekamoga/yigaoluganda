@@ -65,7 +65,7 @@ function SingleChoice({ exercise, lang, checked, setPending }: ExerciseProps) {
       const w = getWord(exercise.wordId)
       instruction = t('exercise.pictureToWord')
       prompt = (
-        <div className="mx-auto mb-6 grid min-h-36 w-fit min-w-36 place-items-center rounded-3xl bg-cloud p-5 shadow-[0_5px_0_var(--color-line)]">
+        <div className="mx-auto mb-6 grid min-h-36 w-fit min-w-36 place-items-center rounded-3xl bg-cloud p-5 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
           <WordPicture image={w.image ?? '❓'} size="lg" />
         </div>
       )
@@ -121,7 +121,7 @@ function SingleChoice({ exercise, lang, checked, setPending }: ExerciseProps) {
         </span>
       )
       prompt = (
-        <div className="mb-6 rounded-3xl bg-cloud p-5 text-2xl leading-relaxed shadow-[0_5px_0_var(--color-line)]">
+        <div className="mb-6 rounded-3xl bg-cloud p-5 text-2xl leading-relaxed shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
           <p {...(exercise.textIsLuganda ? { lang: 'lg' } : {})}>
             {before}
             {gap}
@@ -139,7 +139,7 @@ function SingleChoice({ exercise, lang, checked, setPending }: ExerciseProps) {
     case 'question': {
       instruction = t('exercise.question')
       prompt = (
-        <div className="mb-6 flex items-center gap-4 rounded-3xl bg-cloud p-5 shadow-[0_5px_0_var(--color-line)]">
+        <div className="mb-6 flex items-center gap-4 rounded-3xl bg-cloud p-5 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
           {exercise.image && <WordPicture image={exercise.image} size="md" />}
           <p className="text-2xl font-semibold">{exercise.prompt}</p>
         </div>
@@ -186,7 +186,7 @@ function SingleChoice({ exercise, lang, checked, setPending }: ExerciseProps) {
 /** The word being asked about, with its recording when one exists. */
 function WordCard({ children, wordId, badge }: { children: ReactNode; wordId?: string; badge?: string }) {
   return (
-    <div className="mb-6 flex items-center gap-4 rounded-3xl bg-cloud p-5 shadow-[0_5px_0_var(--color-line)]">
+    <div className="mb-6 flex items-center gap-4 rounded-3xl bg-cloud p-5 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
       {wordId && hasAudio(wordId) && <SpeakerButton wordId={wordId} />}
       <div className="flex-1">
         {badge && <span className="mb-1 inline-block rounded-full bg-sun px-3 py-0.5 text-sm font-bold text-ink">{badge}</span>}

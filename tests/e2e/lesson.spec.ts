@@ -34,12 +34,12 @@ for (const { ui, track } of combos) {
   })
 }
 
-test('a wrong answer is corrected gently, costs a heart and comes back later', async ({ page }) => {
+test('a wrong answer is corrected gently, costs nothing and comes back later', async ({ page }) => {
   await freshStart(page)
   await onboard(page, 'en', 'en')
   await page.getByTestId('lesson-u01-l1').click()
   await answerExercise(page, false)
-  await expect(page.getByTestId('lesson-hearts')).toContainText('4')
+  await expect(page.getByTestId('lesson-hearts')).toHaveCount(0)
   await playToEnd(page)
   await expect(page.getByTestId('complete')).toContainText('1 to practise again')
 })

@@ -13,7 +13,7 @@ export function BadgesScreen() {
         {BADGES.map((b) => {
           const has = Boolean(state.badges[b.id])
           return (
-            <li key={b.id} className={`flex flex-col items-center rounded-3xl p-4 text-center ${has ? 'bg-cloud shadow-[0_5px_0_var(--color-sun)]' : 'border-2 border-dashed border-line'}`} data-testid={`badge-${b.id}`} data-earned={has}>
+            <li key={b.id} className={`flex flex-col items-center rounded-3xl p-4 text-center ${has ? 'bg-cloud shadow-[0_10px_24px_-14px_rgba(242,182,50,0.9)]' : 'border-2 border-dashed border-line'}`} data-testid={`badge-${b.id}`} data-earned={has}>
               <span aria-hidden="true" className={`text-5xl ${has ? '' : 'opacity-40 grayscale'}`}>
                 {b.emoji}
               </span>

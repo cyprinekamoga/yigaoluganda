@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="sv" data-lang="sv">
+<head>
+<title>Glömt lösenordet – Yiga Oluganda</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e6f73">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/grandstander.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="forgot" class="page">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/img/icon.svg" alt="">Yiga Oluganda</a>
+    <nav><button class="lang" type="button" data-lang-toggle><span data-l="sv">English</span><span data-l="en">Svenska</span></button></nav>
+  </div>
+</header>
+<main>
+  <div class="wrap narrow">
+    <div class="panel">
+      <img class="mascot" src="/img/icon.svg" alt="">
+      <form data-form="forgot" novalidate>
+        <h1><span data-l="sv">Glömt lösenordet?</span><span data-l="en">Forgot your password?</span></h1>
+        <p><span data-l="sv">Skriv e-postadressen du registrerade dig med. Vi skickar en länk där du kan välja ett nytt lösenord.</span><span data-l="en">Enter the email address you signed up with. We'll send you a link to choose a new password.</span></p>
+        <label for="email"><span data-l="sv">E-postadress</span><span data-l="en">Email address</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required>
+        <p class="msg err" data-error hidden></p>
+        <button class="btn go block" type="submit" style="margin-top:20px"><span data-l="sv">Skicka länk</span><span data-l="en">Send link</span></button>
+      </form>
+      <div data-sent hidden>
+        <h1><span data-l="sv">Kolla din e-post</span><span data-l="en">Check your email</span></h1>
+        <p><span data-l="sv">Om det finns ett konto med den adressen har vi skickat en länk. Den fungerar i 60 minuter. Hittar du inget mejl? Titta i skräpposten.</span><span data-l="en">If there is an account with that address, we've sent a link. It works for 60 minutes. Can't find it? Check your spam folder.</span></p>
+      </div>
+      <p class="fine"><a href="/login.html"><span data-l="sv">Tillbaka till inloggningen</span><span data-l="en">Back to log in</span></a></p>
+    </div>
+  </div>
+</main>
+<script src="/site.js" defer></script>
+</body>
+</html>

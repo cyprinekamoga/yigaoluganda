@@ -15,7 +15,7 @@
     "listen": "Listen",
     "cancel": "Cancel",
     "lessons": "Lessons",
-    "xp": "XP",
+    "xp": "ensimbi",
     "loading": "Loading…"
   },
   "lang": {
@@ -54,11 +54,8 @@
     "didYouKnow": "Did you know?"
   },
   "stats": {
-    "streak": "{n} day streak",
-    "hearts": "{n} hearts",
-    "xp": "{n} XP",
-    "nextHeart": "Next heart in {min} min",
-    "heartsFull": "Hearts are full"
+    "streak": "{n} sunny days in a row",
+    "xp": "{n} ensimbi (cowrie shells)"
   },
   "exercise": {
     "wordToPicture": "Tap the right picture",
@@ -101,18 +98,14 @@
     "complete": "Lesson complete!",
     "practiceComplete": "Practice complete!",
     "storyComplete": "Chapter complete!",
-    "xpEarned": "+{n} XP",
+    "xpEarned": "+{n} 🐚 ensimbi",
     "perfect": "Perfect, no mistakes!",
     "mistakes": "{n} to practise again",
-    "newBadge": "New badge!",
-    "noHeartsTitle": "Out of hearts",
-    "noHeartsBody": "Your hearts are resting. Do a practice round to fill them up again, or come back later.",
-    "goPractice": "Practise and refill hearts",
-    "heartsRefilled": "Hearts are full again!"
+    "newBadge": "New badge!"
   },
   "practice": {
     "title": "Practice",
-    "intro": "Practise words that need a little more love. It refills all your hearts!",
+    "intro": "Practise words that need a little more love. Every right answer earns ensimbi!",
     "due": "{n} words ready to practise",
     "start": "Start practice",
     "empty": "Finish your first lesson, then come back to practise.",
@@ -174,20 +167,20 @@
       "desc": "Read every story chapter"
     },
     "streak3": {
-      "title": "On fire",
-      "desc": "Learn 3 days in a row"
+      "title": "Sunny start",
+      "desc": "Learn 3 sunny days in a row"
     },
     "streak7": {
       "title": "Shining star",
-      "desc": "Learn 7 days in a row"
+      "desc": "Learn 7 sunny days in a row"
     },
     "xp100": {
-      "title": "100 XP",
-      "desc": "Collect 100 XP"
+      "title": "100 ensimbi",
+      "desc": "Collect 100 cowrie shells"
     },
     "xp500": {
-      "title": "500 XP",
-      "desc": "Collect 500 XP"
+      "title": "500 ensimbi",
+      "desc": "Collect 500 cowrie shells"
     },
     "practice5": {
       "title": "Strong memory",
@@ -240,9 +233,9 @@
     "lessonsDone": "Lessons finished",
     "storiesDone": "Story chapters read",
     "wordsLearned": "Words learned",
-    "streak": "Current streak",
-    "bestStreak": "Best streak",
-    "xp": "Total XP",
+    "streak": "Sunny days in a row now",
+    "bestStreak": "Most sunny days in a row",
+    "xp": "Ensimbi (cowrie shells) collected",
     "weakWords": "Words to practise",
     "noWeakWords": "No tricky words yet.",
     "unitProgress": "Units",
@@ -298,6 +291,6 @@
     "leaderboard": "Family leaderboard",
     "wins": "{n} wins",
     "noBoard": "No duels yet. Be the first!",
-    "xpEarned": "+{n} XP"
+    "xpEarned": "+{n} ensimbi"
   }
 }

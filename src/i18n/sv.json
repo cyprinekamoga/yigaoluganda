@@ -15,7 +15,7 @@
     "listen": "Lyssna",
     "cancel": "Avbryt",
     "lessons": "Lektioner",
-    "xp": "XP",
+    "xp": "ensimbi",
     "loading": "Laddar…"
   },
   "lang": {
@@ -54,11 +54,8 @@
     "didYouKnow": "Visste du?"
   },
   "stats": {
-    "streak": "{n} dagar i rad",
-    "hearts": "{n} hjärtan",
-    "xp": "{n} XP",
-    "nextHeart": "Nästa hjärta om {min} min",
-    "heartsFull": "Hjärtana är fulla"
+    "streak": "{n} soldagar i rad",
+    "xp": "{n} ensimbi (kaurisnäckor)"
   },
   "exercise": {
     "wordToPicture": "Tryck på rätt bild",
@@ -101,18 +98,14 @@
     "complete": "Lektionen är klar!",
     "practiceComplete": "Övningen är klar!",
     "storyComplete": "Kapitlet är klart!",
-    "xpEarned": "+{n} XP",
+    "xpEarned": "+{n} 🐚 ensimbi",
     "perfect": "Perfekt, inga misstag!",
     "mistakes": "{n} att öva på igen",
-    "newBadge": "Nytt märke!",
-    "noHeartsTitle": "Hjärtana är slut",
-    "noHeartsBody": "Hjärtana vilar. Gör en övning för att fylla på dem igen, eller kom tillbaka senare.",
-    "goPractice": "Öva och fyll på hjärtan",
-    "heartsRefilled": "Hjärtana är fulla igen!"
+    "newBadge": "Nytt märke!"
   },
   "practice": {
     "title": "Öva",
-    "intro": "Öva på ord som behöver lite extra kärlek. Det fyller på alla dina hjärtan!",
+    "intro": "Öva på ord som behöver lite extra kärlek. Varje rätt svar ger ensimbi!",
     "due": "{n} ord redo att öva",
     "start": "Starta övningen",
     "empty": "Gör din första lektion och kom sedan tillbaka för att öva.",
@@ -174,20 +167,20 @@
       "desc": "Läs alla kapitel i berättelsen"
     },
     "streak3": {
-      "title": "Het",
-      "desc": "Lär dig 3 dagar i rad"
+      "title": "Solig start",
+      "desc": "Lär dig 3 soldagar i rad"
     },
     "streak7": {
       "title": "Lysande stjärna",
-      "desc": "Lär dig 7 dagar i rad"
+      "desc": "Lär dig 7 soldagar i rad"
     },
     "xp100": {
-      "title": "100 XP",
-      "desc": "Samla 100 XP"
+      "title": "100 ensimbi",
+      "desc": "Samla 100 kaurisnäckor"
     },
     "xp500": {
-      "title": "500 XP",
-      "desc": "Samla 500 XP"
+      "title": "500 ensimbi",
+      "desc": "Samla 500 kaurisnäckor"
     },
     "practice5": {
       "title": "Starkt minne",
@@ -240,9 +233,9 @@
     "lessonsDone": "Klara lektioner",
     "storiesDone": "Lästa kapitel",
     "wordsLearned": "Inlärda ord",
-    "streak": "Dagar i rad nu",
-    "bestStreak": "Flest dagar i rad",
-    "xp": "Totalt XP",
+    "streak": "Soldagar i rad nu",
+    "bestStreak": "Flest soldagar i rad",
+    "xp": "Insamlade ensimbi (kaurisnäckor)",
     "weakWords": "Ord att öva på",
     "noWeakWords": "Inga kluriga ord än.",
     "unitProgress": "Delar",
@@ -298,6 +291,6 @@
     "leaderboard": "Familjens topplista",
     "wins": "{n} vinster",
     "noBoard": "Inga dueller än. Bli först!",
-    "xpEarned": "+{n} XP"
+    "xpEarned": "+{n} ensimbi"
   }
 }

@@ -15,13 +15,13 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   block?: boolean
 }
 
-/** Big, friendly button. At least 56px high for small fingers. */
+/** Big, friendly pill button. At least 56px high for small fingers. */
 export function Button({ variant = 'primary', block, className = '', ref, ...rest }: Props & { ref?: Ref<HTMLButtonElement> }) {
   return (
     <button
       ref={ref}
       type="button"
-      className={`btn-3d min-h-14 rounded-2xl px-6 py-3 font-display text-xl font-semibold tracking-wide
+      className={`btn-3d min-h-14 rounded-full px-7 py-3 font-display text-xl font-bold tracking-wide
         disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none ${styles[variant]} ${block ? 'w-full' : ''} ${className}`}
       {...rest}
     />

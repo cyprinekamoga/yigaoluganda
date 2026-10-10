@@ -79,15 +79,25 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
 4. On another device or browser, log in with the same email and password. You should go straight into the app.
 5. In the app, open **Settings → Subscription and receipts → Cancel**. In test mode you can end the subscription immediately from the Stripe dashboard. Opening the app afterwards sends you to the payment page.
 
+## 4b. "Forgot password" emails (Resend)
+
+The **Glömt lösenordet?** link on the login page sends a one-time link by email. It works for 60 minutes. Until email is set up, the page asks people to email `info@zaweddeoils.com` instead.
+
+1. Create a free account at [resend.com](https://resend.com).
+2. Go to **API Keys → Create API key** and copy the key (`re_…`). Don't paste it into any chat.
+3. In the [Supabase Secrets page](https://supabase.com/dashboard/project/ilcwxstkuuyydnskobll/functions/secrets), add `RESEND_API_KEY` with that key.
+4. **Testing:** without a domain, Resend only delivers to **your own** email address, from `onboarding@resend.dev`.
+5. **For real customers:** once you own a domain, add it in Resend under **Domains** and follow its DNS steps. Then add the secret `MAIL_FROM`, for example `Yiga Oluganda <hej@yigaoluganda.se>`.
+
 ## 5. Go live
 
 1. In Stripe, switch off Test mode and complete your business details.
 2. Repeat steps 1.2–1.5 in live mode. Live mode has its own price, keys, portal settings and webhook.
 3. Replace the three Stripe secrets in Supabase with the live values.
 
-**Before you start selling, add a few things.** These need decisions from you (I'm not a lawyer, so check these with someone who knows Swedish consumer law):
+**Before you start selling, finish the legal pages.** They need decisions from you (I'm not a lawyer, so check these with someone who knows Swedish consumer law):
 
-- **Terms of purchase** and a **privacy policy**, linked from the footer of the landing page.
+- **Terms of purchase** (`site/terms.html`) and the **privacy policy** (`site/privacy.html`) are drafts. Fill in the [brackets] (company name, org. no., address, date), have them reviewed, then remove the yellow "Utkast" box at the top of each page.
 - **Consumer rules for digital services in Sweden:** for example, the 14-day right of withdrawal, and how a buyer agrees to start using the app right away. Stripe Checkout can show a link to your terms.
 - **A support address:** the pages currently show `info@zaweddeoils.com`. Change it in `site/*.html` if needed.
 
@@ -99,13 +109,13 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
   - After 5 wrong passwords, the account is locked for 15 minutes.
   - The app's files are only served to logged-in subscribers.
 - **If a subscription ends** (cancelled or unpaid), access stops within about a minute. The app also checks every time it opens.
-- **Forgotten passwords:** there is no "forgot password" email yet. Until there is, a new password has to be set for the person. Ask Claude in a session that has Supabase connected, or add the email flow (see Next steps).
+- **Forgotten passwords:** handled by the "forgot password" email (step 4b) once Resend is set up.
 - **Duels** need live rooms. For now they work only in the Claude-shared version, so the website version hides the Duel tab.
 - **Children's progress** is saved on each device. Online sync for website accounts is a possible next step.
 
 ## Next steps (optional)
 
-- A "forgot password" email (and a welcome email), for example with Resend.
+- A welcome email after sign-up, also through Resend.
 - A free trial: add `subscription_data[trial_period_days]` to the checkout call in `supabase/functions/yiga-api/index.ts`.
 - Duels and online progress for website accounts, using Supabase Realtime.
 

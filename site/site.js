@@ -68,6 +68,7 @@
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg(err, tr('Skriv en giltig e-postadress.', 'Enter a valid email address.'))
       if (a.length < 8) return showMsg(err, tr('Lösenordet behöver minst 8 tecken.', 'The password needs at least 8 characters.'))
       if (a !== b) return showMsg(err, tr('Lösenorden är inte likadana.', "The passwords don't match."))
+      if (!form.consent.checked) return showMsg(err, tr('Kryssa i att du godkänner villkoren för att fortsätta.', 'Please tick the box to accept the terms.'))
       const button = $('button[type=submit]', form)
       button.disabled = true
       const r = await api('signup', { email, password: a })
@@ -140,6 +141,61 @@
     }
     $('[data-retry]')?.addEventListener('click', confirm)
     confirm()
+  }
+
+  // ---------- forgot password ----------
+  if (page === 'forgot') {
+    const form = $('[data-form=forgot]')
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const err = $('[data-error]', form)
+      showMsg(err, '')
+      const email = form.email.value.trim().toLowerCase()
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg(err, tr('Skriv en giltig e-postadress.', 'Enter a valid email address.'))
+      const button = $('button[type=submit]', form)
+      button.disabled = true
+      const r = await api('forgot', { email })
+      button.disabled = false
+      if (r.ok) {
+        form.hidden = true
+        $('[data-sent]').hidden = false
+        return
+      }
+      showMsg(
+        err,
+        r.data.error === 'not_configured'
+          ? tr('Det går inte att skicka mejl just nu. Mejla info@zaweddeoils.com så hjälper vi dig.', "We can't send emails right now. Email info@zaweddeoils.com and we'll help.")
+          : genericError(),
+      )
+    })
+  }
+
+  // ---------- new password from the emailed link ----------
+  if (page === 'reset') {
+    const form = $('[data-form=reset]')
+    const resetToken = new URLSearchParams(location.hash.slice(1)).get('token') || ''
+    if (location.hash) history.replaceState(null, '', location.pathname)
+    const err = $('[data-error]', form)
+    if (!resetToken) showMsg(err, tr('Länken är ogiltig. Be om en ny länk.', 'This link is not valid. Ask for a new link.'))
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      showMsg(err, '')
+      const a = form.pw1.value
+      const b = form.pw2.value
+      if (a.length < 8) return showMsg(err, tr('Lösenordet behöver minst 8 tecken.', 'The password needs at least 8 characters.'))
+      if (a !== b) return showMsg(err, tr('Lösenorden är inte likadana.', "The passwords don't match."))
+      const button = $('button[type=submit]', form)
+      button.disabled = true
+      const r = await api('reset', { resetToken, newPassword: a })
+      button.disabled = false
+      if (r.ok) return window.location.assign(r.data.active ? '/app/' : '/pay.html')
+      showMsg(
+        err,
+        r.data.error === 'bad_link'
+          ? tr('Länken har gått ut eller redan använts. Be om en ny länk.', 'The link has expired or was already used. Ask for a new link.')
+          : genericError(),
+      )
+    })
   }
 
   // ---------- login ----------

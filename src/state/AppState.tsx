@@ -2,15 +2,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { Lang } from '../content/types'
 import { makeT, translateList, type TFunction } from '../i18n'
 import { awardBadges } from '../logic/badges'
-import { currentHearts, initialState, type ProgressState } from '../logic/progress'
+import { initialState, type ProgressState } from '../logic/progress'
 import { checkSession, goToLogin, goToPayment, LOGIN_REQUIRED, type SessionInfo } from '../platform/account'
 import { connectCloud, preferRemote, type Cloud } from './cloud'
 import { clearState, loadState, saveState } from './storage'
 
 interface AppContextValue {
   state: ProgressState
-  /** Hearts right now, including any that refilled since last time. */
-  hearts: number
   /** Apply a change. Returns any badges that were earned by it. */
   update: (fn: (s: ProgressState, now: number) => ProgressState) => string[]
   reset: () => void
@@ -33,7 +31,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   // The latest state, so several updates in one click build on each other and badges are known at once.
   const latest = useRef(state)
 
-  // Tick once a minute so refilled hearts and the streak stay up to date.
+  // Tick once a minute so the streak stays up to date.
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 60_000)
     return () => clearInterval(id)
@@ -103,7 +101,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     const ui = state.settings.uiLang
     return {
       state,
-      hearts: currentHearts(state, now).hearts,
       update,
       reset,
       t: makeT(ui),

@@ -30,8 +30,10 @@ function ready(): boolean {
 
 export function playCorrect() {
   if (!ready()) return
-  tone(660, 0, 0.12, 'triangle')
-  tone(990, 0.1, 0.2, 'triangle')
+  // Three quick notes, like a thumb piano (akogo).
+  tone(523, 0, 0.14, 'triangle')
+  tone(659, 0.08, 0.14, 'triangle')
+  tone(784, 0.16, 0.24, 'triangle')
 }
 
 /** Soft and low, never a harsh buzzer. */

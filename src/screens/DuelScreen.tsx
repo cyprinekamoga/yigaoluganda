@@ -85,7 +85,7 @@ export function DuelScreen() {
   const needsProfile = !state.settings.nickname || editing
   return (
     <Layout title={t('duel.title')}>
-      <div className="mb-6 flex items-center gap-3 rounded-3xl bg-cloud p-4 shadow-[0_5px_0_var(--color-line)]">
+      <div className="mb-6 flex items-center gap-3 rounded-3xl bg-cloud p-4 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
         <Mascot size={70} mood="cheer" label={t('a11y.mascot', { mascot: state.settings.mascotName })} />
         <p className="text-lg">{t('duel.intro')}</p>
       </div>
@@ -116,7 +116,7 @@ function DuelProfile({ onDone }: { onDone: () => void }) {
     onDone()
   }
   return (
-    <section className="mb-8 rounded-3xl bg-cloud p-5 shadow-[0_5px_0_var(--color-line)]" data-testid="duel-profile">
+    <section className="mb-8 rounded-3xl bg-cloud p-5 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]" data-testid="duel-profile">
       <h2 className="mb-3 font-display text-2xl font-semibold">{t('duel.setupTitle')}</h2>
       <label className="block font-bold" htmlFor="duel-nick">
         {t('duel.nickLabel')}
@@ -277,7 +277,7 @@ function Lobby({ room, onEdit, onStart }: { room: Room; onEdit: () => void; onSt
           {others.map(({ p, player }) => {
             const waiting = invite?.to === p.peer
             return (
-              <li key={p.peer} className="flex items-center justify-between gap-3 rounded-2xl bg-cloud p-3 shadow-[0_3px_0_var(--color-line)]">
+              <li key={p.peer} className="flex items-center justify-between gap-3 rounded-2xl bg-cloud p-3 shadow-[0_6px_16px_-12px_rgba(43,29,20,0.4)]">
                 <span className="flex items-center gap-2 text-xl font-bold">
                   <span aria-hidden="true" className="text-3xl">{player.avatar}</span>
                   {player.nick}
@@ -465,7 +465,7 @@ function DuelMatch({ room, duel, onDone }: { room: Room; duel: DuelInfo; onDone:
           <ScoreCard avatar={opponent.avatar} nick={opponent.nick} score={oppFinal.score} highlight={result.outcome !== 'win'} />
         </div>
         <p className="mt-4 text-lg">{t('duel.correct', { n: right, total })}</p>
-        <p className="mt-2 font-display text-2xl font-semibold text-leaf-dark">⭐ {t('duel.xpEarned', { n: result.xp })}</p>
+        <p className="mt-2 font-display text-2xl font-semibold text-leaf-dark">🐚 {t('duel.xpEarned', { n: result.xp })}</p>
         {result.badges.map((id) => {
           const b = BADGES.find((x) => x.id === id)
           return (
@@ -532,7 +532,7 @@ function DuelMatch({ room, duel, onDone }: { room: Room; duel: DuelInfo; onDone:
 function RaceLane({ avatar, nick, score, progress }: { avatar: string; nick: string; score: number; progress: number }) {
   const pct = Math.round(Math.max(0, Math.min(1, progress)) * 100)
   return (
-    <div className="rounded-2xl bg-cloud p-3 shadow-[0_3px_0_var(--color-line)]">
+    <div className="rounded-2xl bg-cloud p-3 shadow-[0_6px_16px_-12px_rgba(43,29,20,0.4)]">
       <p className="flex items-center justify-between gap-1 font-bold">
         <span className="truncate">
           <span aria-hidden="true">{avatar} </span>
@@ -627,7 +627,7 @@ function Leaderboard() {
               </span>
               <span className="text-right font-bold">
                 {t('duel.wins', { n: r.wins })}
-                <span className="block text-sm text-ink-soft">⭐ {r.xp}</span>
+                <span className="block text-sm text-ink-soft">🐚 {r.xp}</span>
               </span>
             </li>
           ))}

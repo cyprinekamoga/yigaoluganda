@@ -36,38 +36,19 @@ test('story mode: scenes, tappable words, translations and questions', async ({ 
   await expect(page.getByText('Läst')).toBeVisible()
 })
 
-test('practice brings back weak words and refills hearts', async ({ page }) => {
+test('practice brings back weak words, and mistakes never block a lesson', async ({ page }) => {
   await freshStart(page)
   await onboard(page, 'en', 'en')
   await page.getByTestId('lesson-u01-l1').click()
-  await answerExercise(page, false)
-  await answerExercise(page, false)
+  for (let i = 0; i < 6; i++) await answerExercise(page, false)
   await playToEnd(page)
   await page.getByTestId('finish').click()
-  await expect(page.getByTestId('hearts')).toContainText('3')
   await page.getByRole('link', { name: 'Practice' }).click()
   await page.getByTestId('start-practice').click()
   await playToEnd(page)
-  await expect(page.getByTestId('complete')).toContainText('Hearts are full again')
+  await expect(page.getByTestId('complete')).toBeVisible()
   await page.getByTestId('finish').click()
-  await expect(page.getByTestId('hearts')).toContainText('5')
-})
-
-test('out of hearts leads to practice, never a dead end', async ({ page }) => {
-  await freshStart(page)
-  await onboard(page, 'sv', 'sv')
-  await patchState(page, (s) => {
-    s.hearts = 1
-    s.heartsUpdatedAt = Date.now()
-    s.memory = { amazzi: { box: 1, due: 0, correct: 1, wrong: 1, lastSeen: 0 }, ente: { box: 1, due: 0, correct: 0, wrong: 1, lastSeen: 0 } }
-  })
-  await page.getByTestId('lesson-u01-l1').click()
-  await answerExercise(page, false)
-  await expect(page.getByTestId('no-hearts')).toBeVisible()
-  await page.getByTestId('go-practice').click()
-  await playToEnd(page)
-  await page.getByTestId('finish').click()
-  await expect(page.getByTestId('hearts')).toContainText('5')
+  expect(Number(await page.getByTestId('xp-value').innerText())).toBeGreaterThan(0)
 })
 
 test('badges page shows earned badges', async ({ page }) => {

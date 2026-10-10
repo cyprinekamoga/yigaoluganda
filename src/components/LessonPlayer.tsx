@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ExerciseView } from '../exercises/ExerciseView'
 import type { ExerciseResult } from '../exercises/types'
 import type { Exercise } from '../logic/generator'
-import { loseHeart, recordAnswer } from '../logic/progress'
+import { recordAnswer } from '../logic/progress'
 import { answer, current, isFinished, next, progress, startSession, type Session } from '../logic/session'
 import { useApp } from '../state/AppState'
 import { Button } from './Button'
@@ -18,32 +18,27 @@ interface Props {
   mode: PlayerMode
   onFinish: (session: Session) => void
   onExit: () => void
-  onOutOfHearts: () => void
 }
 
-/** Runs a list of exercises: check, feedback, continue. Lessons cost hearts; practice and stories don't. */
-export function LessonPlayer({ exercises, mode, onFinish, onExit, onOutOfHearts }: Props) {
-  const { t, track, update, state, hearts } = useApp()
+/** Runs a list of exercises: check, feedback, continue. Mistakes never cost anything: a missed one simply comes back later. */
+export function LessonPlayer({ exercises, mode, onFinish, onExit }: Props) {
+  const { t, track, update, state } = useApp()
   const [session, setSession] = useState(() => startSession(exercises))
   const [pending, setPending] = useState<ExerciseResult | null>(null)
   const [result, setResult] = useState<ExerciseResult | null>(null)
   const [quitting, setQuitting] = useState(false)
-  const [heartsLeft, setHeartsLeft] = useState(hearts)
 
   const exercise = current(session)
   if (!exercise) return null
 
   const commit = (r: ExerciseResult) => {
     setResult(r)
-    const loses = mode === 'lesson' && !r.correct
     update((s, now) => {
       let out = s
       const perWord = r.wordResults ?? Object.fromEntries(exercise.wordIds.map((id) => [id, r.correct]))
       for (const [id, ok] of Object.entries(perWord)) out = recordAnswer(out, [id], ok, now)
-      if (loses) out = loseHeart(out, now)
       return out
     })
-    if (loses) setHeartsLeft((h) => Math.max(0, h - 1))
     if (state.settings.sound) (r.correct ? playCorrect : playGentle)()
   }
 
@@ -52,13 +47,12 @@ export function LessonPlayer({ exercises, mode, onFinish, onExit, onOutOfHearts 
     const nextSession = next(answer(session, result.correct))
     setResult(null)
     setPending(null)
-    if (mode === 'lesson' && heartsLeft <= 0) return onOutOfHearts()
     if (isFinished(nextSession)) return onFinish(nextSession)
     setSession(nextSession)
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-4 pb-40 pt-4">
+    <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-4 pb-40 pt-4" data-mode={mode}>
       <header className="mb-6 flex items-center gap-3">
         <button
           type="button"
@@ -69,13 +63,6 @@ export function LessonPlayer({ exercises, mode, onFinish, onExit, onOutOfHearts 
           <span aria-hidden="true">✕</span>
         </button>
         <ProgressBar value={progress(session)} label={t('a11y.progress')} />
-        {mode === 'lesson' && (
-          <span className="flex items-center gap-1 font-display text-xl font-semibold text-crane" data-testid="lesson-hearts">
-            <span aria-hidden="true">❤️</span>
-            <span className="sr-only">{t('stats.hearts', { n: heartsLeft })}</span>
-            <span aria-hidden="true">{heartsLeft}</span>
-          </span>
-        )}
       </header>
 
       <main key={exercise.id} className="flex-1" data-testid="exercise" data-kind={exercise.kind}>

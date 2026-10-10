@@ -21,9 +21,9 @@ export function FeedbackSheet({ result, onContinue }: { result: ExerciseResult; 
       role="status"
       aria-live="assertive"
       data-testid={ok ? 'feedback-correct' : 'feedback-wrong'}
-      className={`animate-rise fixed inset-x-0 bottom-0 z-40 border-t-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 ${ok ? 'border-leaf bg-leaf-soft' : 'border-sun bg-sun-soft'}`}
+      className={`animate-rise fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 mx-auto max-w-xl rounded-[28px] border-[3px] pb-4 pt-4 shadow-[0_18px_40px_-16px_rgba(43,29,20,0.45)] ${ok ? 'border-leaf bg-leaf-soft' : 'border-sun bg-sun-soft'}`}
     >
-      <div className="mx-auto flex max-w-xl items-end gap-3 px-4">
+      <div className="flex items-end gap-3 px-4">
         <Mascot mood={ok ? 'cheer' : 'gentle'} size={64} />
         <div className="min-w-0 flex-1 pb-1">
           {ok ? (
@@ -45,7 +45,7 @@ export function FeedbackSheet({ result, onContinue }: { result: ExerciseResult; 
           )}
         </div>
       </div>
-      <div className="mx-auto mt-3 max-w-xl px-4">
+      <div className="mt-3 px-4">
         <Button ref={button} variant={ok ? 'success' : 'sun'} block onClick={onContinue} data-testid="continue">
           {t('common.continue')}
         </Button>

@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
-/* Yiga Oluganda palette: Ugandan flag (black, yellow, red) + Swedish/lake blue + leaf green. */
-@theme {
-  --color-sun: #ffc72c;
-  --color-sun-soft: #fff3cc;
-  --color-ink: #1e1b18;
-  --color-ink-soft: #4a4540;
-  --color-crane: #c8102e;
-  --color-crane-soft: #fde4e8;
-  --color-lake: #0b5cad;
-  --color-lake-dark: #08457f;
-  --color-lake-soft: #dcebfa;
-  --color-leaf: #1e7b34;
-  --color-leaf-dark: #155c26;
-  --color-leaf-soft: #ddf3e2;
-  --color-mist: #eef5fb;
-  --color-cloud: #ffffff;
-  --color-line: #cfdbe7;
-  --color-stone: #5d6977;
+/* Yiga Oluganda's own look: warm barkcloth (olubugo) background, the river Nile as the main colour,
+   Ugandan flag gold and red as accents, banana-leaf green for "right". */
+@font-face {
+  font-family: "Grandstander";
+  src: url("./assets/fonts/grandstander.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend";
+  src: url("./assets/fonts/lexend.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
 
-  --font-display: "Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
-  --font-body: "Nunito", ui-rounded, system-ui, sans-serif;
+@theme {
+  --color-sun: #f2b632;
+  --color-sun-soft: #fdf0cf;
+  --color-ink: #2b1d14;
+  --color-ink-soft: #6b5545;
+  --color-crane: #b8322a;
+  --color-crane-soft: #f8e1dc;
+  --color-lake: #0e6f73;
+  --color-lake-dark: #0a5054;
+  --color-lake-soft: #d5ecea;
+  --color-leaf: #2f7a45;
+  --color-leaf-dark: #215a32;
+  --color-leaf-soft: #e0f0e2;
+  --color-mist: #f6efe4;
+  --color-cloud: #fffbf5;
+  --color-line: #e5d7c3;
+  --color-stone: #8a7462;
+
+  --font-display: "Grandstander", ui-rounded, system-ui, sans-serif;
+  --font-body: "Lexend", system-ui, sans-serif;
 
   --animate-bob: bob 2.6s ease-in-out infinite;
   --animate-pop: pop 0.35s ease-out;
@@ -49,7 +63,11 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: var(--color-mist);
+  background-color: var(--color-mist);
+  /* A faint barkcloth weave. */
+  background-image:
+    repeating-linear-gradient(90deg, rgba(120, 72, 32, 0.035) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(0deg, rgba(120, 72, 32, 0.025) 0 1px, transparent 1px 13px);
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: 18px;
@@ -73,14 +91,17 @@ h1, h2, h3, .font-display {
   font-weight: 700;
 }
 
-/* 3D-ish "press" buttons: a solid bottom edge that collapses when pressed. */
+/* Soft, lifted buttons: a gentle coloured glow that settles when pressed. */
 .btn-3d {
-  box-shadow: 0 5px 0 var(--edge, rgba(0, 0, 0, 0.18));
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  box-shadow: 0 10px 22px -12px var(--edge, rgba(43, 29, 20, 0.45)), inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-3d:hover:not(:disabled) {
+  filter: brightness(1.04);
 }
 .btn-3d:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 var(--edge, rgba(0, 0, 0, 0.18));
+  transform: scale(0.97);
+  box-shadow: 0 4px 10px -8px var(--edge, rgba(43, 29, 20, 0.45));
 }
 
 .confetti {

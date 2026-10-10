@@ -15,8 +15,8 @@ const UNIT_COLORS = [
   { band: 'bg-sun text-ink', node: 'bg-sun text-ink [--edge:#c99400]' },
 ]
 
-/** Horizontal offsets that make the path wind like a river. */
-const OFFSETS = [0, 56, 84, 56, 0, -56, -84, -56]
+/** Stepping stones that cross the river from bank to bank. */
+const OFFSETS = [-70, 0, 70, 0]
 const ROW = 104
 
 export function Home() {
@@ -30,7 +30,7 @@ export function Home() {
 
   return (
     <Layout>
-      <div className="mb-6 flex items-center gap-3 rounded-3xl bg-cloud p-4 shadow-[0_5px_0_var(--color-line)]">
+      <div className="mb-6 flex items-center gap-3 rounded-3xl bg-cloud p-4 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
         <Mascot size={70} mood={nextId ? 'happy' : 'cheer'} label={t('a11y.mascot', { mascot: state.settings.mascotName })} />
         <div>
           <p className="font-display text-lg font-semibold text-lake-dark">{state.settings.mascotName}</p>
@@ -101,18 +101,18 @@ function UnitSection({ unit, index, nextId, currentRef }: { unit: Unit; index: n
                     ref={isNext ? currentRef : undefined}
                     aria-label={label}
                     data-testid={`lesson-${lesson.id}`}
-                    className={`btn-3d grid h-[76px] w-[76px] place-items-center rounded-full text-3xl ${done ? 'bg-sun text-ink [--edge:#c99400]' : `${color.node} text-white`} ${isNext ? 'ring-8 ring-sun/50' : ''}`}
+                    className={`btn-3d grid h-[76px] w-[76px] place-items-center rounded-[26px] font-display text-3xl font-bold ${done ? 'bg-sun text-ink [--edge:#c99400]' : `${color.node} text-white`} ${isNext ? 'ring-8 ring-sun/50' : ''}`}
                   >
-                    <span aria-hidden="true">{done ? '⭐' : isNext ? '▶' : unit.emoji}</span>
+                    <span aria-hidden="true">{done ? '✓' : isNext ? '▶' : firstIndex + i + 1}</span>
                   </Link>
                 ) : (
-                  <span aria-label={label} role="img" className="grid h-[76px] w-[76px] place-items-center rounded-full bg-line text-2xl shadow-[0_5px_0_#b5c3d1]">
+                  <span aria-label={label} role="img" className="grid h-[76px] w-[76px] place-items-center rounded-[26px] border-[3px] border-dashed border-line bg-cloud text-2xl">
                     <span aria-hidden="true">🔒</span>
                   </span>
                 )}
                 <span className={`mt-1 max-w-32 text-center text-sm font-bold leading-tight ${open ? 'text-ink' : 'text-stone'}`}>{lesson.title[ui]}</span>
                 {isNext && (
-                  <span className="absolute -top-9 whitespace-nowrap rounded-xl bg-cloud px-3 py-1 font-display text-base font-semibold text-lake-dark shadow-[0_3px_0_var(--color-line)]">
+                  <span className="absolute -top-9 whitespace-nowrap rounded-xl bg-cloud px-3 py-1 font-display text-base font-semibold text-lake-dark shadow-[0_6px_16px_-12px_rgba(43,29,20,0.4)]">
                     {t('home.start')}
                   </span>
                 )}

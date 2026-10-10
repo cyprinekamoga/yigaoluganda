@@ -184,7 +184,7 @@ const scenes: Record<string, () => ReactElement> = {
 export function Scene({ name, props }: { name: string; props: string[] }) {
   const draw = scenes[name] ?? scenes.sky
   return (
-    <div className="relative overflow-hidden rounded-3xl shadow-[0_5px_0_var(--color-line)]">
+    <div className="relative overflow-hidden rounded-3xl shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
       <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" aria-hidden="true">
         {draw()}
       </svg>

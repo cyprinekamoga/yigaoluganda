@@ -37,7 +37,7 @@ export function StoryScreen() {
       const badges = update((st) => completeStory(st, chapter.id, new Date()))
       setDone({ mistakes: s.mistakes, badges })
     }
-    return <LessonPlayer exercises={exercises} mode="story" onFinish={finish} onExit={() => setQuiz(false)} onOutOfHearts={() => undefined} />
+    return <LessonPlayer exercises={exercises} mode="story" onFinish={finish} onExit={() => setQuiz(false)} />
   }
 
   const scene = chapter.scenes[page]

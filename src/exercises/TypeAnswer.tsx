@@ -28,7 +28,7 @@ export function TypeAnswer({ exercise, lang, checked, setPending }: ExerciseProp
   return (
     <div>
       <Instruction>{t('exercise.type')}</Instruction>
-      <div className="mb-5 rounded-3xl bg-cloud p-5 shadow-[0_5px_0_var(--color-line)]">
+      <div className="mb-5 rounded-3xl bg-cloud p-5 shadow-[0_10px_24px_-16px_rgba(43,29,20,0.4)]">
         <p className="font-display text-3xl font-semibold">{word[lang]}</p>
         <p className="mt-2 text-lg text-ink-soft">{t('exercise.typeHint', { letter: word.lg.charAt(0).toLowerCase() })}</p>
       </div>

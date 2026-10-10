@@ -28,8 +28,8 @@ export default defineConfig(({ mode }) => ({
         start_url: './',
         scope: './',
         display: 'standalone',
-        background_color: '#EEF5FB',
-        theme_color: '#0B5CAD',
+        background_color: '#f6efe4',
+        theme_color: '#0e6f73',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,mp3}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,woff,woff2,json,mp3}'],
         navigateFallback: 'index.html',
       },
     }),

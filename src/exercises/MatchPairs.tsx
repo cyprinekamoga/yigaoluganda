@@ -9,7 +9,7 @@ import type { ExerciseProps } from './types'
 
 type Side = 'lg' | 'meaning'
 
-/** Tap a Luganda word and its meaning. A wrong pair just wiggles: no hearts are lost here. */
+/** Tap a Luganda word and its meaning. A wrong pair just wiggles, nothing is lost. */
 export function MatchPairs({ exercise, lang, submit }: ExerciseProps<'pairs'>) {
   const { t } = useApp()
   const ids = exercise.wordIds

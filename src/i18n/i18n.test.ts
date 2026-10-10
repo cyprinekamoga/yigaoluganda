@@ -9,7 +9,7 @@ describe('translations', () => {
     expect(keys(dictionaries.sv).sort()).toEqual(keys(dictionaries.en).sort())
   })
   it('fills in variables', () => {
-    expect(translate('sv', 'stats.streak', { n: 3 })).toBe('3 dagar i rad')
+    expect(translate('sv', 'stats.streak', { n: 3 })).toBe('3 soldagar i rad')
     expect(translate('en', 'parent.gateQuestion', { a: 6, b: 7 })).toBe('What is 6 × 7?')
   })
 })
