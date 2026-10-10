@@ -1,26 +1,21 @@
 import { expect, test } from '@playwright/test'
 import { answerExercise, freshStart, onboard, playToEnd, type Lang } from './helpers'
 
-const combos: { ui: Lang; track: Lang }[] = [
-  { ui: 'sv', track: 'sv' },
-  { ui: 'sv', track: 'en' },
-  { ui: 'en', track: 'en' },
-  { ui: 'en', track: 'sv' },
-]
+const langs: Lang[] = ['sv', 'en']
 
 const instruction = { sv: 'Tryck på rätt bild', en: 'Tap the right picture' }
 const meaningOfEnsawo = { sv: 'väska', en: 'bag' }
 
-for (const { ui, track } of combos) {
-  test(`completes a whole lesson: UI ${ui}, track ${track} → Luganda`, async ({ page }) => {
+for (const ui of langs) {
+  test(`completes a whole lesson in ${ui} → Luganda`, async ({ page }) => {
     await freshStart(page)
-    await onboard(page, ui, track)
+    await onboard(page, ui)
     await expect(page.locator('html')).toHaveAttribute('lang', ui)
 
     await page.getByTestId('lesson-u01-l1').click()
-    // Instructions follow the UI language; meanings follow the track.
+    // Instructions and meanings both follow the chosen language.
     await expect(page.getByRole('heading', { name: instruction[ui] })).toBeVisible()
-    await expect(page.getByTestId('exercise')).toContainText(meaningOfEnsawo[track])
+    await expect(page.getByTestId('exercise')).toContainText(meaningOfEnsawo[ui])
 
     await playToEnd(page)
     await expect(page.getByTestId('xp-earned')).toContainText('XP')
@@ -36,7 +31,7 @@ for (const { ui, track } of combos) {
 
 test('a wrong answer is corrected gently, costs nothing and comes back later', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.getByTestId('lesson-u01-l1').click()
   await answerExercise(page, false)
   await expect(page.getByTestId('lesson-hearts')).toHaveCount(0)
@@ -46,7 +41,7 @@ test('a wrong answer is corrected gently, costs nothing and comes back later', a
 
 test('typed answers accept capitals, spaces and accents', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   // Unlock the third lesson, which includes a typing task.
   await page.evaluate(() => {
     const s = JSON.parse(localStorage.getItem('yiga-oluganda:v1')!)

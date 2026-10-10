@@ -97,7 +97,7 @@ Inga konton, ingen reklam, inga cookies för spårning och ingen analys. Typsnit
 ### What is this?
 Yiga Oluganda ("Learn Luganda") is a web app for children learning basic Luganda.
 - The interface is in **Swedish** and **English**, chosen at the start and changeable in Settings.
-- Two tracks: **Swedish → Luganda** and **English → Luganda**.
+- Two languages: **Swedish → Luganda** and **English → Luganda**. The chosen language is used for everything, meanings included.
 - It has short lessons on a winding path, XP, a daily streak, hearts, badges, a Practice mode that brings back weak words (spaced repetition), and **Story mode**, which follows Alex's trip to Buganda across the book's 10 chapters.
 - **No accounts and no data collection.** Progress stays on the device (localStorage).
 - It works **offline** as an installable PWA on phones, tablets and desktop.

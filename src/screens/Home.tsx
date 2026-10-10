@@ -77,7 +77,7 @@ function UnitSection({ unit, index, nextId, currentRef }: { unit: Unit; index: n
       {unit.culture && (
         <aside className="mt-3 rounded-2xl border-2 border-sun bg-sun-soft p-3">
           <p className="font-bold">💡 {t('home.didYouKnow')}</p>
-          <p>{unit.culture[state.settings.track]}</p>
+          <p>{unit.culture[state.settings.uiLang]}</p>
         </aside>
       )}
 

@@ -7,8 +7,6 @@ test('screenshots of main screens', async ({ page }, info) => {
   await freshStart(page)
   await shot('01-onboarding')
   await page.getByTestId('ui-sv').click()
-  await shot('02-track')
-  await page.getByTestId('track-sv').click()
   await shot('03-name')
   await page.getByTestId('start').click()
   await page.waitForTimeout(300)
@@ -42,7 +40,7 @@ test('screenshots of main screens', async ({ page }, info) => {
 test('screenshots of story, practice, badges, settings and parent page', async ({ page }, info) => {
   const shot = (name: string) => page.screenshot({ path: `screenshots/${info.project.name}-${name}.png` })
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.evaluate(() => {
     const s = JSON.parse(localStorage.getItem('yiga-oluganda:v1')!)
     for (const id of ['u01-l1', 'u01-l2', 'u01-l3', 'u01-l4', 'u01-l5', 'u02-l1', 'u02-l2', 'u02-l3', 'u02-l4', 'u02-l5', 'u03-l1', 'u03-l2', 'u03-l3', 'u04-l1', 'u04-l2', 'u05-l1', 'u05-l2', 'u05-l3'])

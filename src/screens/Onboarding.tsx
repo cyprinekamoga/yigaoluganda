@@ -6,7 +6,7 @@ import type { Lang } from '../content/types'
 import { DEFAULT_MASCOT_NAME } from '../logic/progress'
 import { useApp } from '../state/AppState'
 
-/** Interface language → learning track → mascot name → start. */
+/** Language (for everything, meanings included) → mascot name → start. */
 export function Onboarding() {
   const { t, state, update } = useApp()
   const navigate = useNavigate()
@@ -15,10 +15,6 @@ export function Onboarding() {
 
   const setUi = (uiLang: Lang) => {
     update((s) => ({ ...s, settings: { ...s.settings, uiLang, track: uiLang } }))
-    setStep(1)
-  }
-  const setTrack = (track: Lang) => {
-    update((s) => ({ ...s, settings: { ...s.settings, track } }))
     setStep(2)
   }
   const finish = () => {
@@ -51,25 +47,6 @@ export function Onboarding() {
         </section>
       )}
 
-      {step === 1 && (
-        <section aria-labelledby="pick-track" className="mt-4">
-          <h2 id="pick-track" className="mb-4 text-xl font-semibold">{t('onboarding.pickTrack')}</h2>
-          <div className="grid gap-3">
-            <Button variant="ghost" block onClick={() => setTrack('sv')} data-testid="track-sv">
-              <span aria-hidden="true">🇸🇪 → 🇺🇬 </span>
-              {t('onboarding.trackSv')}
-            </Button>
-            <Button variant="ghost" block onClick={() => setTrack('en')} data-testid="track-en">
-              <span aria-hidden="true">🇬🇧 → 🇺🇬 </span>
-              {t('onboarding.trackEn')}
-            </Button>
-          </div>
-          <button type="button" className="mt-6 min-h-12 text-lg font-bold text-lake underline" onClick={() => setStep(0)}>
-            {t('common.back')}
-          </button>
-        </section>
-      )}
-
       {step === 2 && (
         <section aria-labelledby="pick-name" className="mt-4">
           <h2 id="pick-name" className="mb-2 text-xl font-semibold">{t('onboarding.pickName')}</h2>
@@ -88,7 +65,7 @@ export function Onboarding() {
           <Button variant="success" block onClick={finish} data-testid="start">
             {t('onboarding.ready', { mascot: name.trim() || DEFAULT_MASCOT_NAME })}
           </Button>
-          <button type="button" className="mt-6 min-h-12 text-lg font-bold text-lake underline" onClick={() => setStep(1)}>
+          <button type="button" className="mt-6 min-h-12 text-lg font-bold text-lake underline" onClick={() => setStep(0)}>
             {t('common.back')}
           </button>
         </section>

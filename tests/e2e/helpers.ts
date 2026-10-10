@@ -9,9 +9,8 @@ export async function freshStart(page: Page) {
   await page.goto('./?e2e#/')
 }
 
-export async function onboard(page: Page, ui: Lang, track: Lang, mascot = 'Ngaali') {
+export async function onboard(page: Page, ui: Lang, mascot = 'Ngaali') {
   await page.getByTestId(`ui-${ui}`).click()
-  await page.getByTestId(`track-${track}`).click()
   await page.getByTestId('mascot-name').fill(mascot)
   await page.getByTestId('start').click()
   await expect(page.getByTestId('lesson-u01-l1')).toBeVisible()

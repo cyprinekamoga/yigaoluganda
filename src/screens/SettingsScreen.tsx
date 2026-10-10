@@ -46,19 +46,7 @@ export function SettingsScreen() {
       <div className="grid gap-6">
         <section>
           <h2 className="mb-2 text-lg font-bold">{t('settings.uiLang')}</h2>
-          <Segmented name="ui" value={s.uiLang} options={langs} onChange={(uiLang) => set({ uiLang })} />
-        </section>
-        <section>
-          <h2 className="mb-2 text-lg font-bold">{t('settings.track')}</h2>
-          <Segmented
-            name="track"
-            value={s.track}
-            options={[
-              { value: 'sv', label: t('onboarding.trackSv') },
-              { value: 'en', label: t('onboarding.trackEn') },
-            ]}
-            onChange={(track) => set({ track })}
-          />
+          <Segmented name="ui" value={s.uiLang} options={langs} onChange={(uiLang) => set({ uiLang, track: uiLang })} />
         </section>
         <section>
           <label htmlFor="settings-name" className="mb-2 block text-lg font-bold">

@@ -106,7 +106,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       t: makeT(ui),
       tList: (key) => translateList(ui, key),
       ui,
-      track: state.settings.track,
+      // Meanings always follow the chosen language: English means English only, Swedish means Swedish only.
+      track: ui,
       now,
       cloudSaving,
       account,

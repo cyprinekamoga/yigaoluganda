@@ -17,7 +17,7 @@ async function patchState(page: import('@playwright/test').Page, patch: (s: any)
 
 test('story mode: scenes, tappable words, translations and questions', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'sv', 'sv')
+  await onboard(page, 'sv')
   await patchState(page, (s) => {
     for (const id of ['u01-l1', 'u01-l2', 'u01-l3', 'u01-l4', 'u01-l5', 'u02-l1', 'u02-l2', 'u02-l3', 'u02-l4', 'u02-l5'])
       s.completedLessons[id] = { at: 1, perfect: false }
@@ -38,7 +38,7 @@ test('story mode: scenes, tappable words, translations and questions', async ({ 
 
 test('practice brings back weak words, and mistakes never block a lesson', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.getByTestId('lesson-u01-l1').click()
   for (let i = 0; i < 6; i++) await answerExercise(page, false)
   await playToEnd(page)
@@ -53,7 +53,7 @@ test('practice brings back weak words, and mistakes never block a lesson', async
 
 test('badges page shows earned badges', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.getByTestId('lesson-u01-l1').click()
   await playToEnd(page)
   await page.getByTestId('finish').click()
@@ -62,13 +62,12 @@ test('badges page shows earned badges', async ({ page }) => {
   await expect(page.getByTestId('badge-streak7')).toHaveAttribute('data-earned', 'false')
 })
 
-test('settings switch the interface language and the track', async ({ page }) => {
+test('settings switch the language of everything, meanings included', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.getByRole('link', { name: 'Settings' }).click()
   await page.getByTestId('ui-sv').click()
   await expect(page.getByRole('heading', { name: 'Inställningar' })).toBeVisible()
-  await page.getByTestId('track-sv').click()
   await page.getByRole('link', { name: 'Lär dig' }).click()
   await page.getByTestId('lesson-u01-l1').click()
   await expect(page.getByTestId('exercise')).toContainText('väska')
@@ -76,7 +75,7 @@ test('settings switch the interface language and the track', async ({ page }) =>
 
 test('parent page is behind a question and can erase progress', async ({ page }) => {
   await freshStart(page)
-  await onboard(page, 'en', 'en')
+  await onboard(page, 'en')
   await page.getByTestId('lesson-u01-l1').click()
   await playToEnd(page)
   await page.getByTestId('finish').click()
@@ -102,7 +101,7 @@ test('parent page is behind a question and can erase progress', async ({ page })
 
 test('works offline after the first visit (PWA)', async ({ page, context }) => {
   await freshStart(page)
-  await onboard(page, 'sv', 'sv')
+  await onboard(page, 'sv')
   await page.evaluate(() => navigator.serviceWorker.ready)
   await page.reload()
   await page.evaluate(() => navigator.serviceWorker.ready)
