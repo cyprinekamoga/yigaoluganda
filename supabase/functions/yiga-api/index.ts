@@ -17,6 +17,7 @@ import {
 const MAX_FAILED = 5
 const LOCK_MINUTES = 15
 const RESET_MINUTES = 60
+const CHECKOUT_LOGIN_SECONDS = 3600
 const RESET_COOLDOWN_MS = 2 * 60_000
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/
 
@@ -123,19 +124,32 @@ const actions: Record<string, (body: Record<string, unknown>) => Promise<Respons
     return json({ url: session.url })
   },
 
-  /** Back from Stripe: unlock the app straight away (the webhook would do it too, a moment later). */
+  /**
+   * Back from Stripe: unlock the app straight away (the webhook does it too, a moment later).
+   * If this browser isn't logged in as the payer (another address, another browser, an older login),
+   * the paid checkout logs the payer in, once, within an hour of paying.
+   */
   async confirm(body) {
-    const s = await sessionAccount(str(body.token))
-    if (!s) return json({ error: 'no_session' }, 401)
     const sessionId = str(body.sessionId)
     if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(sessionId)) return json({ error: 'bad_request' }, 400)
     if (!stripeConfigured()) return json({ error: 'not_configured' }, 503)
     const cs = await stripe('GET', `checkout/sessions/${sessionId}`)
-    if (cs.client_reference_id !== s.account.id) return json({ error: 'not_yours' }, 403)
+    const accountId = typeof cs.client_reference_id === 'string' ? cs.client_reference_id : null
+    if (!accountId) return json({ error: 'bad_request' }, 400)
     const paid = cs.status === 'complete' && ['paid', 'no_payment_required'].includes(cs.payment_status)
     if (!paid || typeof cs.subscription !== 'string') return json({ error: 'not_paid', active: false }, 402)
-    const account = await syncSubscription(cs.subscription, { accountId: s.account.id, checkoutSessionId: sessionId })
-    return json({ active: hasAccess(account) })
+    const account = await syncSubscription(cs.subscription, { accountId, checkoutSessionId: sessionId })
+    if (!account) return json({ error: 'not_found' }, 404)
+
+    // The first return from this checkout is recorded, so the link can't log anyone in a second time.
+    const { error: used } = await db.from('yiga_checkout_logins').insert({ checkout_session_id: sessionId, account_id: account.id })
+    const firstUse = !used
+
+    const s = await sessionAccount(str(body.token))
+    if (s && s.account.id === account.id) return json({ active: hasAccess(account) })
+    if (!firstUse || Date.now() / 1000 - cs.created > CHECKOUT_LOGIN_SECONDS) return json({ error: 'login_needed' }, 401)
+    if (s) await db.from('yiga_sessions').delete().eq('token_hash', s.tokenHash)
+    return json({ ...(await newSession(account.id)), username: account.username, active: hasAccess(account) })
   },
 
   /** "Forgot password": emails a one-time link. Always answers the same, so it never reveals who has an account. */
