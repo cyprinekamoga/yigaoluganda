@@ -81,7 +81,7 @@ Until these are set, the Buy button shows "Purchases aren't open yet".
 
 ## 4b. "Forgot password" emails (Resend)
 
-The **Glömt lösenordet?** link on the login page sends a one-time link by email. It works for 60 minutes. Until email is set up, the page asks people to email `info@zaweddeoils.com` instead.
+Right now the **Glömt lösenordet?** page asks people to email `cyprinekamoga@gmail.com`, and you set a new password for them by hand. The backend can also email a one-time link that works for 60 minutes. To switch that on, set up Resend (below), then bring back the email form in `site/forgot.html` and its handler in `site/site.js` from git history (commit `2474440` or earlier).
 
 1. Create a free account at [resend.com](https://resend.com).
 2. Go to **API Keys → Create API key** and copy the key (`re_…`). Don't paste it into any chat.
@@ -109,7 +109,7 @@ The **Glömt lösenordet?** link on the login page sends a one-time link by emai
   - After 5 wrong passwords, the account is locked for 15 minutes.
   - The app's files are only served to logged-in subscribers.
 - **If a subscription ends** (cancelled or unpaid), access stops within about a minute. The app also checks every time it opens.
-- **Forgotten passwords:** handled by the "forgot password" email (step 4b) once Resend is set up.
+- **Forgotten passwords:** people email `cyprinekamoga@gmail.com` (step 4b). The emailed reset link can be switched on later with Resend.
 - **Duels** need live rooms. For now they work only in the Claude-shared version, so the website version hides the Duel tab.
 - **Children's progress** is saved on each device. Online sync for website accounts is a possible next step.
 

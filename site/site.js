@@ -143,39 +143,6 @@
     confirm()
   }
 
-  // ---------- forgot password ----------
-  if (page === 'forgot') {
-    const form = $('[data-form=forgot]')
-    try {
-      const prefill = sessionStorage.getItem('yiga-forgot-email')
-      if (prefill) form.email.value = prefill
-    } catch {
-      /* private mode */
-    }
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const err = $('[data-error]', form)
-      showMsg(err, '')
-      const email = form.email.value.trim().toLowerCase()
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg(err, tr('Skriv en giltig e-postadress.', 'Enter a valid email address.'))
-      const button = $('button[type=submit]', form)
-      button.disabled = true
-      const r = await api('forgot', { email })
-      button.disabled = false
-      if (r.ok) {
-        form.hidden = true
-        $('[data-sent]').hidden = false
-        return
-      }
-      showMsg(
-        err,
-        r.data.error === 'not_configured'
-          ? tr('Det går inte att skicka mejl just nu. Mejla info@zaweddeoils.com så hjälper vi dig.', "We can't send emails right now. Email info@zaweddeoils.com and we'll help.")
-          : genericError(),
-      )
-    })
-  }
-
   // ---------- new password from the emailed link ----------
   if (page === 'reset') {
     const form = $('[data-form=reset]')
@@ -248,12 +215,6 @@
         // Offer the way out right where the problem is.
         const link = document.createElement('a')
         link.href = '/forgot.html'
-        // Hand the email over without putting it in the address.
-        try {
-          sessionStorage.setItem('yiga-forgot-email', username)
-        } catch {
-          /* private mode */
-        }
         link.textContent = tr('Glömt lösenordet?', 'Forgot your password?')
         link.style.marginLeft = '6px'
         err.append(link)
