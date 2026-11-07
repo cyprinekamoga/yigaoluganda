@@ -3,6 +3,9 @@ import type { Hue, SceneId } from '../content/types';
 import { NgaaliArt, type NgaaliArtProps } from './Ngaali';
 import { C, HUES, SYSTEM_FONT } from './theme';
 
+/** A darker shade of the brand neon yellow, for leaves and outlines. */
+const NEON_SHADE = '#9CC21A';
+
 /** Chapter tile illustrations: Ngaali acting out each chapter's scenario. */
 
 const at = (x: number, y: number, s = 0.6) => `translate(${x} ${y}) scale(${s})`;
@@ -17,29 +20,29 @@ function Sparkle({ x, y, s = 1, fill }: { x: number; y: number; s?: number; fill
 
 const Teacup = (
   <G>
-    <Path d="M49 96 L71 96 L68 110 Q60 114 52 110 Z" fill="#fff" stroke="#C9B9A0" strokeWidth={1.5} />
-    <Path d="M70.5 99 Q77 99 75.5 104 Q74 107 69 106" stroke="#C9B9A0" strokeWidth={2} fill="none" />
-    <Path d="M52 98 L68 98" stroke="#B5703A" strokeWidth={2.5} />
-    <Path d="M56 91 Q54 87 57 84 M63 91 Q61 87 64 84" stroke="#C9B9A0" strokeWidth={1.6} fill="none" strokeLinecap="round" />
+    <Path d="M49 96 L71 96 L68 110 Q60 114 52 110 Z" fill={C.ink} stroke={C.ink3} strokeWidth={1.5} />
+    <Path d="M70.5 99 Q77 99 75.5 104 Q74 107 69 106" stroke={C.ink3} strokeWidth={2} fill="none" />
+    <Path d="M52 98 L68 98" stroke={C.tomato} strokeWidth={2.5} />
+    <Path d="M56 91 Q54 87 57 84 M63 91 Q61 87 64 84" stroke={C.ink3} strokeWidth={1.6} fill="none" strokeLinecap="round" />
   </G>
 );
 
 const Plate = (
   <G>
-    <Ellipse cx={60} cy={107} rx={19} ry={6} fill="#4E9B4A" />
-    <Ellipse cx={60} cy={105.5} rx={16} ry={5} fill="#fff" stroke="#D8CBB5" strokeWidth={1.2} />
-    <Path d="M48 104 Q50 94 60 94 Q70 94 72 104 Z" fill="#F2C14E" />
-    <Path d="M53 99 Q57 97 60 99 M61 98 Q65 96 67 99" stroke="#D9A230" strokeWidth={1.2} fill="none" />
-    <Path d="M55 89 Q53 85 56 82 M64 89 Q62 85 65 82" stroke="#C9B9A0" strokeWidth={1.6} fill="none" strokeLinecap="round" />
+    <Ellipse cx={60} cy={107} rx={19} ry={6} fill={NEON_SHADE} />
+    <Ellipse cx={60} cy={105.5} rx={16} ry={5} fill={C.ink} stroke={C.ink3} strokeWidth={1.2} />
+    <Path d="M48 104 Q50 94 60 94 Q70 94 72 104 Z" fill={C.neon} />
+    <Path d="M53 99 Q57 97 60 99 M61 98 Q65 96 67 99" stroke={NEON_SHADE} strokeWidth={1.2} fill="none" />
+    <Path d="M55 89 Q53 85 56 82 M64 89 Q62 85 65 82" stroke={C.ink3} strokeWidth={1.6} fill="none" strokeLinecap="round" />
   </G>
 );
 
 const NameTag = (
   <G>
-    <Rect x={47} y={95} width={26} height={17} rx={3} fill="#fff" stroke="#C9B9A0" strokeWidth={1.2} />
+    <Rect x={47} y={95} width={26} height={17} rx={3} fill={C.ink} stroke={C.ink3} strokeWidth={1.2} />
     <Rect x={47} y={95} width={26} height={5} rx={2} fill={C.red} />
-    <Rect x={51} y={103} width={18} height={2.4} rx={1.2} fill="#8C8279" />
-    <Rect x={51} y={107} width={12} height={2.4} rx={1.2} fill="#C9B9A0" />
+    <Rect x={51} y={103} width={18} height={2.4} rx={1.2} fill={C.ink3} />
+    <Rect x={51} y={107} width={12} height={2.4} rx={1.2} fill={C.ink2} />
   </G>
 );
 
@@ -58,10 +61,10 @@ const SCENES: Record<SceneId, Spec> = {
     x: 10, y: 22,
     back: (h) => (
       <G>
-        <Rect x={62} y={14} width={50} height={26} rx={11} fill="#fff" />
-        <Path d="M68 38 L76 38 L64 47 Z" fill="#fff" />
+        <Rect x={62} y={14} width={50} height={26} rx={11} fill={C.ink} />
+        <Path d="M68 38 L76 38 L64 47 Z" fill={C.ink} />
         {['a', 'e', 'i', 'o', 'u'].map((v, i) => (
-          <SvgText key={v} x={71 + i * 8.2} y={31.5} fontSize={11.5} fontFamily={SYSTEM_FONT} fontWeight="700" fill={h.deep} textAnchor="middle">
+          <SvgText key={v} x={71 + i * 8.2} y={31.5} fontSize={11.5} fontFamily={SYSTEM_FONT} fontWeight="700" fill={C.onNeon} textAnchor="middle">
             {v}
           </SvgText>
         ))}
@@ -110,8 +113,8 @@ const SCENES: Record<SceneId, Spec> = {
     back: (h) => (
       <G>
         <Path d="M96 18 A16 16 0 1 0 108 44 A13 13 0 1 1 96 18 Z" fill={C.sun} />
-        <Sparkle x={24} y={26} s={0.9} fill="#fff" />
-        <Sparkle x={36} y={14} s={0.6} fill="#fff" />
+        <Sparkle x={24} y={26} s={0.9} fill={C.ink} />
+        <Sparkle x={36} y={14} s={0.6} fill={C.ink} />
         <Sparkle x={16} y={52} s={0.6} fill={h.track} />
       </G>
     ),
@@ -122,14 +125,14 @@ const SCENES: Record<SceneId, Spec> = {
     front: () => (
       <G>
         <Ellipse cx={95} cy={106} rx={11} ry={2.5} fill="rgba(60,45,20,0.12)" />
-        <Path d="M90 84 L89 104 M100 84 L101 104" stroke="#2A2622" strokeWidth={2.4} strokeLinecap="round" />
+        <Path d="M90 84 L89 104 M100 84 L101 104" stroke={C.crane} strokeWidth={2.4} strokeLinecap="round" />
         <Ellipse cx={95} cy={80} rx={12} ry={11} fill="#A7B1BE" />
         <Circle cx={95} cy={66} r={10} fill="#A7B1BE" />
         <Path d="M95 57 L91 49 M95 57 L95 48 M95 57 L99 49" stroke={C.sun} strokeWidth={2} strokeLinecap="round" />
-        <Ellipse cx={91} cy={68} rx={4.4} ry={5} fill="#fff" />
-        <Ellipse cx={99} cy={68} rx={4.4} ry={5} fill="#fff" />
-        <Circle cx={91} cy={68} r={2} fill={C.ink} />
-        <Circle cx={99} cy={68} r={2} fill={C.ink} />
+        <Ellipse cx={91} cy={68} rx={4.4} ry={5} fill={C.ink} />
+        <Ellipse cx={99} cy={68} rx={4.4} ry={5} fill={C.ink} />
+        <Circle cx={91} cy={68} r={2} fill={C.paper} />
+        <Circle cx={99} cy={68} r={2} fill={C.paper} />
         <Path d="M93.5 72 L96.5 72 L95 76 Z" fill="#3D4049" />
       </G>
     ),
@@ -188,7 +191,7 @@ const SCENES: Record<SceneId, Spec> = {
     x: 23, y: 20,
     back: (h) => (
       <G>
-        <Path d="M10 70 Q24 40 46 38 Q30 56 10 70 Z" fill="#4E9B4A" opacity={0.8} />
+        <Path d="M10 70 Q24 40 46 38 Q30 56 10 70 Z" fill={NEON_SHADE} opacity={0.8} />
         <Sparkle x={100} y={30} s={1} fill={h.base} />
       </G>
     ),
@@ -199,9 +202,9 @@ const SCENES: Record<SceneId, Spec> = {
     back: (h) => (
       <G>
         <Path d="M60 122 Q70 92 92 82 Q112 74 108 50" stroke={h.track} strokeWidth={12} fill="none" strokeLinecap="round" />
-        <Path d="M60 122 Q70 92 92 82 Q112 74 108 50" stroke="#fff" strokeWidth={2} strokeDasharray="4 5" fill="none" />
+        <Path d="M60 122 Q70 92 92 82 Q112 74 108 50" stroke={C.ink} strokeWidth={2} strokeDasharray="4 5" fill="none" />
         <Path d="M108 46 C108 34 92 34 92 46 C92 54 100 60 100 64 C100 60 108 54 108 46 Z" fill={C.red} />
-        <Circle cx={100} cy={45} r={3.6} fill="#fff" />
+        <Circle cx={100} cy={45} r={3.6} fill={C.ink} />
       </G>
     ),
   },

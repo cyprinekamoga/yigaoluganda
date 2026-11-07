@@ -24,7 +24,7 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
         onPress={() => playClip(id)}
         style={({ pressed }) => [styles.btn, { width: size, height: size, borderRadius: size / 2 }, pressed && styles.pressed]}
       >
-        <Ionicons name="volume-high" size={size * 0.48} color="#fff" />
+        <Ionicons name="volume-high" size={size * 0.48} color={C.onTomato} />
       </Pressable>
       <Pressable
         testID="play-slow"
@@ -33,7 +33,7 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
         onPress={() => playClip(id, true)}
         style={({ pressed }) => [styles.slow, { width: size * 0.78, height: size * 0.78, borderRadius: size * 0.39 }, pressed && styles.pressed]}
       >
-        <MaterialCommunityIcons name="turtle" size={size * 0.42} color="#FFFFFF" />
+        <MaterialCommunityIcons name="turtle" size={size * 0.42} color={C.onNeon} />
       </Pressable>
     </View>
   );
@@ -41,7 +41,7 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  btn: { backgroundColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  slow: { backgroundColor: C.tomato, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
+  btn: { backgroundColor: C.tomato, alignItems: 'center', justifyContent: 'center' },
+  slow: { backgroundColor: C.neon, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
   pressed: { transform: [{ scale: 0.94 }] },
 });

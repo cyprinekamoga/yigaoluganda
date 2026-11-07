@@ -20,7 +20,7 @@ function head(mono = false, bleed = true) {
       const rad = ((deg - 90) * Math.PI) / 180;
       const x = 60 + Math.cos(rad) * len;
       const y = 34 + Math.sin(rad) * len;
-      return `<line x1="60" y1="34" x2="${x}" y2="${y}" stroke="${c('#F5B400')}" stroke-width="2.6" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="2.4" fill="${c('#D98E00')}"/>`;
+      return `<line x1="60" y1="34" x2="${x}" y2="${y}" stroke="${c('#CDF73D')}" stroke-width="2.6" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="2.4" fill="${c('#9CC21A')}"/>`;
     })
     .join('');
   if (mono) {
@@ -31,7 +31,7 @@ function head(mono = false, bleed = true) {
     <path d="${neck}" fill="#A7B1BE"/>
     <circle cx="60" cy="51" r="20.5" fill="#A7B1BE"/>
     <path d="M40.6 48 A20 20 0 0 1 79.4 48 Q60 40 40.6 48 Z" fill="#1F1A17"/>
-    <ellipse cx="49" cy="55" rx="9" ry="10" fill="#fff"/><ellipse cx="71" cy="55" rx="9" ry="10" fill="#fff"/>
+    <ellipse cx="49" cy="55" rx="9" ry="10" fill="#FFF1EC"/><ellipse cx="71" cy="55" rx="9" ry="10" fill="#FFF1EC"/>
     <ellipse cx="49" cy="46.2" rx="5.6" ry="2.5" fill="#D71A06"/><ellipse cx="71" cy="46.2" rx="5.6" ry="2.5" fill="#D71A06"/>
     <path d="M45.5 55 Q50 49 54.5 55 M65.5 55 Q70 49 74.5 55" stroke="#1F1A17" stroke-width="2.8" stroke-linecap="round" fill="none"/>
     <ellipse cx="44.5" cy="62" rx="3" ry="1.6" fill="#F6A9B3"/><ellipse cx="75.5" cy="62" rx="3" ry="1.6" fill="#F6A9B3"/>

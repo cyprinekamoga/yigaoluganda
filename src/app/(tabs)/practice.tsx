@@ -44,18 +44,18 @@ export default function PracticeLab() {
         <View style={styles.reviewRow}>
           <Ngaali mood="think" size={70} />
           <View style={{ flex: 1, gap: 2 }}>
-            <Txt variant="h2" style={{ color: C.onInk }}>
+            <Txt variant="h2" style={{ color: C.onTomato }}>
               {t('practice.review')}
             </Txt>
             {learned.length ? (
               <View style={styles.inline}>
-                <HeartIcon size={16} />
-                <Txt variant="small" style={{ color: C.onInk2 }}>
+                <HeartIcon size={16} color={C.onTomato} />
+                <Txt variant="small" style={{ color: C.onTomato }}>
                   {t('practice.reviewBody', { n: reviewCount })}
                 </Txt>
               </View>
             ) : (
-              <Txt variant="small" style={{ color: C.onInk2 }}>
+              <Txt variant="small" style={{ color: C.onTomato }}>
                 {t('practice.reviewEmpty')}
               </Txt>
             )}
@@ -144,7 +144,7 @@ export default function PracticeLab() {
 }
 
 const styles = StyleSheet.create({
-  review: { gap: S.md, backgroundColor: C.ink, borderColor: C.ink },
+  review: { gap: S.md, backgroundColor: C.tomato, borderColor: C.tomato },
   reviewRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   section: { gap: S.sm },

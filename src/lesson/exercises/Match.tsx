@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   cols: { flexDirection: 'row', gap: S.md },
   col: { flex: 1, gap: S.md },
   card: { minHeight: 72, borderRadius: R.lg, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, padding: S.md, justifyContent: 'center' },
-  sel: { borderColor: C.ink, backgroundColor: C.neonSoft },
+  sel: { borderColor: C.neon, backgroundColor: C.neonSoft },
   bad: { borderColor: C.red, backgroundColor: C.redSoft },
   done: { borderColor: C.leafSoft, backgroundColor: C.leafSoft, opacity: 0.7 },
   lg: { ...F.semi, fontSize: 18, color: C.ink },

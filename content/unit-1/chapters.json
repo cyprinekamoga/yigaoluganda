@@ -1,6 +1,6 @@
 [
   {
-    "id": "c01", "n": 1, "lgTitle": "Ennukuta", "scene": "sounds", "hue": "gold",
+    "id": "c01", "n": 1, "lgTitle": "Ennukuta", "scene": "sounds", "hue": "neon",
     "title": { "en": "Alphabet & Sounds", "sv": "Alfabetet och ljuden" },
     "scenario": { "en": "Hear the sounds", "sv": "Lyssna på ljuden" },
     "lessons": [
@@ -19,7 +19,7 @@
     ]
   },
   {
-    "id": "c03", "n": 3, "lgTitle": "Okulamusa", "scene": "wave", "hue": "neon",
+    "id": "c03", "n": 3, "lgTitle": "Okulamusa", "scene": "wave", "hue": "blush",
     "title": { "en": "Informal Greetings", "sv": "Vardagliga hälsningar" },
     "scenario": { "en": "Greet a friend", "sv": "Hälsa på en kompis" },
     "lessons": [
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "id": "c04", "n": 4, "lgTitle": "Ekitiibwa", "scene": "bow", "hue": "maroon",
+    "id": "c04", "n": 4, "lgTitle": "Ekitiibwa", "scene": "bow", "hue": "neon",
     "title": { "en": "Respect & Formal Titles", "sv": "Respekt och artiga titlar" },
     "scenario": { "en": "Greet an elder", "sv": "Hälsa på en äldre" },
     "lessons": [
@@ -37,7 +37,7 @@
     ]
   },
   {
-    "id": "c05", "n": 5, "lgTitle": "Okulagana", "scene": "night", "hue": "berry",
+    "id": "c05", "n": 5, "lgTitle": "Okulagana", "scene": "night", "hue": "tomato",
     "title": { "en": "Goodbyes & Well Wishes", "sv": "Hej då och lyckönskningar" },
     "scenario": { "en": "Say goodbye", "sv": "Säg hej då" },
     "lessons": [
@@ -46,7 +46,7 @@
     ]
   },
   {
-    "id": "c06", "n": 6, "lgTitle": "Nze ne Ggwe", "scene": "pointing", "hue": "coral",
+    "id": "c06", "n": 6, "lgTitle": "Nze ne Ggwe", "scene": "pointing", "hue": "blush",
     "title": { "en": "Personal Pronouns", "sv": "Personliga pronomen" },
     "scenario": { "en": "Me and you", "sv": "Jag och du" },
     "lessons": [
@@ -55,7 +55,7 @@
     ]
   },
   {
-    "id": "c07", "n": 7, "lgTitle": "Erinnya", "scene": "nametag", "hue": "gold",
+    "id": "c07", "n": 7, "lgTitle": "Erinnya", "scene": "nametag", "hue": "neon",
     "title": { "en": "Introductions & Names", "sv": "Presentationer och namn" },
     "scenario": { "en": "Introduce yourself", "sv": "Presentera dig" },
     "lessons": [
@@ -73,7 +73,7 @@
     ]
   },
   {
-    "id": "c09", "n": 9, "lgTitle": "Okuba", "scene": "feelings", "hue": "coral",
+    "id": "c09", "n": 9, "lgTitle": "Okuba", "scene": "feelings", "hue": "blush",
     "title": { "en": "To Be", "sv": "Att vara" },
     "scenario": { "en": "Say how you feel", "sv": "Säg hur du mår" },
     "lessons": [
@@ -83,7 +83,7 @@
     ]
   },
   {
-    "id": "c10", "n": 10, "lgTitle": "Obubonero", "scene": "boda", "hue": "gold",
+    "id": "c10", "n": 10, "lgTitle": "Obubonero", "scene": "boda", "hue": "neon",
     "title": { "en": "Survival Expressions", "sv": "Fraser som räddar dig" },
     "scenario": { "en": "Take a boda-boda", "sv": "Åk boda-boda" },
     "lessons": [
@@ -92,7 +92,7 @@
     ]
   },
   {
-    "id": "c11", "n": 11, "lgTitle": "Okwebaza", "scene": "meal", "hue": "maroon",
+    "id": "c11", "n": 11, "lgTitle": "Okwebaza", "scene": "meal", "hue": "tomato",
     "title": { "en": "Daily Thanks & Appreciation", "sv": "Tack och uppskattning" },
     "scenario": { "en": "Thank the cook", "sv": "Tacka för maten" },
     "lessons": [
@@ -101,7 +101,7 @@
     ]
   },
   {
-    "id": "c12", "n": 12, "lgTitle": "Olugendo Lwatandika", "scene": "journey", "hue": "berry", "checkpoint": true,
+    "id": "c12", "n": 12, "lgTitle": "Olugendo Lwatandika", "scene": "journey", "hue": "blush", "checkpoint": true,
     "title": { "en": "Checkpoint & Dialogue", "sv": "Kontrollpunkt och samtal" },
     "scenario": { "en": "First day in Kampala", "sv": "Första dagen i Kampala" },
     "lessons": [

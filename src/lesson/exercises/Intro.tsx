@@ -21,7 +21,7 @@ export function IntroStep({ step, onNext }: ExerciseProps<{ kind: 'intro'; phras
         <View style={styles.head}>
           <Ngaali mood="wave" size={60} />
           <View style={styles.tag}>
-            <Txt variant="label" style={{ color: C.ink }}>
+            <Txt variant="label" style={{ color: C.onNeon }}>
               {t('lesson.newPhrase')}
             </Txt>
           </View>

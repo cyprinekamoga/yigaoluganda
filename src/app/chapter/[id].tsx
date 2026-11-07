@@ -99,7 +99,7 @@ export default function ChapterScreen() {
               style={({ pressed }) => [styles.row, isNext && { borderColor: h.base, borderWidth: 2 }, pressed && { opacity: 0.85 }]}
             >
               <View style={[styles.dot, { backgroundColor: isDone ? C.leafDeep : open ? h.base : C.paperDeep }]}>
-                <Ionicons name={isDone ? 'checkmark' : open ? 'play' : 'lock-closed'} size={18} color={isDone || open ? '#fff' : C.ink2} />
+                <Ionicons name={isDone ? 'checkmark' : open ? 'play' : 'lock-closed'} size={18} color={isDone ? C.onNeon : open ? h.on : C.ink2} />
               </View>
               <View style={{ flex: 1 }}>
                 <Txt variant="caption">{t('chapter.lessonN', { n: i + 1 })}</Txt>

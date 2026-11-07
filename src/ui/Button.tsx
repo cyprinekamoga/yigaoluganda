@@ -6,13 +6,13 @@ import { tapFeedback } from '../audio/feedback';
 type Kind = 'primary' | 'dark' | 'secondary' | 'success' | 'danger' | 'ghost' | 'neon';
 
 const KIND: Record<Kind, { bg: string; fg: string; border?: string }> = {
-  primary: { bg: C.tomato, fg: '#FFFFFF' },
-  dark: { bg: C.ink, fg: C.onInk },
+  primary: { bg: C.tomato, fg: C.onTomato },
+  dark: { bg: C.paperDeep, fg: C.ink },
   secondary: { bg: C.card, fg: C.ink, border: C.line },
-  success: { bg: C.leafDeep, fg: '#fff' },
-  danger: { bg: C.redDeep, fg: '#fff' },
+  success: { bg: C.neon, fg: C.onNeon },
+  danger: { bg: C.tomato, fg: C.onTomato },
   ghost: { bg: 'transparent', fg: C.ink2 },
-  neon: { bg: C.neon, fg: C.ink },
+  neon: { bg: C.neon, fg: C.onNeon },
 };
 
 export interface ButtonProps {

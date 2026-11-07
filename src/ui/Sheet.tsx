@@ -19,7 +19,7 @@ export function Sheet({ visible, onClose, children, testID }: { visible: boolean
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(37,1,4,0.45)', alignItems: 'center' },
-  sheet: { width: '100%', maxWidth: MAX_W, backgroundColor: C.paper, borderTopLeftRadius: R.xl, borderTopRightRadius: R.xl, padding: S.xl, paddingTop: S.md, gap: S.lg },
+  wrap: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(10,0,1,0.6)', alignItems: 'center' },
+  sheet: { width: '100%', maxWidth: MAX_W, backgroundColor: C.card, borderTopLeftRadius: R.xl, borderTopRightRadius: R.xl, padding: S.xl, paddingTop: S.md, gap: S.lg },
   grab: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: C.line, marginBottom: S.sm },
 });

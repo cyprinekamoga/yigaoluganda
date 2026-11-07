@@ -20,6 +20,7 @@ export default function Onboarding() {
   const start = useApp((s) => s.start);
   const [lang, setLang] = useState<Lang>(useApp.getState().profile?.lang ?? deviceLang());
   const [name, setName] = useState('');
+  const [focused, setFocused] = useState(false);
   const t = (k: Parameters<typeof translate>[1], v?: Record<string, string>) => translate(lang, k, v);
 
   const go = () => {
@@ -55,8 +56,8 @@ export default function Onboarding() {
                   onPress={() => setLang(l.id)}
                   style={[styles.lang, on && styles.langOn]}
                 >
-                  <View style={[styles.code, on && { backgroundColor: C.ink }]}>
-                    <Txt style={[styles.codeText, on && { color: C.neon }]}>{l.flag}</Txt>
+                  <View style={[styles.code, on && { backgroundColor: C.neon }]}>
+                    <Txt style={[styles.codeText, on && { color: C.onNeon }]}>{l.flag}</Txt>
                   </View>
                   <Txt variant="strong">{l.label}</Txt>
                 </Pressable>
@@ -77,7 +78,9 @@ export default function Onboarding() {
             onChangeText={setName}
             placeholder={t('onb.namePlaceholder')}
             placeholderTextColor={C.ink3}
-            style={styles.input}
+            style={[styles.input, focused && { borderColor: C.neon }]}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
             maxLength={24}
             autoCapitalize="words"
             autoCorrect={false}
@@ -103,8 +106,8 @@ const styles = StyleSheet.create({
   block: { gap: S.sm },
   langs: { flexDirection: 'row', gap: S.md },
   lang: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.md, borderRadius: R.md, borderWidth: 2, borderColor: C.line, backgroundColor: C.card },
-  langOn: { borderColor: C.ink },
+  langOn: { borderColor: C.neon },
   code: { width: 40, height: 32, borderRadius: 8, backgroundColor: C.paperDeep, alignItems: 'center', justifyContent: 'center' },
   codeText: { ...F.heading, fontSize: 15, color: C.ink },
-  input: { ...F.medium, fontSize: 18, color: C.ink, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 54 },
+  input: { ...F.medium, fontSize: 18, color: C.ink, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 54, outlineWidth: 0 },
 });

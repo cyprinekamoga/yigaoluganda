@@ -14,7 +14,7 @@ import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
 /** react-native-web paints the 'on' thumb teal unless told otherwise. */
-const WEB_SWITCH = { activeThumbColor: '#FFFFFF' } as object;
+const WEB_SWITCH = { activeThumbColor: C.ink } as object;
 
 export default function Settings() {
   const { t, lang } = useT();
@@ -27,6 +27,7 @@ export default function Settings() {
   const reset = useApp((s) => s.reset);
   const [name, setLocalName] = useState(profile?.name ?? '');
   const [confirm, setConfirm] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const saveName = () => {
     if (name.trim()) setName(name);
@@ -47,7 +48,7 @@ export default function Settings() {
               accessibilityState={{ selected: lang === l }}
               style={[styles.segBtn, lang === l && styles.segOn]}
             >
-              <Txt style={[styles.segText, lang === l && { color: C.onInk }]}>{l === 'en' ? 'English' : 'Svenska'}</Txt>
+              <Txt style={[styles.segText, lang === l && { color: C.onTomato }]}>{l === 'en' ? 'English' : 'Svenska'}</Txt>
             </Pressable>
           ))}
         </View>
@@ -62,10 +63,14 @@ export default function Settings() {
           accessibilityLabel={t('settings.name')}
           value={name}
           onChangeText={setLocalName}
-          onBlur={saveName}
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            setFocused(false);
+            saveName();
+          }}
           onSubmitEditing={saveName}
           maxLength={24}
-          style={styles.input}
+          style={[styles.input, focused && { borderColor: C.neon }]}
           autoCorrect={false}
         />
       </View>
@@ -80,7 +85,7 @@ export default function Settings() {
             value={settings.sfx}
             onValueChange={(v) => setSetting('sfx', v)}
             trackColor={{ true: C.tomato, false: C.line }}
-            thumbColor="#fff"
+            thumbColor={C.ink}
             {...WEB_SWITCH}
           />
         </View>
@@ -93,7 +98,7 @@ export default function Settings() {
             value={settings.haptics}
             onValueChange={(v) => setSetting('haptics', v)}
             trackColor={{ true: C.tomato, false: C.line }}
-            thumbColor="#fff"
+            thumbColor={C.ink}
             {...WEB_SWITCH}
           />
         </View>
@@ -136,8 +141,8 @@ const styles = StyleSheet.create({
   section: { gap: S.sm },
   seg: { flexDirection: 'row', backgroundColor: C.paperDeep, borderRadius: R.md, padding: 4, gap: 4 },
   segBtn: { flex: 1, minHeight: 44, borderRadius: R.sm + 2, alignItems: 'center', justifyContent: 'center' },
-  segOn: { backgroundColor: C.ink },
+  segOn: { backgroundColor: C.tomato },
   segText: { ...F.semi, fontSize: 15, color: C.ink },
-  input: { ...F.medium, fontSize: 17, color: C.ink, backgroundColor: C.card, borderWidth: 1.5, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 52 },
+  input: { ...F.medium, fontSize: 17, color: C.ink, backgroundColor: C.card, borderWidth: 1.5, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 52, outlineWidth: 0 },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: S.md, minHeight: 44 },
 });

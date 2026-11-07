@@ -39,7 +39,7 @@ export function Complete({ reward, accuracy, practice, onDone }: { reward: Rewar
         </View>
         {reward.perfect && !practice && (
           <View style={[styles.banner, { backgroundColor: C.neon }]}>
-            <Txt variant="strong" style={{ color: C.ink }}>
+            <Txt variant="strong" style={{ color: C.onNeon }}>
               {t('done.perfect')}
             </Txt>
           </View>

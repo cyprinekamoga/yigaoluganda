@@ -23,7 +23,7 @@ export function FunFact() {
         <Txt variant="label" style={{ color: C.neon }}>
           {t('lesson.didYouKnow')}
         </Txt>
-        <Txt variant="body" style={{ color: C.onInk }}>
+        <Txt variant="body" style={{ color: C.ink }}>
           {tr(fact.text)}
         </Txt>
       </View>
@@ -32,7 +32,7 @@ export function FunFact() {
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', gap: S.md, padding: S.lg, borderRadius: R.lg, alignItems: 'flex-start', backgroundColor: C.ink },
+  card: { flexDirection: 'row', gap: S.md, padding: S.lg, borderRadius: R.lg, alignItems: 'flex-start', backgroundColor: C.card, borderWidth: 1.5, borderColor: C.neon },
   icon: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(205,247,61,0.14)' },
   text: { flex: 1, gap: S.xs },
 });

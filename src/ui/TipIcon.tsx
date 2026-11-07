@@ -20,7 +20,7 @@ const ICONS: Record<TipIcon, Name> = {
   star: 'star-four-points',
 };
 
-export function TipIconBadge({ icon, hue = 'gold', size = 40 }: { icon: TipIcon; hue?: Hue; size?: number }) {
+export function TipIconBadge({ icon, hue = 'neon', size = 40 }: { icon: TipIcon; hue?: Hue; size?: number }) {
   const h = HUES[hue];
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: h.soft, alignItems: 'center', justifyContent: 'center' }}>

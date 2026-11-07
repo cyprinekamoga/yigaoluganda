@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   compactCenter: { position: 'absolute', left: 72, right: 72, textAlign: 'center' },
   compactLeading: { flex: 1 },
   trailing: { marginLeft: 'auto', flexDirection: 'row', alignItems: 'center' },
-  hairline: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(60,45,20,0.22)' },
+  hairline: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,241,236,0.16)' },
   scroll: { paddingBottom: S.xxl * 2 },
   col: { width: '100%', maxWidth: MAX_W, alignSelf: 'center', paddingHorizontal: S.lg, gap: S.lg },
   large: { ...F.heading, fontSize: 34, lineHeight: 41, color: C.ink, letterSpacing: TRACK.largeTitle, transformOrigin: 'left bottom', marginTop: 2, marginBottom: -4 },

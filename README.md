@@ -32,7 +32,7 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Curriculum** | Unit 1, *Absolute Foundations*: the 12 chapters from the PRD, in 26 lessons. It has 93 phrases, 49 sentences, 12 roleplay conversations and 22 culture tips, all in English and Swedish |
 | **Lesson engine** | Each lesson has about 10 steps built from the 7 PRD exercise types, plus a card that introduces each new phrase before it is tested. Wrong answers come back once at the end of the lesson |
 | **Exercises** | **Sound & Vowel Matcher**: pick the right spelling. The wrong options differ only in sound length (*weebale / webale / weebbale*). **Tap & Match** pairs. **Word-bank sentence builder**. **Audio dictation**. **Speak & compare**. **Roleplay chat**: a wrong reply gets an explanation from Ngaali. **Culture tip** cards |
-| **Ngaali's states** | *Idle* (bobs and blinks), *correct* (hops with wings up), *incorrect* (encouraging pose) and *badge* (holds a medal) |
+| **Ngaali's states** | Ngaali stands on one leg like a resting crane, with a neon yellow crown. *Idle* (bobs and blinks), *correct* (hops with wings up), *incorrect* (encouraging pose) and *badge* (holds a medal) |
 | **Gamification** | +10 XP per lesson and +5 for a perfect one. Gems come from lessons. 5 hearts: a wrong answer in a lesson costs 1. Hearts grow back one every 20 minutes, and a Practice Lab review refills them all. There are daily streaks and 12 achievements |
 | **Practice Lab** | Spaced-repetition review, which refills hearts. You can replay finished conversations. There is audio matching and Speak & compare. Practice never costs hearts |
 | **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
@@ -40,7 +40,7 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
 | **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (23 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
 | **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
-| **Colours** | Deep maroon `#250104` for text, dark cards and the app icon, tomato red `#D71A06` for buttons, hearts and progress, and a touch of neon yellow `#CDF73D` for highlights. Green still means "correct", and gold is kept for medals, XP and Ngaali's crown |
+| **Colours** | Only three colours and their shades: deep maroon `#250104` for every background and card, tomato red `#D71A06` for buttons, hearts, progress and wrong answers, and neon yellow `#CDF73D` for highlights, correct answers and the selected tab. Text is a soft off-white tinted from the palette |
 
 ### Where the app differs from the PRD, and why
 

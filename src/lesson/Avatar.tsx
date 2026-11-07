@@ -6,12 +6,12 @@ import { C, F, HUES } from '../ui/theme';
 import { Txt } from '../ui/Txt';
 
 const ROLE_HUE: Record<CastRole, keyof typeof HUES> = {
-  ngaali: 'gold',
-  elder: 'maroon',
+  ngaali: 'neon',
+  elder: 'blush',
   friend: 'neon',
   parent: 'tomato',
-  rider: 'berry',
-  seller: 'coral',
+  rider: 'blush',
+  seller: 'tomato',
 };
 
 export function Avatar({ role, name, size = 40 }: { role: CastRole; name: string; size?: number }) {
@@ -28,8 +28,8 @@ export function Avatar({ role, name, size = 40 }: { role: CastRole; name: string
     );
   }
   return (
-    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: h.deep, alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ ...F.heading, fontSize: size * 0.45, color: '#fff', lineHeight: size * 0.6 }}>{name.charAt(0)}</Txt>
+    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: h.base, alignItems: 'center', justifyContent: 'center' }}>
+      <Txt style={{ ...F.heading, fontSize: size * 0.45, color: h.on, lineHeight: size * 0.6 }}>{name.charAt(0)}</Txt>
     </View>
   );
 }

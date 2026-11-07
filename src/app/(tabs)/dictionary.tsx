@@ -30,7 +30,7 @@ export default function Dictionary() {
 
   return (
     <LargeTitleScreen testID="screen-dictionary" title={t('dict.title')}>
-      <View style={[styles.search, focused && { borderColor: C.ink }]}>
+      <View style={[styles.search, focused && { borderColor: C.neon }]}>
         <Ionicons name="search" size={20} color={C.ink2} />
         <TextInput
           testID="dict-search"
@@ -56,7 +56,7 @@ export default function Dictionary() {
             accessibilityState={{ selected: tab === k }}
             style={[styles.segBtn, tab === k && styles.segOn]}
           >
-            <Txt style={[styles.segText, tab === k && { color: C.onInk }]}>{k === 'phrases' ? t('dict.phrases') : t('dict.roots')}</Txt>
+            <Txt style={[styles.segText, tab === k && { color: C.onTomato }]}>{k === 'phrases' ? t('dict.phrases') : t('dict.roots')}</Txt>
           </Pressable>
         ))}
       </View>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   input: { flex: 1, ...F.body, fontSize: 16, color: C.ink, minHeight: 48, outlineWidth: 0 },
   seg: { flexDirection: 'row', backgroundColor: C.paperDeep, borderRadius: R.md, padding: 4, gap: 4 },
   segBtn: { flex: 1, minHeight: 42, borderRadius: R.sm + 2, alignItems: 'center', justifyContent: 'center' },
-  segOn: { backgroundColor: C.ink },
+  segOn: { backgroundColor: C.tomato },
   segText: { ...F.semi, fontSize: 15, color: C.ink },
   group: { gap: S.sm },
   list: { padding: 0, overflow: 'hidden' },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   rowLine: { borderTopWidth: 1, borderTopColor: C.line },
   lg: { ...F.semi, fontSize: 17, color: C.ink },
   rootHead: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  form: { backgroundColor: C.ink, borderRadius: R.sm, paddingHorizontal: 12, paddingVertical: 6 },
+  form: { backgroundColor: C.paperDeep, borderRadius: R.sm, paddingHorizontal: 12, paddingVertical: 6 },
   formText: { ...F.semi, fontSize: 17, color: C.neon },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   chip: { paddingHorizontal: 12, minHeight: 38, justifyContent: 'center', borderRadius: R.pill, backgroundColor: C.tomatoSoft },

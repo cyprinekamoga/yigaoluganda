@@ -106,7 +106,7 @@ export function SpeakStep({ step, onNext }: ExerciseProps<{ kind: 'speak'; phras
             accessibilityLabel={recording ? t('speak.recording') : phase === 'recorded' ? t('speak.again') : t('speak.record')}
             style={({ pressed }) => [styles.mic, recording && styles.micOn, pressed && { transform: [{ scale: 0.95 }] }]}
           >
-            <Ionicons name={recording ? 'stop' : 'mic'} size={40} color="#fff" />
+            <Ionicons name={recording ? 'stop' : 'mic'} size={40} color={recording ? C.onNeon : C.onTomato} />
           </Pressable>
           <Txt variant="strong">{recording ? t('speak.recording') : phase === 'recorded' ? t('speak.again') : t('speak.record')}</Txt>
         </View>
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
   card: { gap: S.md, padding: S.xl },
   warn: { color: C.redDeep, backgroundColor: C.redSoft, padding: S.md, borderRadius: R.md },
   micWrap: { alignItems: 'center', gap: S.sm },
-  mic: { width: 96, height: 96, borderRadius: 48, backgroundColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  micOn: { backgroundColor: C.redDeep },
+  mic: { width: 96, height: 96, borderRadius: 48, backgroundColor: C.tomato, alignItems: 'center', justifyContent: 'center' },
+  micOn: { backgroundColor: C.neon },
   compare: { gap: S.md },
   compareRow: { flexDirection: 'row', gap: S.md },
   playBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 48, borderRadius: R.pill, backgroundColor: C.tomatoSoft },

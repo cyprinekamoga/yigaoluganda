@@ -116,7 +116,7 @@ export type SceneId =
   | 'meal'
   | 'journey';
 
-export type Hue = 'tomato' | 'maroon' | 'neon' | 'gold' | 'coral' | 'berry';
+export type Hue = 'tomato' | 'neon' | 'blush';
 
 export interface Chapter {
   id: string;

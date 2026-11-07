@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   answer: { minHeight: 120, flexDirection: 'row', flexWrap: 'wrap', alignContent: 'flex-start', gap: S.sm, paddingVertical: S.md, borderTopWidth: 2, borderBottomWidth: 2, borderColor: C.line, borderStyle: 'dashed' },
   bank: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
   tile: { minHeight: 48, paddingHorizontal: 16, justifyContent: 'center', borderRadius: R.md, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderBottomWidth: 4 },
-  tileChosen: { borderColor: C.ink, borderBottomWidth: 2 },
+  tileChosen: { borderColor: C.neon, borderBottomWidth: 2 },
   tileUsed: { backgroundColor: C.paperDeep, borderColor: C.paperDeep },
   tileText: { ...F.semi, fontSize: 18, color: C.ink },
 });

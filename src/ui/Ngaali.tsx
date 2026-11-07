@@ -14,14 +14,16 @@ const COL = {
   body: '#A7B1BE',
   bodyShade: '#8E99A8',
   wing: '#6F7B8B',
-  wingPanel: '#FFFFFF',
-  gold: '#F5B400',
-  goldTip: '#D98E00',
+  wingPanel: '#FFF1EC',
+  /** The crown is neon yellow, from the brand palette. */
+  gold: '#CDF73D',
+  goldTip: '#9CC21A',
   cap: '#1F1A17',
-  cheek: '#FFFFFF',
+  cheek: '#FFF1EC',
   red: '#D71A06',
   beak: '#3D4049',
-  leg: '#2A2622',
+  /** Light enough to show on the maroon background. */
+  leg: '#8E99A8',
   eye: '#1F1A17',
 };
 
@@ -128,11 +130,13 @@ export function NgaaliArt({ pose = 'stand', face = 'open', speaking = false, hel
   const upper = pose === 'bow' ? 'rotate(16 60 128)' : '';
   return (
     <G>
-      <Ellipse cx={60} cy={155} rx={28} ry={4} fill="rgba(60,45,20,0.12)" />
+      <Ellipse cx={58} cy={155} rx={22} ry={3.5} fill="rgba(0,0,0,0.3)" />
       {pose !== 'ride' && (
-        <G stroke={COL.leg} strokeWidth={4} strokeLinecap="round" fill="none">
-          <Path d="M53 120 L51 151 M45 152 L57 152" />
-          <Path d="M67 120 L69 151 M63 152 L75 152" />
+        <G stroke={COL.leg} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" fill="none">
+          {/* Ngaali stands on one leg, like a resting crane. */}
+          <Path d="M58 120 L58 151 M52 152 L64 152" />
+          {/* The other leg is lifted: knee forward, foot tucked back. */}
+          <Path d="M66 119 L79 130 L69 139 L63 138" />
         </G>
       )}
       <G transform={upper}>
@@ -172,7 +176,7 @@ function Medal() {
     <G>
       <Path d="M54 84 L60 98 L66 84" stroke={COL.red} strokeWidth={4} fill="none" />
       <Circle cx={60} cy={104} r={9} fill={COL.gold} stroke={COL.goldTip} strokeWidth={2} />
-      <Path d="M60 98.5 L61.7 102 L65.5 102.4 L62.6 104.9 L63.5 108.6 L60 106.7 L56.5 108.6 L57.4 104.9 L54.5 102.4 L58.3 102 Z" fill="#fff" />
+      <Path d="M60 98.5 L61.7 102 L65.5 102.4 L62.6 104.9 L63.5 108.6 L60 106.7 L56.5 108.6 L57.4 104.9 L54.5 102.4 L58.3 102 Z" fill="#250104" />
     </G>
   );
 }

@@ -12,28 +12,29 @@ function contrast(a: string, b: string) {
 
 describe('colour contrast (WCAG AA 4.5:1 for text)', () => {
   const pairs: [string, string, string][] = [
-    ['ink on paper', C.ink, C.paper],
-    ['ink2 on paper', C.ink2, C.paper],
-    ['ink2 on card', C.ink2, C.card],
-    ['onInk on ink (dark button, maroon cards)', C.onInk, C.ink],
-    ['onInk2 on ink (body text on maroon)', C.onInk2, C.ink],
-    ['white on tomato (main button)', '#FFFFFF', C.tomato],
-    ['ink on neon (neon button and tags)', C.ink, C.neon],
-    ['neon on ink (neon text on maroon)', C.neon, C.ink],
-    ['tomatoDeep on tomatoSoft', C.tomatoDeep, C.tomatoSoft],
-    ['tomato on card (tab label, links)', C.tomato, C.card],
-    ['neonDeep on neonSoft', C.neonDeep, C.neonSoft],
-    ['leafDeep on leafSoft (correct)', C.leafDeep, C.leafSoft],
-    ['redDeep on redSoft (wrong)', C.redDeep, C.redSoft],
-    ['sunDeep on sunSoft', C.sunDeep, C.sunSoft],
-    ['white on leafDeep', '#FFFFFF', C.leafDeep],
-    ['white on redDeep', '#FFFFFF', C.redDeep],
+    ['text on page', C.ink, C.paper],
+    ['text on card', C.ink, C.card],
+    ['text on raised surface', C.ink, C.paperDeep],
+    ['secondary text on page', C.ink2, C.paper],
+    ['secondary text on card', C.ink2, C.card],
+    ['muted text on page', C.ink3, C.paper],
+    ['muted text on card', C.ink3, C.card],
+    ['text on tomato (main button)', C.onTomato, C.tomato],
+    ['maroon on neon (neon button, tags)', C.onNeon, C.neon],
+    ['neon on page', C.neon, C.paper],
+    ['neon on card (correct, selected tab)', C.neon, C.card],
+    ['neon on neonSoft (correct panel)', C.neonDeep, C.neonSoft],
+    ['light tomato on page', C.tomatoDeep, C.paper],
+    ['light tomato on card', C.tomatoDeep, C.card],
+    ['light tomato on tomatoSoft (wrong panel)', C.tomatoDeep, C.tomatoSoft],
+    ['text on tomatoSoft', C.ink, C.tomatoSoft],
   ];
   for (const [name, fg, bg] of pairs) it(name, () => expect(contrast(fg, bg)).toBeGreaterThanOrEqual(4.5));
   for (const [hue, h] of Object.entries(HUES)) {
-    it(`${hue}: deep text on soft and on white`, () => {
+    it(`${hue}: deep text on soft and on card, and text on base`, () => {
       expect(contrast(h.deep, h.soft)).toBeGreaterThanOrEqual(4.5);
-      expect(contrast(h.deep, '#FFFFFF')).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(h.deep, C.card)).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(h.on, h.base)).toBeGreaterThanOrEqual(4.5);
     });
   }
 });
