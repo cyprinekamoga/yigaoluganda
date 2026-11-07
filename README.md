@@ -94,7 +94,13 @@ Builds run in the cloud with EAS, so you don't need Xcode or Android Studio. You
 npx eas-cli@latest build --platform all
 ```
 
-The web version is a static site: `npm run export:web` writes it to `dist/`.
+### The web app (app.yigaoluganda.com)
+
+The web version runs on its **own Netlify site, `yigaoluganda-app`**, separate from the landing page site that serves yigaoluganda.com. A broken app deploy can't affect the landing page, and the other way round.
+
+- [`netlify.toml`](netlify.toml) builds with `npm run export:web` and publishes `dist/` as a single-page app, with long caching for the hashed bundles and security headers. The microphone is allowed for Speak & compare.
+- Production is public. Preview deploys need a Netlify team login.
+- Build it locally with `npm run export:web`. The output is a static site in `dist/`.
 
 ### Editing content
 
