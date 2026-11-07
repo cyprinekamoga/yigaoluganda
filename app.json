@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Yiga Oluganda",
+    "slug": "yiga-oluganda",
+    "scheme": "yigaoluganda",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FBF5EA",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yigaoluganda.app"
+    },
+    "android": {
+      "package": "com.yigaoluganda.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFC233",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "output": "single",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Yiga Oluganda uses the microphone so you can record yourself and compare your pronunciation with a native speaker. Recordings stay on your device."
+        }
+      ],
+      "expo-font",
+      "expo-localization",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FBF5EA",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}

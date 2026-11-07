@@ -1,0 +1,200 @@
+[
+  {
+    "id": "tip-vowels",
+    "icon": "sound",
+    "title": { "en": "Five vowels, always the same", "sv": "Fem vokaler, alltid likadana" },
+    "body": {
+      "en": "Luganda has five vowels: a, e, i, o, u. Each one always sounds the same: a as in 'father', e as in 'bed', i as in 'ski', o as in 'more', u as in 'rule'. Read every letter. None of them are silent.",
+      "sv": "Luganda har fem vokaler: a, e, i, o, u. De låter alltid likadant: a som i 'katt', e som i 'sett', i som i 'sitt', o som i 'åtta' och u som i 'bo'. Läs ut varje bokstav. Ingen av dem är stum."
+    }
+  },
+  {
+    "id": "tip-length",
+    "icon": "sound",
+    "title": { "en": "Long sounds change the meaning", "sv": "Långa ljud ändrar betydelsen" },
+    "body": {
+      "en": "A doubled vowel is held longer. Okusiba means 'to tie', but okusiiba means 'to spend the day'. Always listen for the doubles!",
+      "sv": "En dubbel vokal hålls ut längre. Okusiba betyder 'att knyta', men okusiiba betyder 'att tillbringa dagen'. Lyssna alltid efter dubbla bokstäver!"
+    }
+  },
+  {
+    "id": "tip-ng",
+    "icon": "sound",
+    "title": { "en": "ny and ŋ", "sv": "ny och ŋ" },
+    "body": {
+      "en": "ny is one sound, like ñ in Spanish. ŋ sounds like the ng in 'singer'. No ŋ on your keyboard? Write ng' instead. Double consonants are held longer too: okuba (to be) and okubba (to steal) are different words.",
+      "sv": "ny är ett enda ljud, som ñ på spanska. ŋ låter som ng i 'sjunga'. Saknar ditt tangentbord ŋ? Skriv ng' i stället. Dubbla konsonanter hålls också ut längre: okuba (att vara) och okubba (att stjäla) är olika ord."
+    }
+  },
+  {
+    "id": "tip-weebale",
+    "icon": "heart",
+    "title": { "en": "Say weebale a lot", "sv": "Säg weebale ofta" },
+    "body": {
+      "en": "Thanking people is everywhere in Uganda. To one person, say weebale. To a group, say mwebale.",
+      "sv": "Man tackar ofta i Uganda. Till en person säger man weebale, och till en grupp säger man mwebale."
+    }
+  },
+  {
+    "id": "tip-greet-question",
+    "icon": "chat",
+    "title": { "en": "Greetings are questions", "sv": "Hälsningar är frågor" },
+    "body": {
+      "en": "Luganda greetings ask how you are or how you spent your time, and the answer is part of the greeting. Skipping the greeting and getting straight to business can seem rude.",
+      "sv": "Hälsningar på luganda frågar hur du mår eller hur du har haft det, och svaret hör till hälsningen. Att hoppa över hälsningen och gå rakt på sak kan verka oartigt."
+    }
+  },
+  {
+    "id": "tip-kneel",
+    "icon": "bow",
+    "title": { "en": "Greeting elders", "sv": "Att hälsa på äldre" },
+    "body": {
+      "en": "In many Baganda families, children kneel or bow a little to greet elders as a sign of respect. Customs vary from family to family, so watch what others do.",
+      "sv": "I många familjer i Buganda knäböjer eller bugar barn lite när de hälsar på äldre, som ett tecken på respekt. Seden skiljer sig mellan familjer, så titta på hur andra gör."
+    }
+  },
+  {
+    "id": "tip-titles",
+    "icon": "bow",
+    "title": { "en": "Ssebo and nnyabo", "sv": "Ssebo och nnyabo" },
+    "body": {
+      "en": "Add ssebo (sir) or nnyabo (madam) when you talk to an adult you don't know well. It makes everything more polite.",
+      "sv": "Lägg till ssebo (herrn) eller nnyabo (frun) när du pratar med en vuxen som du inte känner så väl. Det gör allt artigare."
+    }
+  },
+  {
+    "id": "tip-w-mw",
+    "icon": "people",
+    "title": { "en": "One person or many?", "sv": "En person eller flera?" },
+    "body": {
+      "en": "Many phrases change when you talk to several people: weeraba becomes mweraba, weebale becomes mwebale, and wasuze otya becomes mwasuze mutya.",
+      "sv": "Många fraser ändras när du pratar med flera personer: weeraba blir mweraba, weebale blir mwebale och wasuze otya blir mwasuze mutya."
+    }
+  },
+  {
+    "id": "tip-siiba-sula",
+    "icon": "moon",
+    "title": { "en": "Day and night", "sv": "Dag och natt" },
+    "body": {
+      "en": "Siiba bulungi means 'spend the day well' and comes from okusiiba. Sula bulungi means 'spend the night well'. Remember the long ii from Chapter 1!",
+      "sv": "Siiba bulungi betyder 'tillbringa dagen väl' och kommer från okusiiba. Sula bulungi betyder 'tillbringa natten väl'. Kommer du ihåg det långa ii från kapitel 1?"
+    }
+  },
+  {
+    "id": "tip-ye",
+    "icon": "people",
+    "title": { "en": "One word for he and she", "sv": "Ett ord för han och hon" },
+    "body": {
+      "en": "Luganda pronouns don't show gender. Ye means both 'he' and 'she'.",
+      "sv": "Pronomen på luganda visar inte kön. Ye betyder både 'han' och 'hon'."
+    }
+  },
+  {
+    "id": "tip-twins",
+    "icon": "people",
+    "title": { "en": "Twin names", "sv": "Tvillingnamn" },
+    "body": {
+      "en": "Twins in Buganda get special names: Babirye and Nakato for girls, Waswa and Kato for boys. Their mother is honoured as Nnaalongo and their father as Ssaalongo.",
+      "sv": "Tvillingar i Buganda får särskilda namn: Babirye och Nakato för flickor, Waswa och Kato för pojkar. Deras mamma kallas med respekt Nnaalongo och pappan Ssaalongo."
+    }
+  },
+  {
+    "id": "tip-clan",
+    "icon": "drum",
+    "title": { "en": "Clans and totems", "sv": "Klaner och totem" },
+    "body": {
+      "en": "Baganda belong to clans (ebika), and each clan has a totem animal or plant. Many family names hint at the clan. The crowned crane, Ngaali, is a clan totem too!",
+      "sv": "Baganda tillhör klaner (ebika), och varje klan har ett totemdjur eller en totemväxt. Många släktnamn avslöjar klanen. Kronstranen Ngaali är också ett klantotem!"
+    }
+  },
+  {
+    "id": "tip-question-end",
+    "icon": "question",
+    "title": { "en": "Question words go last", "sv": "Frågeordet kommer sist" },
+    "body": {
+      "en": "In Luganda the question word usually comes at the end. Oli wa? is literally 'You are where?' and Kino kiki? is 'This is what?'",
+      "sv": "På luganda kommer frågeordet oftast sist. Oli wa? betyder ordagrant 'Du är var?' och Kino kiki? betyder 'Det här är vad?'"
+    }
+  },
+  {
+    "id": "tip-market",
+    "icon": "market",
+    "title": { "en": "Market manners", "sv": "Hyfs på marknaden" },
+    "body": {
+      "en": "Greet the seller first with gyebale ko, and use ssebo or nnyabo. It's normal to ask the price and bargain a little at markets.",
+      "sv": "Hälsa först på försäljaren med gyebale ko, och säg ssebo eller nnyabo. På marknaden är det normalt att fråga om priset och pruta lite."
+    }
+  },
+  {
+    "id": "tip-oli",
+    "icon": "chat",
+    "title": { "en": "Now you know oli!", "sv": "Nu kan du oli!" },
+    "body": {
+      "en": "Oli means 'you are', so Oli otya? is literally 'You are how?'",
+      "sv": "Oli betyder 'du är'. Oli otya? betyder alltså ordagrant 'Du är hur?'"
+    }
+  },
+  {
+    "id": "tip-li",
+    "icon": "star",
+    "title": { "en": "The -li family", "sv": "Familjen -li" },
+    "body": {
+      "en": "ndi, oli, ali, tuli, muli, bali: they all end in -li, which means 'be'. The start tells you who: n- I, o- you, a- he or she, tu- we, mu- you all, ba- they.",
+      "sv": "ndi, oli, ali, tuli, muli, bali: alla slutar på -li, som betyder 'vara'. Början visar vem: n- jag, o- du, a- han eller hon, tu- vi, mu- ni, ba- de."
+    }
+  },
+  {
+    "id": "tip-agreement",
+    "icon": "star",
+    "title": { "en": "Words that match", "sv": "Ord som anpassar sig" },
+    "body": {
+      "en": "Describing words change to match who you're talking about: ndi musanyufu (I'm happy), but tuli basanyufu (we're happy).",
+      "sv": "Beskrivande ord ändras efter vem det gäller: ndi musanyufu (jag är glad), men tuli basanyufu (vi är glada)."
+    }
+  },
+  {
+    "id": "tip-si",
+    "icon": "question",
+    "title": { "en": "si- means 'I don't'", "sv": "si- betyder 'jag … inte'" },
+    "body": {
+      "en": "Put si- at the front to say 'I don't': simanyi (I don't know), sitegeera (I don't understand).",
+      "sv": "Sätt si- först för att säga 'jag … inte': simanyi (jag vet inte), sitegeera (jag förstår inte)."
+    }
+  },
+  {
+    "id": "tip-boda",
+    "icon": "boda",
+    "title": { "en": "Boda-bodas", "sv": "Boda-bodas" },
+    "body": {
+      "en": "Boda-bodas are motorbike taxis, and you'll find them all over Uganda. Agree on the price before you ride, and wear a helmet!",
+      "sv": "Boda-bodas är motorcykeltaxi och finns överallt i Uganda. Kom överens om priset innan du åker, och använd hjälm!"
+    }
+  },
+  {
+    "id": "tip-weebale-oku",
+    "icon": "heart",
+    "title": { "en": "Thanks for anything", "sv": "Tack för vad som helst" },
+    "body": {
+      "en": "Weebale plus an oku- word thanks someone for doing it: weebale okufumba (for cooking), weebale okujja (for coming).",
+      "sv": "Weebale plus ett oku-ord tackar någon för att de gjorde det: weebale okufumba (för att du lagade mat), weebale okujja (för att du kom)."
+    }
+  },
+  {
+    "id": "tip-eating",
+    "icon": "food",
+    "title": { "en": "At the table", "sv": "Vid bordet" },
+    "body": {
+      "en": "In many homes, people wash their hands before eating, and guests are often served first. Telling the cook the food is delicious is a big compliment!",
+      "sv": "I många hem tvättar man händerna innan maten, och gäster får ofta mat först. Att säga till kocken att maten är god är en stor komplimang!"
+    }
+  },
+  {
+    "id": "tip-journey",
+    "icon": "star",
+    "title": { "en": "Your journey has begun", "sv": "Din resa har börjat" },
+    "body": {
+      "en": "This checkpoint mixes everything from Unit 1. Take your time: you can replay any conversation later in the Practice Lab.",
+      "sv": "Den här kontrollpunkten blandar allt från del 1. Ta god tid på dig: du kan spela upp alla samtal igen senare i Övningslabbet."
+    }
+  }
+]

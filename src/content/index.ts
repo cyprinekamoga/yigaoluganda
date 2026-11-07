@@ -1,78 +1,71 @@
-import vocabularyJson from '../../content/vocabulary.json'
-import unitsJson from '../../content/units.json'
-import storyJson from '../../content/story.json'
-import audioManifest from '../generated/audio-manifest.json'
-import type { ChoiceOption, Lang, Lesson, Story, StoryChapter, Unit, Word } from './types'
+import type { Chapter, Dialogue, Lesson, Phrase, Root, Sentence, SoundPair, Tip, Unit } from './types';
 
-export * from './types'
+import chapters from '../../content/unit-1/chapters.json';
+import phrases from '../../content/unit-1/phrases.json';
+import sentences from '../../content/unit-1/sentences.json';
+import soundPairs from '../../content/unit-1/sound-pairs.json';
+import tips from '../../content/unit-1/tips.json';
+import dialogues from '../../content/unit-1/dialogues.json';
+import roots from '../../content/unit-1/roots.json';
 
-export const vocabulary = vocabularyJson as Word[]
-export const units = unitsJson as Unit[]
-export const story = storyJson as Story
+export * from './types';
 
-const wordById = new Map(vocabulary.map((w) => [w.id, w]))
+export const UNIT_1: Unit = {
+  id: 'unit-1',
+  n: 1,
+  lgTitle: '',
+  title: { en: 'Absolute Foundations', sv: 'Grunderna' },
+  chapters: chapters as unknown as Chapter[],
+  phrases: phrases as unknown as Phrase[],
+  sentences: sentences as unknown as Sentence[],
+  soundPairs: soundPairs as unknown as SoundPair[],
+  tips: tips as unknown as Tip[],
+  dialogues: dialogues as unknown as Dialogue[],
+  roots: roots as unknown as Root[],
+};
 
-export function getWord(id: string): Word {
-  const w = wordById.get(id)
-  if (!w) throw new Error(`Unknown word id: ${id}`)
-  return w
+export const UNITS: Unit[] = [UNIT_1];
+
+function indexBy<V extends { id: string }>(items: V[]): Record<string, V> {
+  const out: Record<string, V> = {};
+  for (const item of items) out[item.id] = item;
+  return out;
 }
 
-export function hasWord(id: string): boolean {
-  return wordById.has(id)
-}
+const all = <K extends keyof Unit>(key: K) => UNITS.flatMap((u) => u[key] as unknown as { id: string }[]);
 
-/** The meaning of a word in the learner's language. */
-export function meaning(word: Word, lang: Lang): string {
-  return word[lang]
-}
+export const PHRASES = indexBy(all('phrases') as Phrase[]);
+export const SENTENCES = indexBy(all('sentences') as Sentence[]);
+export const SOUND_PAIRS = indexBy(all('soundPairs') as SoundPair[]);
+export const TIPS = indexBy(all('tips') as Tip[]);
+export const DIALOGUES = indexBy(all('dialogues') as Dialogue[]);
+export const CHAPTERS = indexBy(all('chapters') as Chapter[]);
+export const ROOTS = all('roots') as Root[];
 
 export interface LessonRef {
-  lesson: Lesson
-  unit: Unit
-  /** Position in the whole course (0-based). */
-  index: number
-  /** Position inside the unit (0-based). */
-  indexInUnit: number
+  lesson: Lesson;
+  chapter: Chapter;
+  unit: Unit;
+  index: number;
 }
 
-export const allLessons: LessonRef[] = units.flatMap((unit) =>
-  unit.lessons.map((lesson, indexInUnit) => ({ lesson, unit, indexInUnit, index: 0 })),
-)
-allLessons.forEach((ref, i) => (ref.index = i))
-
-const lessonById = new Map(allLessons.map((r) => [r.lesson.id, r]))
-
-export function getLessonRef(id: string): LessonRef | undefined {
-  return lessonById.get(id)
+export const LESSONS: Record<string, LessonRef> = {};
+for (const unit of UNITS) {
+  for (const chapter of unit.chapters) {
+    chapter.lessons.forEach((lesson, index) => {
+      LESSONS[lesson.id] = { lesson, chapter, unit, index };
+    });
+  }
 }
 
-export function getChapter(id: string): StoryChapter | undefined {
-  return story.chapters.find((c) => c.id === id)
+/** The chapter and lesson that first teaches each phrase. */
+export const TAUGHT_IN: Record<string, { chapterId: string; lessonId: string }> = {};
+for (const ref of Object.values(LESSONS)) {
+  for (const id of ref.lesson.phrases) {
+    if (!TAUGHT_IN[id]) TAUGHT_IN[id] = { chapterId: ref.chapter.id, lessonId: ref.lesson.id };
+  }
 }
 
-/** Word ids from every lesson up to and including `index`. */
-export function wordsUpTo(index: number): string[] {
-  const seen = new Set<string>()
-  for (const ref of allLessons.slice(0, index + 1)) ref.lesson.words.forEach((w) => seen.add(w))
-  return [...seen]
-}
-
-const audioSet = new Set(audioManifest as string[])
-
-/** True when a native-speaker recording exists in /public/audio/<id>.mp3. */
-export function hasAudio(wordId: string): boolean {
-  return audioSet.has(wordId)
-}
-
-export function audioUrl(wordId: string): string {
-  return `${import.meta.env.BASE_URL}audio/${wordId}.mp3`
-}
-
-export function optionText(option: ChoiceOption, lang: Lang): string {
-  return 'lg' in option ? option.lg : option[lang]
-}
-
-export function isLuganda(option: ChoiceOption): boolean {
-  return 'lg' in option
+export function chapterPhraseIds(chapter: Chapter): string[] {
+  return chapter.lessons.flatMap((l) => l.phrases);
 }

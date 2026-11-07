@@ -1,177 +1,175 @@
 # Yiga Oluganda 🪶
 
-**[Svenska](#svenska) · [English](#english)**
+**[English](#english) · [Svenska](#svenska)**
 
-A free, playful web app that teaches basic **Luganda** to children (about 6–12) growing up in the diaspora, with **Ngaali**, an original crested-crane mascot.
-The content comes from the book **"Luganda för beginners" by Cyprine Kamoga**.
+A mobile app for learning Luganda with **Ngaali**, the crested crane. It runs on iOS, Android and the web, built with Expo (React Native).
+It is for absolute beginners, diaspora heritage learners, travellers and anyone curious about the language.
 
----
-
-## Svenska
-
-### Vad är det här?
-Yiga Oluganda ("Lär dig luganda") är en webbapp för barn som vill lära sig grundläggande luganda.
-- Gränssnittet finns på **svenska** och **engelska**. Man väljer språk när man startar och kan byta i Inställningar.
-- Två spår: **Svenska → Luganda** och **Engelska → Luganda**.
-- Korta lektioner på en slingrande stig, XP, dagar i rad, hjärtan, märken, en övningsdel som tar tillbaka svåra ord (spaced repetition) och **berättelseläge** där man följer Alex resa till Buganda i bokens 10 kapitel.
-- **Inga konton och ingen datainsamling.** Framstegen sparas bara på enheten (localStorage).
-- Fungerar **offline** som PWA och kan installeras på mobil, surfplatta och dator.
-
-### Starta appen
-Du behöver [Node.js](https://nodejs.org) 20 eller senare.
-```bash
-npm install
-npm run dev        # öppna adressen som visas, t.ex. http://localhost:5173
-```
-Övriga kommandon:
-```bash
-npm test           # enhetstester (Vitest)
-npm run test:e2e   # end-to-end-tester i webbläsare (Playwright), mobil + dator
-npm run build      # bygger en färdig version i mappen dist/
-npm run preview    # visar den byggda versionen
-npm run content    # kontrollerar innehållsfilerna och skapar AUDIO_TODO.md
-npm run preview:file  # bygger hela appen som EN html-fil (dist-artifact/) att dela som förhandsvisning
-```
-
-### Lägga till ord, lektioner och ljud (utan att programmera)
-Allt innehåll ligger i mappen **`content/`** som vanliga JSON-filer. Öppna dem i en textredigerare, till exempel VS Code eller direkt på GitHub.
-
-**1. Nytt ord eller uttryck** i `content/vocabulary.json`:
-```json
-{ "id": "embwa", "lg": "embwa", "en": "dog", "sv": "hund", "category": "animals", "page": 12, "difficulty": 1, "image": "🐕" }
-```
-- `id`: unikt namn med små bokstäver, siffror och bindestreck. Det används också som namn på ljudfilen.
-- `lg` är luganda, `en` engelska och `sv` svenska.
-- `category`: greetings, phrases, family, people, numbers, food, body, animals, home, school, verbs, travel, transport, nature, market, culture, time, months eller weather.
-- `page`: sidan i boken. `difficulty`: 1 (lätt), 2 eller 3 (svårt).
-- `image` (valfritt): en emoji, `count:3` (tre saker att räkna) eller `clock:8` (en klocka som visar 8).
-- `variants` (valfritt): andra stavningar som godkänns när barnet skriver.
-- `check` (valfritt): en anteckning om vad en modersmålstalare bör kontrollera.
-
-**2. Ny lektion** i `content/units.json`: lägg till ett objekt i en dels `lessons`:
-```json
-{ "id": "u08-l3", "title": { "en": "Pets", "sv": "Husdjur" }, "words": ["embwa", "ente"] }
-```
-Appen skapar övningarna själv (bilder, flerval, para ihop, bygga meningar, fylla i, skriva). Du kan också lägga till bokens egna övningar:
-- `"fillIns"`: meningar med `___` där ordet saknas, `answer` (ett ord-id) och `options` (ord-id).
-- `"questions"`: flervalsfrågor. **Det första alternativet är det rätta.** Appen blandar dem.
-
-**3. Berättelser** finns i `content/story.json`. I texten blir `{ordets-id}` ett lugandaord som barnet kan trycka på.
-
-**4. Ljud:** spela in ordet (mp3, en till två sekunder, en modersmålstalare) och spara det som
-`public/audio/<id>.mp3`, till exempel `public/audio/embwa.mp3`. Högtalarknappen och lyssningsövningarna dyker upp automatiskt.
-Listan över ord som saknar ljud finns i **`AUDIO_TODO.md`** och uppdateras av `npm run content`.
-Appen använder **aldrig** datorröst (text-till-tal) för luganda, eftersom den uttalar fel.
-
-Kör `npm run content` efter ändringar. Kommandot säger exakt vad som är fel om något id saknas eller ett fält är tomt.
-
-**Nytt gränssnittsspråk:** kopiera `src/i18n/en.json` till till exempel `fr.json`, översätt texterna och lägg till språket i `src/i18n/index.ts`.
-
-### Publicera gratis
-Appen är helt statisk (ingen server), så den kan ligga på vilken gratis webbhotell som helst.
-
-**Netlify**
-1. Lägg koden på GitHub.
-2. På [netlify.com](https://netlify.com): *Add new site → Import an existing project* och välj repot.
-3. Build command: `npm run build`. Publish directory: `dist`. Klicka på *Deploy*.
-
-**Vercel**
-1. På [vercel.com](https://vercel.com): *Add New → Project* och välj repot.
-2. Framework: *Vite* (väljs automatiskt). Build: `npm run build`. Output: `dist`. Klicka på *Deploy*.
-
-**GitHub Pages**: kör `npm run build` och publicera mappen `dist/`. Appen använder relativa sökvägar och hash-adresser (`#/`), så den fungerar även i en undermapp.
-
-### Integritet
-Inga konton, ingen reklam, inga cookies för spårning och ingen analys. Typsnitten ligger i appen, så inga anrop görs till Google. Allt sparas i webbläsaren på enheten och kan raderas på föräldrasidan (Inställningar → För föräldrar).
-
-### Dokument i projektet
-- `RESEARCH.md`: forskningen bakom appen (luganda, inlärning, barn-UX, GDPR).
-- `PLAN.md`: planen och designbesluten.
-- `content/CONTENT_REPORT.md`: vad som kommer från boken, vad som lagts till och **vad som behöver kontrolleras av en modersmålstalare**.
-- `AUDIO_TODO.md`: ord som behöver ljudinspelning.
+<p>
+<img src="docs/screenshots/07-home-progress.png" width="200" alt="Home: chapter tiles with progress rings">
+<img src="docs/screenshots/06-dialogue.png" width="200" alt="A roleplay conversation">
+<img src="docs/screenshots/06-feedback.png" width="200" alt="Feedback on a wrong answer, with a hint about long and short sounds">
+<img src="docs/screenshots/08-practice.png" width="200" alt="Practice Lab">
+</p>
+<p>
+<img src="docs/screenshots/03-chapter.png" width="200" alt="Chapter page">
+<img src="docs/screenshots/06-build.png" width="200" alt="Word bank sentence builder">
+<img src="docs/screenshots/10-phrasebook.png" width="200" alt="Phrasebook">
+<img src="docs/screenshots/12-profile.png" width="200" alt="Profile with streak, XP, gems and achievements">
+</p>
 
 ---
 
 ## English
 
-### What is this?
-Yiga Oluganda ("Learn Luganda") is a web app for children learning basic Luganda.
-- The interface is in **Swedish** and **English**, chosen at the start and changeable in Settings.
-- Two tracks: **Swedish → Luganda** and **English → Luganda**.
-- It has short lessons on a winding path, XP, a daily streak, hearts, badges, a Practice mode that brings back weak words (spaced repetition), and **Story mode**, which follows Alex's trip to Buganda across the book's 10 chapters.
-- **No accounts and no data collection.** Progress stays on the device (localStorage).
-- It works **offline** as an installable PWA on phones, tablets and desktop.
+### What's in the app
 
-### Run the app
+| PRD area | What was built |
+|---|---|
+| **Navigation** | Four tabs: **Learn** (home grid), **Practice** (Practice Lab), **Phrasebook** (dictionary) and **Profile** |
+| **Home** | A stats bar with 🔥 streak, 💎 gems and ❤️ hearts, then Ngaali greeting you by name with a tip. Below that, Unit 1 as a 2-column grid of 12 chapter tiles. Each tile has its own Ngaali illustration (bowing to an elder, riding a boda-boda, holding a plate of matooke, …), a segmented progress ring with one segment per lesson, and a status: *Locked, Unlocked, Ready to start, Active, Unfinished* or *Completed* |
+| **Non-linear unlocking** | Chapters 1–3 are open from the start, and each chapter you finish opens the next locked one, so you choose the order. The checkpoint (chapter 12) opens after chapters 1–11 |
+| **Curriculum** | Unit 1, *Absolute Foundations*: the 12 chapters from the PRD, in 26 lessons. It has 93 phrases, 49 sentences, 12 roleplay conversations and 22 culture tips, all in English and Swedish |
+| **Lesson engine** | Each lesson has about 10 steps built from the 7 PRD exercise types, plus a card that introduces each new phrase before it is tested. Wrong answers come back once at the end of the lesson |
+| **Exercises** | **Sound & Vowel Matcher**: pick the right spelling. The wrong options differ only in sound length (*weebale / webale / weebbale*). **Tap & Match** pairs. **Word-bank sentence builder**. **Audio dictation**. **Speak & compare**. **Roleplay chat**: a wrong reply gets an explanation from Ngaali. **Culture tip** cards |
+| **Ngaali's states** | *Idle* (bobs and blinks), *correct* (hops with wings up), *incorrect* (encouraging pose) and *badge* (holds a medal) |
+| **Gamification** | +10 XP per lesson and +5 for a perfect one. Gems come from lessons. 5 hearts: a wrong answer in a lesson costs 1. Hearts grow back one every 20 minutes, and a Practice Lab review refills them all. There are daily streaks and 12 achievements |
+| **Practice Lab** | Spaced-repetition review, which refills hearts. You can replay finished conversations. There is audio matching and Speak & compare. Practice never costs hearts |
+| **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
+| **Profile** | Streak, XP, gems, lessons, phrases met, this week's activity, achievements and friends |
+| **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
+
+### Where the app differs from the PRD, and why
+
+- **Audio.** No native-speaker recordings exist yet, and the app never uses text-to-speech for Luganda because it mispronounces the language. Listening, dictation and the native-speaker comparison appear **automatically** once recordings are added (see *Adding audio*). Until then, the Sound & Vowel Matcher shows the meaning instead of playing a sound.
+- **Audio format.** The PRD asks for Opus. The app uses **AAC in .m4a**, because iOS cannot reliably play Opus or Ogg. The preparation script can also write Opus files. Slow "turtle" playback is the same clip played at 0.75× with pitch correction, so no separate slow recordings are needed. Clips are pre-loaded before each lesson starts.
+- **Speech & pitch verification.** You record yourself and play your voice next to the native clip, then judge how close it was. There is no automatic scoring, because no reliable Luganda pronunciation model exists to run on a phone. The app says this on screen.
+- **Friend leaderboards** need user accounts and a server, which this version doesn't have. The Profile explains this and shows your own weekly XP.
+- **Unit downloads from a CDN.** Only Unit 1 exists, and it is bundled so it works offline.
+- **What gems buy.** The PRD doesn't say, so 30 gems refill your hearts.
+- **Content changes.** These were flagged for a native speaker in [`content/CONTENT_REPORT.md`](content/CONTENT_REPORT.md):
+  - *Ki kano?* was taught as *Ki kati?*
+  - *Mwe* was taught as *mmwe*.
+  - *Yeye* was taught as *ye* (and *yeye* is accepted).
+- **Mascot name.** The PRD uses both "Kigo" and "Ngaali". The app uses **Ngaali** throughout.
+
+### Run it
+
 You need [Node.js](https://nodejs.org) 20 or newer.
+
 ```bash
 npm install
-npm run dev        # open the printed address, e.g. http://localhost:5173
 ```
-Other commands:
+
 ```bash
-npm test           # unit tests (Vitest)
-npm run test:e2e   # browser end-to-end tests (Playwright), mobile + desktop
-npm run build      # production build into dist/
-npm run preview    # serve the production build
-npm run content    # check the content files and regenerate AUDIO_TODO.md
-npm run preview:file  # build the whole app as ONE html file (dist-artifact/) for sharing a preview
+npx expo start
 ```
 
-### Adding words, lessons and audio (no programming needed)
-All content lives in **`content/`** as plain JSON files that you can edit in any text editor, or directly on GitHub.
+Scan the QR code with **Expo Go** on your phone, or press `w` to open it in a browser.
 
-**1. A new word or phrase** goes in `content/vocabulary.json`:
-```json
-{ "id": "embwa", "lg": "embwa", "en": "dog", "sv": "hund", "category": "animals", "page": 12, "difficulty": 1, "image": "🐕" }
+| Command | What it does |
+|---|---|
+| `npm test` | Unit tests: lesson engine, rules, content checks, colour contrast, translations |
+| `npm run typecheck` | TypeScript check |
+| `npm run doctor` | Checks Expo dependencies and config |
+| `npm run audio` | Rebuilds the list of recordings and `AUDIO_TODO.md` |
+| `npm run report` | Rebuilds `content/CONTENT_REPORT.md` |
+| `npm run icons` / `npm run sfx` | Regenerate the app icons and sound effects |
+
+End-to-end test in a real browser (mobile and desktop sizes):
+
+```bash
+EXPO_PUBLIC_E2E=1 npm run export:web && npm run e2e
 ```
-- `id`: a unique name made of lower-case letters, digits and dashes. It is also the audio file name.
-- `category`: greetings, phrases, family, people, numbers, food, body, animals, home, school, verbs, travel, transport, nature, market, culture, time, months or weather.
-- `page`: the book page. `difficulty`: 1 (easy), 2 or 3 (hard).
-- `image` (optional): an emoji, `count:3` (three things to count) or `clock:8` (a clock showing 8).
-- `variants` (optional): other spellings accepted when typing.
-- `check` (optional): a note on what a native speaker should verify.
 
-**2. A new lesson** goes in `content/units.json`. Add an object to a unit's `lessons`:
-```json
-{ "id": "u08-l3", "title": { "en": "Pets", "sv": "Husdjur" }, "words": ["embwa", "ente"] }
+### Build for the App Store and Google Play
+
+Builds run in the cloud with EAS, so you don't need Xcode or Android Studio. You do need an Expo account, plus an Apple Developer and/or Google Play account.
+
+```bash
+npx eas-cli@latest build --platform all
 ```
-The app builds the exercises automatically: pictures, multiple choice, match pairs, sentence tiles, fill-in and typing. You can also add the book's own exercises:
-- `"fillIns"`: sentences with `___`, an `answer` (word id) and `options` (word ids).
-- `"questions"`: multiple-choice questions. **Put the correct option first.** The app shuffles them.
 
-**3. Stories** live in `content/story.json`. In the narration, `{word-id}` becomes a tappable Luganda word.
+The web version is a static site: `npm run export:web` writes it to `dist/`.
 
-**4. Audio:** record the word (mp3, 1–2 seconds, by a native speaker) and save it as `public/audio/<id>.mp3`, e.g. `public/audio/embwa.mp3`. The speaker button and listening exercises appear automatically.
-**`AUDIO_TODO.md`** lists every word still missing a recording. `npm run content` regenerates it.
-The app **never** uses text-to-speech for Luganda, because it mispronounces the language.
+### Editing content
 
-Run `npm run content` after editing. If something is wrong (a missing id, an empty field), it tells you exactly what.
+All content is plain JSON in [`content/unit-1/`](content/unit-1). `npm test` tells you exactly what's wrong if an id is missing or a translation is empty.
 
-**New interface language:** copy `src/i18n/en.json` to e.g. `fr.json`, translate the values and register it in `src/i18n/index.ts`.
+- `phrases.json`: each phrase has an `id` (also its audio file name), `lg` (Luganda), `tr` (`en` and `sv`), and optional `literal`, `note`, `variants` and `check` (a note for a native speaker).
+- `sentences.json`: sentences for the word bank and dictation. `{name}` becomes the learner's name.
+- `chapters.json`: chapters and their lessons. Each lesson lists its new `phrases`, plus `review`, `sentences`, `sounds`, `tip` and `dialogue`.
+- `dialogues.json`: roleplay conversations. Each `choose` line needs exactly one `correct` option, and every wrong option needs a `why`.
+- `tips.json`, `sound-pairs.json`, `roots.json`: culture tips, long/short sound pairs and the roots guide.
 
-### Deploy for free
-The app is fully static (no server), so any free static host works.
+The app builds each lesson's exercises from these files automatically.
 
-**Netlify**
-1. Push the code to GitHub.
-2. On [netlify.com](https://netlify.com), choose *Add new site → Import an existing project* and pick the repo.
-3. Build command: `npm run build`. Publish directory: `dist`. Click *Deploy*.
+### Adding audio
 
-**Vercel**
-1. On [vercel.com](https://vercel.com), choose *Add New → Project* and pick the repo.
-2. Framework: *Vite* (auto-detected). Build: `npm run build`. Output: `dist`. Click *Deploy*.
+1. Record each phrase with a native speaker and name the file after its id, e.g. `weebale.wav` or `s-kale-weebale.wav`. [`AUDIO_TODO.md`](AUDIO_TODO.md) lists every id that still needs a recording.
+2. Run this to trim silence, normalise to −16 LUFS and save mono AAC clips into `assets/audio/` (needs `ffmpeg`):
 
-**GitHub Pages**: run `npm run build` and publish `dist/`. The app uses relative paths and hash URLs (`#/`), so it also works from a sub-folder.
+   ```bash
+   npm run audio:prepare -- path/to/recordings
+   ```
+
+3. Restart the app. Speaker buttons, listening, dictation and native comparison appear for every recorded item.
+
+### Project layout
+
+```
+content/unit-1/     course content (JSON) + CONTENT_REPORT.md
+assets/audio/       native-speaker clips (<id>.m4a)
+src/app/            screens (Expo Router): tabs, chapter, lesson, practice, phrase, settings, onboarding
+src/lesson/         lesson player, feedback panel, the exercise components
+src/logic/          pure, unit-tested rules: generator, spelling distractors, hearts/XP/streak, unlocking, SRS, badges
+src/state/          Zustand store, saved on the device (AsyncStorage)
+src/ui/             Ngaali, chapter illustrations, progress ring, design tokens
+src/i18n/           English and Swedish interface text
+scripts/            audio, icons, sound effects, content report, e2e
+```
 
 ### Privacy
-There are no accounts, no ads, no tracking cookies and no analytics. Fonts are bundled, so no requests go to Google. Everything is stored in the browser on the device and can be erased from the parent page (Settings → For parents).
 
-### Project documents
-- `RESEARCH.md`: research behind the app (Luganda, learning design, child UX, GDPR).
-- `PLAN.md`: the plan and design decisions.
-- `content/CONTENT_REPORT.md`: what comes from the book, what was added, and **what needs a native-speaker check**.
-- `AUDIO_TODO.md`: words that still need a recording.
+There are no accounts, ads, analytics or tracking. Progress and recordings stay on the device. The fonts are bundled, so the app makes no requests to Google. You can erase everything in *Profile → Settings → Reset progress*.
 
-### Credits
-Content: *Luganda för beginners* © 2026 Cyprine Kamoga (text and idea: Cyprine Kamoga and Veronica Birungi; language and culture advice: Prof. David Lewis Kapeere). App design, mascot and code are original to this project.
+The previous web version of the app, based on the book *Luganda för beginners* by Cyprine Kamoga, is in the git history at commit `6a7fad7`.
+
+---
+
+## Svenska
+
+**Yiga Oluganda** är en app för att lära sig luganda tillsammans med kronstranen **Ngaali**. Den fungerar på iOS, Android och webben och är byggd med Expo (React Native). Gränssnittet finns på svenska och engelska.
+
+**I appen:**
+- En startsida med rutnät över del 1:s 12 kapitel och framstegsringar. Kapitlen öppnas i den ordning du själv väljer.
+- Lektioner med cirka 10 steg av 7 övningstyper: ljud- och vokalmatchning, para ihop, bygga meningar, diktamen, prata och jämföra, rollspel och kulturtips.
+- XP, ädelstenar, hjärtan, dagar i rad och prestationer.
+- Ett övningslabb med repetition som fyller på hjärtan.
+- En parlör som fungerar offline och har en guide till ordstammar och prefix.
+
+**Starta appen** (Node.js 20 eller senare):
+
+```bash
+npm install
+```
+
+```bash
+npx expo start
+```
+
+Skanna QR-koden med **Expo Go** eller tryck `w` för webbläsaren.
+
+**Innehåll:** allt ligger som JSON i `content/unit-1/`. Kör `npm test` efter ändringar.
+
+**Ljud:** spela in med en modersmålstalare, döp filerna efter id (se `AUDIO_TODO.md`) och kör:
+
+```bash
+npm run audio:prepare -- mapp/med/inspelningar
+```
+
+Appen använder aldrig datorröst för luganda.
+
+**Viktigt:** lugandan i del 1 har inte granskats av en modersmålstalare än. Det som är mest osäkert listas i [`content/CONTENT_REPORT.md`](content/CONTENT_REPORT.md).
+
+**Integritet:** inga konton, ingen reklam och ingen spårning. Allt sparas på enheten.

@@ -1,0 +1,1841 @@
+[
+  {
+    "id": "dlg-sounds",
+    "title": {
+      "en": "Ngaali's postcard",
+      "sv": "Ngaalis vykort"
+    },
+    "setting": {
+      "en": "Ngaali is writing a postcard home but keeps mixing up long and short sounds.",
+      "sv": "Ngaali skriver ett vykort hem men blandar ihop långa och korta ljud."
+    },
+    "cast": {
+      "ngaali": {
+        "name": "Ngaali",
+        "role": "ngaali"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Nsonyiwa! Sitegeera…",
+        "tr": {
+          "en": "Sorry! I don't get it…",
+          "sv": "Förlåt! Jag fattar inte…"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Ngaali wants the word for 'to spend the day'. Which one is it?",
+          "sv": "Ngaali vill ha ordet för 'att tillbringa dagen'. Vilket är det?"
+        },
+        "options": [
+          {
+            "lg": "okusiiba",
+            "tr": {
+              "en": "to spend the day",
+              "sv": "att tillbringa dagen"
+            },
+            "correct": true
+          },
+          {
+            "lg": "okusiba",
+            "tr": {
+              "en": "to tie",
+              "sv": "att knyta"
+            },
+            "why": {
+              "en": "Okusiba has a short i and means 'to tie'.",
+              "sv": "Okusiba har kort i och betyder 'att knyta'."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Weebale!",
+        "tr": {
+          "en": "Thank you!",
+          "sv": "Tack!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Next, Ngaali needs 'to steal' (someone stole the stamps!).",
+          "sv": "Nu behöver Ngaali 'att stjäla' (någon har stulit frimärkena!)."
+        },
+        "options": [
+          {
+            "lg": "okuba",
+            "tr": {
+              "en": "to be",
+              "sv": "att vara"
+            },
+            "why": {
+              "en": "Okuba has one b and means 'to be'.",
+              "sv": "Okuba har ett b och betyder 'att vara'."
+            }
+          },
+          {
+            "lg": "okubba",
+            "tr": {
+              "en": "to steal",
+              "sv": "att stjäla"
+            },
+            "correct": true
+          }
+        ]
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Last one: 'to weed the garden'.",
+          "sv": "Sista: 'att rensa ogräs'."
+        },
+        "options": [
+          {
+            "lg": "okukoola",
+            "tr": {
+              "en": "to weed",
+              "sv": "att rensa ogräs"
+            },
+            "correct": true
+          },
+          {
+            "lg": "okukola",
+            "tr": {
+              "en": "to work",
+              "sv": "att arbeta"
+            },
+            "why": {
+              "en": "Okukola has a short o and means 'to work'.",
+              "sv": "Okukola har kort o och betyder 'att arbeta'."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Bulungi nnyo!",
+        "tr": {
+          "en": "Very good!",
+          "sv": "Mycket bra!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-tea",
+    "title": {
+      "en": "Tea with Jjajja",
+      "sv": "Te hos Jjajja"
+    },
+    "setting": {
+      "en": "Jjajja offers you a cup of tea.",
+      "sv": "Jjajja bjuder dig på en kopp te."
+    },
+    "cast": {
+      "jjajja": {
+        "name": "Jjajja",
+        "role": "elder"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Oyagala caayi?",
+        "tr": {
+          "en": "Would you like some tea?",
+          "sv": "Vill du ha te?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "You'd love some. What do you say?",
+          "sv": "Det vill du gärna. Vad säger du?"
+        },
+        "options": [
+          {
+            "lg": "Yee, weebale!",
+            "tr": {
+              "en": "Yes, thank you!",
+              "sv": "Ja, tack!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Nedda, weebale.",
+            "tr": {
+              "en": "No, thank you.",
+              "sv": "Nej tack."
+            },
+            "why": {
+              "en": "That means 'No, thank you', but you wanted tea!",
+              "sv": "Det betyder 'Nej tack', men du ville ju ha te!"
+            }
+          },
+          {
+            "lg": "Nsonyiwa.",
+            "tr": {
+              "en": "Sorry.",
+              "sv": "Förlåt."
+            },
+            "why": {
+              "en": "Nsonyiwa means 'sorry'. You have nothing to apologise for!",
+              "sv": "Nsonyiwa betyder 'förlåt'. Du har inget att be om ursäkt för!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale.",
+        "tr": {
+          "en": "Okay.",
+          "sv": "Okej."
+        }
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "Jjajja hands you a warm cup.",
+          "sv": "Jjajja räcker dig en varm kopp."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Thank her warmly.",
+          "sv": "Tacka henne varmt."
+        },
+        "options": [
+          {
+            "lg": "Weebale nnyo!",
+            "tr": {
+              "en": "Thank you very much!",
+              "sv": "Tack så mycket!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Nedda.",
+            "tr": {
+              "en": "No.",
+              "sv": "Nej."
+            },
+            "why": {
+              "en": "Nedda means 'no'. Try thanking her instead.",
+              "sv": "Nedda betyder 'nej'. Försök tacka henne i stället."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale, mwana wange.",
+        "tr": {
+          "en": "You're welcome, my child.",
+          "sv": "Varsågod, mitt barn."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-friend",
+    "title": {
+      "en": "Hey, Nakato!",
+      "sv": "Hej, Nakato!"
+    },
+    "setting": {
+      "en": "You bump into your friend Nakato after school.",
+      "sv": "Du stöter på din kompis Nakato efter skolan."
+    },
+    "cast": {
+      "nakato": {
+        "name": "Nakato",
+        "role": "friend"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "nakato",
+        "lg": "Agandi, {name}!",
+        "tr": {
+          "en": "How's it going, {name}!",
+          "sv": "Hur är läget, {name}!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Say you're fine and ask how she is.",
+          "sv": "Säg att du mår bra och fråga hur hon mår."
+        },
+        "options": [
+          {
+            "lg": "Gyendi! Oli otya?",
+            "tr": {
+              "en": "I'm fine! How are you?",
+              "sv": "Bra! Hur mår du?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Kale, weebale.",
+            "tr": {
+              "en": "Okay, thanks.",
+              "sv": "Okej, tack."
+            },
+            "why": {
+              "en": "That's 'okay, thanks', but Nakato asked how you are.",
+              "sv": "Det betyder 'okej, tack', men Nakato frågade hur du mår."
+            }
+          },
+          {
+            "lg": "Nedda.",
+            "tr": {
+              "en": "No.",
+              "sv": "Nej."
+            },
+            "why": {
+              "en": "Nedda means 'no'. That's a strange answer to 'how's it going?'",
+              "sv": "Nedda betyder 'nej'. Det är ett konstigt svar på 'hur är läget?'"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "nakato",
+        "lg": "Bulungi, weebale.",
+        "tr": {
+          "en": "Fine, thanks.",
+          "sv": "Bra, tack."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Ask her what's up, the way friends do.",
+          "sv": "Fråga vad som händer, som kompisar gör."
+        },
+        "options": [
+          {
+            "lg": "Ki kati?",
+            "tr": {
+              "en": "What's up?",
+              "sv": "Läget?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Nsonyiwa?",
+            "tr": {
+              "en": "Sorry?",
+              "sv": "Förlåt?"
+            },
+            "why": {
+              "en": "Nsonyiwa means 'sorry'. Try 'what's up?'",
+              "sv": "Nsonyiwa betyder 'förlåt'. Försök med 'läget?'"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "nakato",
+        "lg": "Gyendi, mukwano gwange!",
+        "tr": {
+          "en": "All good, my friend!",
+          "sv": "Allt bra, min vän!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-elder",
+    "title": {
+      "en": "Morning at Jjajja's",
+      "sv": "Morgon hos Jjajja"
+    },
+    "setting": {
+      "en": "It's morning. Jjajja is already busy in the garden.",
+      "sv": "Det är morgon. Jjajja arbetar redan i trädgården."
+    },
+    "cast": {
+      "jjajja": {
+        "name": "Jjajja",
+        "role": "elder"
+      }
+    },
+    "lines": [
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Greet Jjajja respectfully.",
+          "sv": "Hälsa artigt på Jjajja."
+        },
+        "options": [
+          {
+            "lg": "Wasuze otya, jjajja?",
+            "tr": {
+              "en": "Good morning, Jjajja.",
+              "sv": "God morgon, Jjajja."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ki kati, jjajja?",
+            "tr": {
+              "en": "What's up, Jjajja?",
+              "sv": "Läget, Jjajja?"
+            },
+            "why": {
+              "en": "Ki kati is how friends greet each other. It's too casual for an elder.",
+              "sv": "Ki kati säger kompisar till varandra. Det är för slarvigt till en äldre person."
+            }
+          },
+          {
+            "lg": "Osiibye otya, jjajja?",
+            "tr": {
+              "en": "Good afternoon, Jjajja.",
+              "sv": "God eftermiddag, Jjajja."
+            },
+            "why": {
+              "en": "Osiibye otya is for later in the day. It's still morning!",
+              "sv": "Osiibye otya säger man senare på dagen. Det är fortfarande morgon!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Bulungi, mwana wange. Ggwe wasuze otya?",
+        "tr": {
+          "en": "Fine, my child. And how did you sleep?",
+          "sv": "Bra, mitt barn. Och hur har du sovit?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Tell Jjajja you slept well.",
+          "sv": "Berätta för Jjajja att du har sovit gott."
+        },
+        "options": [
+          {
+            "lg": "Bulungi, jjajja.",
+            "tr": {
+              "en": "Fine, Jjajja.",
+              "sv": "Bra, Jjajja."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Nedda, jjajja.",
+            "tr": {
+              "en": "No, Jjajja.",
+              "sv": "Nej, Jjajja."
+            },
+            "why": {
+              "en": "Nedda means 'no'. Jjajja asked how you slept.",
+              "sv": "Nedda betyder 'nej'. Jjajja frågade hur du har sovit."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "Jjajja goes back to digging.",
+          "sv": "Jjajja fortsätter att gräva."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Jjajja is working hard. What do you say?",
+          "sv": "Jjajja jobbar hårt. Vad säger du?"
+        },
+        "options": [
+          {
+            "lg": "Gyebale ko, jjajja!",
+            "tr": {
+              "en": "Well done, Jjajja!",
+              "sv": "Bra jobbat, Jjajja!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Mwattu, jjajja!",
+            "tr": {
+              "en": "Please, Jjajja!",
+              "sv": "Snälla, Jjajja!"
+            },
+            "why": {
+              "en": "Mwattu means 'please', but you're not asking for anything.",
+              "sv": "Mwattu betyder 'snälla', men du ber inte om något."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale, weebale.",
+        "tr": {
+          "en": "Okay, thank you.",
+          "sv": "Okej, tack."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-night",
+    "title": {
+      "en": "Bedtime",
+      "sv": "Läggdags"
+    },
+    "setting": {
+      "en": "It's bedtime, and Maama turns off the light.",
+      "sv": "Det är läggdags, och mamma släcker lampan."
+    },
+    "cast": {
+      "maama": {
+        "name": "Maama",
+        "role": "parent"
+      },
+      "taata": {
+        "name": "Taata",
+        "role": "parent"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "maama",
+        "lg": "Sula bulungi, {name}.",
+        "tr": {
+          "en": "Sleep well, {name}.",
+          "sv": "Sov gott, {name}."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Wish Maama good night too.",
+          "sv": "Önska mamma god natt också."
+        },
+        "options": [
+          {
+            "lg": "Sula bulungi, maama!",
+            "tr": {
+              "en": "Good night, Mum!",
+              "sv": "God natt, mamma!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Siiba bulungi, maama!",
+            "tr": {
+              "en": "Have a good day, Mum!",
+              "sv": "Ha en bra dag, mamma!"
+            },
+            "why": {
+              "en": "Siiba bulungi means 'have a good day', but it's bedtime!",
+              "sv": "Siiba bulungi betyder 'ha en bra dag', men det är ju läggdags!"
+            }
+          },
+          {
+            "lg": "Weeraba, maama!",
+            "tr": {
+              "en": "Goodbye, Mum!",
+              "sv": "Hej då, mamma!"
+            },
+            "why": {
+              "en": "Weeraba is goodbye, but Maama is only going to the next room.",
+              "sv": "Weeraba är hej då, men mamma går bara till rummet bredvid."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "maama",
+        "lg": "Weebale. Tulabagane enkya!",
+        "tr": {
+          "en": "Thank you. See you tomorrow!",
+          "sv": "Tack. Vi ses i morgon!"
+        }
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "The next morning, Taata leaves for work.",
+          "sv": "Nästa morgon går pappa till jobbet."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Wish Taata a good day.",
+          "sv": "Önska pappa en bra dag."
+        },
+        "options": [
+          {
+            "lg": "Siiba bulungi, taata!",
+            "tr": {
+              "en": "Have a good day, Dad!",
+              "sv": "Ha en bra dag, pappa!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Sula bulungi, taata!",
+            "tr": {
+              "en": "Good night, Dad!",
+              "sv": "God natt, pappa!"
+            },
+            "why": {
+              "en": "Sula bulungi is for the night. The day is just starting!",
+              "sv": "Sula bulungi säger man på kvällen. Dagen har ju precis börjat!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "taata",
+        "lg": "Weebale! Weeraba!",
+        "tr": {
+          "en": "Thanks! Bye!",
+          "sv": "Tack! Hej då!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-pronouns",
+    "title": {
+      "en": "Name cards",
+      "sv": "Namnlappar"
+    },
+    "setting": {
+      "en": "Ngaali is making name cards for the class.",
+      "sv": "Ngaali gör namnlappar till klassen."
+    },
+    "cast": {
+      "ngaali": {
+        "name": "Ngaali",
+        "role": "ngaali"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Nze Ngaali. Ggwe?",
+        "tr": {
+          "en": "I'm Ngaali. And you?",
+          "sv": "Jag är Ngaali. Och du?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Tell Ngaali who you are.",
+          "sv": "Berätta för Ngaali vem du är."
+        },
+        "options": [
+          {
+            "lg": "Nze {name}.",
+            "tr": {
+              "en": "I'm {name}.",
+              "sv": "Jag är {name}."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ye {name}.",
+            "tr": {
+              "en": "He / She is {name}.",
+              "sv": "Han / Hon är {name}."
+            },
+            "why": {
+              "en": "Ye means 'he' or 'she'. That sounds like you're talking about someone else!",
+              "sv": "Ye betyder 'han' eller 'hon'. Det låter som att du pratar om någon annan!"
+            }
+          },
+          {
+            "lg": "Ggwe {name}.",
+            "tr": {
+              "en": "You are {name}.",
+              "sv": "Du är {name}."
+            },
+            "why": {
+              "en": "Ggwe means 'you'. That would make Ngaali {name}!",
+              "sv": "Ggwe betyder 'du'. Då skulle Ngaali heta {name}!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "Ngaali points at a girl by the window.",
+          "sv": "Ngaali pekar på en flicka vid fönstret."
+        }
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Ye Nakato.",
+        "tr": {
+          "en": "She's Nakato.",
+          "sv": "Hon är Nakato."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Point at yourself and Nakato. How do you say 'we'?",
+          "sv": "Peka på dig själv och Nakato. Hur säger du 'vi'?"
+        },
+        "options": [
+          {
+            "lg": "Ffe!",
+            "tr": {
+              "en": "We!",
+              "sv": "Vi!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Bo!",
+            "tr": {
+              "en": "They!",
+              "sv": "De!"
+            },
+            "why": {
+              "en": "Bo means 'they', but you're part of the group!",
+              "sv": "Bo betyder 'de', men du är ju med i gruppen!"
+            }
+          },
+          {
+            "lg": "Mmwe!",
+            "tr": {
+              "en": "You all!",
+              "sv": "Ni!"
+            },
+            "why": {
+              "en": "Mmwe means 'you all'. You want 'we'.",
+              "sv": "Mmwe betyder 'ni'. Du vill säga 'vi'."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Bulungi nnyo!",
+        "tr": {
+          "en": "Very good!",
+          "sv": "Mycket bra!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-names",
+    "title": {
+      "en": "At Nakato's door",
+      "sv": "Vid Nakatos dörr"
+    },
+    "setting": {
+      "en": "Nakato's mother, Nnaalongo, opens the door.",
+      "sv": "Nakatos mamma, Nnaalongo, öppnar dörren."
+    },
+    "cast": {
+      "nnaalongo": {
+        "name": "Nnaalongo",
+        "role": "parent"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "nnaalongo",
+        "lg": "Tukusanyukidde! Erinnya lyo ggwe ani?",
+        "tr": {
+          "en": "Welcome! What's your name?",
+          "sv": "Välkommen! Vad heter du?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Tell her your name.",
+          "sv": "Säg vad du heter."
+        },
+        "options": [
+          {
+            "lg": "Erinnya lyange nze {name}.",
+            "tr": {
+              "en": "My name is {name}.",
+              "sv": "Jag heter {name}."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ggwe ani?",
+            "tr": {
+              "en": "Who are you?",
+              "sv": "Vem är du?"
+            },
+            "why": {
+              "en": "That asks who she is. Answer her question first!",
+              "sv": "Då frågar du vem hon är. Svara på hennes fråga först!"
+            }
+          },
+          {
+            "lg": "Nze Ngaali.",
+            "tr": {
+              "en": "I'm Ngaali.",
+              "sv": "Jag är Ngaali."
+            },
+            "why": {
+              "en": "That's the crane's name, not yours!",
+              "sv": "Det är tranans namn, inte ditt!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "nnaalongo",
+        "lg": "Nsanyuse okukulaba, {name}!",
+        "tr": {
+          "en": "Nice to meet you, {name}!",
+          "sv": "Trevligt att träffas, {name}!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Say it back to her, politely.",
+          "sv": "Säg samma sak tillbaka, artigt."
+        },
+        "options": [
+          {
+            "lg": "Nange nsanyuse okukulaba, nnyabo.",
+            "tr": {
+              "en": "Nice to meet you too, madam.",
+              "sv": "Trevligt att träffas, frun."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ki kati, nnyabo?",
+            "tr": {
+              "en": "What's up, madam?",
+              "sv": "Läget, frun?"
+            },
+            "why": {
+              "en": "Ki kati is too casual for Nakato's mum!",
+              "sv": "Ki kati är för slarvigt till Nakatos mamma!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "nnaalongo",
+        "lg": "Yingira, mwana wange.",
+        "tr": {
+          "en": "Come in, my child.",
+          "sv": "Kom in, mitt barn."
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-market",
+    "title": {
+      "en": "At the fruit stall",
+      "sv": "Vid fruktståndet"
+    },
+    "setting": {
+      "en": "You stop at a fruit stall in the market.",
+      "sv": "Du stannar vid ett fruktstånd på marknaden."
+    },
+    "cast": {
+      "seller": {
+        "name": "Nnyabo",
+        "role": "seller"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "seller",
+        "lg": "Gyebale ko! Oyagala ki?",
+        "tr": {
+          "en": "Hello! What would you like?",
+          "sv": "Hej! Vad vill du ha?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Point at a big spiky fruit and ask what it is.",
+          "sv": "Peka på en stor taggig frukt och fråga vad det är."
+        },
+        "options": [
+          {
+            "lg": "Kino kiki?",
+            "tr": {
+              "en": "What is this?",
+              "sv": "Vad är det här?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Oli wa?",
+            "tr": {
+              "en": "Where are you?",
+              "sv": "Var är du?"
+            },
+            "why": {
+              "en": "That asks 'Where are you?', but the seller is right here!",
+              "sv": "Då frågar du 'Var är du?', men försäljaren står ju här!"
+            }
+          },
+          {
+            "lg": "Ani?",
+            "tr": {
+              "en": "Who?",
+              "sv": "Vem?"
+            },
+            "why": {
+              "en": "Ani means 'who?', and a fruit isn't a who!",
+              "sv": "Ani betyder 'vem?', och en frukt är ingen vem!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "seller",
+        "lg": "Ffene.",
+        "tr": {
+          "en": "It's jackfruit.",
+          "sv": "Det är jackfrukt."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Ask how much it costs.",
+          "sv": "Fråga vad den kostar."
+        },
+        "options": [
+          {
+            "lg": "Ssente mmeka, nnyabo?",
+            "tr": {
+              "en": "How much is it, madam?",
+              "sv": "Hur mycket kostar den, frun?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Lwaki, nnyabo?",
+            "tr": {
+              "en": "Why, madam?",
+              "sv": "Varför, frun?"
+            },
+            "why": {
+              "en": "Lwaki means 'why?'. You want 'how much?'",
+              "sv": "Lwaki betyder 'varför?'. Du vill fråga 'hur mycket?'"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "seller",
+        "lg": "Lukumi.",
+        "tr": {
+          "en": "One thousand shillings.",
+          "sv": "Tusen shilling."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Good price! Say okay and thank her.",
+          "sv": "Bra pris! Säg okej och tacka henne."
+        },
+        "options": [
+          {
+            "lg": "Kale, weebale nnyo!",
+            "tr": {
+              "en": "Okay, thank you very much!",
+              "sv": "Okej, tack så mycket!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Weeraba!",
+            "tr": {
+              "en": "Goodbye!",
+              "sv": "Hej då!"
+            },
+            "why": {
+              "en": "Don't leave yet. You haven't paid!",
+              "sv": "Gå inte än. Du har inte betalat!"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dlg-feelings",
+    "title": {
+      "en": "A long day",
+      "sv": "En lång dag"
+    },
+    "setting": {
+      "en": "Ngaali checks on you after a long day of travelling.",
+      "sv": "Ngaali hör hur du mår efter en lång resdag."
+    },
+    "cast": {
+      "ngaali": {
+        "name": "Ngaali",
+        "role": "ngaali"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Oli otya leero?",
+        "tr": {
+          "en": "How are you today?",
+          "sv": "Hur mår du i dag?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "You've travelled all day. Say you're very tired.",
+          "sv": "Du har rest hela dagen. Säg att du är jättetrött."
+        },
+        "options": [
+          {
+            "lg": "Ndi mukoowu nnyo.",
+            "tr": {
+              "en": "I'm very tired.",
+              "sv": "Jag är jättetrött."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ali mukoowu nnyo.",
+            "tr": {
+              "en": "He / She is very tired.",
+              "sv": "Han / Hon är jättetrött."
+            },
+            "why": {
+              "en": "Ali means 'he or she is'. Use ndi for 'I am'.",
+              "sv": "Ali betyder 'han eller hon är'. Använd ndi för 'jag är'."
+            }
+          },
+          {
+            "lg": "Ndi musanyufu.",
+            "tr": {
+              "en": "I'm happy.",
+              "sv": "Jag är glad."
+            },
+            "why": {
+              "en": "That's 'I'm happy'. You're tired, remember?",
+              "sv": "Det betyder 'jag är glad'. Du är ju trött!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Bambi! Nange ndi mukoowu.",
+        "tr": {
+          "en": "Oh dear! I'm tired too.",
+          "sv": "Åh nej! Jag är också trött."
+        }
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "The next morning, the sun is shining.",
+          "sv": "Nästa morgon skiner solen."
+        }
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Wasuze otya?",
+        "tr": {
+          "en": "Good morning!",
+          "sv": "God morgon!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "You feel great today!",
+          "sv": "Du mår toppen i dag!"
+        },
+        "options": [
+          {
+            "lg": "Bulungi! Leero ndi musanyufu.",
+            "tr": {
+              "en": "Fine! Today I'm happy.",
+              "sv": "Bra! I dag är jag glad."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Sula bulungi.",
+            "tr": {
+              "en": "Good night.",
+              "sv": "God natt."
+            },
+            "why": {
+              "en": "That's 'good night', and the day is just starting!",
+              "sv": "Det betyder 'god natt', och dagen har ju precis börjat!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Nange ndi musanyufu!",
+        "tr": {
+          "en": "I'm happy too!",
+          "sv": "Jag är också glad!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-boda",
+    "title": {
+      "en": "Boda-boda ride",
+      "sv": "Boda-boda-tur"
+    },
+    "setting": {
+      "en": "You hop on a boda-boda (motorbike taxi). The rider talks fast!",
+      "sv": "Du hoppar upp på en boda-boda (motorcykeltaxi). Föraren pratar snabbt!"
+    },
+    "cast": {
+      "rider": {
+        "name": "Ssebo",
+        "role": "rider"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "rider",
+        "lg": "Gyebale ko! Ogenda wa?",
+        "tr": {
+          "en": "Hello! Where are you going?",
+          "sv": "Hej! Vart ska du?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "That was too fast! Ask him to speak slowly.",
+          "sv": "Det gick för fort! Be honom prata långsamt."
+        },
+        "options": [
+          {
+            "lg": "Nsonyiwa, yogera mpola mwattu.",
+            "tr": {
+              "en": "Sorry, please speak slowly.",
+              "sv": "Förlåt, prata långsamt, snälla."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Weebale nnyo!",
+            "tr": {
+              "en": "Thank you very much!",
+              "sv": "Tack så mycket!"
+            },
+            "why": {
+              "en": "That's 'thank you very much', but he hasn't helped you yet!",
+              "sv": "Det betyder 'tack så mycket', men han har ju inte hjälpt dig än!"
+            }
+          },
+          {
+            "lg": "Simanyi.",
+            "tr": {
+              "en": "I don't know.",
+              "sv": "Jag vet inte."
+            },
+            "why": {
+              "en": "Simanyi means 'I don't know'. Ask him to slow down instead.",
+              "sv": "Simanyi betyder 'jag vet inte'. Be honom prata långsammare i stället."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "rider",
+        "lg": "O-gen-da wa?",
+        "tr": {
+          "en": "Where… are… you… going?",
+          "sv": "Vart… ska… du?"
+        },
+        "slow": true
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Tell him you're going to Kampala.",
+          "sv": "Säg att du ska till Kampala."
+        },
+        "options": [
+          {
+            "lg": "Ŋŋenda e Kampala.",
+            "tr": {
+              "en": "I'm going to Kampala.",
+              "sv": "Jag ska till Kampala."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Oli wa?",
+            "tr": {
+              "en": "Where are you?",
+              "sv": "Var är du?"
+            },
+            "why": {
+              "en": "That asks 'Where are you?', and he's right in front of you!",
+              "sv": "Då frågar du 'Var är du?', och han står ju framför dig!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "rider",
+        "lg": "Kale! Omanyi Oluganda!",
+        "tr": {
+          "en": "Okay! You know Luganda!",
+          "sv": "Okej! Du kan ju luganda!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Be modest: you know a little.",
+          "sv": "Var blygsam: du kan lite."
+        },
+        "options": [
+          {
+            "lg": "Mmanyi Oluganda katono!",
+            "tr": {
+              "en": "I know a little Luganda!",
+              "sv": "Jag kan lite luganda!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Sitegeera.",
+            "tr": {
+              "en": "I don't understand.",
+              "sv": "Jag förstår inte."
+            },
+            "why": {
+              "en": "But you did understand: he said you know Luganda!",
+              "sv": "Men du förstod ju: han sa att du kan luganda!"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dlg-dinner",
+    "title": {
+      "en": "Dinner at Jjajja's",
+      "sv": "Middag hos Jjajja"
+    },
+    "setting": {
+      "en": "Dinner at Jjajja's house. There's matooke!",
+      "sv": "Middag hemma hos Jjajja. Det blir matooke!"
+    },
+    "cast": {
+      "jjajja": {
+        "name": "Jjajja",
+        "role": "elder"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Tulye!",
+        "tr": {
+          "en": "Let's eat!",
+          "sv": "Nu äter vi!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "You take a bite. It's delicious! Tell her.",
+          "sv": "Du tar en tugga. Det är jättegott! Säg det."
+        },
+        "options": [
+          {
+            "lg": "Emmere ewooma nnyo!",
+            "tr": {
+              "en": "The food is really tasty!",
+              "sv": "Maten är jättegod!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Simanyi.",
+            "tr": {
+              "en": "I don't know.",
+              "sv": "Jag vet inte."
+            },
+            "why": {
+              "en": "Simanyi means 'I don't know', but you do know it's tasty!",
+              "sv": "Simanyi betyder 'jag vet inte', men du vet ju att det är gott!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Weebale, mwana wange.",
+        "tr": {
+          "en": "Thank you, my child.",
+          "sv": "Tack, mitt barn."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Dinner is finished. Thank Jjajja for cooking.",
+          "sv": "Middagen är slut. Tacka Jjajja för maten."
+        },
+        "options": [
+          {
+            "lg": "Weebale okufumba, jjajja!",
+            "tr": {
+              "en": "Thanks for cooking, Jjajja!",
+              "sv": "Tack för maten, Jjajja!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Weebale okujja, jjajja!",
+            "tr": {
+              "en": "Thanks for coming, Jjajja!",
+              "sv": "Tack för att du kom, Jjajja!"
+            },
+            "why": {
+              "en": "That's 'thanks for coming'. Jjajja didn't come, she cooked!",
+              "sv": "Det betyder 'tack för att du kom'. Jjajja kom inte, hon lagade maten!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale. Weebale okukyala!",
+        "tr": {
+          "en": "You're welcome. Thanks for visiting!",
+          "sv": "Varsågod. Tack för besöket!"
+        }
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "Jjajja starts washing the dishes.",
+          "sv": "Jjajja börjar diska."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "She's working again. What do you say?",
+          "sv": "Hon jobbar igen. Vad säger du?"
+        },
+        "options": [
+          {
+            "lg": "Gyebale ko, jjajja!",
+            "tr": {
+              "en": "Well done, Jjajja!",
+              "sv": "Bra jobbat, Jjajja!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Mwebale!",
+            "tr": {
+              "en": "Thank you, all!",
+              "sv": "Tack, alla!"
+            },
+            "why": {
+              "en": "Mwebale is for thanking several people, and Jjajja is one person.",
+              "sv": "Mwebale tackar flera personer, och Jjajja är en person."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale!",
+        "tr": {
+          "en": "Okay!",
+          "sv": "Okej!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dlg-checkpoint",
+    "title": {
+      "en": "First day in Kampala",
+      "sv": "Första dagen i Kampala"
+    },
+    "setting": {
+      "en": "Your first full day in Kampala. Ngaali shows you around.",
+      "sv": "Din första hela dag i Kampala. Ngaali visar dig runt."
+    },
+    "cast": {
+      "ngaali": {
+        "name": "Ngaali",
+        "role": "ngaali"
+      },
+      "jjajja": {
+        "name": "Jjajja",
+        "role": "elder"
+      },
+      "rider": {
+        "name": "Ssebo",
+        "role": "rider"
+      },
+      "nakato": {
+        "name": "Nakato",
+        "role": "friend"
+      }
+    },
+    "lines": [
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Tukusanyukidde e Kampala, {name}!",
+        "tr": {
+          "en": "Welcome to Kampala, {name}!",
+          "sv": "Välkommen till Kampala, {name}!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Thank Ngaali.",
+          "sv": "Tacka Ngaali."
+        },
+        "options": [
+          {
+            "lg": "Weebale nnyo, Ngaali!",
+            "tr": {
+              "en": "Thank you very much, Ngaali!",
+              "sv": "Tack så mycket, Ngaali!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Nedda, Ngaali.",
+            "tr": {
+              "en": "No, Ngaali.",
+              "sv": "Nej, Ngaali."
+            },
+            "why": {
+              "en": "Nedda means 'no'. Ngaali just welcomed you!",
+              "sv": "Nedda betyder 'nej'. Ngaali hälsade dig ju välkommen!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "It's early morning, and Jjajja walks over to meet you.",
+          "sv": "Det är tidig morgon, och Jjajja kommer fram för att hälsa."
+        }
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Wasuze otya, mwana wange?",
+        "tr": {
+          "en": "Good morning, my child.",
+          "sv": "God morgon, mitt barn."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Answer and greet Jjajja back.",
+          "sv": "Svara och hälsa tillbaka på Jjajja."
+        },
+        "options": [
+          {
+            "lg": "Bulungi, jjajja. Ggwe wasuze otya?",
+            "tr": {
+              "en": "Fine, Jjajja. And how did you sleep?",
+              "sv": "Bra, Jjajja. Och hur har du sovit?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Ki kati, jjajja?",
+            "tr": {
+              "en": "What's up, Jjajja?",
+              "sv": "Läget, Jjajja?"
+            },
+            "why": {
+              "en": "Too casual! Ki kati is for friends.",
+              "sv": "För slarvigt! Ki kati säger man till kompisar."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Bulungi. Erinnya lyo ggwe ani?",
+        "tr": {
+          "en": "Fine. What's your name?",
+          "sv": "Bra. Vad heter du?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Introduce yourself.",
+          "sv": "Presentera dig."
+        },
+        "options": [
+          {
+            "lg": "Erinnya lyange nze {name}.",
+            "tr": {
+              "en": "My name is {name}.",
+              "sv": "Jag heter {name}."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Simanyi.",
+            "tr": {
+              "en": "I don't know.",
+              "sv": "Jag vet inte."
+            },
+            "why": {
+              "en": "You do know your own name!",
+              "sv": "Du vet väl vad du heter!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Nsanyuse okukulaba!",
+        "tr": {
+          "en": "Nice to meet you!",
+          "sv": "Trevligt att träffas!"
+        }
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "Later, you take a boda-boda to the market.",
+          "sv": "Senare tar du en boda-boda till marknaden."
+        }
+      },
+      {
+        "kind": "say",
+        "who": "rider",
+        "lg": "Ogenda wa?",
+        "tr": {
+          "en": "Where are you going?",
+          "sv": "Vart ska du?"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "He spoke really fast. Ask him to slow down.",
+          "sv": "Han pratade jättefort. Be honom prata långsammare."
+        },
+        "options": [
+          {
+            "lg": "Yogera mpola, mwattu.",
+            "tr": {
+              "en": "Please speak slowly.",
+              "sv": "Prata långsamt, snälla."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Sula bulungi.",
+            "tr": {
+              "en": "Good night.",
+              "sv": "God natt."
+            },
+            "why": {
+              "en": "That's 'good night'. You need him to slow down!",
+              "sv": "Det betyder 'god natt'. Du vill att han ska prata långsammare!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "rider",
+        "lg": "O-gen-da wa?",
+        "tr": {
+          "en": "Where… are… you… going?",
+          "sv": "Vart… ska… du?"
+        },
+        "slow": true
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "You're going to Nakasero market.",
+          "sv": "Du ska till Nakasero-marknaden."
+        },
+        "options": [
+          {
+            "lg": "Ŋŋenda e Nakasero.",
+            "tr": {
+              "en": "I'm going to Nakasero.",
+              "sv": "Jag ska till Nakasero."
+            },
+            "correct": true
+          },
+          {
+            "lg": "Kino kiki?",
+            "tr": {
+              "en": "What is this?",
+              "sv": "Vad är det här?"
+            },
+            "why": {
+              "en": "That asks 'What is this?'. He asked where you're going.",
+              "sv": "Då frågar du 'Vad är det här?'. Han frågade vart du ska."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "At the market, you spot your friend Nakato!",
+          "sv": "På marknaden får du syn på din kompis Nakato!"
+        }
+      },
+      {
+        "kind": "say",
+        "who": "nakato",
+        "lg": "Agandi, {name}!",
+        "tr": {
+          "en": "How's it going, {name}!",
+          "sv": "Hur är läget, {name}!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Greet your friend.",
+          "sv": "Hälsa på din kompis."
+        },
+        "options": [
+          {
+            "lg": "Gyendi! Oli otya?",
+            "tr": {
+              "en": "I'm fine! How are you?",
+              "sv": "Bra! Hur mår du?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Wasuze otya, ssebo?",
+            "tr": {
+              "en": "Good morning, sir.",
+              "sv": "God morgon, herrn."
+            },
+            "why": {
+              "en": "Nakato is your friend, and she's not a 'sir'!",
+              "sv": "Nakato är din kompis, och hon är ingen 'herre'!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "nakato",
+        "lg": "Bulungi! Laba, eŋŋoma!",
+        "tr": {
+          "en": "Fine! Look, a drum!",
+          "sv": "Bra! Titta, en trumma!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Ask the seller how much the drum costs.",
+          "sv": "Fråga försäljaren vad trumman kostar."
+        },
+        "options": [
+          {
+            "lg": "Ssente mmeka, ssebo?",
+            "tr": {
+              "en": "How much is it, sir?",
+              "sv": "Hur mycket kostar den, herrn?"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Lwaki, ssebo?",
+            "tr": {
+              "en": "Why, sir?",
+              "sv": "Varför, herrn?"
+            },
+            "why": {
+              "en": "Lwaki means 'why?'.",
+              "sv": "Lwaki betyder 'varför?'."
+            }
+          }
+        ]
+      },
+      {
+        "kind": "narrate",
+        "text": {
+          "en": "In the evening, back at Jjajja's, dinner is ready.",
+          "sv": "På kvällen, tillbaka hos Jjajja, är middagen klar."
+        }
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Tulye!",
+        "tr": {
+          "en": "Let's eat!",
+          "sv": "Nu äter vi!"
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "After dinner, thank Jjajja for cooking.",
+          "sv": "Efter middagen, tacka Jjajja för maten."
+        },
+        "options": [
+          {
+            "lg": "Weebale okufumba, jjajja!",
+            "tr": {
+              "en": "Thanks for cooking, Jjajja!",
+              "sv": "Tack för maten, Jjajja!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Weebale okujja, jjajja!",
+            "tr": {
+              "en": "Thanks for coming, Jjajja!",
+              "sv": "Tack för att du kom, Jjajja!"
+            },
+            "why": {
+              "en": "That's 'thanks for coming'. You're at Jjajja's house!",
+              "sv": "Det betyder 'tack för att du kom'. Ni är ju hemma hos Jjajja!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "jjajja",
+        "lg": "Kale. Sula bulungi, mwana wange.",
+        "tr": {
+          "en": "You're welcome. Sleep well, my child.",
+          "sv": "Varsågod. Sov gott, mitt barn."
+        }
+      },
+      {
+        "kind": "choose",
+        "prompt": {
+          "en": "Wish Jjajja good night.",
+          "sv": "Önska Jjajja god natt."
+        },
+        "options": [
+          {
+            "lg": "Sula bulungi, jjajja!",
+            "tr": {
+              "en": "Good night, Jjajja!",
+              "sv": "God natt, Jjajja!"
+            },
+            "correct": true
+          },
+          {
+            "lg": "Siiba bulungi, jjajja!",
+            "tr": {
+              "en": "Have a good day, Jjajja!",
+              "sv": "Ha en bra dag, Jjajja!"
+            },
+            "why": {
+              "en": "Siiba is for the day. It's night now!",
+              "sv": "Siiba säger man på dagen. Nu är det natt!"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "say",
+        "who": "ngaali",
+        "lg": "Olugendo lwatandika!",
+        "tr": {
+          "en": "The journey has begun!",
+          "sv": "Resan har börjat!"
+        }
+      }
+    ]
+  }
+]

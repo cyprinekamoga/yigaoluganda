@@ -1,0 +1,58 @@
+[
+  {
+    "id": "root-oku",
+    "form": "oku-",
+    "meaning": { "en": "to … (verb)", "sv": "att … (verb)" },
+    "explain": { "en": "Verbs in their basic form start with oku- (or okw- before a vowel).", "sv": "Verb i grundform börjar med oku- (eller okw- före en vokal)." },
+    "examples": ["okuba", "okukola", "okusiiba", "weebale-okufumba", "weebale-okujja"]
+  },
+  {
+    "id": "root-si",
+    "form": "si-",
+    "meaning": { "en": "I don't …", "sv": "jag … inte" },
+    "explain": { "en": "At the start of a verb, si- makes it 'I don't'.", "sv": "Först i ett verb betyder si- 'jag … inte'." },
+    "examples": ["simanyi", "sitegeera"]
+  },
+  {
+    "id": "root-n",
+    "form": "n- / m- / ŋ-",
+    "meaning": { "en": "I (on a verb)", "sv": "jag (på ett verb)" },
+    "explain": { "en": "A verb that starts with n, m or ŋ is often about 'I'. The letter changes to fit the sound after it.", "sv": "Ett verb som börjar med n, m eller ŋ handlar ofta om 'jag'. Bokstaven ändras efter ljudet som kommer efter." },
+    "examples": ["ndi", "nnenda", "mpitibwa", "mmanyi-oluganda-katono", "nsanyuse-okukulaba"]
+  },
+  {
+    "id": "root-o",
+    "form": "o-",
+    "meaning": { "en": "you (one person, on a verb)", "sv": "du (på ett verb)" },
+    "explain": { "en": "A verb starting with o- is usually about 'you'.", "sv": "Ett verb som börjar med o- handlar oftast om 'du'." },
+    "examples": ["oli", "ogenda-wa", "oyagala-ki", "osiibye-otya"]
+  },
+  {
+    "id": "root-tu-ba",
+    "form": "tu- · mu- · ba-",
+    "meaning": { "en": "we · you all · they (on a verb)", "sv": "vi · ni · de (på ett verb)" },
+    "explain": { "en": "Change the start of the verb to change who does it.", "sv": "Byt början på verbet för att byta vem som gör det." },
+    "examples": ["tuli", "muli", "bali", "tulabagane"]
+  },
+  {
+    "id": "root-mu-ba",
+    "form": "omu- → aba-",
+    "meaning": { "en": "one person → people", "sv": "en person → flera personer" },
+    "explain": { "en": "Words for people often start with omu- in the singular and aba- in the plural: omuntu (person), abantu (people).", "sv": "Ord för människor börjar ofta med omu- i singular och aba- i plural: omuntu (människa), abantu (människor)." },
+    "examples": ["omuntu", "ndi-musanyufu"]
+  },
+  {
+    "id": "root-w-mw",
+    "form": "w- → mw-",
+    "meaning": { "en": "to one person → to several", "sv": "till en person → till flera" },
+    "explain": { "en": "Greetings and thanks change when you speak to a group.", "sv": "Hälsningar och tack ändras när du pratar med en grupp." },
+    "examples": ["weebale", "mwebale", "weeraba", "mweraba"]
+  },
+  {
+    "id": "root-ange",
+    "form": "-ange / -o",
+    "meaning": { "en": "my / your", "sv": "min / din" },
+    "explain": { "en": "'My' ends in -ange and 'your' ends in -o, but the start changes to match the word: erinnya lyange, mukwano gwange, mwana wange.", "sv": "'Min' slutar på -ange och 'din' på -o, men början anpassar sig efter ordet: erinnya lyange, mukwano gwange, mwana wange." },
+    "examples": ["erinnya-lyange", "mukwano-gwange", "mwana-wange", "erinnya-lyo"]
+  }
+]

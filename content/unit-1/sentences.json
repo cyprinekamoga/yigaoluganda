@@ -1,0 +1,61 @@
+[
+  { "id": "s-kale-weebale", "lg": "Kale, weebale.", "tr": { "en": "Okay, thank you.", "sv": "Okej, tack." } },
+  { "id": "s-weebale-nnyo", "lg": "Weebale nnyo!", "tr": { "en": "Thank you very much!", "sv": "Tack så mycket!" } },
+  { "id": "s-yee-weebale", "lg": "Yee, weebale.", "tr": { "en": "Yes, thank you.", "sv": "Ja, tack." } },
+  { "id": "s-nedda-weebale", "lg": "Nedda, weebale.", "tr": { "en": "No, thank you.", "sv": "Nej tack." } },
+  { "id": "s-bambi-nsonyiwa", "lg": "Bambi, nsonyiwa!", "tr": { "en": "Oh, I'm so sorry!", "sv": "Åh, förlåt mig!" }, "check": "Confirm this is natural." },
+
+  { "id": "s-gyendi-naawe", "lg": "Gyendi, naawe?", "tr": { "en": "I'm fine, and you?", "sv": "Jag mår bra, och du?" } },
+  { "id": "s-bulungi-weebale", "lg": "Bulungi, weebale.", "tr": { "en": "Fine, thanks.", "sv": "Bra, tack." } },
+  { "id": "s-oli-otya-mukwano", "lg": "Oli otya, mukwano gwange?", "tr": { "en": "How are you, my friend?", "sv": "Hur mår du, min vän?" } },
+  { "id": "s-ki-kati-mukwano", "lg": "Ki kati, mukwano gwange?", "tr": { "en": "What's up, my friend?", "sv": "Läget, min vän?" } },
+
+  { "id": "s-wasuze-ssebo", "lg": "Wasuze otya, ssebo?", "tr": { "en": "Good morning, sir.", "sv": "God morgon, herrn." } },
+  { "id": "s-wasuze-nnyabo", "lg": "Wasuze otya, nnyabo?", "tr": { "en": "Good morning, madam.", "sv": "God morgon, frun." } },
+  { "id": "s-bulungi-ssebo", "lg": "Bulungi, ssebo.", "tr": { "en": "Fine, sir.", "sv": "Bra, herrn." } },
+  { "id": "s-osiibye-jjajja", "lg": "Osiibye otya, jjajja?", "tr": { "en": "Good afternoon, Grandma.", "sv": "God eftermiddag, mormor." } },
+  { "id": "s-gyebale-nnyabo", "lg": "Gyebale ko, nnyabo.", "tr": { "en": "Well done, madam.", "sv": "Bra jobbat, frun." } },
+  { "id": "s-bulungi-mwana", "lg": "Bulungi, mwana wange.", "tr": { "en": "Fine, my child.", "sv": "Bra, mitt barn." } },
+
+  { "id": "s-kale-weeraba", "lg": "Kale, weeraba!", "tr": { "en": "Okay, goodbye!", "sv": "Okej, hej då!" } },
+  { "id": "s-weeraba-jjajja", "lg": "Weeraba, jjajja!", "tr": { "en": "Goodbye, Grandpa!", "sv": "Hej då, morfar!" } },
+  { "id": "s-kale-tulabagane", "lg": "Kale, tulabagane!", "tr": { "en": "Okay, see you!", "sv": "Okej, vi ses!" } },
+  { "id": "s-sula-maama", "lg": "Sula bulungi, maama.", "tr": { "en": "Good night, Mum.", "sv": "God natt, mamma." } },
+  { "id": "s-siiba-taata", "lg": "Siiba bulungi, taata.", "tr": { "en": "Have a good day, Dad.", "sv": "Ha en bra dag, pappa." } },
+
+  { "id": "s-nze-name", "lg": "Nze {name}.", "tr": { "en": "I'm {name}.", "sv": "Jag är {name}." } },
+  { "id": "s-nze-ne-ggwe", "lg": "Nze ne ggwe.", "tr": { "en": "You and me.", "sv": "Du och jag." } },
+  { "id": "s-ffe-ne-mmwe", "lg": "Ffe ne mmwe.", "tr": { "en": "Us and you (all).", "sv": "Vi och ni." } },
+
+  { "id": "s-erinnya-lyange", "lg": "Erinnya lyange nze {name}.", "tr": { "en": "My name is {name}.", "sv": "Jag heter {name}." } },
+  { "id": "s-mpitibwa", "lg": "Nze mpitibwa {name}.", "tr": { "en": "I'm called {name}.", "sv": "Jag kallas {name}." }, "check": "Confirm word order." },
+  { "id": "s-erinnya-lyo", "lg": "Erinnya lyo ggwe ani?", "tr": { "en": "What's your name?", "sv": "Vad heter du?" } },
+  { "id": "s-nange-nsanyuse", "lg": "Nange nsanyuse okukulaba.", "tr": { "en": "Nice to meet you too.", "sv": "Trevligt att träffas, detsamma." }, "check": "Confirm this reply." },
+
+  { "id": "s-kino-kiki", "lg": "Kino kiki?", "tr": { "en": "What is this?", "sv": "Vad är det här?" } },
+  { "id": "s-oli-wa", "lg": "Oli wa?", "tr": { "en": "Where are you?", "sv": "Var är du?" } },
+  { "id": "s-ssente-ssebo", "lg": "Ssente mmeka, ssebo?", "tr": { "en": "How much is it, sir?", "sv": "Hur mycket kostar det, herrn?" } },
+  { "id": "s-oyagala-ki-mukwano", "lg": "Oyagala ki, mukwano gwange?", "tr": { "en": "What would you like, my friend?", "sv": "Vad vill du ha, min vän?" } },
+
+  { "id": "s-ndi-bulungi", "lg": "Ndi bulungi.", "tr": { "en": "I'm fine.", "sv": "Jag mår bra." } },
+  { "id": "s-ali-bulungi", "lg": "Ali bulungi.", "tr": { "en": "He / She is fine.", "sv": "Han / Hon mår bra." } },
+  { "id": "s-oli-bulungi", "lg": "Oli bulungi?", "tr": { "en": "Are you well?", "sv": "Mår du bra?" } },
+  { "id": "s-tuli-bulungi", "lg": "Tuli bulungi.", "tr": { "en": "We are fine.", "sv": "Vi mår bra." } },
+  { "id": "s-bali-bulungi", "lg": "Bali bulungi.", "tr": { "en": "They are fine.", "sv": "De mår bra." } },
+  { "id": "s-leero-musanyufu", "lg": "Leero ndi musanyufu.", "tr": { "en": "Today I'm happy.", "sv": "I dag är jag glad." } },
+  { "id": "s-mukoowu-nnyo", "lg": "Ndi mukoowu nnyo.", "tr": { "en": "I'm very tired.", "sv": "Jag är jättetrött." } },
+
+  { "id": "s-nsonyiwa-sitegeera", "lg": "Nsonyiwa, sitegeera.", "tr": { "en": "Sorry, I don't understand.", "sv": "Förlåt, jag förstår inte." } },
+  { "id": "s-yogera-mpola-mwattu", "lg": "Yogera mpola, mwattu.", "tr": { "en": "Please speak slowly.", "sv": "Prata långsamt, snälla." } },
+  { "id": "s-ddamu-mwattu", "lg": "Ddamu, mwattu.", "tr": { "en": "Say it again, please.", "sv": "Säg det igen, snälla." } },
+  { "id": "s-nnenda-kampala", "lg": "Ŋŋenda e Kampala.", "tr": { "en": "I'm going to Kampala.", "sv": "Jag ska till Kampala." }, "check": "Confirm the locative 'e Kampala'." },
+  { "id": "s-mmanyi-katono", "lg": "Mmanyi Oluganda katono.", "tr": { "en": "I know a little Luganda.", "sv": "Jag kan lite luganda." } },
+
+  { "id": "s-weebale-okufumba-maama", "lg": "Weebale okufumba, maama.", "tr": { "en": "Thanks for cooking, Mum.", "sv": "Tack för maten, mamma." } },
+  { "id": "s-mwebale-okujja", "lg": "Mwebale okujja.", "tr": { "en": "Thank you all for coming.", "sv": "Tack alla för att ni kom." }, "check": "Confirm plural agreement." },
+  { "id": "s-emmere-ewooma-nnyo", "lg": "Emmere ewooma nnyo!", "tr": { "en": "The food is really tasty!", "sv": "Maten är jättegod!" } },
+  { "id": "s-weebale-nnyo-jjajja", "lg": "Weebale nnyo, jjajja.", "tr": { "en": "Thank you very much, Grandma.", "sv": "Tack så mycket, farmor." } },
+
+  { "id": "s-olugendo-lwatandika", "lg": "Olugendo lwatandika!", "tr": { "en": "The journey has begun!", "sv": "Resan har börjat!" }, "check": "Chapter 12 title from the PRD. Confirm grammar." },
+  { "id": "s-nnenda-ewaka", "lg": "Ŋŋenda ewaka.", "tr": { "en": "I'm going home.", "sv": "Jag går hem." } }
+]

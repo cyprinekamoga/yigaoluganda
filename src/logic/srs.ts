@@ -1,72 +1,51 @@
+import { addDays, diffDays } from './dates';
+
 /**
- * Simple spaced repetition (Leitner boxes).
- * Box 0 = brand new or just missed, box 5 = well known.
- * A correct answer moves a word up one box, but only when the word was due, so answering the
- * same word five times in one lesson doesn't count as five days of practice.
- * A wrong answer sends it back to box 0 and makes it due straight away, so it is reviewed
- * like a new word (never scheduled later than a word the child always gets right).
+ * Leitner-style spaced repetition. Each phrase sits in a box 1–6;
+ * a right answer moves it up (longer gap), a wrong one sends it back to box 1.
  */
-
-export interface WordMemory {
-  box: number
-  /** Epoch ms when the word is next due for review. */
-  due: number
-  correct: number
-  wrong: number
-  lastSeen: number
+export interface SrsCard {
+  box: number;
+  due: string;
+  right: number;
+  wrong: number;
 }
 
-export type MemoryMap = Record<string, WordMemory>
+export const INTERVALS = [0, 0, 1, 2, 4, 8, 16];
+export const MAX_BOX = 6;
 
-const DAY = 24 * 60 * 60 * 1000
-/** Review interval for each box, in days. */
-export const BOX_INTERVAL_DAYS = [0, 1, 2, 4, 8, 16] as const
-export const MAX_BOX = BOX_INTERVAL_DAYS.length - 1
-
-export function newMemory(now: number): WordMemory {
-  return { box: 0, due: now, correct: 0, wrong: 0, lastSeen: now }
+export function introduce(card: SrsCard | undefined, today: string): SrsCard {
+  return card ?? { box: 1, due: addDays(today, 1), right: 0, wrong: 0 };
 }
 
-export function review(memory: WordMemory | undefined, correct: boolean, now: number): WordMemory {
-  const m = memory ?? newMemory(now)
-  if (correct && m.due > now) return { ...m, correct: m.correct + 1, lastSeen: now }
-  const box = correct ? Math.min(m.box + 1, MAX_BOX) : 0
-  // A missed word is due again straight away (it should come back in the next practice).
-  const due = correct ? now + BOX_INTERVAL_DAYS[box] * DAY : now
-  return {
-    box,
-    due,
-    correct: m.correct + (correct ? 1 : 0),
-    wrong: m.wrong + (correct ? 0 : 1),
-    lastSeen: now,
+export function grade(card: SrsCard | undefined, correct: boolean, today: string): SrsCard {
+  const c = card ?? { box: 1, due: today, right: 0, wrong: 0 };
+  if (correct) {
+    const box = Math.min(c.box + 1, MAX_BOX);
+    return { box, due: addDays(today, INTERVALS[box]), right: c.right + 1, wrong: c.wrong };
   }
+  return { box: 1, due: today, right: c.right, wrong: c.wrong + 1 };
 }
 
-/** Lower is weaker. Used to sort practice words. */
-export function strength(m: WordMemory): number {
-  const attempts = m.correct + m.wrong
-  const accuracy = attempts ? m.correct / attempts : 0
-  return m.box + accuracy
+/** Phrases due for review, most overdue and weakest first. */
+export function dueIds(cards: Record<string, SrsCard>, today: string, limit = 8): string[] {
+  return Object.entries(cards)
+    .filter(([, c]) => diffDays(c.due, today) >= 0)
+    .sort(([, a], [, b]) => a.due.localeCompare(b.due) || a.box - b.box)
+    .slice(0, limit)
+    .map(([id]) => id);
 }
 
-/**
- * Pick words for a practice round: words that are due first (weakest first),
- * then the weakest of the rest. Only words the child has met are used.
- */
-export function pickPracticeWords(memory: MemoryMap, now: number, count = 6): string[] {
-  const entries = Object.entries(memory)
-  const byWeakness = (a: [string, WordMemory], b: [string, WordMemory]) =>
-    strength(a[1]) - strength(b[1]) || a[1].lastSeen - b[1].lastSeen
-  const due = entries.filter(([, m]) => m.due <= now).sort(byWeakness)
-  const notDue = entries.filter(([, m]) => m.due > now).sort(byWeakness)
-  return [...due, ...notDue].slice(0, count).map(([id]) => id)
+/** Weakest learned phrases, used when nothing is due. */
+export function weakestIds(cards: Record<string, SrsCard>, limit = 8): string[] {
+  return Object.entries(cards)
+    .sort(([, a], [, b]) => a.box - b.box || b.wrong - a.wrong || a.due.localeCompare(b.due))
+    .slice(0, limit)
+    .map(([id]) => id);
 }
 
-export function countDue(memory: MemoryMap, now: number): number {
-  return Object.values(memory).filter((m) => m.due <= now).length
-}
-
-/** Words the child has answered right since they last missed them (box 1 or higher). */
-export function countLearned(memory: MemoryMap): number {
-  return Object.values(memory).filter((m) => m.box >= 1).length
+/** 0–1 strength, for the phrasebook's little meter. */
+export function strength(card: SrsCard | undefined): number {
+  if (!card) return 0;
+  return card.box / MAX_BOX;
 }

@@ -1,42 +1,36 @@
-import en from './en.json'
-import sv from './sv.json'
-import type { Lang } from '../content/types'
+import { useCallback } from 'react';
+import { getLocales } from 'expo-localization';
+import type { Lang, T } from '../content/types';
+import { useApp } from '../state/store';
+import { en, type Key } from './en';
+import { sv } from './sv';
 
-/**
- * All interface text lives in the JSON files in this folder.
- * To add a language: copy en.json to <code>.json, translate the values and add it to `dictionaries`.
- */
-export const dictionaries = { en, sv } as const satisfies Record<Lang, unknown>
+export type { Key };
+export const DICTS: Record<Lang, Record<Key, string>> = { en, sv };
 
-export const UI_LANGS: Lang[] = ['sv', 'en']
+export function translate(lang: Lang, key: Key, vars?: Record<string, string | number>): string {
+  let s = DICTS[lang][key] ?? en[key] ?? key;
+  if (vars) for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+  return s;
+}
 
-type Vars = Record<string, string | number>
-
-function lookup(lang: Lang, key: string): unknown {
-  let node: unknown = dictionaries[lang]
-  for (const part of key.split('.')) {
-    if (node && typeof node === 'object' && part in node) node = (node as Record<string, unknown>)[part]
-    else return undefined
+/** Best guess for first launch: Swedish if the device prefers it, otherwise English. */
+export function deviceLang(): Lang {
+  try {
+    return getLocales()[0]?.languageCode === 'sv' ? 'sv' : 'en';
+  } catch {
+    return 'en';
   }
-  return node
 }
 
-function fill(text: string, vars?: Vars): string {
-  return vars ? text.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m)) : text
+export function useLang(): Lang {
+  return useApp((s) => s.profile?.lang) ?? deviceLang();
 }
 
-export function translate(lang: Lang, key: string, vars?: Vars): string {
-  const value = lookup(lang, key) ?? lookup('en', key)
-  return typeof value === 'string' ? fill(value, vars) : key
-}
-
-export function translateList(lang: Lang, key: string): string[] {
-  const value = lookup(lang, key) ?? lookup('en', key)
-  return Array.isArray(value) ? (value as string[]) : []
-}
-
-export type TFunction = (key: string, vars?: Vars) => string
-
-export function makeT(lang: Lang): TFunction {
-  return (key, vars) => translate(lang, key, vars)
+/** t(key, vars) for UI text and tr(T) for content text, in the learner's language. */
+export function useT() {
+  const lang = useLang();
+  const t = useCallback((key: Key, vars?: Record<string, string | number>) => translate(lang, key, vars), [lang]);
+  const tr = useCallback((text: T | undefined) => (text ? text[lang] : ''), [lang]);
+  return { t, tr, lang };
 }

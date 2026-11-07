@@ -1,167 +1,107 @@
-import type { Lang } from '../content/types'
-import { review, type MemoryMap } from './srs'
+import { diffDays } from './dates';
 
-/** Everything the app remembers. Stored only on this device (localStorage). */
-export interface ProgressState {
-  version: 1
-  settings: {
-    uiLang: Lang
-    /** The language the child learns Luganda from (Swedish → Luganda or English → Luganda). */
-    track: Lang
-    mascotName: string
-    onboarded: boolean
-    sound: boolean
-  }
-  xp: number
-  hearts: number
-  /** When `hearts` was last recalculated (epoch ms). */
-  heartsUpdatedAt: number
-  streak: number
-  bestStreak: number
-  /** Local calendar day (YYYY-MM-DD) of the last finished activity. */
-  lastActiveDay: string | null
-  completedLessons: Record<string, { at: number; perfect: boolean }>
-  completedStories: Record<string, number>
-  memory: MemoryMap
-  practiceCount: number
-  perfectCount: number
-  badges: Record<string, number>
+/** Gamification rules (PRD §6). */
+export const MAX_HEARTS = 5;
+export const HEART_REGEN_MS = 20 * 60 * 1000;
+export const REFILL_COST = 30;
+
+export const LESSON_XP = 10;
+export const PERFECT_XP = 5;
+export const LESSON_GEMS = 5;
+export const PERFECT_GEMS = 5;
+export const PRACTICE_XP = 5;
+export const PRACTICE_GEMS = 2;
+
+export interface Stats {
+  xp: number;
+  gems: number;
+  hearts: number;
+  /** When the next heart started counting (ms). */
+  heartsAt: number;
+  streak: number;
+  bestStreak: number;
+  lastActiveDay: string | null;
+  xpByDay: Record<string, number>;
+  perfectLessons: number;
+  dialoguesDone: number;
+  recordings: number;
 }
 
-export const MAX_HEARTS = 5
-export const HEART_REFILL_MS = 20 * 60 * 1000
-
-export const XP = {
-  correctAnswer: 1,
-  lessonComplete: 10,
-  perfectBonus: 5,
-  practiceComplete: 5,
-  storyComplete: 15,
-} as const
-
-export const DEFAULT_MASCOT_NAME = 'Ngaali'
-
-export function initialState(now: number, uiLang: Lang = 'sv'): ProgressState {
+export function initialStats(now: number): Stats {
   return {
-    version: 1,
-    settings: { uiLang, track: uiLang, mascotName: DEFAULT_MASCOT_NAME, onboarded: false, sound: true },
     xp: 0,
+    gems: 0,
     hearts: MAX_HEARTS,
-    heartsUpdatedAt: now,
+    heartsAt: now,
     streak: 0,
     bestStreak: 0,
     lastActiveDay: null,
-    completedLessons: {},
-    completedStories: {},
-    memory: {},
-    practiceCount: 0,
-    perfectCount: 0,
-    badges: {},
+    xpByDay: {},
+    perfectLessons: 0,
+    dialoguesDone: 0,
+    recordings: 0,
+  };
+}
+
+/** Add the hearts that have grown back since heartsAt. */
+export function regenHearts(s: Stats, now: number): Stats {
+  if (s.hearts >= MAX_HEARTS) return s.heartsAt === now ? s : { ...s, heartsAt: now };
+  const gained = Math.floor((now - s.heartsAt) / HEART_REGEN_MS);
+  if (gained <= 0) return s;
+  const hearts = Math.min(MAX_HEARTS, s.hearts + gained);
+  return { ...s, hearts, heartsAt: hearts >= MAX_HEARTS ? now : s.heartsAt + gained * HEART_REGEN_MS };
+}
+
+export function loseHeart(s: Stats, now: number): Stats {
+  const r = regenHearts(s, now);
+  if (r.hearts <= 0) return r;
+  return { ...r, hearts: r.hearts - 1, heartsAt: r.hearts >= MAX_HEARTS ? now : r.heartsAt };
+}
+
+/** Milliseconds until the next heart, or 0 when full. */
+export function nextHeartIn(s: Stats, now: number): number {
+  const r = regenHearts(s, now);
+  if (r.hearts >= MAX_HEARTS) return 0;
+  return Math.max(0, r.heartsAt + HEART_REGEN_MS - now);
+}
+
+export function refillHearts(s: Stats, now: number): Stats {
+  return { ...s, hearts: MAX_HEARTS, heartsAt: now };
+}
+
+export function buyRefill(s: Stats, now: number): Stats | null {
+  if (s.gems < REFILL_COST) return null;
+  return { ...refillHearts(s, now), gems: s.gems - REFILL_COST };
+}
+
+export function lessonReward(perfect: boolean): { xp: number; gems: number } {
+  return { xp: LESSON_XP + (perfect ? PERFECT_XP : 0), gems: LESSON_GEMS + (perfect ? PERFECT_GEMS : 0) };
+}
+
+/** Record an activity on `today`: adds XP and gems and moves the streak. */
+export function recordActivity(s: Stats, today: string, xp: number, gems: number): Stats {
+  let streak = s.streak;
+  if (s.lastActiveDay !== today) {
+    const gap = s.lastActiveDay ? diffDays(s.lastActiveDay, today) : Infinity;
+    streak = gap === 1 ? s.streak + 1 : 1;
   }
+  return {
+    ...s,
+    xp: s.xp + xp,
+    gems: s.gems + gems,
+    streak,
+    bestStreak: Math.max(s.bestStreak, streak),
+    lastActiveDay: today,
+    xpByDay: { ...s.xpByDay, [today]: (s.xpByDay[today] ?? 0) + xp },
+  };
 }
 
-// ---------- Hearts ----------
-
-/** Hearts refill one at a time, every HEART_REFILL_MS. */
-export function currentHearts(state: Pick<ProgressState, 'hearts' | 'heartsUpdatedAt'>, now: number) {
-  if (state.hearts >= MAX_HEARTS) return { hearts: MAX_HEARTS, heartsUpdatedAt: now }
-  const gained = Math.floor(Math.max(0, now - state.heartsUpdatedAt) / HEART_REFILL_MS)
-  const hearts = Math.min(MAX_HEARTS, state.hearts + gained)
-  // Keep the leftover time so the next heart isn't delayed.
-  const heartsUpdatedAt = hearts >= MAX_HEARTS ? now : state.heartsUpdatedAt + gained * HEART_REFILL_MS
-  return { hearts, heartsUpdatedAt }
+/** The streak to show: it stays alive until a full day is missed. */
+export function visibleStreak(s: Stats, today: string): number {
+  if (!s.lastActiveDay) return 0;
+  return diffDays(s.lastActiveDay, today) <= 1 ? s.streak : 0;
 }
 
-/** Milliseconds until the next heart, or 0 when hearts are full. */
-export function msUntilNextHeart(state: Pick<ProgressState, 'hearts' | 'heartsUpdatedAt'>, now: number): number {
-  const c = currentHearts(state, now)
-  if (c.hearts >= MAX_HEARTS) return 0
-  return HEART_REFILL_MS - (now - c.heartsUpdatedAt)
-}
-
-export function loseHeart(state: ProgressState, now: number): ProgressState {
-  const c = currentHearts(state, now)
-  // Refill timing starts from the moment the first heart is lost.
-  const heartsUpdatedAt = c.hearts >= MAX_HEARTS ? now : c.heartsUpdatedAt
-  return { ...state, hearts: Math.max(0, c.hearts - 1), heartsUpdatedAt }
-}
-
-export function refillHearts(state: ProgressState, now: number): ProgressState {
-  return { ...state, hearts: MAX_HEARTS, heartsUpdatedAt: now }
-}
-
-// ---------- Streak ----------
-
-export function dayKey(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
-
-function previousDay(day: string): string {
-  const [y, m, d] = day.split('-').map(Number)
-  return dayKey(new Date(y, m - 1, d - 1))
-}
-
-/** Call when an activity is finished. Counts consecutive local days. */
-export function registerActivity(state: ProgressState, now: Date): ProgressState {
-  const today = dayKey(now)
-  if (state.lastActiveDay === today) return state
-  const streak = state.lastActiveDay === previousDay(today) ? state.streak + 1 : 1
-  return { ...state, streak, bestStreak: Math.max(state.bestStreak, streak), lastActiveDay: today }
-}
-
-/** The streak as it should be shown today (0 if the child missed yesterday). */
-export function visibleStreak(state: Pick<ProgressState, 'streak' | 'lastActiveDay'>, now: Date): number {
-  const today = dayKey(now)
-  if (state.lastActiveDay === today || state.lastActiveDay === previousDay(today)) return state.streak
-  return 0
-}
-
-// ---------- Answers and completion ----------
-
-export function recordAnswer(state: ProgressState, wordIds: readonly string[], correct: boolean, now: number): ProgressState {
-  const memory = { ...state.memory }
-  for (const id of wordIds) memory[id] = review(memory[id], correct, now)
-  return { ...state, memory, xp: state.xp + (correct ? XP.correctAnswer : 0) }
-}
-
-export interface LessonResult {
-  lessonId: string
-  mistakes: number
-}
-
-export function completeLesson(state: ProgressState, result: LessonResult, now: Date): ProgressState {
-  const perfect = result.mistakes === 0
-  const prev = state.completedLessons[result.lessonId]
-  const next: ProgressState = {
-    ...state,
-    xp: state.xp + XP.lessonComplete + (perfect ? XP.perfectBonus : 0),
-    perfectCount: state.perfectCount + (perfect ? 1 : 0),
-    completedLessons: {
-      ...state.completedLessons,
-      [result.lessonId]: { at: now.getTime(), perfect: perfect || (prev?.perfect ?? false) },
-    },
-  }
-  return registerActivity(next, now)
-}
-
-/** Finishing a practice round always refills every heart. */
-export function completePractice(state: ProgressState, now: Date): ProgressState {
-  const next = refillHearts(
-    { ...state, xp: state.xp + XP.practiceComplete, practiceCount: state.practiceCount + 1 },
-    now.getTime(),
-  )
-  return registerActivity(next, now)
-}
-
-export function completeStory(state: ProgressState, chapterId: string, now: Date): ProgressState {
-  const first = !state.completedStories[chapterId]
-  const next = {
-    ...state,
-    xp: state.xp + (first ? XP.storyComplete : XP.practiceComplete),
-    completedStories: { ...state.completedStories, [chapterId]: state.completedStories[chapterId] ?? now.getTime() },
-  }
-  return registerActivity(next, now)
+export function activeToday(s: Stats, today: string): boolean {
+  return s.lastActiveDay === today;
 }
