@@ -1,0 +1,31 @@
+# The web app, deployed to its own Netlify site at app.yigaoluganda.com.
+# It is separate from the landing page site (yigaoluganda.com), so a broken
+# app deploy can never take the landing page down.
+
+[build]
+  command = "npm run export:web"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: every route serves index.html (real files are served first).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Bundles have content hashes in their names, so they can be cached forever.
+[[headers]]
+  for = "/_expo/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    # The microphone is used by "Speak & compare"; nothing else is needed.
+    Permissions-Policy = "camera=(), geolocation=(), microphone=(self)"

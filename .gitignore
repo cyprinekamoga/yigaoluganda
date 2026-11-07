@@ -43,3 +43,6 @@ yarn-error.*
 # test output
 test-results/
 e2e-shots/
+
+# Netlify CLI link state
+.netlify

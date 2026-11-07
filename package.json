@@ -43,7 +43,7 @@
     "icons": "node scripts/make-icons.mjs",
     "typecheck": "tsc --noEmit",
     "test": "npm run audio && vitest run",
-    "export:web": "npm run audio && expo export --platform web",
+    "export:web": "npm run audio && expo export --platform web && node scripts/postexport.mjs",
     "e2e": "node scripts/e2e.mjs",
     "doctor": "expo-doctor",
     "report": "node scripts/content-report.mjs",
