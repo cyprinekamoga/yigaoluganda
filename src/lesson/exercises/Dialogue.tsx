@@ -107,7 +107,7 @@ export function DialogueStep({ step, locked, name, onMistake, onNext }: Exercise
           return (
             <View key={i} style={styles.mineRow}>
               <View style={[styles.bubble, styles.mine]}>
-                <Txt variant="caption" style={{ color: C.sun }}>
+                <Txt variant="caption" style={{ color: C.neon }}>
                   {t('lesson.you')}
                 </Txt>
                 <Txt style={[styles.lg, { color: C.onInk }]}>{fillName(opt.lg, name)}</Txt>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   theirs: { backgroundColor: C.card, borderWidth: 1, borderColor: C.line, borderBottomLeftRadius: 6 },
   mine: { backgroundColor: C.ink, borderBottomRightRadius: 6, maxWidth: '85%' },
   lg: { ...F.semi, fontSize: 18, lineHeight: 24, color: C.ink },
-  mineTr: { ...F.body, fontSize: 14, lineHeight: 20, color: '#E9DEC9' },
+  mineTr: { ...F.body, fontSize: 14, lineHeight: 20, color: C.onInk2 },
   why: { flexDirection: 'row', gap: S.sm, alignItems: 'flex-start', backgroundColor: C.redSoft, padding: S.md, borderRadius: R.md },
   option: { minHeight: 52, borderRadius: R.md, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, paddingHorizontal: S.lg, paddingVertical: 10, justifyContent: 'center' },
   optionWrong: { borderColor: C.redSoft, backgroundColor: C.redSoft },

@@ -8,7 +8,7 @@ import { useT } from '@/i18n';
 import { matches } from '@/logic/search';
 import { useApp } from '@/state/store';
 import { Card } from '@/ui/Card';
-import { Screen } from '@/ui/Screen';
+import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
@@ -29,10 +29,7 @@ export default function Dictionary() {
   const total = groups.reduce((n, g) => n + g.items.length, 0);
 
   return (
-    <Screen testID="screen-dictionary">
-      <Txt variant="title" accessibilityRole="header" style={{ paddingTop: S.sm }}>
-        {t('dict.title')}
-      </Txt>
+    <LargeTitleScreen testID="screen-dictionary" title={t('dict.title')}>
       <View style={[styles.search, focused && { borderColor: C.ink }]}>
         <Ionicons name="search" size={20} color={C.ink2} />
         <TextInput
@@ -118,7 +115,7 @@ export default function Dictionary() {
           ))}
         </>
       )}
-    </Screen>
+    </LargeTitleScreen>
   );
 }
 
@@ -136,8 +133,8 @@ const styles = StyleSheet.create({
   lg: { ...F.semi, fontSize: 17, color: C.ink },
   rootHead: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   form: { backgroundColor: C.ink, borderRadius: R.sm, paddingHorizontal: 12, paddingVertical: 6 },
-  formText: { ...F.semi, fontSize: 17, color: C.sun },
+  formText: { ...F.semi, fontSize: 17, color: C.neon },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
-  chip: { paddingHorizontal: 12, minHeight: 38, justifyContent: 'center', borderRadius: R.pill, backgroundColor: C.sunSoft },
-  chipText: { ...F.semi, fontSize: 14, color: C.sunDeep },
+  chip: { paddingHorizontal: 12, minHeight: 38, justifyContent: 'center', borderRadius: R.pill, backgroundColor: C.tomatoSoft },
+  chipText: { ...F.semi, fontSize: 14, color: C.tomatoDeep },
 });

@@ -14,7 +14,7 @@ export function StatusPill({ status, hue }: { status: TileStatus; hue: Chapter['
   const h = HUES[hue];
   const look: Record<TileStatus, { bg: string; fg: string; icon: React.ComponentProps<typeof Ionicons>['name'] }> = {
     locked: { bg: C.paperDeep, fg: C.ink2, icon: 'lock-closed' },
-    unlocked: { bg: C.sun, fg: C.ink, icon: 'sparkles' },
+    unlocked: { bg: C.neon, fg: C.ink, icon: 'sparkles' },
     ready: { bg: C.paperDeep, fg: C.ink, icon: 'play' },
     active: { bg: h.soft, fg: h.deep, icon: 'play-circle' },
     unfinished: { bg: C.sunSoft, fg: C.sunDeep, icon: 'time' },
@@ -75,7 +75,7 @@ export function ChapterTile({
         )}
         {chapter.checkpoint && (
           <View style={[styles.flag, { backgroundColor: locked ? C.paperDeep : C.ink }]}>
-            <Ionicons name="flag" size={14} color={locked ? C.ink2 : C.sun} />
+            <Ionicons name="flag" size={14} color={locked ? C.ink2 : C.neon} />
           </View>
         )}
       </View>

@@ -38,8 +38,8 @@ export function Complete({ reward, accuracy, practice, onDone }: { reward: Rewar
           {!practice && <Tile icon={<MaterialCommunityIcons name="bullseye-arrow" size={26} color={C.leafDeep} />} label={t('done.accuracy')} value={`${Math.round(accuracy * 100)}%`} />}
         </View>
         {reward.perfect && !practice && (
-          <View style={[styles.banner, { backgroundColor: C.sunSoft }]}>
-            <Txt variant="strong" style={{ color: C.sunDeep }}>
+          <View style={[styles.banner, { backgroundColor: C.neon }]}>
+            <Txt variant="strong" style={{ color: C.ink }}>
               {t('done.perfect')}
             </Txt>
           </View>

@@ -134,6 +134,17 @@ async function run(viewport, label) {
   ok((await page.getByTestId('tile-c04').getAttribute('aria-label')).includes('Locked'), 'chapter 4 starts locked');
   await shot(page, `${label}-02-home`);
 
+  // iOS-style large title: hidden compact title at the top, shown in the bar after scrolling
+  const compactOpacity = async () => Number(await page.getByTestId('compact-title').first().evaluate((el) => getComputedStyle(el).opacity));
+  ok((await compactOpacity()) < 0.1, 'large title at the top, compact title hidden');
+  await page.mouse.move(viewport.width / 2, viewport.height / 2);
+  await page.mouse.wheel(0, 400);
+  await page.waitForTimeout(500);
+  ok((await compactOpacity()) > 0.9, 'scrolling folds the large title into the top bar');
+  await shot(page, `${label}-02b-home-scrolled`);
+  await page.mouse.wheel(0, -2000);
+  await page.waitForTimeout(400);
+
   // Locked tile explains itself
   await page.getByTestId('tile-c04').click();
   ok(await page.getByText('This chapter is locked').isVisible(), 'locked tile shows why');
@@ -146,6 +157,7 @@ async function run(viewport, label) {
   await shot(page, `${label}-03-chapter`);
   await page.getByTestId('chapter-start').click();
   await page.getByTestId('lesson-player').waitFor();
+  ok(await page.getByTestId('fun-fact').waitFor({ timeout: 3000 }).then(() => true, () => false), 'new-phrase screen shows a fun fact about Uganda');
   ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c02-l1');
   ok((await page.getByText('+15').count()) > 0, 'perfect lesson gives 15 XP');
   await shot(page, `${label}-05-complete`);

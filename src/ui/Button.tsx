@@ -3,15 +3,16 @@ import { C, F, R } from './theme';
 import { Txt } from './Txt';
 import { tapFeedback } from '../audio/feedback';
 
-type Kind = 'primary' | 'secondary' | 'success' | 'danger' | 'ghost' | 'sun';
+type Kind = 'primary' | 'dark' | 'secondary' | 'success' | 'danger' | 'ghost' | 'neon';
 
 const KIND: Record<Kind, { bg: string; fg: string; border?: string }> = {
-  primary: { bg: C.ink, fg: C.onInk },
+  primary: { bg: C.tomato, fg: '#FFFFFF' },
+  dark: { bg: C.ink, fg: C.onInk },
   secondary: { bg: C.card, fg: C.ink, border: C.line },
   success: { bg: C.leafDeep, fg: '#fff' },
   danger: { bg: C.redDeep, fg: '#fff' },
   ghost: { bg: 'transparent', fg: C.ink2 },
-  sun: { bg: C.sun, fg: C.ink },
+  neon: { bg: C.neon, fg: C.ink },
 };
 
 export interface ButtonProps {

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   prompt: { gap: S.lg, alignItems: 'flex-start' },
   options: { gap: S.md },
   option: { minHeight: 64, borderRadius: R.lg, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, paddingHorizontal: S.lg, justifyContent: 'center' },
-  optionPicked: { borderColor: C.ink, backgroundColor: '#FFFDF8' },
+  optionPicked: { borderColor: C.ink, backgroundColor: C.neonSoft },
   optionRight: { borderColor: C.leaf, backgroundColor: C.leafSoft },
   optionWrong: { borderColor: C.red, backgroundColor: C.redSoft },
   optionText: { ...F.semi, fontSize: 22, letterSpacing: 0.6, color: C.ink },

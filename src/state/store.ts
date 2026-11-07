@@ -58,6 +58,8 @@ interface Data {
   lastChapterId: string | null;
   srs: Record<string, SrsCard>;
   badges: Record<string, number>;
+  /** Position in the fun-fact rotation. */
+  factIndex: number;
 }
 
 interface Actions {
@@ -74,6 +76,8 @@ interface Actions {
   completePractice(kind: 'review' | 'dialogue' | 'speak'): Reward;
   buyRefill(): boolean;
   noteRecording(): void;
+  /** The next fun fact to show (index into FACTS); advances the rotation. */
+  takeFact(count: number): number;
   reset(): void;
 }
 
@@ -88,6 +92,7 @@ const fresh = (): Data => ({
   lastChapterId: null,
   srs: {},
   badges: {},
+  factIndex: 0,
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
@@ -187,6 +192,12 @@ export const useApp = create<AppState>()(
           awardBadges();
         },
 
+        takeFact: (count) => {
+          const i = count > 0 ? get().factIndex % count : 0;
+          set({ factIndex: i + 1 });
+          return i;
+        },
+
         reset: () => set({ ...fresh() }),
       };
     },
@@ -203,6 +214,7 @@ export const useApp = create<AppState>()(
         lastChapterId: s.lastChapterId,
         srs: s.srs,
         badges: s.badges,
+        factIndex: s.factIndex,
       }),
     },
   ),

@@ -13,9 +13,9 @@ import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
 import { ChapterTile } from '@/ui/ChapterTile';
 import { Ngaali } from '@/ui/Ngaali';
-import { Screen } from '@/ui/Screen';
+import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { Sheet } from '@/ui/Sheet';
-import { StatsBar } from '@/ui/StatsBar';
+import { StatsBar, useNow } from '@/ui/StatsBar';
 import { C, MAX_W, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
@@ -31,6 +31,7 @@ export default function Home() {
   const srs = useApp((s) => s.srs);
   const openChapter = useApp((s) => s.openChapter);
   const [lockedMsg, setLockedMsg] = useState<string | null>(null);
+  const now = useNow();
   const name = profile?.name ?? '';
 
   const unit = UNIT_1;
@@ -42,7 +43,7 @@ export default function Home() {
   const advice = useMemo(
     () =>
       adviceFor({
-        hearts: regenHearts(stats, Date.now()).hearts,
+        hearts: regenHearts(stats, now).hearts,
         streak: visibleStreak(stats, today),
         activeToday: activeToday(stats, today),
         lessonsDone: Object.keys(done).length,
@@ -51,7 +52,7 @@ export default function Home() {
         dueCount: dueIds(srs, today, 50).length,
         allDone: completedCount === unit.chapters.length,
       }),
-    [stats, today, done, srs, statuses, completedCount, unit.chapters],
+    [stats, now, today, done, srs, statuses, completedCount, unit.chapters],
   );
   const adviceText = t(`advice.${advice.key}`, {
     n: advice.count ?? 0,
@@ -72,13 +73,7 @@ export default function Home() {
   };
 
   return (
-    <Screen testID="screen-home">
-      <View style={styles.top}>
-        <Txt variant="h3" style={styles.brand} accessibilityRole="header">
-          {t('app.name')}
-        </Txt>
-        <StatsBar />
-      </View>
+    <LargeTitleScreen testID="screen-home" title={t('tabs.home')} trailing={<StatsBar />} compactAlign="leading">
 
       <Card style={styles.hello}>
         <Ngaali mood="idle" size={78} />
@@ -90,17 +85,17 @@ export default function Home() {
             {adviceText}
           </Txt>
           {advice.key === 'noHearts' && (
-            <Button small kind="sun" label={t('hearts.review')} onPress={() => router.push('/practice/review')} style={styles.adviceBtn} />
+            <Button small kind="neon" label={t('hearts.review')} onPress={() => router.push('/practice/review')} style={styles.adviceBtn} />
           )}
           {advice.key === 'review' && (
-            <Button small kind="sun" label={t('practice.review')} onPress={() => router.push('/practice/review')} style={styles.adviceBtn} />
+            <Button small kind="neon" label={t('practice.review')} onPress={() => router.push('/practice/review')} style={styles.adviceBtn} />
           )}
         </View>
       </Card>
 
       <View style={styles.unitHead}>
         <Txt variant="label">{t('home.unit', { n: unit.n })}</Txt>
-        <Txt variant="title" accessibilityRole="header">
+        <Txt variant="h2" accessibilityRole="header">
           {tr(unit.title)}
         </Txt>
         <View style={styles.unitBar} accessibilityLabel={`${completedCount} / ${unit.chapters.length}`}>
@@ -129,19 +124,17 @@ export default function Home() {
         </View>
         <Button label={t('common.close')} onPress={() => setLockedMsg(null)} />
       </Sheet>
-    </Screen>
+    </LargeTitleScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: S.sm, gap: S.sm, flexWrap: 'wrap' },
-  brand: { color: C.ink },
   hello: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingVertical: S.md },
   helloText: { flex: 1, gap: S.xs },
   adviceBtn: { alignSelf: 'flex-start', marginTop: S.xs },
   unitHead: { gap: 2, marginTop: S.sm },
   unitBar: { height: 8, borderRadius: R.pill, backgroundColor: C.paperDeep, overflow: 'hidden', marginTop: S.sm },
-  unitFill: { height: 8, borderRadius: R.pill, backgroundColor: C.leaf },
+  unitFill: { height: 8, borderRadius: R.pill, backgroundColor: C.tomato },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: S.md },
   soon: { backgroundColor: C.paperDeep, borderStyle: 'dashed', gap: S.xs },
   lockedRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },

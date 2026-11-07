@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, Easing, Platform, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Ellipse, G, Line, Path, Rect } from 'react-native-svg';
 
@@ -19,7 +19,7 @@ const COL = {
   goldTip: '#D98E00',
   cap: '#1F1A17',
   cheek: '#FFFFFF',
-  red: '#E03A3E',
+  red: '#D71A06',
   beak: '#3D4049',
   leg: '#2A2622',
   eye: '#1F1A17',
@@ -191,7 +191,7 @@ export interface NgaaliProps {
  * STATE_INCORRECT → incorrect (soft face, encouraging sway), STATE_BADGE → badge (holds a medal).
  */
 export function Ngaali({ mood = 'idle', size = 120, style, label }: NgaaliProps) {
-  const anim = useRef(new Animated.Value(0)).current;
+  const [anim] = useState(() => new Animated.Value(0));
   const [blink, setBlink] = useState(false);
 
   useEffect(() => {

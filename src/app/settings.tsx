@@ -13,6 +13,9 @@ import { Sheet } from '@/ui/Sheet';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
+/** react-native-web paints the 'on' thumb teal unless told otherwise. */
+const WEB_SWITCH = { activeThumbColor: '#FFFFFF' } as object;
+
 export default function Settings() {
   const { t, lang } = useT();
   const router = useRouter();
@@ -76,8 +79,9 @@ export default function Settings() {
             accessibilityLabel={t('settings.sfx')}
             value={settings.sfx}
             onValueChange={(v) => setSetting('sfx', v)}
-            trackColor={{ true: C.leaf, false: C.line }}
+            trackColor={{ true: C.tomato, false: C.line }}
             thumbColor="#fff"
+            {...WEB_SWITCH}
           />
         </View>
         <View style={styles.switchRow}>
@@ -88,8 +92,9 @@ export default function Settings() {
             accessibilityLabel={t('settings.haptics')}
             value={settings.haptics}
             onValueChange={(v) => setSetting('haptics', v)}
-            trackColor={{ true: C.leaf, false: C.line }}
+            trackColor={{ true: C.tomato, false: C.line }}
             thumbColor="#fff"
+            {...WEB_SWITCH}
           />
         </View>
       </Card>

@@ -56,7 +56,7 @@ export default function Onboarding() {
                   style={[styles.lang, on && styles.langOn]}
                 >
                   <View style={[styles.code, on && { backgroundColor: C.ink }]}>
-                    <Txt style={[styles.codeText, on && { color: C.sun }]}>{l.flag}</Txt>
+                    <Txt style={[styles.codeText, on && { color: C.neon }]}>{l.flag}</Txt>
                   </View>
                   <Txt variant="strong">{l.label}</Txt>
                 </Pressable>

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   micOn: { backgroundColor: C.redDeep },
   compare: { gap: S.md },
   compareRow: { flexDirection: 'row', gap: S.md },
-  playBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 48, borderRadius: R.pill, backgroundColor: C.sunSoft },
+  playBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 48, borderRadius: R.pill, backgroundColor: C.tomatoSoft },
   playText: { ...F.semi, fontSize: 15, color: C.ink },
   rate: { flexDirection: 'row', gap: S.md },
 });

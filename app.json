@@ -7,7 +7,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#FBF5EA",
+    "backgroundColor": "#FCF5F0",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yigaoluganda.app"
@@ -15,7 +15,7 @@
     "android": {
       "package": "com.yigaoluganda.app",
       "adaptiveIcon": {
-        "backgroundColor": "#FFC233",
+        "backgroundColor": "#250104",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -41,7 +41,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#FBF5EA",
+          "backgroundColor": "#FCF5F0",
           "image": "./assets/splash-icon.png",
           "imageWidth": 180
         }

@@ -72,6 +72,7 @@ export const en = {
   'lesson.newPhrase': 'New phrase',
   'lesson.literally': 'Literally',
   'lesson.goodToKnow': 'Good to know',
+  'lesson.didYouKnow': 'Did you know?',
   'lesson.cultureTip': 'Culture tip',
   'lesson.choiceRead': 'Which is “{meaning}”?',
   'lesson.choiceListen': 'Which one do you hear?',

@@ -22,8 +22,8 @@ export function TipStep({ step, onNext }: ExerciseProps<{ kind: 'tip'; tipId: st
         </View>
         <Card style={styles.card} testID="tip-card">
           <View style={styles.head}>
-            <TipIconBadge icon={tip.icon} hue="sun" size={44} />
-            <Txt variant="label" style={{ color: C.sunDeep }}>
+            <TipIconBadge icon={tip.icon} hue="tomato" size={44} />
+            <Txt variant="label" style={{ color: C.tomatoDeep }}>
               {t('lesson.cultureTip')}
             </Txt>
           </View>
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   body: { padding: S.lg, gap: S.lg, width: '100%', maxWidth: 640, alignSelf: 'center' },
   mascot: { alignItems: 'center' },
-  card: { gap: S.md, padding: S.xl, borderColor: C.sun, borderWidth: 2, backgroundColor: '#FFFDF6' },
+  card: { gap: S.md, padding: S.xl, borderColor: C.tomato, borderWidth: 2, backgroundColor: C.card },
   head: { flexDirection: 'row', alignItems: 'center', gap: S.md },
 });

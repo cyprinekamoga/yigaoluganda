@@ -11,7 +11,7 @@ import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
 import { HeartIcon } from '@/ui/Icons';
 import { Ngaali } from '@/ui/Ngaali';
-import { Screen } from '@/ui/Screen';
+import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { StatsBar } from '@/ui/StatsBar';
 import { C, F, HUES, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
@@ -34,13 +34,7 @@ export default function PracticeLab() {
   );
 
   return (
-    <Screen testID="screen-practice">
-      <View style={styles.top}>
-        <Txt variant="title" accessibilityRole="header">
-          {t('practice.title')}
-        </Txt>
-        <StatsBar />
-      </View>
+    <LargeTitleScreen testID="screen-practice" title={t('practice.title')} trailing={<StatsBar />} compactAlign="leading">
       <Txt variant="body" style={{ color: C.ink2 }}>
         {t('practice.subtitle')}
       </Txt>
@@ -50,18 +44,24 @@ export default function PracticeLab() {
         <View style={styles.reviewRow}>
           <Ngaali mood="think" size={70} />
           <View style={{ flex: 1, gap: 2 }}>
-            <Txt variant="h2">{t('practice.review')}</Txt>
+            <Txt variant="h2" style={{ color: C.onInk }}>
+              {t('practice.review')}
+            </Txt>
             {learned.length ? (
               <View style={styles.inline}>
                 <HeartIcon size={16} />
-                <Txt variant="small">{t('practice.reviewBody', { n: reviewCount })}</Txt>
+                <Txt variant="small" style={{ color: C.onInk2 }}>
+                  {t('practice.reviewBody', { n: reviewCount })}
+                </Txt>
               </View>
             ) : (
-              <Txt variant="small">{t('practice.reviewEmpty')}</Txt>
+              <Txt variant="small" style={{ color: C.onInk2 }}>
+                {t('practice.reviewEmpty')}
+              </Txt>
             )}
           </View>
         </View>
-        <Button testID="practice-review" kind="sun" label={t('practice.reviewStart')} disabled={!learned.length} onPress={() => router.push('/practice/review')} />
+        <Button testID="practice-review" kind="neon" label={t('practice.reviewStart')} disabled={!learned.length} onPress={() => router.push('/practice/review')} />
       </Card>
 
       {/* Conversations */}
@@ -139,13 +139,12 @@ export default function PracticeLab() {
           <Txt variant="small">{t('practice.reviewEmpty')}</Txt>
         )}
       </View>
-    </Screen>
+    </LargeTitleScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: S.sm, paddingTop: S.sm },
-  review: { gap: S.md, backgroundColor: '#FFFCF3', borderColor: C.sun, borderWidth: 2 },
+  review: { gap: S.md, backgroundColor: C.ink, borderColor: C.ink },
   reviewRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   section: { gap: S.sm },

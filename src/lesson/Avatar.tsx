@@ -6,12 +6,12 @@ import { C, F, HUES } from '../ui/theme';
 import { Txt } from '../ui/Txt';
 
 const ROLE_HUE: Record<CastRole, keyof typeof HUES> = {
-  ngaali: 'sun',
-  elder: 'plum',
-  friend: 'leaf',
-  parent: 'clay',
-  rider: 'lake',
-  seller: 'teal',
+  ngaali: 'gold',
+  elder: 'maroon',
+  friend: 'neon',
+  parent: 'tomato',
+  rider: 'berry',
+  seller: 'coral',
 };
 
 export function Avatar({ role, name, size = 40 }: { role: CastRole; name: string; size?: number }) {

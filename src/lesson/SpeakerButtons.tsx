@@ -33,7 +33,7 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
         onPress={() => playClip(id, true)}
         style={({ pressed }) => [styles.slow, { width: size * 0.78, height: size * 0.78, borderRadius: size * 0.39 }, pressed && styles.pressed]}
       >
-        <MaterialCommunityIcons name="turtle" size={size * 0.42} color={C.ink} />
+        <MaterialCommunityIcons name="turtle" size={size * 0.42} color="#FFFFFF" />
       </Pressable>
     </View>
   );
@@ -42,6 +42,6 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   btn: { backgroundColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  slow: { backgroundColor: C.sun, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
+  slow: { backgroundColor: C.tomato, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
   pressed: { transform: [{ scale: 0.94 }] },
 });

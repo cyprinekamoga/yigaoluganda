@@ -74,6 +74,7 @@ export const sv: Record<Key, string> = {
   'lesson.newPhrase': 'Ny fras',
   'lesson.literally': 'Ordagrant',
   'lesson.goodToKnow': 'Bra att veta',
+  'lesson.didYouKnow': 'Visste du?',
   'lesson.cultureTip': 'Kulturtips',
   'lesson.choiceRead': 'Vilket är ”{meaning}”?',
   'lesson.choiceListen': 'Vilket hör du?',

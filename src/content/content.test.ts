@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DIALOGUES, LESSONS, PHRASES, SENTENCES, SOUND_PAIRS, TIPS, UNITS, type T } from './index';
+import { DIALOGUES, FACTS, LESSONS, PHRASES, SENTENCES, SOUND_PAIRS, TIPS, UNITS, type T } from './index';
 import { buildLesson, MAX_STEPS, MIN_STEPS } from '../logic/generator';
 import { normalize } from '../logic/text';
 
@@ -97,6 +97,12 @@ describe('content', () => {
         expect(new Set(forms).size).toBe(forms.length);
       }
     }
+  });
+
+  it('has fun facts in English and Swedish with unique ids', () => {
+    expect(FACTS.length).toBeGreaterThanOrEqual(10);
+    expect(new Set(FACTS.map((f) => f.id)).size).toBe(FACTS.length);
+    for (const f of FACTS) expect(filled(f.text), f.id).toBe(true);
   });
 
   it('builds lessons of about 10 steps, with and without recordings', () => {

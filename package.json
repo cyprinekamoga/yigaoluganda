@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4",
     "typescript": "~6.0.3",
     "vitest": "^5.1.0"
   },
@@ -45,7 +47,8 @@
     "e2e": "node scripts/e2e.mjs",
     "doctor": "expo-doctor",
     "report": "node scripts/content-report.mjs",
-    "audio:prepare": "bash scripts/prepare-audio.sh"
+    "audio:prepare": "bash scripts/prepare-audio.sh",
+    "lint": "expo lint"
   },
   "private": true
 }

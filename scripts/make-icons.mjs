@@ -32,11 +32,11 @@ function head(mono = false, bleed = true) {
     <circle cx="60" cy="51" r="20.5" fill="#A7B1BE"/>
     <path d="M40.6 48 A20 20 0 0 1 79.4 48 Q60 40 40.6 48 Z" fill="#1F1A17"/>
     <ellipse cx="49" cy="55" rx="9" ry="10" fill="#fff"/><ellipse cx="71" cy="55" rx="9" ry="10" fill="#fff"/>
-    <ellipse cx="49" cy="46.2" rx="5.6" ry="2.5" fill="#E03A3E"/><ellipse cx="71" cy="46.2" rx="5.6" ry="2.5" fill="#E03A3E"/>
+    <ellipse cx="49" cy="46.2" rx="5.6" ry="2.5" fill="#D71A06"/><ellipse cx="71" cy="46.2" rx="5.6" ry="2.5" fill="#D71A06"/>
     <path d="M45.5 55 Q50 49 54.5 55 M65.5 55 Q70 49 74.5 55" stroke="#1F1A17" stroke-width="2.8" stroke-linecap="round" fill="none"/>
     <ellipse cx="44.5" cy="62" rx="3" ry="1.6" fill="#F6A9B3"/><ellipse cx="75.5" cy="62" rx="3" ry="1.6" fill="#F6A9B3"/>
     <path d="M56 59.5 L64 59.5 L60 69 Z" fill="#3D4049"/>
-    <ellipse cx="60" cy="73.5" rx="3.1" ry="4.6" fill="#E03A3E"/>`;
+    <ellipse cx="60" cy="73.5" rx="3.1" ry="4.6" fill="#D71A06"/>`;
 }
 
 /** viewBox crop around the head (x 30–90, y 12–88), scaled to `fill` of the canvas. */
@@ -48,14 +48,14 @@ function svg({ size, bg = null, fill = 0.8, mono = false, bleed = true }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${vb}">${rect}${head(mono, bleed)}</svg>`;
 }
 
-const SUN = '#FFC233';
+const BG = '#250104'; // deep maroon
 const jobs = [
-  ['icon.png', svg({ size: 1024, bg: SUN, fill: 0.78 })],
+  ['icon.png', svg({ size: 1024, bg: BG, fill: 0.78 })],
   ['android-icon-foreground.png', svg({ size: 1024, fill: 0.56 })],
-  ['android-icon-background.png', `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><rect width="1024" height="1024" fill="${SUN}"/></svg>`],
+  ['android-icon-background.png', `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><rect width="1024" height="1024" fill="${BG}"/></svg>`],
   ['android-icon-monochrome.png', svg({ size: 1024, fill: 0.56, mono: true })],
   ['splash-icon.png', svg({ size: 512, fill: 0.9, bleed: false })],
-  ['favicon.png', svg({ size: 64, bg: SUN, fill: 0.9 })],
+  ['favicon.png', svg({ size: 64, bg: BG, fill: 0.9 })],
 ];
 
 const browser = await chromium.launch();
@@ -67,5 +67,5 @@ for (const [name, markup] of jobs) {
   await page.screenshot({ path: path.join(ASSETS, name), omitBackground: true, clip: { x: 0, y: 0, width: size, height: size } });
   console.log('wrote', name);
 }
-writeFileSync(path.join(ASSETS, 'icon.svg'), svg({ size: 1024, bg: SUN, fill: 0.78 }));
+writeFileSync(path.join(ASSETS, 'icon.svg'), svg({ size: 1024, bg: BG, fill: 0.78 }));
 await browser.close();

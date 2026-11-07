@@ -2,8 +2,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useT } from '../i18n';
-import { C, MAX_W, S } from './theme';
+import { C, F, MAX_W, S } from './theme';
 import { Txt } from './Txt';
+
+/** iOS and the web get a chevron and a centred title; Android keeps its arrow and left-aligned title. */
+const ANDROID = process.env.EXPO_OS === 'android';
 
 export function BackBar({ title, right }: { title?: string; right?: React.ReactNode }) {
   const router = useRouter();
@@ -18,10 +21,10 @@ export function BackBar({ title, right }: { title?: string; right?: React.ReactN
         onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
         style={({ pressed }) => [styles.btn, pressed && { opacity: 0.6 }]}
       >
-        <Ionicons name="arrow-back" size={24} color={C.ink} />
+        <Ionicons name={ANDROID ? 'arrow-back' : 'chevron-back'} size={ANDROID ? 24 : 28} color={C.ink} />
       </Pressable>
       {title ? (
-        <Txt variant="h3" style={styles.title} numberOfLines={1} accessibilityRole="header">
+        <Txt style={[styles.title, !ANDROID && styles.titleCenter]} numberOfLines={1} accessibilityRole="header">
           {title}
         </Txt>
       ) : (
@@ -35,6 +38,7 @@ export function BackBar({ title, right }: { title?: string; right?: React.ReactN
 const styles = StyleSheet.create({
   bar: { flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: MAX_W, alignSelf: 'center', paddingHorizontal: S.sm, paddingVertical: S.xs, gap: S.sm },
   btn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: 22 },
-  title: { flex: 1 },
+  title: { flex: 1, ...F.semi, fontSize: 17, lineHeight: 22, color: C.ink },
+  titleCenter: { textAlign: 'center' },
   right: { minWidth: 44, alignItems: 'flex-end' },
 });

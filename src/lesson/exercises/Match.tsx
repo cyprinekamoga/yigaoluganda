@@ -23,7 +23,7 @@ export function MatchStep({ step, locked, onResult, onMistake }: ExerciseProps<M
   const [matched, setMatched] = useState<string[]>([]);
   const [bad, setBad] = useState<{ lg: string; tr: string } | null>(null);
   const mistakes = useRef(0);
-  const shake = useRef(new Animated.Value(0)).current;
+  const [shake] = useState(() => new Animated.Value(0));
 
   const tap = (side: Side, id: string) => {
     if (locked || matched.includes(id)) return;
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   cols: { flexDirection: 'row', gap: S.md },
   col: { flex: 1, gap: S.md },
   card: { minHeight: 72, borderRadius: R.lg, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, padding: S.md, justifyContent: 'center' },
-  sel: { borderColor: C.ink, backgroundColor: C.sunSoft },
+  sel: { borderColor: C.ink, backgroundColor: C.neonSoft },
   bad: { borderColor: C.red, backgroundColor: C.redSoft },
   done: { borderColor: C.leafSoft, backgroundColor: C.leafSoft, opacity: 0.7 },
   lg: { ...F.semi, fontSize: 18, color: C.ink },

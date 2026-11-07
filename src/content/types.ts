@@ -116,7 +116,7 @@ export type SceneId =
   | 'meal'
   | 'journey';
 
-export type Hue = 'sun' | 'leaf' | 'lake' | 'clay' | 'plum' | 'teal';
+export type Hue = 'tomato' | 'maroon' | 'neon' | 'gold' | 'coral' | 'berry';
 
 export interface Chapter {
   id: string;
@@ -131,6 +131,12 @@ export interface Chapter {
   lessons: Lesson[];
   /** Checkpoint chapters unlock only when every other chapter in the unit is complete. */
   checkpoint?: boolean;
+}
+
+/** A "Did you know?" fun fact about Uganda or Buganda, shown in lessons. */
+export interface Fact {
+  id: string;
+  text: T;
 }
 
 export interface Root {

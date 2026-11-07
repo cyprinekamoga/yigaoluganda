@@ -1,12 +1,15 @@
 import { Text, type TextProps, type TextStyle, StyleSheet } from 'react-native';
-import { C, F } from './theme';
+import { C, F, TRACK } from './theme';
 
-export type Variant = 'hero' | 'title' | 'h2' | 'h3' | 'body' | 'strong' | 'small' | 'caption' | 'lg' | 'lgBig' | 'label';
+export type Variant = 'largeTitle' | 'hero' | 'title' | 'h2' | 'h3' | 'body' | 'strong' | 'small' | 'caption' | 'lg' | 'lgBig' | 'label';
 
 const V: Record<Variant, TextStyle> = {
-  hero: { ...F.display, fontSize: 34, lineHeight: 40, color: C.ink },
-  title: { ...F.display, fontSize: 28, lineHeight: 34, color: C.ink },
-  h2: { ...F.heading, fontSize: 22, lineHeight: 28, color: C.ink },
+  /** iOS "Large Title": 34 pt bold. */
+  largeTitle: { ...F.heading, fontSize: 34, lineHeight: 41, color: C.ink, letterSpacing: TRACK.largeTitle },
+  hero: { ...F.heading, fontSize: 34, lineHeight: 41, color: C.ink, letterSpacing: TRACK.largeTitle },
+  /** iOS "Title 1" and "Title 2". */
+  title: { ...F.heading, fontSize: 28, lineHeight: 34, color: C.ink, letterSpacing: TRACK.title },
+  h2: { ...F.heading, fontSize: 22, lineHeight: 28, color: C.ink, letterSpacing: TRACK.h2 },
   h3: { ...F.heading, fontSize: 18, lineHeight: 23, color: C.ink },
   body: { ...F.body, fontSize: 16, lineHeight: 24, color: C.ink },
   strong: { ...F.semi, fontSize: 16, lineHeight: 23, color: C.ink },

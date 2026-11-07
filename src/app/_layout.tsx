@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initAudio } from '@/audio/engine';
 import { useApp } from '@/state/store';
@@ -11,13 +11,10 @@ SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
   // No custom fonts to load: the app uses the system font (San Francisco on Apple devices).
-  const [hydrated, setHydrated] = useState(() => useApp.persist.hasHydrated());
-
-  useEffect(() => {
-    const unsub = useApp.persist.onFinishHydration(() => setHydrated(true));
-    setHydrated(useApp.persist.hasHydrated());
-    return unsub;
-  }, []);
+  const hydrated = useSyncExternalStore(
+    (onChange) => useApp.persist.onFinishHydration(onChange),
+    () => useApp.persist.hasHydrated(),
+  );
 
   const ready = hydrated;
 

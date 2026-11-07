@@ -6,14 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { preloadClips, releaseClips } from '../audio/engine';
 import { completeFeedback, correctFeedback, wrongFeedback } from '../audio/feedback';
 import { useT } from '../i18n';
-import { GRADED, phrasesInStep, retryStep, type GenContext, type Step } from '../logic/generator';
+import { phrasesInStep, retryStep, type GenContext, type Step } from '../logic/generator';
 import { regenHearts } from '../logic/progress';
 import { useApp, type Reward } from '../state/store';
 import { Button } from '../ui/Button';
 import { HeartIcon } from '../ui/Icons';
 import { Ngaali } from '../ui/Ngaali';
 import { Sheet } from '../ui/Sheet';
-import { HeartsSheet } from '../ui/StatsBar';
+import { HeartsSheet, useNow } from '../ui/StatsBar';
 import { C, F, MAX_W, R, S } from '../ui/theme';
 import { Txt } from '../ui/Txt';
 import { Complete } from './Complete';
@@ -39,7 +39,8 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const [feedback, setFeedback] = useState<{ result: Result; heartLost: boolean } | null>(null);
   const [reward, setReward] = useState<Reward | null>(null);
   const [quitOpen, setQuitOpen] = useState(false);
-  const [outOfHearts, setOutOfHearts] = useState(false);
+  // Opening a lesson with no hearts left shows the out-of-hearts sheet straight away.
+  const [outOfHearts, setOutOfHearts] = useState(() => mode.kind === 'lesson' && regenHearts(useApp.getState().stats, Date.now()).hearts <= 0);
   const attempts = useRef(0);
   const mistakes = useRef(0);
   const retried = useRef(new Set<number>());
@@ -52,7 +53,8 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const completeLesson = useApp((s) => s.completeLesson);
   const completePractice = useApp((s) => s.completePractice);
   const stats = useApp((s) => s.stats);
-  const hearts = regenHearts(stats, Date.now()).hearts;
+  const now = useNow(5_000);
+  const hearts = regenHearts(stats, now).hearts;
   const usesHearts = mode.kind === 'lesson';
 
   const step = queue[index];
@@ -63,13 +65,6 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
     preloadClips(ids);
     return () => releaseClips();
   }, [steps]);
-
-  // Entering a lesson with no hearts left.
-  useEffect(() => {
-    if (usesHearts && hearts <= 0) setOutOfHearts(true);
-    // Only on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (step?.kind === 'intro') meet([step.phraseId]);
@@ -230,7 +225,7 @@ const styles = StyleSheet.create({
   top: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingHorizontal: S.lg, paddingVertical: S.sm, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
   close: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   bar: { flex: 1, height: 14, borderRadius: R.pill, backgroundColor: C.paperDeep, overflow: 'hidden' },
-  fillBar: { height: 14, borderRadius: R.pill, backgroundColor: C.leaf },
+  fillBar: { height: 14, borderRadius: R.pill, backgroundColor: C.tomato },
   hearts: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 48 },
   heartsText: { ...F.semi, fontSize: 17, color: C.redDeep },
   practiceTag: { backgroundColor: C.leafSoft, paddingHorizontal: 10, paddingVertical: 4, borderRadius: R.pill },

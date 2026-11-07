@@ -1,4 +1,4 @@
-import type { Chapter, Dialogue, Lesson, Phrase, Root, Sentence, SoundPair, Tip, Unit } from './types';
+import type { Chapter, Dialogue, Fact, Lesson, Phrase, Root, Sentence, SoundPair, Tip, Unit } from './types';
 
 import chapters from '../../content/unit-1/chapters.json';
 import phrases from '../../content/unit-1/phrases.json';
@@ -7,6 +7,7 @@ import soundPairs from '../../content/unit-1/sound-pairs.json';
 import tips from '../../content/unit-1/tips.json';
 import dialogues from '../../content/unit-1/dialogues.json';
 import roots from '../../content/unit-1/roots.json';
+import facts from '../../content/facts.json';
 
 export * from './types';
 
@@ -25,6 +26,9 @@ export const UNIT_1: Unit = {
 };
 
 export const UNITS: Unit[] = [UNIT_1];
+
+/** Fun facts about Uganda and Buganda, shown in order so none repeats until all have been seen. */
+export const FACTS = facts as Fact[];
 
 function indexBy<V extends { id: string }>(items: V[]): Record<string, V> {
   const out: Record<string, V> = {};

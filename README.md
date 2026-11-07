@@ -6,14 +6,14 @@ A mobile app for learning Luganda with **Ngaali**, the crested crane. It runs on
 It is for absolute beginners, diaspora heritage learners, travellers and anyone curious about the language.
 
 <p>
-<img src="docs/screenshots/07-home-progress.png" width="200" alt="Home: chapter tiles with progress rings">
+<img src="docs/screenshots/02-home.png" width="200" alt="Learn tab with its large title, stats and chapter tiles">
+<img src="docs/screenshots/04-intro.png" width="200" alt="New phrase with a Did you know? fact about Uganda">
 <img src="docs/screenshots/06-dialogue.png" width="200" alt="A roleplay conversation">
-<img src="docs/screenshots/06-feedback.png" width="200" alt="Feedback on a wrong answer, with a hint about long and short sounds">
 <img src="docs/screenshots/08-practice.png" width="200" alt="Practice Lab">
 </p>
 <p>
 <img src="docs/screenshots/03-chapter.png" width="200" alt="Chapter page">
-<img src="docs/screenshots/06-build.png" width="200" alt="Word bank sentence builder">
+<img src="docs/screenshots/06-feedback.png" width="200" alt="Feedback on a wrong answer, with a hint about long and short sounds">
 <img src="docs/screenshots/10-phrasebook.png" width="200" alt="Phrasebook">
 <img src="docs/screenshots/12-profile.png" width="200" alt="Profile with streak, XP, gems and achievements">
 </p>
@@ -26,7 +26,7 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 
 | PRD area | What was built |
 |---|---|
-| **Navigation** | Four tabs: **Learn** (home grid), **Practice** (Practice Lab), **Phrasebook** (dictionary) and **Profile** |
+| **Navigation** | Four tabs: **Learn** (home grid), **Practice** (Practice Lab), **Phrasebook** (dictionary) and **Profile**. Each tab has an iOS-style large title that folds into the top bar as you scroll, the same on iOS, Android and web |
 | **Home** | A stats bar with 🔥 streak, 💎 gems and ❤️ hearts, then Ngaali greeting you by name with a tip. Below that, Unit 1 as a 2-column grid of 12 chapter tiles. Each tile has its own Ngaali illustration (bowing to an elder, riding a boda-boda, holding a plate of matooke, …), a segmented progress ring with one segment per lesson, and a status: *Locked, Unlocked, Ready to start, Active, Unfinished* or *Completed* |
 | **Non-linear unlocking** | Chapters 1–3 are open from the start, and each chapter you finish opens the next locked one, so you choose the order. The checkpoint (chapter 12) opens after chapters 1–11 |
 | **Curriculum** | Unit 1, *Absolute Foundations*: the 12 chapters from the PRD, in 26 lessons. It has 93 phrases, 49 sentences, 12 roleplay conversations and 22 culture tips, all in English and Swedish |
@@ -38,7 +38,9 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
 | **Profile** | Streak, XP, gems, lessons, phrases met, this week's activity, achievements and friends |
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
+| **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (23 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
 | **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
+| **Colours** | Deep maroon `#250104` for text, dark cards and the app icon, tomato red `#D71A06` for buttons, hearts and progress, and a touch of neon yellow `#CDF73D` for highlights. Green still means "correct", and gold is kept for medals, XP and Ngaali's crown |
 
 ### Where the app differs from the PRD, and why
 
@@ -72,6 +74,7 @@ Scan the QR code with **Expo Go** on your phone, or press `w` to open it in a br
 |---|---|
 | `npm test` | Unit tests: lesson engine, rules, content checks, colour contrast, translations |
 | `npm run typecheck` | TypeScript check |
+| `npm run lint` | ESLint (Expo's config) |
 | `npm run doctor` | Checks Expo dependencies and config |
 | `npm run audio` | Rebuilds the list of recordings and `AUDIO_TODO.md` |
 | `npm run report` | Rebuilds `content/CONTENT_REPORT.md` |
@@ -102,6 +105,7 @@ All content is plain JSON in [`content/unit-1/`](content/unit-1). `npm test` tel
 - `chapters.json`: chapters and their lessons. Each lesson lists its new `phrases`, plus `review`, `sentences`, `sounds`, `tip` and `dialogue`.
 - `dialogues.json`: roleplay conversations. Each `choose` line needs exactly one `correct` option, and every wrong option needs a `why`.
 - `tips.json`, `sound-pairs.json`, `roots.json`: culture tips, long/short sound pairs and the roots guide.
+- [`content/facts.json`](content/facts.json): the "Did you know?" fun facts about Uganda and Buganda, each in English and Swedish.
 
 The app builds each lesson's exercises from these files automatically.
 
@@ -148,6 +152,7 @@ The previous web version of the app, based on the book *Luganda för beginners* 
 - XP, ädelstenar, hjärtan, dagar i rad och prestationer.
 - Ett övningslabb med repetition som fyller på hjärtan.
 - En parlör som fungerar offline och har en guide till ordstammar och prefix.
+- ”Visste du?”: en rolig fakta om Uganda eller Buganda på varje sida med en ny fras (`content/facts.json`).
 
 **Starta appen** (Node.js 20 eller senare):
 

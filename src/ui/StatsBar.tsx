@@ -28,7 +28,7 @@ function Pill({ icon, value, label, onPress, testID }: { icon: React.ReactNode; 
 }
 
 export function useNow(intervalMs = 15_000) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), intervalMs);
     return () => clearInterval(id);
@@ -46,9 +46,9 @@ export function StatsBar() {
   const streak = visibleStreak(stats, dayKey(new Date(now)));
   return (
     <View style={styles.bar}>
-      <Pill testID="stat-streak" icon={<FlameIcon off={streak === 0} />} value={streak} label={t('stats.streakA11y', { n: streak })} />
-      <Pill testID="stat-gems" icon={<GemIcon />} value={stats.gems} label={t('stats.gemsA11y', { n: stats.gems })} />
-      <Pill testID="stat-hearts" icon={<HeartIcon off={hearts === 0} />} value={hearts} label={t('stats.heartsA11y', { n: hearts })} onPress={() => setOpen(true)} />
+      <Pill testID="stat-streak" icon={<FlameIcon size={19} off={streak === 0} />} value={streak} label={t('stats.streakA11y', { n: streak })} />
+      <Pill testID="stat-gems" icon={<GemIcon size={19} />} value={stats.gems} label={t('stats.gemsA11y', { n: stats.gems })} />
+      <Pill testID="stat-hearts" icon={<HeartIcon size={19} off={hearts === 0} />} value={hearts} label={t('stats.heartsA11y', { n: hearts })} onPress={() => setOpen(true)} />
       <HeartsSheet visible={open} onClose={() => setOpen(false)} />
     </View>
   );
@@ -107,8 +107,8 @@ export function HeartsSheet({ visible, onClose, out = false }: { visible: boolea
 }
 
 const styles = StyleSheet.create({
-  bar: { flexDirection: 'row', justifyContent: 'flex-end', gap: S.sm },
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, minHeight: 40, borderRadius: R.pill, backgroundColor: C.card, borderWidth: 1, borderColor: C.line },
-  value: { ...F.semi, fontSize: 16, color: C.ink },
+  bar: { flexDirection: 'row', justifyContent: 'flex-end', gap: 6 },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 10, minHeight: 34, borderRadius: R.pill, backgroundColor: C.card, borderWidth: 1, borderColor: C.line },
+  value: { ...F.semi, fontSize: 15, color: C.ink },
   hearts: { flexDirection: 'row', gap: S.sm },
 });

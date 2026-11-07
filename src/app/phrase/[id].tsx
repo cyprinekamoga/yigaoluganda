@@ -54,7 +54,7 @@ export default function PhraseScreen() {
         <Txt variant="label">{t('phrase.memory')}</Txt>
         <View style={styles.meter} accessibilityLabel={card ? `${t('phrase.memory')}: ${box} / ${MAX_BOX}` : t('phrase.notLearned')}>
           {Array.from({ length: MAX_BOX }, (_, i) => (
-            <View key={i} style={[styles.seg, { backgroundColor: i < box ? C.leaf : C.leafSoft }]} />
+            <View key={i} style={[styles.seg, { backgroundColor: i < box ? C.tomato : C.tomatoSoft }]} />
           ))}
         </View>
         <Txt variant="small">{card ? `${t('phrase.learned')} · ${box}/${MAX_BOX}` : t('phrase.notLearned')}</Txt>

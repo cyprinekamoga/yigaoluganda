@@ -3,6 +3,7 @@ import { PHRASES } from '../../content';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
+import { FunFact } from '../../ui/FunFact';
 import { Ngaali } from '../../ui/Ngaali';
 import { C, R, S } from '../../ui/theme';
 import { Txt } from '../../ui/Txt';
@@ -20,7 +21,7 @@ export function IntroStep({ step, onNext }: ExerciseProps<{ kind: 'intro'; phras
         <View style={styles.head}>
           <Ngaali mood="wave" size={60} />
           <View style={styles.tag}>
-            <Txt variant="label" style={{ color: C.sunDeep }}>
+            <Txt variant="label" style={{ color: C.ink }}>
               {t('lesson.newPhrase')}
             </Txt>
           </View>
@@ -46,6 +47,10 @@ export function IntroStep({ step, onNext }: ExerciseProps<{ kind: 'intro'; phras
             <Txt variant="body">{tr(p.note)}</Txt>
           </View>
         )}
+        {/* Fills the empty space under the card with a fact about Uganda or Buganda. */}
+        <View style={styles.fact}>
+          <FunFact />
+        </View>
       </ScrollView>
       <Footer>
         <Button testID="continue" label={t('common.continue')} onPress={onNext} />
@@ -56,9 +61,10 @@ export function IntroStep({ step, onNext }: ExerciseProps<{ kind: 'intro'; phras
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  body: { padding: S.lg, gap: S.lg, width: '100%', maxWidth: 640, alignSelf: 'center' },
+  body: { padding: S.lg, gap: S.lg, width: '100%', maxWidth: 640, alignSelf: 'center', flexGrow: 1 },
+  fact: { marginTop: 'auto', paddingTop: S.sm },
   head: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  tag: { backgroundColor: C.sunSoft, paddingHorizontal: 12, paddingVertical: 6, borderRadius: R.pill },
+  tag: { backgroundColor: C.neon, paddingHorizontal: 12, paddingVertical: 6, borderRadius: R.pill },
   card: { gap: S.md, padding: S.xl },
   rule: { height: 1, backgroundColor: C.line },
   note: { gap: S.xs, backgroundColor: C.paperDeep, padding: S.lg, borderRadius: R.lg },

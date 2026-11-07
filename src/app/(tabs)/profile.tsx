@@ -10,8 +10,8 @@ import { BadgeMedal } from '@/ui/Badge';
 import { Card } from '@/ui/Card';
 import { FlameIcon, GemIcon, XpIcon } from '@/ui/Icons';
 import { Ngaali } from '@/ui/Ngaali';
-import { Screen } from '@/ui/Screen';
-import { C, F, R, S } from '@/ui/theme';
+import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
+import { C, F, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
 function compact(n: number) {
@@ -48,19 +48,24 @@ export default function Profile() {
   const earned = BADGES.filter((b) => badges[b.id]).length;
 
   return (
-    <Screen testID="screen-profile">
-      <View style={styles.head}>
+    <LargeTitleScreen
+      testID="screen-profile"
+      title={t('profile.title')}
+      trailing={
+        <Pressable testID="open-settings" onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel={t('profile.settings')} style={styles.gear} hitSlop={8}>
+          <Ionicons name="settings-outline" size={22} color={C.ink} />
+        </Pressable>
+      }
+    >
+      <Card style={styles.head}>
         <Ngaali mood="idle" size={64} />
         <View style={{ flex: 1 }}>
-          <Txt variant="title" accessibilityRole="header" numberOfLines={1}>
+          <Txt variant="h2" numberOfLines={1}>
             {profile.name}
           </Txt>
           <Txt variant="small">{t('profile.since', { date: since })}</Txt>
         </View>
-        <Pressable testID="open-settings" onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel={t('profile.settings')} style={styles.gear} hitSlop={8}>
-          <Ionicons name="settings-outline" size={24} color={C.ink} />
-        </Pressable>
-      </View>
+      </Card>
 
       <View style={styles.tiles}>
         <StatTile testID="tile-streak" icon={<FlameIcon size={26} off={visibleStreak(stats, today) === 0} />} label={t('profile.streak')} value={visibleStreak(stats, today)} sub={t('profile.best', { n: stats.bestStreak })} />
@@ -130,13 +135,13 @@ export default function Profile() {
           <Txt variant="small">{t('profile.friendsBody')}</Txt>
         </Card>
       </View>
-    </Screen>
+    </LargeTitleScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  head: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingTop: S.sm },
-  gear: { width: 44, height: 44, borderRadius: 22, backgroundColor: C.card, borderWidth: 1, borderColor: C.line, alignItems: 'center', justifyContent: 'center' },
+  head: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingVertical: S.md },
+  gear: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.card, borderWidth: 1, borderColor: C.line, alignItems: 'center', justifyContent: 'center' },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   tile: { width: '31.6%', flexGrow: 1, gap: 2, padding: S.md, alignItems: 'flex-start' },
   tileValue: { ...F.semi, fontSize: 24, lineHeight: 30, color: C.ink },
@@ -152,5 +157,5 @@ const styles = StyleSheet.create({
   friendRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   rank: { ...F.heading, fontSize: 18, color: C.sunDeep, width: 18 },
   youDot: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  youText: { ...F.heading, fontSize: 18, color: C.sun },
+  youText: { ...F.heading, fontSize: 18, color: C.neon },
 });
