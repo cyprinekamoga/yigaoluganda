@@ -93,5 +93,5 @@ const styles = StyleSheet.create({
   optionPicked: { borderColor: C.ink, backgroundColor: '#FFFDF8' },
   optionRight: { borderColor: C.leaf, backgroundColor: C.leafSoft },
   optionWrong: { borderColor: C.red, backgroundColor: C.redSoft },
-  optionText: { fontFamily: F.semi, fontSize: 22, letterSpacing: 0.6, color: C.ink },
+  optionText: { ...F.semi, fontSize: 22, letterSpacing: 0.6, color: C.ink },
 });

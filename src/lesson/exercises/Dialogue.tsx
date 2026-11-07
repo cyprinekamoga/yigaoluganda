@@ -171,10 +171,10 @@ const styles = StyleSheet.create({
   bubble: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: R.lg, gap: 2, flexShrink: 1 },
   theirs: { backgroundColor: C.card, borderWidth: 1, borderColor: C.line, borderBottomLeftRadius: 6 },
   mine: { backgroundColor: C.ink, borderBottomRightRadius: 6, maxWidth: '85%' },
-  lg: { fontFamily: F.semi, fontSize: 18, lineHeight: 24, color: C.ink },
-  mineTr: { fontFamily: F.body, fontSize: 14, lineHeight: 20, color: '#E9DEC9' },
+  lg: { ...F.semi, fontSize: 18, lineHeight: 24, color: C.ink },
+  mineTr: { ...F.body, fontSize: 14, lineHeight: 20, color: '#E9DEC9' },
   why: { flexDirection: 'row', gap: S.sm, alignItems: 'flex-start', backgroundColor: C.redSoft, padding: S.md, borderRadius: R.md },
   option: { minHeight: 52, borderRadius: R.md, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, paddingHorizontal: S.lg, paddingVertical: 10, justifyContent: 'center' },
   optionWrong: { borderColor: C.redSoft, backgroundColor: C.redSoft },
-  optionText: { fontFamily: F.semi, fontSize: 17, color: C.ink },
+  optionText: { ...F.semi, fontSize: 17, color: C.ink },
 });

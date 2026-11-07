@@ -117,5 +117,5 @@ const styles = StyleSheet.create({
   tile: { minHeight: 48, paddingHorizontal: 16, justifyContent: 'center', borderRadius: R.md, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderBottomWidth: 4 },
   tileChosen: { borderColor: C.ink, borderBottomWidth: 2 },
   tileUsed: { backgroundColor: C.paperDeep, borderColor: C.paperDeep },
-  tileText: { fontFamily: F.semi, fontSize: 18, color: C.ink },
+  tileText: { ...F.semi, fontSize: 18, color: C.ink },
 });

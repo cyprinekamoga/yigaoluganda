@@ -109,6 +109,6 @@ export function HeartsSheet({ visible, onClose, out = false }: { visible: boolea
 const styles = StyleSheet.create({
   bar: { flexDirection: 'row', justifyContent: 'flex-end', gap: S.sm },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, minHeight: 40, borderRadius: R.pill, backgroundColor: C.card, borderWidth: 1, borderColor: C.line },
-  value: { fontFamily: F.semi, fontSize: 16, color: C.ink },
+  value: { ...F.semi, fontSize: 16, color: C.ink },
   hearts: { flexDirection: 'row', gap: S.sm },
 });

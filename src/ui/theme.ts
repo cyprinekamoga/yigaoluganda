@@ -1,3 +1,4 @@
+import type { TextStyle } from 'react-native';
 import type { Hue } from '../content/types';
 
 /**
@@ -48,12 +49,25 @@ export const HUES: Record<Hue, HueSet> = {
   teal: { base: '#13A1A0', soft: '#D5F2F1', deep: '#0C6E6E', track: '#A9E0DE' },
 };
 
+/**
+ * Type: the device's own system font — San Francisco on iPhone, iPad and Mac
+ * (also in Safari), Roboto on Android, Segoe UI on Windows. Nothing is bundled:
+ * on iOS/Android leaving fontFamily unset gives the system font; on the web we
+ * name the system font stack. Styles set the weight, so spread them: `...F.semi`.
+ */
+export const SYSTEM_FONT: string | undefined =
+  process.env.EXPO_OS === 'web'
+    ? 'system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+    : undefined;
+
+const weight = (fontWeight: TextStyle['fontWeight']): TextStyle => (SYSTEM_FONT ? { fontFamily: SYSTEM_FONT, fontWeight } : { fontWeight });
+
 export const F = {
-  display: 'Baloo2_800ExtraBold',
-  heading: 'Baloo2_700Bold',
-  body: 'Lexend_400Regular',
-  medium: 'Lexend_500Medium',
-  semi: 'Lexend_600SemiBold',
+  display: weight('800'),
+  heading: weight('700'),
+  body: weight('400'),
+  medium: weight('500'),
+  semi: weight('600'),
 } as const;
 
 export const R = { sm: 10, md: 16, lg: 22, xl: 28, pill: 999 } as const;

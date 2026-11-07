@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   bar: { flex: 1, height: 14, borderRadius: R.pill, backgroundColor: C.paperDeep, overflow: 'hidden' },
   fillBar: { height: 14, borderRadius: R.pill, backgroundColor: C.leaf },
   hearts: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 48 },
-  heartsText: { fontFamily: F.semi, fontSize: 17, color: C.redDeep },
+  heartsText: { ...F.semi, fontSize: 17, color: C.redDeep },
   practiceTag: { backgroundColor: C.leafSoft, paddingHorizontal: 10, paddingVertical: 4, borderRadius: R.pill },
   stage: { flex: 1 },
   sheetRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },

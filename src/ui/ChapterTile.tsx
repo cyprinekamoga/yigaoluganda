@@ -106,6 +106,6 @@ const styles = StyleSheet.create({
   title: { minHeight: 46 },
   foot: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: S.xs, gap: 4 },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: R.pill, flexShrink: 1 },
-  pillText: { fontFamily: F.semi, fontSize: 11.5, lineHeight: 15 },
-  count: { fontFamily: F.semi },
+  pillText: { ...F.semi, fontSize: 11.5, lineHeight: 15 },
+  count: { ...F.semi },
 });

@@ -84,7 +84,7 @@ export default function Profile() {
             const isToday = d === today;
             return (
               <View key={d} style={styles.day} accessible accessibilityLabel={`${d}: ${xp} XP`}>
-                <Txt variant="caption" style={[isToday && { color: C.ink, fontFamily: F.semi }]}>
+                <Txt variant="caption" style={[isToday && { color: C.ink, ...F.semi }]}>
                   {letter}
                 </Txt>
                 <View style={[styles.dayDot, xp > 0 && styles.dayOn, isToday && styles.dayToday]}>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   gear: { width: 44, height: 44, borderRadius: 22, backgroundColor: C.card, borderWidth: 1, borderColor: C.line, alignItems: 'center', justifyContent: 'center' },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   tile: { width: '31.6%', flexGrow: 1, gap: 2, padding: S.md, alignItems: 'flex-start' },
-  tileValue: { fontFamily: F.semi, fontSize: 24, lineHeight: 30, color: C.ink },
+  tileValue: { ...F.semi, fontSize: 24, lineHeight: 30, color: C.ink },
   rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   week: { flexDirection: 'row', justifyContent: 'space-between' },
   day: { alignItems: 'center', gap: 4, flex: 1 },
@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
   dayToday: { borderWidth: 2, borderColor: C.ink },
   badges: { flexDirection: 'row', flexWrap: 'wrap', rowGap: S.lg },
   badge: { width: '25%', alignItems: 'center', gap: 6, paddingHorizontal: 2 },
-  badgeText: { textAlign: 'center', color: C.ink, fontFamily: F.semi },
+  badgeText: { textAlign: 'center', color: C.ink, ...F.semi },
   friendRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  rank: { fontFamily: F.heading, fontSize: 18, color: C.sunDeep, width: 18 },
+  rank: { ...F.heading, fontSize: 18, color: C.sunDeep, width: 18 },
   youDot: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  youText: { fontFamily: F.heading, fontSize: 18, color: C.sun },
+  youText: { ...F.heading, fontSize: 18, color: C.sun },
 });

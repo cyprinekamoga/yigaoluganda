@@ -38,6 +38,7 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
 | **Profile** | Streak, XP, gems, lessons, phrases met, this week's activity, achievements and friends |
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
+| **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
 
 ### Where the app differs from the PRD, and why
 
@@ -124,14 +125,14 @@ src/app/            screens (Expo Router): tabs, chapter, lesson, practice, phra
 src/lesson/         lesson player, feedback panel, the exercise components
 src/logic/          pure, unit-tested rules: generator, spelling distractors, hearts/XP/streak, unlocking, SRS, badges
 src/state/          Zustand store, saved on the device (AsyncStorage)
-src/ui/             Ngaali, chapter illustrations, progress ring, design tokens
+src/ui/             Ngaali, chapter illustrations, progress ring, design tokens (colours, type in theme.ts)
 src/i18n/           English and Swedish interface text
 scripts/            audio, icons, sound effects, content report, e2e
 ```
 
 ### Privacy
 
-There are no accounts, ads, analytics or tracking. Progress and recordings stay on the device. The fonts are bundled, so the app makes no requests to Google. You can erase everything in *Profile → Settings → Reset progress*.
+There are no accounts, ads, analytics or tracking. Progress and recordings stay on the device. You can erase everything in *Profile → Settings → Reset progress*.
 
 The previous web version of the app, based on the book *Luganda för beginners* by Cyprine Kamoga, is in the git history at commit `6a7fad7`.
 

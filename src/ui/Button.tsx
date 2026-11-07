@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   base: { minHeight: 54, borderRadius: R.md, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
   small: { minHeight: 42, paddingHorizontal: 14, borderRadius: R.sm + 2 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  label: { fontFamily: F.heading, fontSize: 18, lineHeight: 22, letterSpacing: 0.2 },
+  label: { ...F.heading, fontSize: 18, lineHeight: 22, letterSpacing: 0.2 },
   smallLabel: { fontSize: 15, lineHeight: 19 },
   disabled: { backgroundColor: C.paperDeep, borderColor: C.paperDeep },
   pressed: { transform: [{ scale: 0.97 }], opacity: 0.92 },

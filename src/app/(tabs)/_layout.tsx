@@ -26,7 +26,7 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: C.ink,
         tabBarInactiveTintColor: C.ink2,
-        tabBarLabelStyle: { fontFamily: F.semi, fontSize: 12, lineHeight: 17 },
+        tabBarLabelStyle: { ...F.semi, fontSize: 12, lineHeight: 17 },
         tabBarStyle: {
           backgroundColor: C.card,
           borderTopColor: C.line,

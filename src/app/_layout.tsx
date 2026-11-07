@@ -1,6 +1,3 @@
-import { Baloo2_700Bold, Baloo2_800ExtraBold } from '@expo-google-fonts/baloo-2';
-import { Lexend_400Regular, Lexend_500Medium, Lexend_600SemiBold } from '@expo-google-fonts/lexend';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -13,13 +10,7 @@ import { C } from '@/ui/theme';
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({
-    Baloo2_700Bold,
-    Baloo2_800ExtraBold,
-    Lexend_400Regular,
-    Lexend_500Medium,
-    Lexend_600SemiBold,
-  });
+  // No custom fonts to load: the app uses the system font (San Francisco on Apple devices).
   const [hydrated, setHydrated] = useState(() => useApp.persist.hasHydrated());
 
   useEffect(() => {
@@ -28,7 +19,7 @@ export default function RootLayout() {
     return unsub;
   }, []);
 
-  const ready = (fontsLoaded || Boolean(fontError)) && hydrated;
+  const ready = hydrated;
 
   useEffect(() => {
     if (!ready) return;

@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
   lang: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.md, borderRadius: R.md, borderWidth: 2, borderColor: C.line, backgroundColor: C.card },
   langOn: { borderColor: C.ink },
   code: { width: 40, height: 32, borderRadius: 8, backgroundColor: C.paperDeep, alignItems: 'center', justifyContent: 'center' },
-  codeText: { fontFamily: F.heading, fontSize: 15, color: C.ink },
-  input: { fontFamily: F.medium, fontSize: 18, color: C.ink, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 54 },
+  codeText: { ...F.heading, fontSize: 15, color: C.ink },
+  input: { ...F.medium, fontSize: 18, color: C.ink, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 54 },
 });

@@ -170,10 +170,10 @@ const styles = StyleSheet.create({
   section: { gap: S.sm },
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.md, backgroundColor: C.card, borderRadius: R.lg, borderWidth: 1, borderColor: C.line, minHeight: 64 },
   dot: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  replay: { fontFamily: F.semi, fontSize: 13, color: C.ink2 },
+  replay: { ...F.semi, fontSize: 13, color: C.ink2 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: R.pill, minHeight: 40, justifyContent: 'center' },
-  chipText: { fontFamily: F.semi, fontSize: 15 },
+  chipText: { ...F.semi, fontSize: 15 },
   lockedCard: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   tipHead: { flexDirection: 'row', alignItems: 'center', gap: S.md },
 });

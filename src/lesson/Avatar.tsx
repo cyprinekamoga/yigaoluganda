@@ -29,7 +29,7 @@ export function Avatar({ role, name, size = 40 }: { role: CastRole; name: string
   }
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: h.deep, alignItems: 'center', justifyContent: 'center' }}>
-      <Txt style={{ fontFamily: F.heading, fontSize: size * 0.45, color: '#fff', lineHeight: size * 0.6 }}>{name.charAt(0)}</Txt>
+      <Txt style={{ ...F.heading, fontSize: size * 0.45, color: '#fff', lineHeight: size * 0.6 }}>{name.charAt(0)}</Txt>
     </View>
   );
 }

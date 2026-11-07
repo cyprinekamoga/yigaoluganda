@@ -155,6 +155,6 @@ const styles = StyleSheet.create({
   compare: { gap: S.md },
   compareRow: { flexDirection: 'row', gap: S.md },
   playBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 48, borderRadius: R.pill, backgroundColor: C.sunSoft },
-  playText: { fontFamily: F.semi, fontSize: 15, color: C.ink },
+  playText: { ...F.semi, fontSize: 15, color: C.ink },
   rate: { flexDirection: 'row', gap: S.md },
 });

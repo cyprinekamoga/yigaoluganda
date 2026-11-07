@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
   sel: { borderColor: C.ink, backgroundColor: C.sunSoft },
   bad: { borderColor: C.red, backgroundColor: C.redSoft },
   done: { borderColor: C.leafSoft, backgroundColor: C.leafSoft, opacity: 0.7 },
-  lg: { fontFamily: F.semi, fontSize: 18, color: C.ink },
-  tr: { fontFamily: F.body, fontSize: 16, color: C.ink },
+  lg: { ...F.semi, fontSize: 18, color: C.ink },
+  tr: { ...F.body, fontSize: 16, color: C.ink },
 });

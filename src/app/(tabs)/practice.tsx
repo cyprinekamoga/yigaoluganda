@@ -154,5 +154,5 @@ const styles = StyleSheet.create({
   note: { flexDirection: 'row', gap: S.md, alignItems: 'flex-start', backgroundColor: C.paperDeep },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 42, borderRadius: R.pill, backgroundColor: C.card, borderWidth: 1, borderColor: C.line },
-  chipText: { fontFamily: F.semi, fontSize: 15, color: C.ink },
+  chipText: { ...F.semi, fontSize: 15, color: C.ink },
 });

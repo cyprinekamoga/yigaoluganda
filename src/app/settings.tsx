@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   seg: { flexDirection: 'row', backgroundColor: C.paperDeep, borderRadius: R.md, padding: 4, gap: 4 },
   segBtn: { flex: 1, minHeight: 44, borderRadius: R.sm + 2, alignItems: 'center', justifyContent: 'center' },
   segOn: { backgroundColor: C.ink },
-  segText: { fontFamily: F.semi, fontSize: 15, color: C.ink },
-  input: { fontFamily: F.medium, fontSize: 17, color: C.ink, backgroundColor: C.card, borderWidth: 1.5, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 52 },
+  segText: { ...F.semi, fontSize: 15, color: C.ink },
+  input: { ...F.medium, fontSize: 17, color: C.ink, backgroundColor: C.card, borderWidth: 1.5, borderColor: C.line, borderRadius: R.md, paddingHorizontal: S.lg, minHeight: 52 },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: S.md, minHeight: 44 },
 });

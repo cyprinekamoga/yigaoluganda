@@ -1,7 +1,7 @@
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import type { Hue, SceneId } from '../content/types';
 import { NgaaliArt, type NgaaliArtProps } from './Ngaali';
-import { C, F, HUES } from './theme';
+import { C, HUES, SYSTEM_FONT } from './theme';
 
 /** Chapter tile illustrations: Ngaali acting out each chapter's scenario. */
 
@@ -61,7 +61,7 @@ const SCENES: Record<SceneId, Spec> = {
         <Rect x={62} y={14} width={50} height={26} rx={11} fill="#fff" />
         <Path d="M68 38 L76 38 L64 47 Z" fill="#fff" />
         {['a', 'e', 'i', 'o', 'u'].map((v, i) => (
-          <SvgText key={v} x={71 + i * 8.2} y={31.5} fontSize={11.5} fontFamily={F.heading} fill={h.deep} textAnchor="middle">
+          <SvgText key={v} x={71 + i * 8.2} y={31.5} fontSize={11.5} fontFamily={SYSTEM_FONT} fontWeight="700" fill={h.deep} textAnchor="middle">
             {v}
           </SvgText>
         ))}
@@ -149,8 +149,8 @@ const SCENES: Record<SceneId, Spec> = {
     x: 14, y: 22,
     back: (h) => (
       <G>
-        <SvgText x={96} y={44} fontSize={34} fontFamily={F.display} fill={h.base} textAnchor="middle">?</SvgText>
-        <SvgText x={22} y={40} fontSize={18} fontFamily={F.display} fill={h.track} textAnchor="middle">?</SvgText>
+        <SvgText x={96} y={44} fontSize={34} fontFamily={SYSTEM_FONT} fontWeight="800" fill={h.base} textAnchor="middle">?</SvgText>
+        <SvgText x={22} y={40} fontSize={18} fontFamily={SYSTEM_FONT} fontWeight="800" fill={h.track} textAnchor="middle">?</SvgText>
       </G>
     ),
   },
