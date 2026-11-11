@@ -159,31 +159,33 @@ async function run(viewport, label) {
   await page.getByTestId('lesson-player').waitFor();
   ok(await page.getByTestId('fun-fact').waitFor({ timeout: 3000 }).then(() => true, () => false), 'new-phrase screen shows a fun fact about Uganda');
   ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c02-l1');
-  ok((await page.getByText('+15').count()) > 0, 'perfect lesson gives 15 XP');
+  ok((await page.getByTestId('done-cowries').innerText()).includes('+10'), 'perfect lesson gives 10 cowries');
+  ok((await page.getByTestId('done-summary').innerText()).includes('new phrase'), 'completion lists the phrases learned');
+  ok((await page.getByTestId('done-phrases').count()) > 0, 'completion shows the learned phrases');
   await shot(page, `${label}-05-complete`);
   await page.getByTestId('complete-continue').click();
 
-  // Lesson 2 with one wrong answer: loses a heart, has a roleplay
+  // Lesson 2 with one wrong answer: spills a water pot, has a roleplay
   await page.getByTestId('screen-chapter').waitFor();
   await page.getByTestId('chapter-start').click();
   await page.getByTestId('lesson-player').waitFor();
   ok(await playLesson(page, { wrongOnce: true, shotPrefix: `${label}-06` }), 'finished lesson c02-l2 with a mistake');
-  ok((await page.getByText('+10').count()) > 0, 'non-perfect lesson gives 10 XP');
+  ok((await page.getByTestId('done-cowries').innerText()).includes('+5'), 'lesson with a mistake gives 5 cowries');
   await page.getByTestId('complete-continue').click();
   await page.getByTestId('back').click();
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Completed'), 'chapter 2 shows completed');
   ok((await page.getByTestId('tile-c04').getAttribute('aria-label')).includes('Unlocked'), 'completing a chapter unlocks chapter 4');
-  ok((await page.getByTestId('stat-hearts').getAttribute('aria-label')).includes('4 of 5'), 'one heart was lost');
+  ok((await page.getByTestId('stat-hearts').getAttribute('aria-label')).includes('4 of 5'), 'one water pot was spilled');
   await shot(page, `${label}-07-home-progress`);
 
-  // Practice Lab: review refills hearts
+  // Practice Lab: a review fills the water pots
   await page.getByTestId('tab-practice').click();
   await page.getByTestId('screen-practice').waitFor();
   await shot(page, `${label}-08-practice`);
   await page.getByTestId('practice-review').click();
   ok(await playLesson(page), 'finished a review round');
-  ok(await page.getByText('Your hearts are full again').isVisible(), 'review refills hearts');
+  ok(await page.getByText('Your water pots are full again').isVisible(), 'review fills the water pots');
   await page.getByTestId('complete-continue').click();
   await page.getByTestId('convo-dlg-tea').click();
   ok(await playLesson(page, { shotPrefix: `${label}-09` }), 'replayed a conversation');
@@ -203,7 +205,9 @@ async function run(viewport, label) {
   // Profile and settings
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('screen-profile').waitFor();
-  ok((await page.getByTestId('tile-xp').getAttribute('aria-label')).includes('35'), 'profile shows total XP (15 + 10 + 5 + 5)');
+  ok((await page.getByTestId('tile-gems').getAttribute('aria-label')).includes('19'), 'profile shows total cowries (10 + 5 + 2 + 2)');
+  ok(/Phrases learned: [1-9]/.test(await page.getByTestId('tile-phrases').getAttribute('aria-label')), 'profile shows phrases learned');
+  ok(await page.getByTestId('family-card').isVisible(), 'profile has the practise-with-family card');
   await shot(page, `${label}-12-profile`);
   await page.getByTestId('open-settings').click();
   await page.getByTestId('settings-lang-sv').click();

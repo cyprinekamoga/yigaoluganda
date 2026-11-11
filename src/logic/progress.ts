@@ -1,27 +1,34 @@
 import { diffDays } from './dates';
 
-/** Gamification rules (PRD §6). */
+/**
+ * Game rules. In the app these are drawn from Buganda life:
+ *   hearts → water pots: a wrong answer spills one; they fill again over time,
+ *            or all at once when you "fetch water" with a quick review
+ *   gems   → cowries: the shells once used as money in Buganda
+ *   streak → drumbeat: your drum beats each day you practise
+ * Progress is counted in phrases learned, not points.
+ */
 export const MAX_HEARTS = 5;
 export const HEART_REGEN_MS = 20 * 60 * 1000;
 export const REFILL_COST = 30;
 
-export const LESSON_XP = 10;
-export const PERFECT_XP = 5;
 export const LESSON_GEMS = 5;
 export const PERFECT_GEMS = 5;
-export const PRACTICE_XP = 5;
 export const PRACTICE_GEMS = 2;
 
 export interface Stats {
-  xp: number;
+  /** Cowries. */
   gems: number;
+  /** Water pots. */
   hearts: number;
-  /** When the next heart started counting (ms). */
+  /** When the next pot started filling (ms). */
   heartsAt: number;
+  /** Drumbeat: days in a row. */
   streak: number;
   bestStreak: number;
   lastActiveDay: string | null;
-  xpByDay: Record<string, number>;
+  /** Lessons and practice rounds finished, per day. */
+  activityByDay: Record<string, number>;
   perfectLessons: number;
   dialoguesDone: number;
   recordings: number;
@@ -29,14 +36,13 @@ export interface Stats {
 
 export function initialStats(now: number): Stats {
   return {
-    xp: 0,
     gems: 0,
     hearts: MAX_HEARTS,
     heartsAt: now,
     streak: 0,
     bestStreak: 0,
     lastActiveDay: null,
-    xpByDay: {},
+    activityByDay: {},
     perfectLessons: 0,
     dialoguesDone: 0,
     recordings: 0,
@@ -74,12 +80,12 @@ export function buyRefill(s: Stats, now: number): Stats | null {
   return { ...refillHearts(s, now), gems: s.gems - REFILL_COST };
 }
 
-export function lessonReward(perfect: boolean): { xp: number; gems: number } {
-  return { xp: LESSON_XP + (perfect ? PERFECT_XP : 0), gems: LESSON_GEMS + (perfect ? PERFECT_GEMS : 0) };
+export function lessonReward(perfect: boolean): { gems: number } {
+  return { gems: LESSON_GEMS + (perfect ? PERFECT_GEMS : 0) };
 }
 
-/** Record an activity on `today`: adds XP and gems and moves the streak. */
-export function recordActivity(s: Stats, today: string, xp: number, gems: number): Stats {
+/** Record a finished lesson or practice round on `today`: adds cowries and moves the drumbeat. */
+export function recordActivity(s: Stats, today: string, gems: number): Stats {
   let streak = s.streak;
   if (s.lastActiveDay !== today) {
     const gap = s.lastActiveDay ? diffDays(s.lastActiveDay, today) : Infinity;
@@ -87,12 +93,11 @@ export function recordActivity(s: Stats, today: string, xp: number, gems: number
   }
   return {
     ...s,
-    xp: s.xp + xp,
     gems: s.gems + gems,
     streak,
     bestStreak: Math.max(s.bestStreak, streak),
     lastActiveDay: today,
-    xpByDay: { ...s.xpByDay, [today]: (s.xpByDay[today] ?? 0) + xp },
+    activityByDay: { ...s.activityByDay, [today]: (s.activityByDay?.[today] ?? 0) + 1 },
   };
 }
 

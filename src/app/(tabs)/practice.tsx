@@ -9,7 +9,7 @@ import { dueIds } from '@/logic/srs';
 import { useApp } from '@/state/store';
 import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
-import { HeartIcon } from '@/ui/Icons';
+import { PotIcon } from '@/ui/Icons';
 import { Ngaali } from '@/ui/Ngaali';
 import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { StatsBar } from '@/ui/StatsBar';
@@ -39,7 +39,7 @@ export default function PracticeLab() {
         {t('practice.subtitle')}
       </Txt>
 
-      {/* Review: spaced repetition, refills hearts */}
+      {/* Review: spaced repetition, fills the water pots */}
       <Card style={styles.review}>
         <View style={styles.reviewRow}>
           <Ngaali mood="think" size={70} />
@@ -49,7 +49,9 @@ export default function PracticeLab() {
             </Txt>
             {learned.length ? (
               <View style={styles.inline}>
-                <HeartIcon size={16} color={C.onTomato} />
+                <View style={styles.potDot}>
+                  <PotIcon size={16} />
+                </View>
                 <Txt variant="small" style={{ color: C.onTomato }}>
                   {t('practice.reviewBody', { n: reviewCount })}
                 </Txt>
@@ -145,6 +147,7 @@ export default function PracticeLab() {
 
 const styles = StyleSheet.create({
   review: { gap: S.md, backgroundColor: C.tomato, borderColor: C.tomato },
+  potDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: C.paper, alignItems: 'center', justifyContent: 'center' },
   reviewRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   section: { gap: S.sm },

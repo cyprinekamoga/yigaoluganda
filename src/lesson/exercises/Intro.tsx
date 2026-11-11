@@ -18,14 +18,7 @@ export function IntroStep({ step, onNext }: ExerciseProps<{ kind: 'intro'; phras
   return (
     <View style={styles.fill}>
       <ScrollView contentContainerStyle={styles.body}>
-        <View style={styles.head}>
-          <Ngaali mood="wave" size={60} />
-          <View style={styles.tag}>
-            <Txt variant="label" style={{ color: C.onNeon }}>
-              {t('lesson.newPhrase')}
-            </Txt>
-          </View>
-        </View>
+        <Ngaali mood="wave" size={60} />
         <Card style={styles.card}>
           <Txt variant="lgBig" testID="intro-lg" accessibilityLanguage="lg">
             {p.lg}
@@ -63,8 +56,6 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   body: { padding: S.lg, gap: S.lg, width: '100%', maxWidth: 640, alignSelf: 'center', flexGrow: 1 },
   fact: { marginTop: 'auto', paddingTop: S.sm },
-  head: { flexDirection: 'row', alignItems: 'center', gap: S.md },
-  tag: { backgroundColor: C.neon, paddingHorizontal: 12, paddingVertical: 6, borderRadius: R.pill },
   card: { gap: S.md, padding: S.xl },
   rule: { height: 1, backgroundColor: C.line },
   note: { gap: S.xs, backgroundColor: C.paperDeep, padding: S.lg, borderRadius: R.lg },

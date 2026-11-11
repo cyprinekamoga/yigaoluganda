@@ -10,7 +10,6 @@ import {
   lessonReward,
   loseHeart as loseHeartRule,
   PRACTICE_GEMS,
-  PRACTICE_XP,
   recordActivity,
   refillHearts,
   regenHearts,
@@ -42,7 +41,7 @@ export interface LessonResult {
 }
 
 export interface Reward {
-  xp: number;
+  /** Cowries earned. */
   gems: number;
   perfect: boolean;
   badges: string[];
@@ -103,7 +102,7 @@ export const useApp = create<AppState>()(
       /** Award any badges the new state has earned. */
       const awardBadges = (): string[] => {
         const s = get();
-        const earned = newlyEarned({ stats: s.stats, done: s.done }, s.badges);
+        const earned = newlyEarned({ stats: s.stats, done: s.done, phrases: Object.keys(s.srs).length }, s.badges);
         if (earned.length) {
           const now = Date.now();
           set({ badges: { ...s.badges, ...Object.fromEntries(earned.map((id) => [id, now])) } });
@@ -145,11 +144,11 @@ export const useApp = create<AppState>()(
         completeLesson: ({ lessonId, graded, mistakes }) => {
           const ref = LESSONS[lessonId];
           const perfect = mistakes === 0;
-          const { xp, gems } = lessonReward(perfect);
+          const { gems } = lessonReward(perfect);
           const accuracy = graded ? Math.max(0, (graded - mistakes) / graded) : 1;
           set((s) => {
             const prev = s.done[lessonId];
-            let stats = recordActivity(regenHearts(s.stats, Date.now()), dayKey(), xp, gems);
+            let stats = recordActivity(regenHearts(s.stats, Date.now()), dayKey(), gems);
             if (perfect) stats = { ...stats, perfectLessons: stats.perfectLessons + 1 };
             if (ref?.lesson.dialogue) stats = { ...stats, dialoguesDone: stats.dialoguesDone + 1 };
             return {
@@ -166,18 +165,18 @@ export const useApp = create<AppState>()(
               opened: ref ? { ...s.opened, [ref.chapter.id]: true } : s.opened,
             };
           });
-          return { xp, gems, perfect, badges: awardBadges() };
+          return { gems, perfect, badges: awardBadges() };
         },
 
         completePractice: (kind) => {
           set((s) => {
-            let stats = recordActivity(s.stats, dayKey(), PRACTICE_XP, PRACTICE_GEMS);
-            // A review round refills hearts (PRD: "refreshed via time delay or review mode").
+            let stats = recordActivity(s.stats, dayKey(), PRACTICE_GEMS);
+            // A review round "fetches water": all water pots are full again.
             if (kind === 'review') stats = refillHearts(stats, Date.now());
             if (kind === 'dialogue') stats = { ...stats, dialoguesDone: stats.dialoguesDone + 1 };
             return { stats };
           });
-          return { xp: PRACTICE_XP, gems: PRACTICE_GEMS, perfect: false, badges: awardBadges(), heartsRefilled: kind === 'review' };
+          return { gems: PRACTICE_GEMS, perfect: false, badges: awardBadges(), heartsRefilled: kind === 'review' };
         },
 
         buyRefill: () => {
@@ -203,7 +202,18 @@ export const useApp = create<AppState>()(
     },
     {
       name: STORE_KEY,
-      version: 1,
+      version: 2,
+      // v1 counted XP per day; v2 counts finished lessons and practice rounds per day.
+      migrate: (persisted, from) => {
+        const s = (persisted ?? {}) as Partial<Data> & { stats?: Partial<Stats> & { xpByDay?: Record<string, number> } };
+        if (from < 2 && s.stats) {
+          const { xpByDay, ...rest } = s.stats as Partial<Stats> & { xpByDay?: Record<string, number>; xp?: number };
+          delete (rest as { xp?: number }).xp;
+          const activityByDay = Object.fromEntries(Object.entries(xpByDay ?? {}).filter(([, v]) => v > 0).map(([d]) => [d, 1]));
+          s.stats = { ...initialStats(Date.now()), ...rest, activityByDay };
+        }
+        return s as Data;
+      },
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (s): Data => ({
         profile: s.profile,

@@ -1,62 +1,75 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PHRASES } from '../content';
 import { useT } from '../i18n';
 import type { Reward } from '../state/store';
 import { BadgeMedal } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { GemIcon, HeartIcon, XpIcon } from '../ui/Icons';
+import { CowrieIcon, PotIcon } from '../ui/Icons';
 import { Ngaali } from '../ui/Ngaali';
-import { C, MAX_W, R, S } from '../ui/theme';
+import { C, F, MAX_W, R, S } from '../ui/theme';
 import { Txt } from '../ui/Txt';
 import { Footer } from './Footer';
 
-function Tile({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <Card style={styles.tile} accessible accessibilityLabel={`${label}: ${value}`}>
-      {icon}
-      <Txt variant="h2">{value}</Txt>
-      <Txt variant="caption">{label}</Txt>
-    </Card>
-  );
-}
-
-export function Complete({ reward, accuracy, practice, onDone }: { reward: Reward; accuracy: number; practice: boolean; onDone: () => void }) {
-  const { t } = useT();
+/**
+ * The end of a lesson: what you can now say, not a score. Lists the phrases the lesson taught
+ * (or, for practice, the ones it went over), then the cowries earned and any new shield.
+ */
+export function Complete({ reward, phrases, practice, onDone }: { reward: Reward; phrases: string[]; practice: boolean; onDone: () => void }) {
+  const { t, tr } = useT();
   const badge = reward.badges[0];
+  const n = phrases.length;
+  const summary = practice ? t('done.practised', { n }) : n === 0 ? t('done.noNew') : n === 1 ? t('done.learnedOne') : t('done.learned', { n });
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']} testID="lesson-complete">
       <ScrollView contentContainerStyle={styles.body}>
-        <Ngaali mood={badge ? 'badge' : 'correct'} size={140} label={t('mascot.label')} />
+        <Ngaali mood={badge ? 'badge' : 'correct'} size={120} label={t('mascot.label')} />
         <Txt variant="hero" style={styles.center} accessibilityRole="header">
-          {practice ? t('done.titlePractice') : t('done.title')}
+          {t('done.heading')}
         </Txt>
-        <View style={styles.tiles}>
-          <Tile icon={<XpIcon size={26} />} label={t('done.xp')} value={`+${reward.xp}`} />
-          <Tile icon={<GemIcon size={26} />} label={t('done.gems')} value={`+${reward.gems}`} />
-          {!practice && <Tile icon={<MaterialCommunityIcons name="bullseye-arrow" size={26} color={C.leafDeep} />} label={t('done.accuracy')} value={`${Math.round(accuracy * 100)}%`} />}
+        <Txt variant="body" style={[styles.center, { color: C.ink2 }]} testID="done-summary">
+          {summary}
+        </Txt>
+
+        {n > 0 && (
+          <Card style={styles.list} testID="done-phrases">
+            {phrases.slice(0, 8).map((id, i) => (
+              <View key={id} style={[styles.phrase, i > 0 && styles.rule]}>
+                <Txt style={styles.lg} accessibilityLanguage="lg">
+                  {PHRASES[id].lg}
+                </Txt>
+                <Txt variant="small" style={{ color: C.ink2 }}>
+                  {tr(PHRASES[id].tr)}
+                </Txt>
+              </View>
+            ))}
+          </Card>
+        )}
+
+        <View style={styles.earned}>
+          <View style={styles.pill} testID="done-cowries" accessible accessibilityLabel={t('done.cowries', { n: reward.gems })}>
+            <CowrieIcon size={22} />
+            <Txt style={styles.pillText}>{t('done.cowries', { n: reward.gems })}</Txt>
+          </View>
+          {reward.perfect && !practice && (
+            <View style={[styles.pill, styles.pillNeon]}>
+              <Txt style={[styles.pillText, { color: C.onNeon }]}>{t('done.perfect')}</Txt>
+            </View>
+          )}
+          {reward.heartsRefilled && (
+            <View style={styles.pill}>
+              <PotIcon size={20} />
+              <Txt style={styles.pillText}>{t('done.heartsRefilled')}</Txt>
+            </View>
+          )}
         </View>
-        {reward.perfect && !practice && (
-          <View style={[styles.banner, { backgroundColor: C.neon }]}>
-            <Txt variant="strong" style={{ color: C.onNeon }}>
-              {t('done.perfect')}
-            </Txt>
-          </View>
-        )}
-        {reward.heartsRefilled && (
-          <View style={[styles.banner, { backgroundColor: C.redSoft }]}>
-            <HeartIcon size={20} />
-            <Txt variant="strong" style={{ color: C.redDeep }}>
-              {t('done.heartsRefilled')}
-            </Txt>
-          </View>
-        )}
+
         {reward.badges.map((id) => (
           <Card key={id} style={styles.badge} testID={`new-badge-${id}`}>
-            <BadgeMedal id={id} earned size={56} />
+            <BadgeMedal id={id} earned size={60} />
             <View style={{ flex: 1 }}>
-              <Txt variant="label" style={{ color: C.sunDeep }}>
+              <Txt variant="label" style={{ color: C.neon }}>
                 {t('done.badge')}
               </Txt>
               <Txt variant="h3">{t(`badge.${id}.title` as never)}</Txt>
@@ -74,10 +87,15 @@ export function Complete({ reward, accuracy, practice, onDone }: { reward: Rewar
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: C.paper },
-  body: { padding: S.lg, gap: S.lg, alignItems: 'center', width: '100%', maxWidth: MAX_W, alignSelf: 'center', paddingTop: S.xxl },
+  body: { padding: S.lg, gap: S.lg, alignItems: 'center', width: '100%', maxWidth: MAX_W, alignSelf: 'center', paddingTop: S.xl },
   center: { textAlign: 'center' },
-  tiles: { flexDirection: 'row', gap: S.md, alignSelf: 'stretch' },
-  tile: { flex: 1, alignItems: 'center', gap: 2, paddingVertical: S.lg },
-  banner: { flexDirection: 'row', alignItems: 'center', gap: S.sm, paddingHorizontal: S.lg, paddingVertical: S.md, borderRadius: R.lg, alignSelf: 'stretch', justifyContent: 'center' },
+  list: { alignSelf: 'stretch', paddingVertical: S.sm },
+  phrase: { paddingVertical: S.sm, gap: 2 },
+  rule: { borderTopWidth: 1, borderTopColor: C.line },
+  lg: { ...F.semi, fontSize: 19, color: C.neon },
+  earned: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 8, borderRadius: R.pill, backgroundColor: C.paperDeep },
+  pillNeon: { backgroundColor: C.neon },
+  pillText: { ...F.semi, fontSize: 15, color: C.ink },
   badge: { flexDirection: 'row', alignItems: 'center', gap: S.md, alignSelf: 'stretch' },
 });

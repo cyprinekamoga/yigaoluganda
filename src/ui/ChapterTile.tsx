@@ -4,7 +4,7 @@ import type { Chapter } from '../content/types';
 import { useT } from '../i18n';
 import type { TileStatus } from '../logic/unlock';
 import { PressCard } from './Card';
-import { ProgressRing } from './ProgressRing';
+import { Beads } from './Beads';
 import { Scene } from './Scene';
 import { C, F, HUES, R, S } from './theme';
 import { Txt } from './Txt';
@@ -46,8 +46,7 @@ export function ChapterTile({
 }) {
   const { t, tr } = useT();
   const h = HUES[chapter.hue];
-  const ring = Math.min(width - S.lg * 2, 150);
-  const stroke = 7;
+  const art = width - S.md * 2;
   const locked = status === 'locked';
   const total = chapter.lessons.length;
   const a11y = [
@@ -64,21 +63,16 @@ export function ChapterTile({
       accessibilityLabel={a11y}
       style={[styles.tile, { width }, status === 'active' && { borderColor: h.base, borderWidth: 2 }]}
     >
-      <View style={styles.ringWrap}>
-        <ProgressRing size={ring} stroke={stroke} segments={total} done={done} color={locked ? C.line : h.base} track={locked ? C.paperDeep : h.track}>
-          <Scene scene={chapter.scene} hue={chapter.hue} size={ring - stroke * 2 - 8} muted={locked} />
-        </ProgressRing>
-        {locked && (
-          <View style={styles.lock}>
-            <Ionicons name="lock-closed" size={18} color={C.ink2} />
-          </View>
-        )}
+      <View style={styles.artWrap}>
+        <Scene scene={chapter.scene} hue={chapter.hue} size={art} muted={locked} />
         {chapter.checkpoint && (
           <View style={[styles.flag, { backgroundColor: locked ? C.paperDeep : C.neon }]}>
             <Ionicons name="flag" size={14} color={locked ? C.ink2 : C.onNeon} />
           </View>
         )}
       </View>
+      {/* One bead per lesson. */}
+      <Beads total={total} done={done} size={10} color={locked ? C.line : h.base} style={styles.beads} />
       <Txt variant="caption" numberOfLines={1} style={{ color: locked ? C.ink2 : h.deep }}>
         {t('home.chapter', { n: chapter.n })} · {chapter.lgTitle}
       </Txt>
@@ -99,10 +93,10 @@ export function ChapterTile({
 }
 
 const styles = StyleSheet.create({
-  tile: { padding: S.md, paddingTop: S.lg, gap: 3, borderRadius: R.xl },
-  ringWrap: { alignItems: 'center', marginBottom: S.sm },
-  lock: { position: 'absolute', bottom: 2, right: '18%', backgroundColor: C.card, borderRadius: 16, width: 32, height: 32, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.line },
-  flag: { position: 'absolute', top: 0, right: '14%', borderRadius: 14, width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
+  tile: { padding: S.md, gap: 3, borderRadius: R.lg },
+  artWrap: { alignItems: 'center' },
+  beads: { alignSelf: 'flex-start', marginVertical: S.sm },
+  flag: { position: 'absolute', top: 6, right: 6, borderRadius: 14, width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
   title: { minHeight: 46 },
   foot: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: S.xs, gap: 4 },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: R.pill, flexShrink: 1 },

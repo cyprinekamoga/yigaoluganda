@@ -6,13 +6,13 @@ export interface Result {
   meaning?: string;
   /** An extra, specific hint (e.g. about long and short sounds). */
   hint?: string;
-  /** Override the panel title. */
+  /** Override the result card's title. */
   title?: string;
 }
 
 export interface ExerciseProps<S> {
   step: S;
-  /** True while the feedback panel is showing. */
+  /** True while the result card is showing. */
   locked: boolean;
   name: string;
   /** Graded answer: shows the feedback panel. */
@@ -21,4 +21,8 @@ export interface ExerciseProps<S> {
   onMistake: () => void;
   /** Non-graded step finished. */
   onNext: () => void;
+  /** The result card, shown in the page right under the answer once it is checked. */
+  after?: React.ReactNode;
+  /** Replaces the step's own footer button (Check becomes Continue). */
+  footer?: React.ReactNode;
 }

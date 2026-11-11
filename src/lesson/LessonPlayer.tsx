@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -10,11 +9,11 @@ import { phrasesInStep, retryStep, type GenContext, type Step } from '../logic/g
 import { regenHearts } from '../logic/progress';
 import { useApp, type Reward } from '../state/store';
 import { Button } from '../ui/Button';
-import { HeartIcon } from '../ui/Icons';
-import { Ngaali } from '../ui/Ngaali';
+import { Beads } from '../ui/Beads';
+import { PotIcon } from '../ui/Icons';
 import { Sheet } from '../ui/Sheet';
-import { HeartsSheet, useNow } from '../ui/StatsBar';
-import { C, F, MAX_W, R, S } from '../ui/theme';
+import { PotsSheet, useNow } from '../ui/StatsBar';
+import { C, F, MAX_W, S } from '../ui/theme';
 import { Txt } from '../ui/Txt';
 import { Complete } from './Complete';
 import { BuildStep } from './exercises/Build';
@@ -24,7 +23,7 @@ import { IntroStep } from './exercises/Intro';
 import { MatchStep } from './exercises/Match';
 import { SpeakStep } from './exercises/Speak';
 import { TipStep } from './exercises/Tip';
-import { FeedbackPanel } from './FeedbackPanel';
+import { FeedbackCard } from './FeedbackCard';
 import type { Result } from './types';
 
 export type PlayMode = { kind: 'lesson'; lessonId: string } | { kind: 'practice'; practice: 'review' | 'dialogue' | 'speak' };
@@ -39,12 +38,11 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const [feedback, setFeedback] = useState<{ result: Result; heartLost: boolean } | null>(null);
   const [reward, setReward] = useState<Reward | null>(null);
   const [quitOpen, setQuitOpen] = useState(false);
-  // Opening a lesson with no hearts left shows the out-of-hearts sheet straight away.
+  // Opening a lesson with every water pot empty shows the empty-pots sheet straight away.
   const [outOfHearts, setOutOfHearts] = useState(() => mode.kind === 'lesson' && regenHearts(useApp.getState().stats, Date.now()).hearts <= 0);
   const attempts = useRef(0);
   const mistakes = useRef(0);
   const retried = useRef(new Set<number>());
-  const [accuracy, setAccuracy] = useState(1);
 
   const name = useApp((s) => s.profile?.name ?? '');
   const meet = useApp((s) => s.meet);
@@ -106,7 +104,6 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
 
   const finish = () => {
     const graded = attempts.current;
-    setAccuracy(graded ? Math.max(0, (graded - mistakes.current) / graded) : 1);
     const rw =
       mode.kind === 'lesson'
         ? completeLesson({ lessonId: mode.lessonId, graded, mistakes: mistakes.current })
@@ -123,14 +120,26 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
 
   const exit = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
-  const progress = useMemo(() => (queue.length ? index / queue.length : 0), [index, queue.length]);
+  // New phrases this lesson introduced, or for practice every phrase it went over.
+  const phrases = useMemo(() => {
+    const ids = mode.kind === 'lesson' ? steps.flatMap((s) => (s.kind === 'intro' ? [s.phraseId] : [])) : steps.flatMap(phrasesInStep);
+    return [...new Set(ids)];
+  }, [steps, mode.kind]);
 
   if (reward) {
-    return <Complete reward={reward} accuracy={accuracy} practice={mode.kind === 'practice'} onDone={exit} />;
+    return <Complete reward={reward} phrases={phrases} practice={mode.kind === 'practice'} onDone={exit} />;
   }
   if (!step) return null;
 
-  const common = { locked: Boolean(feedback), name, onResult, onMistake, onNext: next };
+  const common = {
+    locked: Boolean(feedback),
+    name,
+    onResult,
+    onMistake,
+    onNext: next,
+    after: feedback ? <FeedbackCard result={feedback.result} seed={index} heartLost={feedback.heartLost} /> : undefined,
+    footer: feedback ? <Button testID="feedback-continue" label={t('common.continue')} onPress={next} /> : undefined,
+  };
   let body: React.ReactNode;
   switch (step.kind) {
     case 'intro':
@@ -160,47 +169,36 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']} testID="lesson-player">
       <View style={styles.top}>
-        <Pressable testID="lesson-close" onPress={() => setQuitOpen(true)} accessibilityRole="button" accessibilityLabel={t('common.close')} hitSlop={10} style={styles.close}>
-          <Ionicons name="close" size={28} color={C.ink2} />
-        </Pressable>
-        <View
-          style={styles.bar}
-          accessibilityRole="progressbar"
-          accessibilityValue={{ min: 0, max: queue.length, now: index }}
-        >
-          <View style={[styles.fillBar, { width: `${Math.max(4, progress * 100)}%` }]} />
-        </View>
         {usesHearts ? (
-          <View style={styles.hearts} accessibilityLabel={t('stats.heartsA11y', { n: hearts })} testID="lesson-hearts">
-            <HeartIcon size={24} off={hearts === 0} />
-            <Txt style={styles.heartsText}>{hearts}</Txt>
+          <View style={styles.side} accessible accessibilityLabel={t('stats.heartsA11y', { n: hearts })} testID="lesson-hearts">
+            <PotIcon size={24} off={hearts === 0} />
+            <Txt style={styles.potsText}>{hearts}</Txt>
           </View>
         ) : (
-          <View style={styles.practiceTag}>
-            <Txt variant="caption" style={{ color: C.leafDeep }}>
-              {t('tabs.practice')}
+          <View style={styles.side}>
+            <Txt variant="caption" style={styles.practiceTag} numberOfLines={1}>
+              {t('lesson.practiceMode')}
             </Txt>
           </View>
         )}
+        <Beads fit total={queue.length} done={index} current={index} size={12} style={styles.beads} accessibilityLabel={t('lesson.stepOf', { n: index + 1, total: queue.length })} />
+        <Pressable testID="lesson-close" onPress={() => setQuitOpen(true)} accessibilityRole="button" accessibilityLabel={t('lesson.leave')} hitSlop={10} style={[styles.side, styles.leave]}>
+          <Txt style={styles.leaveText}>{t('lesson.leave')}</Txt>
+        </Pressable>
       </View>
 
       <View style={styles.stage}>{body}</View>
 
-      {feedback && <FeedbackPanel result={feedback.result} seed={index} heartLost={feedback.heartLost} onContinue={next} />}
-
       <Sheet visible={quitOpen} onClose={() => setQuitOpen(false)} testID="quit-sheet">
-        <View style={styles.sheetRow}>
-          <Ngaali mood="incorrect" size={64} />
-          <View style={{ flex: 1, gap: S.xs }}>
-            <Txt variant="h3">{t('lesson.quitTitle')}</Txt>
-            <Txt variant="body">{t('lesson.quitBody')}</Txt>
-          </View>
+        <View style={{ gap: S.xs }}>
+          <Txt variant="h3">{t('lesson.quitTitle')}</Txt>
+          <Txt variant="body">{t('lesson.quitBody')}</Txt>
         </View>
         <Button label={t('lesson.keepGoing')} onPress={() => setQuitOpen(false)} />
         <Button
           testID="quit-confirm"
           kind="ghost"
-          label={t('lesson.quit')}
+          label={t('lesson.leave')}
           onPress={() => {
             setQuitOpen(false);
             exit();
@@ -208,7 +206,7 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
         />
       </Sheet>
 
-      <HeartsSheet
+      <PotsSheet
         out
         visible={outOfHearts && hearts <= 0}
         onClose={() => {
@@ -222,13 +220,12 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: C.paper },
-  top: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingHorizontal: S.lg, paddingVertical: S.sm, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
-  close: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  bar: { flex: 1, height: 14, borderRadius: R.pill, backgroundColor: C.paperDeep, overflow: 'hidden' },
-  fillBar: { height: 14, borderRadius: R.pill, backgroundColor: C.tomato },
-  hearts: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 48 },
-  heartsText: { ...F.semi, fontSize: 17, color: C.redDeep },
-  practiceTag: { backgroundColor: C.leafSoft, paddingHorizontal: 10, paddingVertical: 4, borderRadius: R.pill },
+  top: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingHorizontal: S.lg, paddingVertical: S.sm, minHeight: 56, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
+  side: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 64, minHeight: 44 },
+  potsText: { ...F.semi, fontSize: 17, color: C.tomatoDeep },
+  practiceTag: { color: C.neon },
+  beads: { flex: 1 },
+  leave: { justifyContent: 'flex-end' },
+  leaveText: { ...F.semi, fontSize: 16, color: C.ink2 },
   stage: { flex: 1 },
-  sheetRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
 });

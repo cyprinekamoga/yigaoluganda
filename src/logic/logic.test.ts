@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { LESSONS, PHRASES, UNIT_1 } from '../content';
 import { addDays, diffDays } from './dates';
 import { buildLesson, choiceStep, type Step } from './generator';
-import { HEART_REGEN_MS, MAX_HEARTS, initialStats, loseHeart, nextHeartIn, recordActivity, regenHearts, visibleStreak, buyRefill, REFILL_COST } from './progress';
+import { HEART_REGEN_MS, MAX_HEARTS, initialStats, lessonReward, loseHeart, nextHeartIn, recordActivity, regenHearts, visibleStreak, buyRefill, REFILL_COST } from './progress';
 import { makeRng } from './rng';
 import { lengthVariants, spellingDistractors } from './spelling';
 import { dueIds, grade, introduce } from './srs';
@@ -92,7 +92,7 @@ describe('lesson generator', () => {
   });
 });
 
-describe('hearts, XP and streak', () => {
+describe('water pots, cowries and drumbeat', () => {
   const t0 = 1_000_000;
   it('loses a heart and grows it back after 20 minutes', () => {
     let s = initialStats(t0);
@@ -113,20 +113,25 @@ describe('hearts, XP and streak', () => {
     expect(r.hearts).toBe(MAX_HEARTS);
     expect(r.gems).toBe(1);
   });
-  it('counts consecutive days and resets after a gap', () => {
+  it('beats the drum on consecutive days and goes quiet after a gap', () => {
     const d1 = '2026-11-01';
-    let s = recordActivity(initialStats(t0), d1, 10, 5);
-    s = recordActivity(s, d1, 10, 5);
+    let s = recordActivity(initialStats(t0), d1, 5);
+    s = recordActivity(s, d1, 5);
     expect(s.streak).toBe(1);
-    s = recordActivity(s, addDays(d1, 1), 10, 5);
+    s = recordActivity(s, addDays(d1, 1), 5);
     expect(s.streak).toBe(2);
     expect(visibleStreak(s, addDays(d1, 2))).toBe(2);
     expect(visibleStreak(s, addDays(d1, 3))).toBe(0);
-    s = recordActivity(s, addDays(d1, 4), 10, 5);
+    s = recordActivity(s, addDays(d1, 4), 5);
     expect(s.streak).toBe(1);
     expect(s.bestStreak).toBe(2);
-    expect(s.xp).toBe(40);
-    expect(s.xpByDay[d1]).toBe(20);
+    expect(s.gems).toBe(20);
+    expect(s.activityByDay[d1]).toBe(2);
+    expect(s.activityByDay[addDays(d1, 1)]).toBe(1);
+  });
+  it('rewards lessons with cowries, more for a lesson with no mistakes', () => {
+    expect(lessonReward(false).gems).toBe(5);
+    expect(lessonReward(true).gems).toBe(10);
   });
   it('handles month boundaries', () => {
     expect(diffDays('2026-01-31', '2026-02-01')).toBe(1);

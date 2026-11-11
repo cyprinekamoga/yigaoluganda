@@ -1,12 +1,15 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { hasAudio, playClip } from '../audio/engine';
 import { useT } from '../i18n';
-import { C, R, S } from '../ui/theme';
+import { C, F, R, S } from '../ui/theme';
+import { Txt } from '../ui/Txt';
 
-/** Normal and 0.75× "turtle" playback of a native recording. Renders nothing when there is no recording. */
+/**
+ * Normal and 0.75× playback of a native recording. The slow button says "mpola" (Luganda for
+ * "slowly"). Renders nothing when there is no recording.
+ */
 export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: string; big?: boolean; autoPlay?: boolean }) {
   const { t } = useT();
   const available = hasAudio(id);
@@ -31,9 +34,9 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
         accessibilityRole="button"
         accessibilityLabel={`${t('lesson.play')}: ${t('lesson.slow')}`}
         onPress={() => playClip(id, true)}
-        style={({ pressed }) => [styles.slow, { width: size * 0.78, height: size * 0.78, borderRadius: size * 0.39 }, pressed && styles.pressed]}
+        style={({ pressed }) => [styles.slow, { height: size * 0.66, paddingHorizontal: size * 0.26 }, pressed && styles.pressed]}
       >
-        <MaterialCommunityIcons name="turtle" size={size * 0.42} color={C.onNeon} />
+        <Txt style={[styles.slowText, { fontSize: Math.round(size * 0.24) }]}>mpola</Txt>
       </Pressable>
     </View>
   );
@@ -42,6 +45,7 @@ export function SpeakerButtons({ id, big = false, autoPlay = false }: { id: stri
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   btn: { backgroundColor: C.tomato, alignItems: 'center', justifyContent: 'center' },
-  slow: { backgroundColor: C.neon, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
+  slow: { borderWidth: 2, borderColor: C.neon, alignItems: 'center', justifyContent: 'center', borderRadius: R.pill },
+  slowText: { ...F.semi, color: C.neon, letterSpacing: 0.4 },
   pressed: { transform: [{ scale: 0.94 }] },
 });

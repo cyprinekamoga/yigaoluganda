@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { PHRASES } from '../../content';
 import { useT } from '../../i18n';
 import type { Step } from '../../logic/generator';
@@ -9,6 +9,7 @@ import { C, F, R, S } from '../../ui/theme';
 import { Txt } from '../../ui/Txt';
 import { Footer } from '../Footer';
 import { SpeakerButtons } from '../SpeakerButtons';
+import { StepScroll } from '../StepScroll';
 import type { ExerciseProps } from '../types';
 
 type ChoiceStepT = Extract<Step, { kind: 'choice' }>;
@@ -17,7 +18,7 @@ type ChoiceStepT = Extract<Step, { kind: 'choice' }>;
  * Sound & Vowel Matcher. With a recording: listen, then pick the spelling.
  * Without one: read the meaning, then pick the spelling. Wrong options differ only in sound length.
  */
-export function ChoiceStep({ step, locked, onResult }: ExerciseProps<ChoiceStepT>) {
+export function ChoiceStep({ step, locked, onResult, after, footer }: ExerciseProps<ChoiceStepT>) {
   const { t, tr } = useT();
   const [picked, setPicked] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
@@ -34,7 +35,7 @@ export function ChoiceStep({ step, locked, onResult }: ExerciseProps<ChoiceStepT
 
   return (
     <View style={styles.fill}>
-      <ScrollView contentContainerStyle={styles.body}>
+      <StepScroll contentContainerStyle={styles.body} after={after}>
         {step.mode === 'listen' ? (
           <View style={styles.prompt}>
             <Txt variant="h2" accessibilityRole="header">
@@ -71,15 +72,13 @@ export function ChoiceStep({ step, locked, onResult }: ExerciseProps<ChoiceStepT
                   pressed && { transform: [{ scale: 0.98 }] },
                 ]}
               >
-                <Txt style={[styles.optionText, showRight && { color: C.leafDeep }, showWrong && { color: C.redDeep }]}>{o}</Txt>
+                <Txt style={[styles.optionText, showRight && { color: C.neon }, showWrong && { color: C.tomatoDeep }]}>{o}</Txt>
               </Pressable>
             );
           })}
         </View>
-      </ScrollView>
-      <Footer>
-        <Button testID="check" label={t('common.check')} disabled={!picked || checked} onPress={check} />
-      </Footer>
+      </StepScroll>
+      <Footer>{footer ?? <Button testID="check" label={t('common.check')} disabled={!picked || checked} onPress={check} />}</Footer>
     </View>
   );
 }
@@ -90,8 +89,8 @@ const styles = StyleSheet.create({
   prompt: { gap: S.lg, alignItems: 'flex-start' },
   options: { gap: S.md },
   option: { minHeight: 64, borderRadius: R.lg, borderWidth: 2, borderColor: C.line, backgroundColor: C.card, paddingHorizontal: S.lg, justifyContent: 'center' },
-  optionPicked: { borderColor: C.neon, backgroundColor: C.neonSoft },
-  optionRight: { borderColor: C.leaf, backgroundColor: C.leafSoft },
-  optionWrong: { borderColor: C.red, backgroundColor: C.redSoft },
+  optionPicked: { borderColor: C.ink2, backgroundColor: C.paperDeep },
+  optionRight: { borderColor: C.neon, backgroundColor: C.card },
+  optionWrong: { borderColor: C.tomato, backgroundColor: C.card },
   optionText: { ...F.semi, fontSize: 22, letterSpacing: 0.6, color: C.ink },
 });

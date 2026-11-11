@@ -7,11 +7,11 @@ import { useT } from '@/i18n';
 import { isAvailable, isLessonOpen, lessonsDone, nextLessonIndex } from '@/logic/unlock';
 import { useApp } from '@/state/store';
 import { BackBar } from '@/ui/BackBar';
+import { Beads } from '@/ui/Beads';
 import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
 import { TipIconBadge } from '@/ui/TipIcon';
 import { Ngaali } from '@/ui/Ngaali';
-import { ProgressRing } from '@/ui/ProgressRing';
 import { Scene } from '@/ui/Scene';
 import { Screen } from '@/ui/Screen';
 import { Sheet } from '@/ui/Sheet';
@@ -47,9 +47,8 @@ export default function ChapterScreen() {
   return (
     <Screen testID="screen-chapter" header={<BackBar />}>
       <View style={styles.hero}>
-        <ProgressRing size={200} stroke={10} segments={chapter.lessons.length} done={n} color={h.base} track={h.track}>
-          <Scene scene={chapter.scene} hue={chapter.hue} size={170} muted={!available} />
-        </ProgressRing>
+        <Scene scene={chapter.scene} hue={chapter.hue} size={180} muted={!available} />
+        <Beads total={chapter.lessons.length} done={n} size={14} color={h.base} style={styles.beads} accessibilityLabel={t('home.lessons', { done: n, total: chapter.lessons.length })} />
         <Txt variant="label" style={{ color: h.deep }}>
           {chapter.checkpoint ? `${t('chapter.checkpoint')} · ` : ''}
           {t('home.chapter', { n: chapter.n })} · {chapter.lgTitle}
@@ -166,6 +165,7 @@ export default function ChapterScreen() {
 
 const styles = StyleSheet.create({
   hero: { alignItems: 'center', gap: S.xs, paddingTop: S.sm },
+  beads: { marginTop: S.sm, marginBottom: S.xs },
   center: { textAlign: 'center' },
   section: { gap: S.sm },
   row: { flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.md, backgroundColor: C.card, borderRadius: R.lg, borderWidth: 1, borderColor: C.line, minHeight: 64 },

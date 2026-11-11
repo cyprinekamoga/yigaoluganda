@@ -13,7 +13,7 @@ import { useApp } from '@/state/store';
 
 type Mode = 'review' | 'dialogue' | 'listen' | 'speak';
 
-/** Practice Lab sessions. Practice never costs hearts; a review or listening round refills them. */
+/** Practice Lab sessions. Practice never spills water; a review or listening round fills the pots. */
 export default function PracticeRoute() {
   const { mode, id } = useLocalSearchParams<{ mode: Mode; id?: string }>();
   const lang = useLang();

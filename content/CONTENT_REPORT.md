@@ -21,7 +21,7 @@ Items marked below are the least certain; everything else still needs a read-thr
 | 9 | Okuba | To Be | 3 | ndi, oli, ali, ndi bulungi, tuli, muli, bali, ndi musanyufu, ndi mukoowu, leero |
 | 10 | Obubonero | Survival Expressions | 2 | sitegeera, simanyi, yogera mpola, ddamu, mmanyi Oluganda katono, Ogenda wa? |
 | 11 | Okwebaza | Daily Thanks & Appreciation | 2 | weebale okufumba, weebale okujja, weebale okukyala, mwebale, emmere ewooma, matooke, caayi |
-| 12 | Olugendo Lwatandika | Checkpoint & Dialogue | 2 | olugendo, ewaka |
+| 12 | Olugendo Lwatandika | Final Conversation | 2 | olugendo, ewaka |
 
 ## Needs a native-speaker check
 

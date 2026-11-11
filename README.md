@@ -6,16 +6,16 @@ A mobile app for learning Luganda with **Ngaali**, the crested crane. It runs on
 It is for absolute beginners, diaspora heritage learners, travellers and anyone curious about the language.
 
 <p>
-<img src="docs/screenshots/02-home.png" width="200" alt="Learn tab with its large title, stats and chapter tiles">
-<img src="docs/screenshots/04-intro.png" width="200" alt="New phrase with a Did you know? fact about Uganda">
+<img src="docs/screenshots/02-home.png" width="200" alt="Chapters tab with its large title, water pots, drumbeat and cowries, and square chapter cards">
+<img src="docs/screenshots/04-intro.png" width="200" alt="A new phrase with a Did you know? fact about Uganda">
 <img src="docs/screenshots/06-dialogue.png" width="200" alt="A roleplay conversation">
 <img src="docs/screenshots/08-practice.png" width="200" alt="Practice Lab">
 </p>
 <p>
 <img src="docs/screenshots/03-chapter.png" width="200" alt="Chapter page">
-<img src="docs/screenshots/06-feedback.png" width="200" alt="Feedback on a wrong answer, with a hint about long and short sounds">
+<img src="docs/screenshots/06-feedback.png" width="200" alt="The result of a wrong answer, shown right under the options, with a hint about long and short sounds">
 <img src="docs/screenshots/10-phrasebook.png" width="200" alt="Phrasebook">
-<img src="docs/screenshots/12-profile.png" width="200" alt="Profile with streak, XP, gems and achievements">
+<img src="docs/screenshots/12-profile.png" width="200" alt="The Me tab with phrases learned, drumbeat, cowries and this week">
 </p>
 
 ---
@@ -26,30 +26,46 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 
 | PRD area | What was built |
 |---|---|
-| **Navigation** | Four tabs: **Learn** (home grid), **Practice** (Practice Lab), **Phrasebook** (dictionary) and **Profile**. Each tab has an iOS-style large title that folds into the top bar as you scroll, the same on iOS, Android and web |
-| **Home** | A stats bar with 🔥 streak, 💎 gems and ❤️ hearts, then Ngaali greeting you by name with a tip. Below that, Unit 1 as a 2-column grid of 12 chapter tiles. Each tile has its own Ngaali illustration (bowing to an elder, riding a boda-boda, holding a plate of matooke, …), a segmented progress ring with one segment per lesson, and a status: *Locked, Unlocked, Ready to start, Active, Unfinished* or *Completed* |
-| **Non-linear unlocking** | Chapters 1–3 are open from the start, and each chapter you finish opens the next locked one, so you choose the order. The checkpoint (chapter 12) opens after chapters 1–11 |
-| **Curriculum** | Unit 1, *Absolute Foundations*: the 12 chapters from the PRD, in 26 lessons. It has 93 phrases, 49 sentences, 12 roleplay conversations and 22 culture tips, all in English and Swedish |
-| **Lesson engine** | Each lesson has about 10 steps built from the 7 PRD exercise types, plus a card that introduces each new phrase before it is tested. Wrong answers come back once at the end of the lesson |
-| **Exercises** | **Sound & Vowel Matcher**: pick the right spelling. The wrong options differ only in sound length (*weebale / webale / weebbale*). **Tap & Match** pairs. **Word-bank sentence builder**. **Audio dictation**. **Speak & compare**. **Roleplay chat**: a wrong reply gets an explanation from Ngaali. **Culture tip** cards |
-| **Ngaali's states** | Ngaali stands on one leg like a resting crane, with a neon yellow crown. *Idle* (bobs and blinks), *correct* (hops with wings up), *incorrect* (encouraging pose) and *badge* (holds a medal) |
-| **Gamification** | +10 XP per lesson and +5 for a perfect one. Gems come from lessons. 5 hearts: a wrong answer in a lesson costs 1. Hearts grow back one every 20 minutes, and a Practice Lab review refills them all. There are daily streaks and 12 achievements |
-| **Practice Lab** | Spaced-repetition review, which refills hearts. You can replay finished conversations. There is audio matching and Speak & compare. Practice never costs hearts |
+| **Navigation** | Four tabs: **Chapters** (home grid), **Practice Lab**, **Phrasebook** (dictionary) and **Me**. Each tab has an iOS-style large title that folds into the top bar as you scroll, the same on iOS, Android and web |
+| **Home** | One capsule with your water pots, drumbeat and cowries, then Ngaali greeting you by name with a tip. Below that, Part 1 as a 2-column grid of 12 square chapter cards. Each card has its own Ngaali illustration (bowing to an elder, riding a boda-boda, holding a plate of matooke, …), a string of beads with one bead per lesson, and a status: *Locked, Unlocked, Ready to start, Active, Unfinished* or *Completed* |
+| **Non-linear unlocking** | Chapters 1–3 are open from the start, and each chapter you finish opens the next locked one, so you choose the order. The final conversation (chapter 12) opens after chapters 1–11 |
+| **Curriculum** | Part 1, *Absolute Foundations*: the 12 chapters from the PRD, in 26 lessons. It has 93 phrases, 49 sentences, 12 roleplay conversations and 22 culture tips, all in English and Swedish |
+| **Lesson engine** | Each lesson has about 10 steps built from the 7 PRD exercise types, plus a card that introduces each new phrase before it is tested. At the top: your water pots on the left, a string of beads (one per step) in the middle, and *Leave* on the right. After you check an answer, the result appears in the page right under it and *Check* turns into *Continue*. Wrong answers come back once at the end of the lesson |
+| **Exercises** | **Sound & Vowel Matcher**: pick the right spelling. The wrong options differ only in sound length (*weebale / webale / weebbale*). **Join each word to its meaning**: joined pairs leave the columns and are threaded onto a list. **Build it in Luganda**: the words you tap are written on a line, like a sentence in an exercise book. **Listen, then build what you hear** (dictation). **Speak & compare**. **Roleplay chat**: a wrong reply gets an explanation from Ngaali. **Culture tip** cards |
+| **Ngaali's states** | Ngaali stands on one leg like a resting crane, with a neon yellow crown. *Idle* (bobs and blinks), *correct* (hops with wings up), *incorrect* (encouraging pose) and *badge* (holds a medal). Ngaali greets you, introduces new phrases and celebrates at the end of a lesson, but stays out of the answer results |
+| **Game layer** | Built from Buganda life (see *Our own symbols* below). Progress is counted in **phrases learned**, not points. **5 water pots**: a wrong answer in a lesson spills one. A pot refills every 20 minutes, and a quick review in the Practice Lab fetches water for all of them. **Cowries**: 5 per lesson, 5 more for no mistakes, 2 per practice round. The **drumbeat** counts the days in a row you practise. 12 **shields** to earn |
+| **Practice Lab** | Spaced-repetition review, which fills your water pots. You can replay finished conversations. There is audio matching and Speak & compare. Practice never spills water |
 | **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
-| **Profile** | Streak, XP, gems, lessons, phrases met, this week's activity, achievements and friends |
+| **Me** | Phrases learned (out of the 93 in Part 1), drumbeat, cowries, this week (one drum per day), a chapter map with a bead string per chapter, your shields, and a **Practise with family** card |
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
-| **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (23 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
+| **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (27 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
 | **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
-| **Colours** | Only three colours and their shades: deep maroon `#250104` for every background and card, tomato red `#D71A06` for buttons, hearts, progress and wrong answers, and neon yellow `#CDF73D` for highlights, correct answers and the selected tab. Text is a soft off-white tinted from the palette |
+| **Colours** | Only three colours and their shades: deep maroon `#250104` for every background and card, tomato red `#D71A06` for buttons, water pots and wrong answers, and neon yellow `#CDF73D` for correct answers, progress beads, earned shields and the selected tab. Text is a soft off-white tinted from the palette |
+
+### Our own symbols
+
+The game layer is drawn from Buganda life, so it looks and feels like this app and no other.
+
+| In the app | What it is | Where it comes from |
+|---|---|---|
+| **Water pots** | Your 5 lives. A wrong answer spills one; they refill over time, or you fetch water with a quick review | Drinking water is kept cool in a clay pot, *ensuwa* |
+| **Cowries** | What you earn in lessons and practice. 30 fill all your pots | Cowrie shells were once money in Buganda |
+| **Drumbeat** | Days in a row you practise | Drums announce great royal events; the Kabaka's royal drums are the *Mujaguzo* |
+| **Beads** | Progress: one bead per step in a lesson, one per lesson on each chapter card | Ugandan rolled paper beads |
+| **Shields** | Achievements, e.g. *Steady hand*, *Finding the beat*, *Royal drummer*, *Full basket* | The Kiganda shield, *engabo* |
+| **Bulungi nnyo!** | The end of a lesson lists the phrases you just learned, not a score | "Very good!" in Luganda |
+| **mpola** | The slow playback button | "Slowly" in Luganda |
+
+The facts behind the pots, cowries, drums and beads are also in the *Did you know?* rotation.
 
 ### Where the app differs from the PRD, and why
 
 - **Audio.** No native-speaker recordings exist yet, and the app never uses text-to-speech for Luganda because it mispronounces the language. Listening, dictation and the native-speaker comparison appear **automatically** once recordings are added (see *Adding audio*). Until then, the Sound & Vowel Matcher shows the meaning instead of playing a sound.
-- **Audio format.** The PRD asks for Opus. The app uses **AAC in .m4a**, because iOS cannot reliably play Opus or Ogg. The preparation script can also write Opus files. Slow "turtle" playback is the same clip played at 0.75× with pitch correction, so no separate slow recordings are needed. Clips are pre-loaded before each lesson starts.
+- **Audio format.** The PRD asks for Opus. The app uses **AAC in .m4a**, because iOS cannot reliably play Opus or Ogg. The preparation script can also write Opus files. Slow playback (the **mpola** button, Luganda for "slowly") is the same clip played at 0.75× with pitch correction, so no separate slow recordings are needed. Clips are pre-loaded before each lesson starts.
 - **Speech & pitch verification.** You record yourself and play your voice next to the native clip, then judge how close it was. There is no automatic scoring, because no reliable Luganda pronunciation model exists to run on a phone. The app says this on screen.
-- **Friend leaderboards** need user accounts and a server, which this version doesn't have. The Profile explains this and shows your own weekly XP.
-- **Unit downloads from a CDN.** Only Unit 1 exists, and it is bundled so it works offline.
-- **What gems buy.** The PRD doesn't say, so 30 gems refill your hearts.
+- **Friend leaderboards** are replaced by a **Practise with family** card. A leaderboard needs accounts and a server, and the best practice partner for most learners is a Luganda speaker they already know.
+- **Unit downloads from a CDN.** Only Part 1 exists, and it is bundled so it works offline.
+- **What cowries buy.** The PRD doesn't say, so 30 cowries fill all your water pots.
 - **Content changes.** These were flagged for a native speaker in [`content/CONTENT_REPORT.md`](content/CONTENT_REPORT.md):
   - *Ki kano?* was taught as *Ki kati?*
   - *Mwe* was taught as *mmwe*.
@@ -132,10 +148,10 @@ The app builds each lesson's exercises from these files automatically.
 content/unit-1/     course content (JSON) + CONTENT_REPORT.md
 assets/audio/       native-speaker clips (<id>.m4a)
 src/app/            screens (Expo Router): tabs, chapter, lesson, practice, phrase, settings, onboarding
-src/lesson/         lesson player, feedback panel, the exercise components
-src/logic/          pure, unit-tested rules: generator, spelling distractors, hearts/XP/streak, unlocking, SRS, badges
+src/lesson/         lesson player, result card, the exercise components
+src/logic/          pure, unit-tested rules: generator, spelling distractors, water pots/cowries/drumbeat, unlocking, SRS, shields
 src/state/          Zustand store, saved on the device (AsyncStorage)
-src/ui/             Ngaali, chapter illustrations, progress ring, design tokens (colours, type in theme.ts)
+src/ui/             Ngaali, chapter illustrations, bead strings, pot/drum/cowrie icons, design tokens (colours, type in theme.ts)
 src/i18n/           English and Swedish interface text
 scripts/            audio, icons, sound effects, content report, e2e
 ```
@@ -153,10 +169,10 @@ The previous web version of the app, based on the book *Luganda för beginners* 
 **Yiga Oluganda** är en app för att lära sig luganda tillsammans med kronstranen **Ngaali**. Den fungerar på iOS, Android och webben och är byggd med Expo (React Native). Gränssnittet finns på svenska och engelska.
 
 **I appen:**
-- En startsida med rutnät över del 1:s 12 kapitel och framstegsringar. Kapitlen öppnas i den ordning du själv väljer.
+- En startsida med rutnät över del 1:s 12 kapitel, med ett pärlband per kapitel. Kapitlen öppnas i den ordning du själv väljer.
 - Lektioner med cirka 10 steg av 7 övningstyper: ljud- och vokalmatchning, para ihop, bygga meningar, diktamen, prata och jämföra, rollspel och kulturtips.
-- XP, ädelstenar, hjärtan, dagar i rad och prestationer.
-- Ett övningslabb med repetition som fyller på hjärtan.
+- Ett eget spelsystem från Buganda: vattenkrukor (ett fel spiller en kruka), kaurisnäckor, trumslag för dagar i rad och sköldar. Framsteg räknas i fraser du kan, inte poäng.
+- Ett övningslabb med repetition som fyller vattenkrukorna.
 - En parlör som fungerar offline och har en guide till ordstammar och prefix.
 - ”Visste du?”: en rolig fakta om Uganda eller Buganda på varje sida med en ny fras (`content/facts.json`).
 

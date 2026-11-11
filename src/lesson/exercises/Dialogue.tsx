@@ -16,7 +16,7 @@ const REVEAL_MS = 650;
 
 /**
  * Contextual dialogue & roleplay: a chat where the learner picks the reply that fits the situation.
- * A wrong reply costs a heart (in lessons), shows why it doesn't fit, and can be retried.
+ * A wrong reply spills a water pot (in lessons), shows why it doesn't fit, and can be retried.
  */
 export function DialogueStep({ step, locked, name, onMistake, onNext }: ExerciseProps<{ kind: 'dialogue'; dialogueId: string }>) {
   const { t, tr } = useT();

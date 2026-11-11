@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { SENTENCES } from '../../content';
 import { useT } from '../../i18n';
 import type { Step } from '../../logic/generator';
@@ -9,6 +9,7 @@ import { C, F, R, S } from '../../ui/theme';
 import { Txt } from '../../ui/Txt';
 import { Footer } from '../Footer';
 import { SpeakerButtons } from '../SpeakerButtons';
+import { StepScroll } from '../StepScroll';
 import type { ExerciseProps } from '../types';
 
 type BuildStepT = Extract<Step, { kind: 'build' | 'dictation' }>;
@@ -18,7 +19,7 @@ type BuildStepT = Extract<Step, { kind: 'build' | 'dictation' }>;
  * Audio Dictation (assemble what you hear). Tiles are Luganda only: one Luganda
  * word often equals several English words, so tiles never map word-for-word.
  */
-export function BuildStep({ step, locked, name, onResult }: ExerciseProps<BuildStepT>) {
+export function BuildStep({ step, locked, name, onResult, after, footer }: ExerciseProps<BuildStepT>) {
   const { t, tr } = useT();
   const sentence = SENTENCES[step.sentenceId];
   // Track tiles by index: the same word can appear twice.
@@ -38,7 +39,7 @@ export function BuildStep({ step, locked, name, onResult }: ExerciseProps<BuildS
   const e2eOrder = process.env.EXPO_PUBLIC_E2E ? answerOrder(step.tiles, step.answer) : null;
   return (
     <View style={styles.fill}>
-      <ScrollView contentContainerStyle={styles.body}>
+      <StepScroll contentContainerStyle={styles.body} after={after}>
         <Txt variant="h2" accessibilityRole="header">
           {step.kind === 'dictation' ? t('lesson.dictation') : t('lesson.build')}
         </Txt>
@@ -52,8 +53,9 @@ export function BuildStep({ step, locked, name, onResult }: ExerciseProps<BuildS
           </View>
         )}
 
+        {/* The words are written on a line, like a sentence in an exercise book. */}
         <View style={styles.answer} accessibilityLabel={t('lesson.tapTiles')} testID="build-answer">
-          {chosen.length === 0 && <Txt variant="small">{t('lesson.tapTiles')}</Txt>}
+          {chosen.length === 0 && <Txt variant="small" style={styles.placeholder}>{t('lesson.tapTiles')}</Txt>}
           {chosen.map((ti, pos) => (
             <Pressable
               key={`${ti}-${pos}`}
@@ -61,9 +63,9 @@ export function BuildStep({ step, locked, name, onResult }: ExerciseProps<BuildS
               onPress={() => setChosen(chosen.filter((_, j) => j !== pos))}
               accessibilityRole="button"
               accessibilityLabel={step.tiles[ti]}
-              style={[styles.tile, styles.tileChosen]}
+              style={styles.written}
             >
-              <Txt style={styles.tileText}>{step.tiles[ti]}</Txt>
+              <Txt style={styles.writtenText}>{step.tiles[ti]}</Txt>
             </Pressable>
           ))}
         </View>
@@ -87,10 +89,8 @@ export function BuildStep({ step, locked, name, onResult }: ExerciseProps<BuildS
             );
           })}
         </View>
-      </ScrollView>
-      <Footer>
-        <Button testID="check" label={t('common.check')} disabled={chosen.length === 0 || checked} onPress={check} />
-      </Footer>
+      </StepScroll>
+      <Footer>{footer ?? <Button testID="check" label={t('common.check')} disabled={chosen.length === 0 || checked} onPress={check} />}</Footer>
     </View>
   );
 }
@@ -112,10 +112,12 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   body: { padding: S.lg, gap: S.xl, width: '100%', maxWidth: 640, alignSelf: 'center' },
   source: { backgroundColor: C.card, borderRadius: R.lg, padding: S.lg, borderWidth: 1, borderColor: C.line },
-  answer: { minHeight: 120, flexDirection: 'row', flexWrap: 'wrap', alignContent: 'flex-start', gap: S.sm, paddingVertical: S.md, borderTopWidth: 2, borderBottomWidth: 2, borderColor: C.line, borderStyle: 'dashed' },
+  answer: { minHeight: 64, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-end', alignContent: 'flex-end', columnGap: S.md, rowGap: S.sm, paddingBottom: 6, borderBottomWidth: 2, borderBottomColor: C.ink3 },
+  placeholder: { color: C.ink3, paddingBottom: 4 },
+  written: { minHeight: 44, justifyContent: 'flex-end', paddingHorizontal: 2 },
+  writtenText: { ...F.semi, fontSize: 24, color: C.neon },
   bank: { flexDirection: 'row', flexWrap: 'wrap', gap: S.sm, justifyContent: 'center' },
-  tile: { minHeight: 48, paddingHorizontal: 16, justifyContent: 'center', borderRadius: R.md, backgroundColor: C.card, borderWidth: 2, borderColor: C.line, borderBottomWidth: 4 },
-  tileChosen: { borderColor: C.neon, borderBottomWidth: 2 },
-  tileUsed: { backgroundColor: C.paperDeep, borderColor: C.paperDeep },
+  tile: { minHeight: 46, paddingHorizontal: 16, justifyContent: 'center', borderRadius: R.pill, backgroundColor: C.paperDeep },
+  tileUsed: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: C.line, borderStyle: 'dashed' },
   tileText: { ...F.semi, fontSize: 18, color: C.ink },
 });

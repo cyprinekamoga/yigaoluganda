@@ -217,7 +217,7 @@ export interface SceneProps {
   muted?: boolean;
 }
 
-/** A round illustration, sized to sit inside a progress ring. */
+/** A chapter illustration on a rounded square, like a picture card. */
 export function Scene({ scene, hue, size, muted }: SceneProps) {
   const h = HUES[hue];
   const spec = SCENES[scene];
@@ -226,11 +226,11 @@ export function Scene({ scene, hue, size, muted }: SceneProps) {
     <Svg width={size} height={size} viewBox="0 0 120 120">
       <Defs>
         <ClipPath id={clipId}>
-          <Circle cx={60} cy={60} r={60} />
+          <Rect x={0} y={0} width={120} height={120} rx={16} />
         </ClipPath>
       </Defs>
       <G clipPath={`url(#${clipId})`}>
-        <Circle cx={60} cy={60} r={60} fill={muted ? C.paperDeep : h.soft} />
+        <Rect x={0} y={0} width={120} height={120} fill={muted ? C.paperDeep : h.soft} />
         <G opacity={muted ? 0.35 : 1}>
           {spec.back?.(h)}
           <G transform={at(spec.x, spec.y, spec.s ?? 0.6)}>

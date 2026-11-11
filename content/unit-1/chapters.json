@@ -102,11 +102,11 @@
   },
   {
     "id": "c12", "n": 12, "lgTitle": "Olugendo Lwatandika", "scene": "journey", "hue": "blush", "checkpoint": true,
-    "title": { "en": "Checkpoint & Dialogue", "sv": "Kontrollpunkt och samtal" },
+    "title": { "en": "Final Conversation", "sv": "Slutsamtal" },
     "scenario": { "en": "First day in Kampala", "sv": "Första dagen i Kampala" },
     "lessons": [
       {
-        "id": "c12-l1", "title": { "en": "Unit 1 review", "sv": "Repetition av del 1" },
+        "id": "c12-l1", "title": { "en": "Part 1 review", "sv": "Repetition av del 1" },
         "phrases": ["olugendo", "ewaka"],
         "review": ["weebale-nnyo", "wasuze-otya", "oli-otya", "sula-bulungi", "erinnya-lyange", "kino-kiki", "ndi-bulungi", "yogera-mpola", "weebale-okufumba", "nsonyiwa", "ssente-mmeka", "siiba-bulungi"],
         "sentences": ["s-nnenda-ewaka", "s-wasuze-ssebo", "s-erinnya-lyange", "s-yogera-mpola-mwattu"],
