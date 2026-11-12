@@ -5,6 +5,7 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@supabase/supabase-js": "^2.119.0",
     "expo": "~58.0.23",
     "expo-asset": "~58.0.20",
     "expo-audio": "~58.0.11",
@@ -23,6 +24,7 @@
     "react-native-safe-area-context": "~5.11.1",
     "react-native-screens": "~4.30.1",
     "react-native-svg": "15.16.0",
+    "react-native-url-polyfill": "^4.0.0",
     "react-native-web": "^0.21.4",
     "zustand": "^5.1.0"
   },
@@ -48,7 +50,10 @@
     "doctor": "expo-doctor",
     "report": "node scripts/content-report.mjs",
     "audio:prepare": "bash scripts/prepare-audio.sh",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "sites:sync": "node scripts/sync-sites.mjs",
+    "stripe:setup": "node scripts/stripe-setup.ts",
+    "e2e:accounts": "node scripts/e2e-accounts.mjs"
   },
   "private": true
 }

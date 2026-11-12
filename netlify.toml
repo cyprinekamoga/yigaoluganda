@@ -8,6 +8,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # Accounts and payments switch on when these two are set (both values are public).
+  # Until then the app runs without accounts, so do not go live without them.
+  # EXPO_PUBLIC_SUPABASE_URL = "https://<project-ref>.supabase.co"
+  # EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_..."
 
 # Single-page app: every route serves index.html (real files are served first).
 [[redirects]]

@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 import type { ColorValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ACCOUNTS } from '@/account/config';
 import { useT } from '@/i18n';
 import { useApp } from '@/state/store';
 import { C, F } from '@/ui/theme';
@@ -13,7 +14,8 @@ export default function TabsLayout() {
   const profile = useApp((s) => s.profile);
   const { t } = useT();
   const insets = useSafeAreaInsets();
-  if (!profile?.name) return <Redirect href="/onboarding" />;
+  // Without accounts, a first visit starts with onboarding (with accounts, sign-up asks the name).
+  if (!ACCOUNTS && !profile?.name) return <Redirect href="/onboarding" />;
 
   const icon = (on: IconName, off: IconName) =>
     function TabIcon({ color, focused }: { color: ColorValue; focused: boolean }) {

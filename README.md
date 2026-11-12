@@ -72,6 +72,36 @@ The facts behind the pots, cowries, drums and beads are also in the *Did you kno
   - *Yeye* was taught as *ye* (and *yeye* is accepted).
 - **Mascot name.** The PRD uses both "Kigo" and "Ngaali". The app uses **Ngaali** throughout.
 
+### Landing page, accounts and payments
+
+The project is three parts that are deployed separately:
+
+| Part | Where | Folder |
+|---|---|---|
+| **Landing page** | yigaoluganda.com | [`landing/`](landing) (static site, English at `/`, Swedish at `/sv/`, terms and privacy pages) |
+| **The app** | app.yigaoluganda.com | this folder (Expo web build) |
+| **Backend** | Supabase (EU) | [`supabase/`](supabase) (database tables and the payment functions) |
+
+- **Price.** One monthly plan: €3.99 + VAT, shown in each visitor's local currency (16 currencies, e.g. 55,00 kr incl. moms in Sweden, £3.49 in the UK). The table is [`src/pricing/pricing.ts`](src/pricing/pricing.ts). Stripe Tax adds VAT in the EU, so EU visitors see the price including VAT. Visitors from other countries see the net price. There is no free trial.
+- **Accounts.** Sign up with name, e-mail and password. The password field has an eye button to show or hide what you typed. Log in, forgot password, a new password from the e-mail link, log out and delete account. Progress is saved to the account and follows the learner between devices.
+- **Paying.** Only on the website, through Stripe Checkout. The plan screen says why: it's cheaper than an app store and keeps the app affordable. The phone apps never sell anything. After paying, the course unlocks. Settings shows the subscription, *Manage subscription* (Stripe's portal: cancel, change card, receipts) and, for 14 days, *Withdraw from contract* (ends it and refunds in full).
+- **Without Supabase settings** (`EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), the app runs as before, with no accounts and progress on the device only. Development and the offline e2e test use this mode.
+
+| Command | What it does |
+|---|---|
+| `npm run sites:sync` | Copies the price table and course facts to the landing page and the app's edge function |
+| `cd landing && node build.mjs` | Builds the landing page into `landing/dist/` |
+| `npm run stripe:setup` | Creates the Stripe price (all currencies), customer portal and webhook (see the script) |
+| `npm run e2e:accounts` | Browser test of sign-up, password show/hide, paying, withdrawing and log-in, with Supabase and Stripe mocked |
+
+**Before going live:**
+1. Fill in the company details in [`landing/src/company.mjs`](landing/src/company.mjs), and have the terms and privacy policy ([`landing/src/legal.mjs`](landing/src/legal.mjs)) checked.
+2. Create the Supabase project (EU). Apply [`supabase/migrations`](supabase/migrations) and deploy the five functions in [`supabase/functions`](supabase/functions).
+3. In Stripe, turn on Stripe Tax (EU One-Stop Shop) and set the terms URL under *Public details*. Run `npm run stripe:setup -- --webhook https://<ref>.supabase.co` with a test key, then with the live key.
+4. Save the Edge Function secrets `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID` and `STRIPE_PORTAL_CONFIGURATION`.
+5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml).
+6. Point yigaoluganda.com at the landing site and app.yigaoluganda.com at the app site.
+
 ### Run it
 
 You need [Node.js](https://nodejs.org) 20 or newer.
@@ -88,7 +118,7 @@ Scan the QR code with **Expo Go** on your phone, or press `w` to open it in a br
 
 | Command | What it does |
 |---|---|
-| `npm test` | Unit tests: lesson engine, rules, content checks, colour contrast, translations |
+| `npm test` | Unit tests: lesson engine, rules, content checks, colour contrast, translations, prices, subscription rules |
 | `npm run typecheck` | TypeScript check |
 | `npm run lint` | ESLint (Expo's config) |
 | `npm run doctor` | Checks Expo dependencies and config |
@@ -150,7 +180,11 @@ assets/audio/       native-speaker clips (<id>.m4a)
 src/app/            screens (Expo Router): tabs, chapter, lesson, practice, phrase, settings, onboarding
 src/lesson/         lesson player, result card, the exercise components
 src/logic/          pure, unit-tested rules: generator, spelling distractors, water pots/cowries/drumbeat, unlocking, SRS, shields
-src/state/          Zustand store, saved on the device (AsyncStorage)
+src/state/          Zustand store, saved on the device (AsyncStorage) and, with an account, in Supabase
+src/account/        accounts, subscription state, progress sync, local price
+src/pricing/        the price table (local currencies, VAT)
+landing/            the landing page (yigaoluganda.com)
+supabase/           database migration and payment functions (Stripe)
 src/ui/             Ngaali, chapter illustrations, bead strings, pot/drum/cowrie icons, design tokens (colours, type in theme.ts)
 src/i18n/           English and Swedish interface text
 scripts/            audio, icons, sound effects, content report, e2e
@@ -158,7 +192,7 @@ scripts/            audio, icons, sound effects, content report, e2e
 
 ### Privacy
 
-There are no accounts, ads, analytics or tracking. Progress and recordings stay on the device. You can erase everything in *Profile → Settings → Reset progress*.
+There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device. Learners can delete their account in the app.
 
 The previous web version of the app, based on the book *Luganda för beginners* by Cyprine Kamoga, is in the git history at commit `6a7fad7`.
 
@@ -200,4 +234,6 @@ Appen använder aldrig datorröst för luganda.
 
 **Viktigt:** lugandan i del 1 har inte granskats av en modersmålstalare än. Det som är mest osäkert listas i [`content/CONTENT_REPORT.md`](content/CONTENT_REPORT.md).
 
-**Integritet:** inga konton, ingen reklam och ingen spårning. Allt sparas på enheten.
+**Webbplats och betalning:** landningssidan ligger i `landing/` (yigaoluganda.com). Appen kräver ett konto och ett abonnemang: 3,99 € + moms i månaden, i besökarens egen valuta, utan gratisperiod. Betalningen sker bara på webben, via Stripe. Lösenordsfältet har en ögonknapp för att visa eller dölja lösenordet.
+
+**Integritet:** ingen reklam och ingen spårning. Konto och framsteg sparas inom EU (Supabase), och betalningar sköts av Stripe.

@@ -1,0 +1,14 @@
+# Supabase project settings used by the CLI. The project itself lives in the Supabase dashboard.
+project_id = "yigaoluganda"
+
+[auth]
+site_url = "https://app.yigaoluganda.com"
+additional_redirect_urls = ["https://app.yigaoluganda.com/**", "http://localhost:8081/**"]
+minimum_password_length = 8
+
+[auth.email]
+enable_confirmations = true
+
+# Stripe calls the webhook without a Supabase login; the function checks Stripe's signature instead.
+[functions.stripe-webhook]
+verify_jwt = false

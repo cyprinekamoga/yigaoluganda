@@ -48,7 +48,7 @@ export interface Reward {
   heartsRefilled?: boolean;
 }
 
-interface Data {
+export interface Data {
   profile: Profile | null;
   settings: Settings;
   stats: Stats;
@@ -95,6 +95,27 @@ const fresh = (): Data => ({
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
+
+/** The saved part of the state: what goes to the device and, with an account, to the cloud. */
+export function snapshot(s: Data): Data {
+  return {
+    profile: s.profile,
+    settings: s.settings,
+    stats: s.stats,
+    done: s.done,
+    opened: s.opened,
+    lastChapterId: s.lastChapterId,
+    srs: s.srs,
+    badges: s.badges,
+    factIndex: s.factIndex,
+  };
+}
+
+/** Fills any field a saved snapshot lacks, so an older or partial copy loads safely. */
+export function restore(saved: Partial<Data>): Data {
+  const base = fresh();
+  return { ...base, ...saved, settings: { ...base.settings, ...saved.settings }, stats: { ...base.stats, ...saved.stats } };
+}
 
 export const useApp = create<AppState>()(
   persist(
@@ -215,17 +236,7 @@ export const useApp = create<AppState>()(
         return s as Data;
       },
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (s): Data => ({
-        profile: s.profile,
-        settings: s.settings,
-        stats: s.stats,
-        done: s.done,
-        opened: s.opened,
-        lastChapterId: s.lastChapterId,
-        srs: s.srs,
-        badges: s.badges,
-        factIndex: s.factIndex,
-      }),
+      partialize: (s): Data => snapshot(s),
     },
   ),
 );
