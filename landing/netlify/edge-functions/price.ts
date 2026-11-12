@@ -2,8 +2,8 @@
 // Netlify knows the visitor's country from their IP address, the same signal Stripe Checkout
 // uses to pick the currency, so the page and the checkout agree.
 import type { Context } from 'https://edge.netlify.com';
-import { injectPrice } from './_inject.ts';
-import { priceLine, quote } from './_pricing.ts';
+import { injectPrice } from '../lib/inject.ts';
+import { priceLine, quote } from '../lib/pricing.ts';
 
 export default async (request: Request, context: Context) => {
   const response = await context.next();

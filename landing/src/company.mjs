@@ -1,14 +1,17 @@
 // Company details shown in the footer, the terms and the privacy policy.
 // Fill these in before the landing page goes live: `node build.mjs` warns while any is still empty.
 export const COMPANY = {
-  /** Legal name of the company, e.g. "Example AB". */
-  name: '',
-  /** Swedish organisation number, e.g. "559000-0000". */
-  orgNo: '',
-  /** Postal address on one line. */
-  address: '',
+  /** Name of the business behind Yiga Oluganda. */
+  name: 'Nordvra',
+  /** Organisation number (for a sole trader, the owner's personal identity number). */
+  orgNo: '20061129-9595',
+  /**
+   * Where the business is. Nordvra publishes only its city; add a postal address here if you
+   * want one shown (e-commerce rules normally expect a geographic address).
+   */
+  address: { en: 'Stockholm, Sweden', sv: 'Stockholm, Sverige' },
   /** Support e-mail address shown on the site. */
-  email: '',
+  email: 'info@nordvra.se',
 };
 
 /** Where the app runs. "Get started" and "Log in" link here. */

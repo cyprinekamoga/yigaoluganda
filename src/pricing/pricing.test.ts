@@ -41,7 +41,7 @@ describe('pricing', () => {
 
   it('keeps the edge-function copies in sync (run `npm run sites:sync`)', () => {
     const source = readFileSync(path.join(ROOT, 'src/pricing/pricing.ts'), 'utf8');
-    for (const copy of ['netlify/edge-functions/_pricing.ts', 'landing/netlify/edge-functions/_pricing.ts']) {
+    for (const copy of ['netlify/lib/pricing.ts', 'landing/netlify/lib/pricing.ts']) {
       expect(readFileSync(path.join(ROOT, copy), 'utf8'), copy).toBe(source);
     }
   });

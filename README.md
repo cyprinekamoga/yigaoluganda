@@ -90,7 +90,7 @@ The project is three parts that are deployed separately:
 | Command | What it does |
 |---|---|
 | `npm run sites:sync` | Copies the price table and course facts to the landing page and the app's edge function |
-| `cd landing && node build.mjs` | Builds the landing page into `landing/dist/` |
+| `cd landing && node build.mjs` | Builds the landing page into `landing/dist/` (the landing site deploys from the `landing/` folder) |
 | `npm run stripe:setup` | Creates the Stripe price (all currencies), customer portal and webhook (see the script) |
 | `npm run e2e:accounts` | Browser test of sign-up, password show/hide, paying, withdrawing and log-in, with Supabase and Stripe mocked |
 
@@ -98,8 +98,8 @@ The project is three parts that are deployed separately:
 1. Fill in the company details in [`landing/src/company.mjs`](landing/src/company.mjs), and have the terms and privacy policy ([`landing/src/legal.mjs`](landing/src/legal.mjs)) checked.
 2. Create the Supabase project (EU). Apply [`supabase/migrations`](supabase/migrations) and deploy the five functions in [`supabase/functions`](supabase/functions).
 3. In Stripe, turn on Stripe Tax (EU One-Stop Shop) and set the terms URL under *Public details*. Run `npm run stripe:setup -- --webhook https://<ref>.supabase.co` with a test key, then with the live key.
-4. Save the Edge Function secrets `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID` and `STRIPE_PORTAL_CONFIGURATION`.
-5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml).
+4. Save the Edge Function secrets `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` (the functions find the price and the portal by name).
+5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml). In Supabase, set *Authentication → URL Configuration* to the app's address, and add your own SMTP (e.g. Resend) so sign-up e-mails reach everyone.
 6. Point yigaoluganda.com at the landing site and app.yigaoluganda.com at the app site.
 
 ### Run it

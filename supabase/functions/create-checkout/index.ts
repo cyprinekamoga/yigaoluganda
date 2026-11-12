@@ -1,8 +1,8 @@
 // POST /create-checkout { lang } → { url } of a Stripe Checkout page for the monthly plan.
 // Stripe picks the customer's local currency from the price's currency options and adds VAT
 // (Stripe Tax). The customer must accept the terms, which explain the 14-day right of withdrawal.
-import { callingUser, customerFor, stripe, admin } from '../_shared/clients.ts';
-import { appUrl, cors, env, json, siteUrl } from '../_shared/http.ts';
+import { admin, callingUser, customerFor, monthlyPrice, stripe } from '../_shared/clients.ts';
+import { appUrl, cors, json, siteUrl } from '../_shared/http.ts';
 
 const ACTIVE = ['active', 'trialing', 'past_due'];
 
@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
     mode: 'subscription',
     customer: await customerFor(user),
     client_reference_id: user.id,
-    line_items: [{ price: env('STRIPE_PRICE_ID'), quantity: 1 }],
+    line_items: [{ price: await monthlyPrice(), quantity: 1 }],
     subscription_data: { metadata: { user_id: user.id } },
     automatic_tax: { enabled: true },
     customer_update: { address: 'auto', name: 'auto' },

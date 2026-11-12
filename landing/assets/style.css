@@ -154,6 +154,7 @@ p { margin: 0 0 1em; }
 .foot-links a { color: var(--ink2); text-decoration: none; }
 .foot-links a:hover { color: var(--ink); }
 .foot-small { color: var(--ink3); font-size: 0.85rem; margin-top: 20px; }
+.foot-small a { color: var(--ink2); }
 
 /* Legal pages and 404 */
 .legal { padding-top: 32px; padding-bottom: 56px; }

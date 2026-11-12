@@ -1,17 +1,17 @@
 // Builds the landing page (yigaoluganda.com) into dist/: English at /, Swedish at /sv/,
 // plus the terms and privacy pages, robots.txt, sitemap.xml and a 404 page.
-// No dependencies: `node build.mjs` (Node 22.18 or newer, for the TypeScript price table).
-import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+// No dependencies: `node build.mjs`.
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { priceLine, quote } from './netlify/edge-functions/_pricing.ts';
 import { APP_URL, COMPANY, SITE_URL } from './src/company.mjs';
 import { CONTENT } from './src/content.mjs';
-import course from './src/course.json' with { type: 'json' };
 import { privacy, terms } from './src/legal.mjs';
+import { priceLine, quote } from './src/pricing.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'dist');
+const course = JSON.parse(readFileSync(path.join(ROOT, 'src/course.json'), 'utf8'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fill = (s, vars) => s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
@@ -19,6 +19,8 @@ const fill = (s, vars) => s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k]
 // Empty company fields show as visible placeholders, and the build warns about them.
 const missing = Object.entries(COMPANY).filter(([, v]) => !v).map(([k]) => k);
 const company = Object.fromEntries(Object.entries(COMPANY).map(([k, v]) => [k, v || `[${k}]`]));
+/** Company details in one language (the address can differ between English and Swedish). */
+const companyIn = (lang) => ({ ...company, address: typeof company.address === 'object' ? company.address[lang] : company.address });
 
 /** The visitor's price. The edge function replaces the text inside every data-price span. */
 const priceSpan = (lang) => `<span class="price" data-price>${esc(priceLine(quote(''), lang))}</span>`;
@@ -95,7 +97,7 @@ function footer(t) {
       <a href="${t.other.path}" hreflang="${t.other.lang}" lang="${t.other.lang}">${esc(t.other.label)}</a>
     </nav>
   </div>
-  <div class="wrap foot-small">© ${new Date().getFullYear()} ${esc(company.name)} · ${esc(t.footer.orgNo)} ${esc(company.orgNo)}</div>
+  <div class="wrap foot-small">© ${new Date().getFullYear()} ${esc(company.name)} · ${esc(t.footer.orgNo)} ${esc(company.orgNo)} · ${esc(companyIn(t.lang).address)} · <a href="mailto:${esc(company.email)}">${esc(company.email)}</a></div>
 </footer>`;
 }
 
@@ -292,8 +294,8 @@ cpSync(path.join(ROOT, 'assets'), path.join(OUT, 'assets'), { recursive: true })
 const pages = [];
 for (const t of Object.values(CONTENT)) {
   write(`${t.path.slice(1)}index.html`, home(t));
-  write(`${t.legal.terms.slice(1)}index.html`, legalPage(t, terms(t.lang, company), t.legal.terms));
-  write(`${t.legal.privacy.slice(1)}index.html`, legalPage(t, privacy(t.lang, company), t.legal.privacy));
+  write(`${t.legal.terms.slice(1)}index.html`, legalPage(t, terms(t.lang, companyIn(t.lang)), t.legal.terms));
+  write(`${t.legal.privacy.slice(1)}index.html`, legalPage(t, privacy(t.lang, companyIn(t.lang)), t.legal.privacy));
   pages.push(t.path, t.legal.terms, t.legal.privacy);
 }
 write('404.html', notFound());

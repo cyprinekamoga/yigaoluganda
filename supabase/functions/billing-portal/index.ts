@@ -1,5 +1,5 @@
 // POST /billing-portal { lang } → { url } of Stripe's customer portal: cancel, change card, receipts.
-import { callingUser, customerFor, stripe } from '../_shared/clients.ts';
+import { callingUser, customerFor, portalConfiguration, stripe } from '../_shared/clients.ts';
 import { appUrl, cors, json } from '../_shared/http.ts';
 
 Deno.serve(async (req) => {
@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
   const session = await stripe.billingPortal.sessions.create({
     customer: await customerFor(user),
     return_url: `${appUrl()}/settings`,
-    configuration: Deno.env.get('STRIPE_PORTAL_CONFIGURATION') || undefined,
+    configuration: await portalConfiguration(),
     locale: lang === 'sv' ? 'sv' : 'en',
   });
   return json({ url: session.url });

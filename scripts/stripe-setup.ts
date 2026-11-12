@@ -2,7 +2,7 @@
 //   1. the monthly price (net, VAT added by Stripe Tax) in every local currency,
 //   2. a customer-portal configuration (cancel at period end, change card, receipts),
 //   3. the webhook that keeps the app's database in step (with --webhook <supabase url>).
-// Prints the ids to save as Supabase Edge Function secrets. Never prints secret keys.
+// Safe to run again: it reuses what exists. Never prints secret keys.
 //
 // Usage:  STRIPE_SECRET_KEY=sk_test_... npm run stripe:setup -- [--webhook https://<ref>.supabase.co] [--new-price]
 // Run it with a test-mode key first, then again with the live key.
@@ -66,8 +66,11 @@ if (!existing || flag('--new-price')) {
   console.log(`✓ price ${priceId} (${Object.keys(MONTHLY_NET).length} currencies)`);
 } else console.log(`✓ price ${priceId} already exists (use --new-price after changing the table)`);
 
-// 2. Customer portal
-const portal = await stripe('POST', 'billing_portal/configurations', {
+// 2. Customer portal (tagged so the billing-portal function can find it)
+const portals = (await stripe('GET', 'billing_portal/configurations', { active: true, limit: 100 })).data as { id: string; metadata?: Record<string, string> }[];
+const ours = portals.find((c) => c.metadata?.app === 'yiga-oluganda');
+const portal = await stripe('POST', ours ? `billing_portal/configurations/${ours.id}` : 'billing_portal/configurations', {
+  'metadata[app]': 'yiga-oluganda',
   'business_profile[headline]': 'Yiga Oluganda',
   'business_profile[privacy_policy_url]': `${SITE}/privacy/`,
   'business_profile[terms_of_service_url]': `${SITE}/terms/`,
@@ -89,8 +92,11 @@ console.log(`✓ customer portal ${portal.id}`);
 // 3. Webhook
 const supabaseUrl = value('--webhook');
 if (supabaseUrl) {
-  const endpoint = await stripe('POST', 'webhook_endpoints', {
-    url: `${supabaseUrl.replace(/\/$/, '')}/functions/v1/stripe-webhook`,
+  const hookUrl = `${supabaseUrl.replace(/\/$/, '')}/functions/v1/stripe-webhook`;
+  const hooks = (await stripe('GET', 'webhook_endpoints', { limit: 100 })).data as { id: string; url: string }[];
+  const found = hooks.find((h) => h.url === hookUrl);
+  const endpoint = await stripe('POST', found ? `webhook_endpoints/${found.id}` : 'webhook_endpoints', {
+    ...(found ? {} : { url: hookUrl }),
     description: 'Yiga Oluganda: keep subscriptions in step',
     'enabled_events[0]': 'checkout.session.completed',
     'enabled_events[1]': 'customer.subscription.created',
@@ -103,4 +109,4 @@ if (supabaseUrl) {
   console.log('  Its signing secret is shown in the Stripe dashboard (Developers → Webhooks). Save it as STRIPE_WEBHOOK_SECRET.');
 }
 
-console.log(`\nSave these as Supabase Edge Function secrets:\n  STRIPE_PRICE_ID=${priceId}\n  STRIPE_PORTAL_CONFIGURATION=${portal.id}`);
+console.log('\nThe Edge Functions find the price and the portal by name; they only need the secrets STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.');

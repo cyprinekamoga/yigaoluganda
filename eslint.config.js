@@ -5,6 +5,6 @@ const expoConfig = require('eslint-config-expo/flat');
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*', 'netlify/edge-functions/*', 'landing/**', 'supabase/functions/**'],
+    ignores: ['dist/*', 'netlify/**', 'landing/**', 'supabase/functions/**'],
   },
 ]);

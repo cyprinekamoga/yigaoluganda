@@ -9,6 +9,27 @@ export const admin = createClient(env('SUPABASE_URL'), env('SUPABASE_SERVICE_ROL
   auth: { persistSession: false, autoRefreshToken: false },
 });
 
+/** Set up by scripts/stripe-setup.ts. Found by name, so no ids need copying into secrets. */
+export const PRICE_LOOKUP_KEY = 'yiga-oluganda-monthly';
+export const PORTAL_TAG = 'yiga-oluganda';
+
+/** The monthly price (all currencies), by its lookup key. */
+export async function monthlyPrice(): Promise<string> {
+  const fromEnv = Deno.env.get('STRIPE_PRICE_ID');
+  if (fromEnv) return fromEnv;
+  const { data } = await stripe.prices.list({ lookup_keys: [PRICE_LOOKUP_KEY], active: true, limit: 1 });
+  if (!data[0]) throw new Error('No active Stripe price with lookup key ' + PRICE_LOOKUP_KEY);
+  return data[0].id;
+}
+
+/** Our customer-portal configuration (tagged in its metadata), or Stripe's default. */
+export async function portalConfiguration(): Promise<string | undefined> {
+  const fromEnv = Deno.env.get('STRIPE_PORTAL_CONFIGURATION');
+  if (fromEnv) return fromEnv;
+  const { data } = await stripe.billingPortal.configurations.list({ active: true, limit: 100 });
+  return data.find((c) => c.metadata?.app === PORTAL_TAG)?.id;
+}
+
 /** The signed-in user who called the function, or null. */
 export async function callingUser(req: Request): Promise<User | null> {
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
