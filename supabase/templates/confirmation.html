@@ -1,0 +1,18 @@
+<!-- Supabase → Authentication → Emails → Templates → "Confirm signup".
+     Subject: {{ if eq .Data.ui_lang "sv" }}Bekräfta ditt konto{{ else }}Confirm your account{{ end }} · Yiga Oluganda -->
+<div style="margin:0;background:#250104;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#FFF1EC;padding:32px 20px">
+  <div style="max-width:480px;margin:0 auto">
+    <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#CDF73D;margin:0 0 12px">Yiga Oluganda</p>
+    {{ if eq .Data.ui_lang "sv" }}
+    <h1 style="font-size:26px;line-height:1.2;margin:0 0 12px">Gyebale ko{{ if .Data.name }}, {{ .Data.name }}{{ end }}!</h1>
+    <p style="font-size:17px;line-height:1.5;color:#E3BEB7;margin:0 0 24px">Tryck på knappen för att bekräfta din e-postadress, så kommer du direkt tillbaka till Yiga Oluganda.</p>
+    <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:12px">Bekräfta mitt konto</a>
+    <p style="font-size:13px;color:#A8807A;margin:32px 0 0">Har du inte skapat ett konto? Då kan du strunta i det här mejlet.</p>
+    {{ else }}
+    <h1 style="font-size:26px;line-height:1.2;margin:0 0 12px">Gyebale ko{{ if .Data.name }}, {{ .Data.name }}{{ end }}!</h1>
+    <p style="font-size:17px;line-height:1.5;color:#E3BEB7;margin:0 0 24px">Tap the button to confirm your e-mail address, and you'll come straight back to Yiga Oluganda.</p>
+    <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:12px">Confirm my account</a>
+    <p style="font-size:13px;color:#A8807A;margin:32px 0 0">Didn't create an account? You can ignore this e-mail.</p>
+    {{ end }}
+  </div>
+</div>

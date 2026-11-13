@@ -16,3 +16,12 @@ verify_jwt = false
 # Called by pg_cron (with a shared secret) and by unsubscribe links in e-mails.
 [functions.reminders]
 verify_jwt = false
+
+# Branded e-mails in the learner's language (paste the same into the dashboard's Email Templates).
+[auth.email.template.confirmation]
+subject = "{{ if eq .Data.ui_lang \"sv\" }}Bekräfta ditt konto{{ else }}Confirm your account{{ end }} · Yiga Oluganda"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "{{ if eq .Data.ui_lang \"sv\" }}Välj ett nytt lösenord{{ else }}Choose a new password{{ end }} · Yiga Oluganda"
+content_path = "./supabase/templates/recovery.html"

@@ -1,0 +1,18 @@
+<!-- Supabase → Authentication → Emails → Templates → "Reset password".
+     Subject: {{ if eq .Data.ui_lang "sv" }}Välj ett nytt lösenord{{ else }}Choose a new password{{ end }} · Yiga Oluganda -->
+<div style="margin:0;background:#250104;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#FFF1EC;padding:32px 20px">
+  <div style="max-width:480px;margin:0 auto">
+    <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#CDF73D;margin:0 0 12px">Yiga Oluganda</p>
+    {{ if eq .Data.ui_lang "sv" }}
+    <h1 style="font-size:26px;line-height:1.2;margin:0 0 12px">Nytt lösenord</h1>
+    <p style="font-size:17px;line-height:1.5;color:#E3BEB7;margin:0 0 24px">Tryck på knappen för att välja ett nytt lösenord till Yiga Oluganda.</p>
+    <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:12px">Välj ett nytt lösenord</a>
+    <p style="font-size:13px;color:#A8807A;margin:32px 0 0">Har du inte bett om det här? Då kan du strunta i mejlet. Ditt lösenord ändras inte.</p>
+    {{ else }}
+    <h1 style="font-size:26px;line-height:1.2;margin:0 0 12px">New password</h1>
+    <p style="font-size:17px;line-height:1.5;color:#E3BEB7;margin:0 0 24px">Tap the button to choose a new password for Yiga Oluganda.</p>
+    <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:12px">Choose a new password</a>
+    <p style="font-size:13px;color:#A8807A;margin:32px 0 0">Didn't ask for this? You can ignore this e-mail. Your password won't change.</p>
+    {{ end }}
+  </div>
+</div>
