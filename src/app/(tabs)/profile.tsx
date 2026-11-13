@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { UNIT_1 } from '@/content';
+import { ALL_CHAPTERS, ALL_PHRASES, UNITS } from '@/content';
 import { useT } from '@/i18n';
 import { BADGES } from '@/logic/badges';
 import { dayKey, lastWeek } from '@/logic/dates';
@@ -38,8 +38,8 @@ export default function Profile() {
   const since = new Date(profile.createdAt).toLocaleDateString(lang === 'sv' ? 'sv-SE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const earned = BADGES.filter((b) => badges[b.id]).length;
   const learned = Object.keys(srs).length;
-  const totalPhrases = UNIT_1.phrases.length;
-  const chaptersDone = UNIT_1.chapters.filter((c) => isComplete(c, done)).length;
+  const totalPhrases = ALL_PHRASES.length;
+  const chaptersDone = ALL_CHAPTERS.filter((c) => isComplete(c, done)).length;
   const streak = visibleStreak(stats, today);
 
   return (
@@ -119,28 +119,35 @@ export default function Profile() {
       <View style={{ gap: S.sm }}>
         <View style={styles.rowBetween}>
           <Txt variant="label">{t('profile.chapters')}</Txt>
-          <Txt variant="small">{t('profile.chaptersDone', { n: chaptersDone, total: UNIT_1.chapters.length })}</Txt>
+          <Txt variant="small">{t('profile.chaptersDone', { n: chaptersDone, total: ALL_CHAPTERS.length })}</Txt>
         </View>
         <Card style={styles.map} testID="chapter-map">
-          {UNIT_1.chapters.map((c, i) => {
-            const n = lessonsDone(c, done);
-            const h = HUES[c.hue];
-            return (
-              <Pressable
-                key={c.id}
-                onPress={() => router.push(`/chapter/${c.id}`)}
-                accessibilityRole="button"
-                accessibilityLabel={`${t('home.chapter', { n: c.n })}: ${tr(c.title)}. ${t('home.lessons', { done: n, total: c.lessons.length })}`}
-                style={({ pressed }) => [styles.mapRow, i > 0 && styles.mapRule, pressed && { opacity: 0.8 }]}
-              >
-                <Txt style={[styles.mapN, n > 0 && { color: h.deep }]}>{c.n}</Txt>
-                <Txt variant="strong" style={{ flex: 1 }} numberOfLines={1}>
-                  {c.lgTitle}
-                </Txt>
-                <Beads total={c.lessons.length} done={n} size={11} color={h.base} />
-              </Pressable>
-            );
-          })}
+          {UNITS.map((unit) => (
+            <View key={unit.id}>
+              <Txt variant="label" style={styles.mapPart}>
+                {t('home.unit', { n: unit.n })} · {tr(unit.title)}
+              </Txt>
+              {unit.chapters.map((c, i) => {
+                const n = lessonsDone(c, done);
+                const h = HUES[c.hue];
+                return (
+                  <Pressable
+                    key={c.id}
+                    onPress={() => router.push(`/chapter/${c.id}`)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${t('home.chapter', { n: c.n })}: ${tr(c.title)}. ${t('home.lessons', { done: n, total: c.lessons.length })}`}
+                    style={({ pressed }) => [styles.mapRow, i > 0 && styles.mapRule, pressed && { opacity: 0.8 }]}
+                  >
+                    <Txt style={[styles.mapN, n > 0 && { color: h.deep }]}>{c.n}</Txt>
+                    <Txt variant="strong" style={{ flex: 1 }} numberOfLines={1}>
+                      {c.lgTitle}
+                    </Txt>
+                    <Beads total={c.lessons.length} done={n} size={11} color={h.base} />
+                  </Pressable>
+                );
+              })}
+            </View>
+          ))}
         </Card>
       </View>
 
@@ -196,7 +203,8 @@ const styles = StyleSheet.create({
   dayDot: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: C.paperDeep },
   dayOn: { backgroundColor: C.tomatoSoft },
   dayToday: { borderWidth: 2, borderColor: C.neon },
-  map: { paddingVertical: S.xs },
+  map: { paddingVertical: S.xs, gap: S.sm },
+  mapPart: { paddingTop: S.sm, paddingBottom: 2 },
   mapRow: { flexDirection: 'row', alignItems: 'center', gap: S.md, minHeight: 44 },
   mapRule: { borderTopWidth: 1, borderTopColor: C.line },
   mapN: { ...F.semi, fontSize: 15, color: C.ink3, width: 22 },

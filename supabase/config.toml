@@ -12,3 +12,7 @@ enable_confirmations = true
 # Stripe calls the webhook without a Supabase login; the function checks Stripe's signature instead.
 [functions.stripe-webhook]
 verify_jwt = false
+
+# Called by pg_cron (with a shared secret) and by unsubscribe links in e-mails.
+[functions.reminders]
+verify_jwt = false

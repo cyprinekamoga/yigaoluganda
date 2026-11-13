@@ -1,0 +1,4 @@
+[
+  {"id": "root-nnuma", "form": "-nnuma", "meaning": {"en": "bites me, hurts me", "sv": "biter mig, gör ont"}, "explain": {"en": "Hunger, thirst and pain all 'bite' you. The start of the word matches what is biting.", "sv": "Hunger, törst och smärta 'biter' dig. Början av ordet passar ihop med det som biter."}, "examples": ["enjala-ennuma", "ennyonta-ennuma", "omutwe-gunnuma", "olubuto-lunnuma"]},
+  {"id": "root-lwa", "form": "Lwa-", "meaning": {"en": "day … (weekdays)", "sv": "dag … (veckodagar)"}, "explain": {"en": "Most weekdays are 'day two' to 'day six': Lwakubiri, Lwakusatu, Lwakuna, Lwakutaano, Lwamukaaga.", "sv": "De flesta veckodagar är 'dag två' till 'dag sex': Lwakubiri, Lwakusatu, Lwakuna, Lwakutaano, Lwamukaaga."}, "examples": ["lwakutaano", "lwamukaaga"]}
+]

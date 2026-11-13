@@ -7,6 +7,7 @@ import { deleteAccount, openBillingPortal, signOut, withdraw } from '@/account/a
 import { FormMessage } from '@/account/AuthShell';
 import { ACCOUNTS, SITE_URL } from '@/account/config';
 import { useAccount } from '@/account/store';
+import { ReminderSettings } from '@/reminders/ReminderSettings';
 import type { Lang } from '@/content/types';
 import { useT, type Key } from '@/i18n';
 import { useApp } from '@/state/store';
@@ -129,6 +130,8 @@ export default function Settings() {
           />
         </View>
       </Card>
+
+      <ReminderSettings />
 
       {ACCOUNTS && (
         <View style={styles.section} testID="settings-account">

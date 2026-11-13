@@ -182,8 +182,11 @@ ${header(t)}
     <div class="wrap">
       <h2 id="course-title" class="section-title">${esc(t.course.title)}</h2>
       <p class="section-lead">${esc(fill(t.course.lead, counts))}</p>
+      ${course.parts
+        .map(
+          (part) => `<h3 class="part-title">${esc(fill(t.course.part, { n: part.n, title: part.title[t.lang] }))}</h3>
       <ol class="chapters">
-        ${course.chapters
+        ${part.chapters
           .map(
             (c) => `<li class="chapter">
           <img src="/assets/img/scene-${c.id}.svg" alt="" width="120" height="120" loading="lazy">
@@ -191,7 +194,9 @@ ${header(t)}
         </li>`,
           )
           .join('\n        ')}
-      </ol>
+      </ol>`,
+        )
+        .join('\n      ')}
       <p class="note">${esc(t.course.next)}</p>
     </div>
   </section>

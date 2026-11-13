@@ -55,7 +55,149 @@ interface Spec {
   front?: (h: (typeof HUES)[Hue]) => React.ReactNode;
 }
 
+const Basket = (
+  <G>
+    <Circle cx={53} cy={96} r={5} fill={C.tomato} />
+    <Circle cx={62} cy={94} r={5.5} fill={C.tomato} />
+    <Circle cx={70} cy={97} r={4.5} fill={C.tomato} />
+    <Path d="M52 92 l1.5 -2 M62 89 l1 -2.5 M70 93 l1 -2" stroke={NEON_SHADE} strokeWidth={1.4} strokeLinecap="round" />
+    <Path d="M44 99 L78 99 L74 112 Q61 116 48 112 Z" fill={C.ink3} />
+    <Path d="M47 104 L75 104 M48 108 L74 108" stroke={C.paperDeep} strokeWidth={1.2} />
+  </G>
+);
+
+const ClayPot = (
+  <G>
+    <Path d="M55 86 Q53 82 56 79 M64 86 Q62 82 65 79" stroke={C.ink3} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+    <Path d="M53 90 H67 Q68.5 90 68.5 91.6 Q68.5 93.2 67 93.2 H53 Q51.5 93.2 51.5 91.6 Q51.5 90 53 90 Z" fill="#A51404" />
+    <Path d="M50.5 94 C42 98 42 110 50.5 114 H69.5 C78 110 78 98 69.5 94 Z" fill={C.tomato} />
+    <Path d="M45 102 Q60 106 75 102" stroke={C.neon} strokeWidth={1.6} fill="none" strokeLinecap="round" />
+  </G>
+);
+
+const SCENES_PART2: Record<'family' | 'numbers' | 'market' | 'kitchen' | 'clock' | 'signpost' | 'home' | 'health' | 'village', Spec> = {
+  family: {
+    art: { pose: 'wave', face: 'happy', speaking: true },
+    x: 4, y: 20,
+    front: (h) => (
+      <G>
+        <G transform={at(70, 56, 0.36)}>
+          <NgaaliArt pose="cheer" face="happy" />
+        </G>
+        <Heart x={86} y={30} s={1.1} fill={h.base} />
+        <Heart x={102} y={46} s={0.7} fill={h.track} />
+      </G>
+    ),
+  },
+  numbers: {
+    art: { pose: 'point', face: 'open', speaking: true },
+    x: 4, y: 22,
+    back: (h) => (
+      <G>
+        <Rect x={62} y={12} width={52} height={28} rx={12} fill={C.ink} />
+        <Path d="M70 38 L78 38 L66 47 Z" fill={C.ink} />
+        {['1', '2', '3'].map((n, i) => (
+          <SvgText key={n} x={75 + i * 13.5} y={32} fontSize={15} fontFamily={SYSTEM_FONT} fontWeight="800" fill={i === 1 ? C.tomato : C.onNeon} textAnchor="middle">
+            {n}
+          </SvgText>
+        ))}
+        <Sparkle x={104} y={60} s={0.8} fill={h.base} />
+      </G>
+    ),
+  },
+  market: {
+    art: { pose: 'hold', face: 'happy', speaking: true, held: Basket },
+    x: 23, y: 22,
+    back: (h) => (
+      <G>
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <Path key={i} d={`M${i * 20} 0 H${i * 20 + 20} V16 Q${i * 20 + 10} 24 ${i * 20} 16 Z`} fill={i % 2 ? C.ink : h.base} />
+        ))}
+      </G>
+    ),
+  },
+  kitchen: {
+    art: { pose: 'hold', face: 'happy', held: ClayPot },
+    x: 23, y: 20,
+    back: (h) => (
+      <G>
+        <Path d="M10 70 Q24 40 46 38 Q30 56 10 70 Z" fill={NEON_SHADE} opacity={0.8} />
+        <Sparkle x={100} y={28} s={1} fill={h.base} />
+        <Sparkle x={106} y={56} s={0.6} fill={h.track} />
+      </G>
+    ),
+  },
+  clock: {
+    art: { pose: 'think', face: 'up' },
+    x: 10, y: 22,
+    back: (h) => (
+      <G>
+        <Circle cx={92} cy={34} r={18} fill={C.ink} />
+        <Circle cx={92} cy={34} r={18} fill="none" stroke={h.base} strokeWidth={3} />
+        {[0, 90, 180, 270].map((d) => (
+          <Line key={d} x1={92 + Math.cos((d * Math.PI) / 180) * 13} y1={34 + Math.sin((d * Math.PI) / 180) * 13} x2={92 + Math.cos((d * Math.PI) / 180) * 15.5} y2={34 + Math.sin((d * Math.PI) / 180) * 15.5} stroke={C.ink3} strokeWidth={2} strokeLinecap="round" />
+        ))}
+        <Line x1={92} y1={34} x2={92} y2={23} stroke={C.onNeon} strokeWidth={2.6} strokeLinecap="round" />
+        <Line x1={92} y1={34} x2={100} y2={38} stroke={C.tomato} strokeWidth={2.6} strokeLinecap="round" />
+        <Circle cx={92} cy={34} r={2} fill={C.onNeon} />
+      </G>
+    ),
+  },
+  signpost: {
+    art: { pose: 'point', face: 'happy', speaking: true },
+    x: 0, y: 22,
+    front: (h) => (
+      <G>
+        <Path d="M96 40 L96 112" stroke={C.ink3} strokeWidth={4} strokeLinecap="round" />
+        <Path d="M78 42 H110 L116 49 L110 56 H78 Z" fill={h.base} />
+        <Path d="M114 62 H82 L76 69 L82 76 H114 Z" fill={C.ink} />
+        <Path d="M84 49 H104 M84 69 H106" stroke={C.paper} strokeWidth={2} strokeLinecap="round" opacity={0.5} />
+      </G>
+    ),
+  },
+  home: {
+    art: { pose: 'wave', face: 'happy', speaking: true },
+    x: 0, y: 22,
+    back: (h) => (
+      <G>
+        <Rect x={76} y={62} width={38} height={44} fill={C.ink3} />
+        <Path d="M70 64 L95 38 L120 64 Z" fill={NEON_SHADE} />
+        <Path d="M76 60 L95 41 L114 60" stroke={C.neon} strokeWidth={2} fill="none" />
+        <Rect x={89} y={80} width={13} height={26} rx={2} fill={C.paper} />
+        <Circle cx={99} cy={93} r={1.4} fill={h.base} />
+        <Sparkle x={22} y={26} s={0.9} fill={h.base} />
+      </G>
+    ),
+  },
+  health: {
+    art: { pose: 'stand', face: 'soft' },
+    x: 23, y: 20,
+    back: (h) => (
+      <G>
+        <Path transform="translate(80 18) scale(2.2)" d="M0 3 C0 -1 5 -2 6 2 C7 -2 12 -1 12 3 C12 7 6 10 6 11 C6 10 0 7 0 3 Z" fill={h.base} />
+        <Path d="M78 30 H88 L91 23 L95 38 L98 30 H108" stroke={C.ink} strokeWidth={2} fill="none" strokeLinejoin="round" strokeLinecap="round" />
+        <Sparkle x={18} y={36} s={0.8} fill={h.track} />
+      </G>
+    ),
+  },
+  village: {
+    art: { pose: 'cheer', face: 'happy' },
+    x: 23, y: 26,
+    back: (h) => (
+      <G>
+        <Circle cx={96} cy={26} r={10} fill={C.sun} />
+        <Path d="M0 92 Q30 66 64 88 Q92 70 120 86 V120 H0 Z" fill={C.line} />
+        <Path d="M14 90 L14 64" stroke={NEON_SHADE} strokeWidth={3} strokeLinecap="round" />
+        <Path d="M14 66 Q2 56 0 44 Q12 50 14 64 Q18 50 30 46 Q26 58 14 66 Z" fill={NEON_SHADE} />
+        <Path d="M108 88 L108 70" stroke={NEON_SHADE} strokeWidth={2.4} strokeLinecap="round" />
+        <Path d="M108 72 Q99 64 98 56 Q107 61 108 70 Q111 61 119 58 Q116 66 108 72 Z" fill={h.base} opacity={0.9} />
+      </G>
+    ),
+  },
+};
+
 const SCENES: Record<SceneId, Spec> = {
+  ...SCENES_PART2,
   sounds: {
     art: { pose: 'stand', face: 'happy', speaking: true },
     x: 10, y: 22,

@@ -1,31 +1,41 @@
 import { describe, expect, it } from 'vitest';
-import { DIALOGUES, FACTS, LESSONS, PHRASES, SENTENCES, SOUND_PAIRS, TIPS, UNITS, type T } from './index';
+import { ALL_CHAPTERS, DIALOGUES, FACTS, LESSONS, PHRASES, SENTENCES, SOUND_PAIRS, TIPS, UNITS, type T, type Unit } from './index';
 import { buildLesson, MAX_STEPS, MIN_STEPS } from '../logic/generator';
 import { normalize } from '../logic/text';
 
-const unit = UNITS[0];
 const filled = (t: T | undefined) => Boolean(t && t.en.trim() && t.sv.trim());
 
-describe('content', () => {
-  it('has 12 chapters in Unit 1, numbered in order, with the last one a checkpoint', () => {
-    expect(unit.chapters.map((c) => c.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-    expect(unit.chapters[11].checkpoint).toBe(true);
-    expect(unit.chapters.filter((c) => c.checkpoint)).toHaveLength(1);
+describe('course', () => {
+  it('has Part 1 (12 chapters) and Part 2 (9 chapters), numbered in order', () => {
+    expect(UNITS.map((u) => u.chapters.length)).toEqual([12, 9]);
+    expect(ALL_CHAPTERS.map((c) => c.n)).toEqual(ALL_CHAPTERS.map((_, i) => i + 1));
   });
 
-  it('uses unique, kebab-case ids', () => {
-    const ids = [
+  it('ends every part with its one final conversation', () => {
+    for (const unit of UNITS) {
+      expect(unit.chapters[unit.chapters.length - 1].checkpoint, unit.id).toBe(true);
+      expect(unit.chapters.filter((c) => c.checkpoint), unit.id).toHaveLength(1);
+    }
+  });
+
+  it('uses unique, kebab-case ids across the whole course', () => {
+    const ids = UNITS.flatMap((unit: Unit) => [
       ...unit.phrases.map((p) => p.id),
       ...unit.sentences.map((s) => s.id),
       ...unit.tips.map((t) => t.id),
       ...unit.dialogues.map((d) => d.id),
       ...unit.soundPairs.map((s) => s.id),
+      ...unit.roots.map((r) => r.id),
       ...unit.chapters.map((c) => c.id),
       ...unit.chapters.flatMap((c) => c.lessons.map((l) => l.id)),
-    ];
-    expect(new Set(ids).size).toBe(ids.length);
+    ]);
+    const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
+    expect(dupes).toEqual([]);
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
   });
+});
+
+describe.each(UNITS)('content of part $n', (unit) => {
 
   it('translates everything into English and Swedish', () => {
     for (const p of unit.phrases) {

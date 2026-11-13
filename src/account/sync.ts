@@ -13,20 +13,41 @@ import { supabase } from './supabase';
 let unsubscribe: (() => void) | null = null;
 let timer: ReturnType<typeof setTimeout> | null = null;
 let userId: string | null = null;
-let lastName = '';
-let lastLang = '';
+/** The last profile fields sent, so the profile row is only updated when they change. */
+let lastProfile = '';
+
+function timeZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch {
+    return 'UTC';
+  }
+}
+
+/** What the server needs for e-mails: name, language, the reminder and the last day practised. */
+function profileFields(data: Data) {
+  return {
+    name: data.profile?.name ?? '',
+    ui_lang: data.profile?.lang ?? 'en',
+    reminder_on: data.settings.reminder?.on ?? false,
+    reminder_hour: data.settings.reminder?.hour ?? 18,
+    timezone: timeZone(),
+    last_active_day: data.stats.lastActiveDay,
+  };
+}
 
 async function upload() {
   timer = null;
   if (!supabase || !userId) return;
   const data = snapshot(useApp.getState());
   await supabase.from('progress').upsert({ user_id: userId, data, updated_at: new Date().toISOString() });
-  // Keep the profile row (used for e-mails) in step with the name and language.
-  const p = data.profile;
-  if (p && (p.name !== lastName || p.lang !== lastLang)) {
-    lastName = p.name;
-    lastLang = p.lang;
-    await supabase.from('profiles').update({ name: p.name, ui_lang: p.lang, updated_at: new Date().toISOString() }).eq('id', userId);
+  // Keep the profile row (used for reminder e-mails) in step.
+  if (!data.profile) return;
+  const fields = profileFields(data);
+  const key = JSON.stringify(fields);
+  if (key !== lastProfile) {
+    const { error } = await supabase.from('profiles').update({ ...fields, updated_at: new Date().toISOString() }).eq('id', userId);
+    if (!error) lastProfile = key;
   }
 }
 
@@ -62,9 +83,9 @@ export async function startSync(session: Session) {
       },
     });
   }
-  lastName = useApp.getState().profile?.name ?? '';
-  lastLang = useApp.getState().profile?.lang ?? '';
+  lastProfile = '';
   if (!saved?.data) await upload();
+  else schedule();
   unsubscribe = useApp.subscribe(schedule);
   if (Platform.OS === 'web' && typeof window !== 'undefined') window.addEventListener('pagehide', flush);
   else appStateSub = AppState.addEventListener('change', (s) => s !== 'active' && flush());

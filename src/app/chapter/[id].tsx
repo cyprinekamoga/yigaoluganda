@@ -2,9 +2,10 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { CHAPTERS, PHRASES, TIPS, UNIT_1, type Tip } from '@/content';
+import { CHAPTERS, PHRASES, TIPS, type Tip } from '@/content';
 import { useT } from '@/i18n';
-import { isAvailable, isLessonOpen, lessonsDone, nextLessonIndex } from '@/logic/unlock';
+import { chapterAvailable, lockedReason } from '@/logic/course';
+import { isLessonOpen, lessonsDone, nextLessonIndex } from '@/logic/unlock';
 import { useApp } from '@/state/store';
 import { BackBar } from '@/ui/BackBar';
 import { Beads } from '@/ui/Beads';
@@ -36,7 +37,7 @@ export default function ChapterScreen() {
   }
 
   const h = HUES[chapter.hue];
-  const available = isAvailable(UNIT_1, chapter, done);
+  const available = chapterAvailable(chapter, done);
   const n = lessonsDone(chapter, done);
   const next = nextLessonIndex(chapter, done);
   const phraseIds = chapter.lessons.flatMap((l) => l.phrases);
@@ -66,7 +67,7 @@ export default function ChapterScreen() {
           <Ngaali mood="think" size={60} />
           <View style={{ flex: 1, gap: S.xs }}>
             <Txt variant="h3">{t('chapter.lockedTitle')}</Txt>
-            <Txt variant="body">{chapter.checkpoint ? t('chapter.lockedCheckpoint') : t('chapter.lockedBody')}</Txt>
+            <Txt variant="body">{t(lockedReason(chapter, done))}</Txt>
           </View>
         </Card>
       ) : next !== null ? (

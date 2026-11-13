@@ -120,6 +120,7 @@ p { margin: 0 0 1em; }
 .chapter p { margin: 0; color: var(--ink2); font-size: 0.93rem; }
 .chapter .chapter-n { color: var(--neon); font-weight: 600; font-size: 0.8rem; }
 .note { color: var(--ink2); }
+.part-title { font-size: 1.25rem; margin: 28px 0 12px; color: var(--neon); }
 
 /* Price */
 .price-card { max-width: 520px; margin: 0 auto; background: var(--card); border: 2px solid var(--neon); border-radius: 26px; padding: 28px 22px; text-align: center; }

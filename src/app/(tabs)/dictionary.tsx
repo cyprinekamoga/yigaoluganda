@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { hasAudio } from '@/audio/engine';
-import { PHRASES, ROOTS, UNIT_1, type Situation } from '@/content';
+import { ALL_PHRASES, PHRASES, ROOTS, type Situation } from '@/content';
 import { useT } from '@/i18n';
 import { matches } from '@/logic/search';
 import { useApp } from '@/state/store';
@@ -12,7 +12,7 @@ import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
-const ORDER: Situation[] = ['greet', 'polite', 'elders', 'leaving', 'intro', 'me', 'family', 'asking', 'feelings', 'stuck', 'around', 'table', 'sounds'];
+const ORDER: Situation[] = ['greet', 'polite', 'elders', 'leaving', 'intro', 'me', 'family', 'asking', 'feelings', 'stuck', 'around', 'table', 'numbers', 'time', 'home', 'health', 'sounds'];
 
 export default function Dictionary() {
   const { t, tr, lang } = useT();
@@ -23,7 +23,7 @@ export default function Dictionary() {
   const [focused, setFocused] = useState(false);
 
   const groups = useMemo(() => {
-    const hits = UNIT_1.phrases.filter((p) => matches(q, p.lg, p.tr[lang], ...(p.variants ?? [])));
+    const hits = ALL_PHRASES.filter((p) => matches(q, p.lg, p.tr[lang], ...(p.variants ?? [])));
     return ORDER.map((sit) => ({ sit, items: hits.filter((p) => p.category === sit) })).filter((g) => g.items.length);
   }, [q, lang]);
   const total = groups.reduce((n, g) => n + g.items.length, 0);
@@ -63,7 +63,7 @@ export default function Dictionary() {
 
       {tab === 'phrases' ? (
         <>
-          <Txt variant="small">{q ? (total ? t('dict.count', { n: total }) : t('dict.noResults', { q })) : t('dict.count', { n: UNIT_1.phrases.length })}</Txt>
+          <Txt variant="small">{q ? (total ? t('dict.count', { n: total }) : t('dict.noResults', { q })) : t('dict.count', { n: ALL_PHRASES.length })}</Txt>
           {groups.map(({ sit, items }) => (
             <View key={sit} style={styles.group}>
               <Txt variant="label">{t(`sit.${sit}`)}</Txt>

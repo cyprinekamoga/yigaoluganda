@@ -15,6 +15,7 @@ import {
   regenHearts,
   type Stats,
 } from '../logic/progress';
+import { DEFAULT_REMINDER_HOUR } from '../logic/reminders';
 import { grade, introduce, type SrsCard } from '../logic/srs';
 
 export interface Profile {
@@ -26,12 +27,18 @@ export interface Profile {
 export interface Settings {
   sfx: boolean;
   haptics: boolean;
+  /** Daily reminder: a notification on phones, an e-mail on the web (with an account). */
+  reminder: { on: boolean; hour: number };
+  /** The "want a daily reminder?" offer has been answered. */
+  reminderAsked: boolean;
 }
 
 export interface LessonRecord {
   completedAt: number;
   bestAccuracy: number;
   plays: number;
+  /** Marked done by the placement test rather than played. */
+  placed?: true;
 }
 
 export interface LessonResult {
@@ -59,6 +66,8 @@ export interface Data {
   badges: Record<string, number>;
   /** Position in the fun-fact rotation. */
   factIndex: number;
+  /** The placement test has been taken or declined (hides the offer on the home screen). */
+  placementSeen: boolean;
 }
 
 interface Actions {
@@ -77,6 +86,9 @@ interface Actions {
   noteRecording(): void;
   /** The next fun fact to show (index into FACTS); advances the rotation. */
   takeFact(count: number): number;
+  /** Marks whole chapters as done after the placement test, and adds their phrases to review. */
+  placeOut(chapterIds: string[]): void;
+  setPlacementSeen(): void;
   reset(): void;
 }
 
@@ -84,7 +96,7 @@ export type AppState = Data & Actions;
 
 const fresh = (): Data => ({
   profile: null,
-  settings: { sfx: true, haptics: true },
+  settings: { sfx: true, haptics: true, reminder: { on: false, hour: DEFAULT_REMINDER_HOUR }, reminderAsked: false },
   stats: initialStats(Date.now()),
   done: {},
   opened: {},
@@ -92,6 +104,7 @@ const fresh = (): Data => ({
   srs: {},
   badges: {},
   factIndex: 0,
+  placementSeen: false,
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
@@ -108,6 +121,7 @@ export function snapshot(s: Data): Data {
     srs: s.srs,
     badges: s.badges,
     factIndex: s.factIndex,
+    placementSeen: s.placementSeen,
   };
 }
 
@@ -217,6 +231,23 @@ export const useApp = create<AppState>()(
           set({ factIndex: i + 1 });
           return i;
         },
+
+        placeOut: (chapterIds) =>
+          set((s) => {
+            const now = Date.now();
+            const today = dayKey();
+            const done = { ...s.done };
+            const srs = { ...s.srs };
+            for (const id of chapterIds) {
+              for (const lesson of CHAPTERS[id]?.lessons ?? []) {
+                done[lesson.id] ??= { completedAt: now, bestAccuracy: 1, plays: 0, placed: true };
+                for (const pid of lesson.phrases) srs[pid] = introduce(srs[pid], today);
+              }
+            }
+            return { done, srs, placementSeen: true };
+          }),
+
+        setPlacementSeen: () => set({ placementSeen: true }),
 
         reset: () => set({ ...fresh() }),
       };

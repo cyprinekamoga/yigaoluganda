@@ -1,0 +1,570 @@
+[
+  {
+    "id": "c13",
+    "n": 13,
+    "lgTitle": "Ab'omu Maka",
+    "scene": "family",
+    "hue": "tomato",
+    "title": {
+      "en": "Family",
+      "sv": "Familjen"
+    },
+    "scenario": {
+      "en": "Introduce your family",
+      "sv": "Presentera din familj"
+    },
+    "lessons": [
+      {
+        "id": "c13-l1",
+        "title": {
+          "en": "Brothers and sisters",
+          "sv": "Syskon"
+        },
+        "phrases": [
+          "muganda-wange",
+          "mwannyinaze",
+          "omwana",
+          "abaana"
+        ],
+        "review": [
+          "maama",
+          "taata"
+        ],
+        "sentences": [
+          "s-ono-ye-maama",
+          "s-ono-ye-mwana-wange",
+          "s-abaana-bali-bulungi"
+        ],
+        "tip": "tip-siblings"
+      },
+      {
+        "id": "c13-l2",
+        "title": {
+          "en": "Married? Children?",
+          "sv": "Gift? Barn?"
+        },
+        "phrases": [
+          "ono-ye-ani",
+          "oli-mufumbo",
+          "ndi-mufumbo",
+          "olina-abaana"
+        ],
+        "review": [
+          "jjajja",
+          "omwana"
+        ],
+        "sentences": [
+          "s-yee-ndi-mufumbo",
+          "s-nedda-siri-mufumbo",
+          "s-nnina-abaana-babiri"
+        ],
+        "tip": "tip-family-questions",
+        "dialogue": "dlg-family"
+      }
+    ]
+  },
+  {
+    "id": "c14",
+    "n": 14,
+    "lgTitle": "Okubala",
+    "scene": "numbers",
+    "hue": "neon",
+    "title": {
+      "en": "Numbers 1–10",
+      "sv": "Siffror 1–10"
+    },
+    "scenario": {
+      "en": "Count to ten",
+      "sv": "Räkna till tio"
+    },
+    "lessons": [
+      {
+        "id": "c14-l1",
+        "title": {
+          "en": "One to five",
+          "sv": "Ett till fem"
+        },
+        "phrases": [
+          "emu",
+          "bbiri",
+          "ssatu",
+          "ttaano"
+        ],
+        "review": [
+          "nnya"
+        ],
+        "sentences": [
+          "s-emu-bbiri-ssatu",
+          "s-nnya-ttaano"
+        ],
+        "tip": "tip-counting"
+      },
+      {
+        "id": "c14-l2",
+        "title": {
+          "en": "Six to ten",
+          "sv": "Sex till tio"
+        },
+        "phrases": [
+          "mukaaga",
+          "musanvu",
+          "munaana",
+          "mwenda",
+          "kkumi"
+        ],
+        "review": [
+          "emu",
+          "ttaano"
+        ],
+        "sentences": [
+          "s-mukaaga-musanvu-munaana",
+          "s-emyaka-kkumi"
+        ],
+        "dialogue": "dlg-counting"
+      }
+    ]
+  },
+  {
+    "id": "c15",
+    "n": 15,
+    "lgTitle": "Ssente n'Akatale",
+    "scene": "market",
+    "hue": "blush",
+    "title": {
+      "en": "Money & the Market",
+      "sv": "Pengar och marknaden"
+    },
+    "scenario": {
+      "en": "Shop at the market",
+      "sv": "Handla på marknaden"
+    },
+    "lessons": [
+      {
+        "id": "c15-l1",
+        "title": {
+          "en": "Shillings",
+          "sv": "Shilling"
+        },
+        "phrases": [
+          "siringi",
+          "kikumi",
+          "lukumi",
+          "kya-bbeeyi"
+        ],
+        "review": [
+          "ssente-mmeka",
+          "kino-kiki"
+        ],
+        "sentences": [
+          "s-siringi-lukumi",
+          "s-kya-bbeeyi-nnyo",
+          "s-kino-ssente-mmeka"
+        ],
+        "tip": "tip-thousands"
+      },
+      {
+        "id": "c15-l2",
+        "title": {
+          "en": "Bargaining",
+          "sv": "Pruta"
+        },
+        "phrases": [
+          "akatale",
+          "mpa",
+          "kendeezaako",
+          "nja-kukitwala"
+        ],
+        "review": [
+          "kya-bbeeyi",
+          "nnyabo"
+        ],
+        "sentences": [
+          "s-kendeezaako-nnyabo",
+          "s-kale-nja-kukitwala"
+        ],
+        "dialogue": "dlg-tomatoes"
+      }
+    ]
+  },
+  {
+    "id": "c16",
+    "n": 16,
+    "lgTitle": "Emmere n'Ebyokunywa",
+    "scene": "kitchen",
+    "hue": "tomato",
+    "title": {
+      "en": "Food & Drink",
+      "sv": "Mat och dryck"
+    },
+    "scenario": {
+      "en": "Order a meal",
+      "sv": "Beställ mat"
+    },
+    "lessons": [
+      {
+        "id": "c16-l1",
+        "title": {
+          "en": "Hungry and thirsty",
+          "sv": "Hungrig och törstig"
+        },
+        "phrases": [
+          "enjala-ennuma",
+          "ennyonta-ennuma",
+          "amazzi",
+          "njagala"
+        ],
+        "review": [
+          "emmere",
+          "caayi"
+        ],
+        "sentences": [
+          "s-njagala-amazzi",
+          "s-enjala-ennuma-nnyo",
+          "s-njagala-caayi"
+        ],
+        "tip": "tip-bites"
+      },
+      {
+        "id": "c16-l2",
+        "title": {
+          "en": "What's for dinner?",
+          "sv": "Vad blir det till middag?"
+        },
+        "phrases": [
+          "ennyama",
+          "enkoko",
+          "omuceere",
+          "ebinyeebwa",
+          "nkkuse"
+        ],
+        "review": [
+          "matooke",
+          "emmere-ewooma"
+        ],
+        "sentences": [
+          "s-matooke-nebinyeebwa",
+          "s-nkkuse-weebale"
+        ],
+        "tip": "tip-luwombo",
+        "dialogue": "dlg-restaurant"
+      }
+    ]
+  },
+  {
+    "id": "c17",
+    "n": 17,
+    "lgTitle": "Ebiseera",
+    "scene": "clock",
+    "hue": "neon",
+    "title": {
+      "en": "Time & Days",
+      "sv": "Tid och dagar"
+    },
+    "scenario": {
+      "en": "Make a plan",
+      "sv": "Gör upp en plan"
+    },
+    "lessons": [
+      {
+        "id": "c17-l1",
+        "title": {
+          "en": "What time is it?",
+          "sv": "Vad är klockan?"
+        },
+        "phrases": [
+          "essaawa-mmeka",
+          "essaawa-emu",
+          "kati",
+          "jjo"
+        ],
+        "review": [
+          "leero",
+          "enkya"
+        ],
+        "sentences": [
+          "s-kati-essaawa-ssatu",
+          "s-essaawa-nnya"
+        ],
+        "tip": "tip-ugandan-time"
+      },
+      {
+        "id": "c17-l2",
+        "title": {
+          "en": "Days of the week",
+          "sv": "Veckodagar"
+        },
+        "phrases": [
+          "bbalaza",
+          "lwakutaano",
+          "lwamukaaga",
+          "ssabbiiti"
+        ],
+        "review": [
+          "leero",
+          "ddi"
+        ],
+        "sentences": [
+          "s-leero-bbalaza",
+          "s-nja-kujja-enkya",
+          "s-ojja-ddi"
+        ],
+        "tip": "tip-weekdays",
+        "dialogue": "dlg-plans"
+      }
+    ]
+  },
+  {
+    "id": "c18",
+    "n": 18,
+    "lgTitle": "Okutambula",
+    "scene": "signpost",
+    "hue": "blush",
+    "title": {
+      "en": "Getting Around",
+      "sv": "Ta sig runt"
+    },
+    "scenario": {
+      "en": "Find the way",
+      "sv": "Hitta rätt"
+    },
+    "lessons": [
+      {
+        "id": "c18-l1",
+        "title": {
+          "en": "Left, right, straight on",
+          "sv": "Vänster, höger, rakt fram"
+        },
+        "phrases": [
+          "kkono",
+          "ddyo",
+          "mu-maaso",
+          "yimirira-wano"
+        ],
+        "review": [
+          "ogenda-wa",
+          "nnenda"
+        ],
+        "sentences": [
+          "s-kyuka-ku-ddyo",
+          "s-kyuka-ku-kkono",
+          "s-genda-mu-maaso"
+        ],
+        "tip": "tip-taxi"
+      },
+      {
+        "id": "c18-l2",
+        "title": {
+          "en": "Near or far?",
+          "sv": "Nära eller långt?"
+        },
+        "phrases": [
+          "kiri-wala",
+          "kumpi",
+          "wala",
+          "takisi"
+        ],
+        "review": [
+          "oli-wa",
+          "yogera-mpola"
+        ],
+        "sentences": [
+          "s-tekiri-wala",
+          "s-kiri-kumpi"
+        ],
+        "dialogue": "dlg-directions"
+      }
+    ]
+  },
+  {
+    "id": "c19",
+    "n": 19,
+    "lgTitle": "Okukyala",
+    "scene": "home",
+    "hue": "tomato",
+    "title": {
+      "en": "Visiting a Home",
+      "sv": "På besök"
+    },
+    "scenario": {
+      "en": "Visit a family",
+      "sv": "Besök en familj"
+    },
+    "lessons": [
+      {
+        "id": "c19-l1",
+        "title": {
+          "en": "At the door",
+          "sv": "Vid dörren"
+        },
+        "phrases": [
+          "kkoodi",
+          "yingira",
+          "tuula",
+          "tukwaniriza"
+        ],
+        "review": [
+          "tukusanyukidde",
+          "gyebale-ko"
+        ],
+        "sentences": [
+          "s-yingira-otuule",
+          "s-kkoodi-oliwo"
+        ],
+        "tip": "tip-visiting"
+      },
+      {
+        "id": "c19-l2",
+        "title": {
+          "en": "Time to go",
+          "sv": "Dags att gå"
+        },
+        "phrases": [
+          "abewaka-bali-batya",
+          "bali-bulungi",
+          "ka-nnende"
+        ],
+        "review": [
+          "weebale-okukyala",
+          "weeraba"
+        ],
+        "sentences": [
+          "s-ka-nnende-weebale",
+          "s-bali-bulungi-weebale"
+        ],
+        "dialogue": "dlg-visit"
+      }
+    ]
+  },
+  {
+    "id": "c20",
+    "n": 20,
+    "lgTitle": "Omubiri n'Obulamu",
+    "scene": "health",
+    "hue": "neon",
+    "title": {
+      "en": "Body & Health",
+      "sv": "Kropp och hälsa"
+    },
+    "scenario": {
+      "en": "See a doctor",
+      "sv": "Gå till doktorn"
+    },
+    "lessons": [
+      {
+        "id": "c20-l1",
+        "title": {
+          "en": "Where does it hurt?",
+          "sv": "Var gör det ont?"
+        },
+        "phrases": [
+          "omutwe",
+          "olubuto",
+          "omutwe-gunnuma",
+          "olubuto-lunnuma"
+        ],
+        "review": [
+          "enjala-ennuma"
+        ],
+        "sentences": [
+          "s-omutwe-gunnuma-nnyo",
+          "s-olubuto-lunnuma-leero"
+        ],
+        "tip": "tip-hurts"
+      },
+      {
+        "id": "c20-l2",
+        "title": {
+          "en": "At the clinic",
+          "sv": "På mottagningen"
+        },
+        "phrases": [
+          "ndwadde",
+          "omusawo",
+          "eddagala",
+          "wona-mangu"
+        ],
+        "review": [
+          "bambi",
+          "ndi-mukoowu"
+        ],
+        "sentences": [
+          "s-mpa-eddagala",
+          "s-owulira-otya",
+          "s-bambi-wona-mangu"
+        ],
+        "dialogue": "dlg-clinic"
+      }
+    ]
+  },
+  {
+    "id": "c21",
+    "n": 21,
+    "lgTitle": "Okukyalira Jjajja",
+    "scene": "village",
+    "hue": "blush",
+    "checkpoint": true,
+    "title": {
+      "en": "Final Conversation",
+      "sv": "Slutsamtal"
+    },
+    "scenario": {
+      "en": "A weekend with jjajja",
+      "sv": "En helg hos jjajja"
+    },
+    "lessons": [
+      {
+        "id": "c21-l1",
+        "title": {
+          "en": "Part 2 review",
+          "sv": "Repetition av del 2"
+        },
+        "phrases": [
+          "ekyalo",
+          "wiiki-ejja"
+        ],
+        "review": [
+          "muganda-wange",
+          "olina-abaana",
+          "ttaano",
+          "kkumi",
+          "kya-bbeeyi",
+          "njagala",
+          "essaawa-mmeka",
+          "ssabbiiti",
+          "kkono",
+          "kiri-wala",
+          "yingira",
+          "omutwe-gunnuma"
+        ],
+        "sentences": [
+          "s-ngenda-ku-kyalo",
+          "s-nja-kujja-wiiki-ejja",
+          "s-jjajja-ali-ku-kyalo",
+          "s-ekyalo-kiri-wala"
+        ],
+        "tip": "tip-village"
+      },
+      {
+        "id": "c21-l2",
+        "title": {
+          "en": "A day with jjajja",
+          "sv": "En dag hos jjajja"
+        },
+        "phrases": [],
+        "review": [
+          "abewaka-bali-batya",
+          "bali-bulungi",
+          "enjala-ennuma",
+          "nkkuse",
+          "tukwaniriza",
+          "yimirira-wano"
+        ],
+        "sentences": [
+          "s-emmere-ewooma-jjajja",
+          "s-tulabagane-wiiki-ejja"
+        ],
+        "dialogue": "dlg-weekend"
+      }
+    ]
+  }
+]

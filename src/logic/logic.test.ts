@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { LESSONS, PHRASES, UNIT_1 } from '../content';
+import { LESSONS, PHRASES, UNIT_1, UNIT_2, UNITS } from '../content';
+import { chapterStatus } from './course';
 import { addDays, diffDays } from './dates';
 import { buildLesson, choiceStep, type Step } from './generator';
 import { HEART_REGEN_MS, MAX_HEARTS, initialStats, lessonReward, loseHeart, nextHeartIn, recordActivity, regenHearts, visibleStreak, buyRefill, REFILL_COST } from './progress';
@@ -7,7 +8,7 @@ import { makeRng } from './rng';
 import { lengthVariants, spellingDistractors } from './spelling';
 import { dueIds, grade, introduce } from './srs';
 import { normalize, sameText, tilesOf } from './text';
-import { tileStatus, isAvailable } from './unlock';
+import { tileStatus, isAvailable, isUnitOpen } from './unlock';
 
 const ctx = { lang: 'en' as const, name: 'Alex', hasAudio: () => false };
 
@@ -177,5 +178,29 @@ describe('non-linear unlocking', () => {
     const ids = chapters.slice(0, 11).map((c) => c.id);
     expect(isAvailable(UNIT_1, chapters[11], finish(...ids.slice(0, 10)))).toBe(false);
     expect(isAvailable(UNIT_1, chapters[11], finish(...ids))).toBe(true);
+  });
+});
+
+describe('parts', () => {
+  const lessonsOf = (...chapterIds: string[]) =>
+    Object.fromEntries(
+      chapterIds.flatMap((id) => [...UNIT_1.chapters, ...UNIT_2.chapters].find((c) => c.id === id)!.lessons.map((l) => [l.id, true])),
+    ) as Record<string, true>;
+  const view = (done: Record<string, true>) => ({ done, opened: {}, lastChapterId: null });
+
+  it('keeps Part 2 locked until Part 1 is finished', () => {
+    expect(isUnitOpen(UNITS, UNIT_1, {})).toBe(true);
+    expect(isUnitOpen(UNITS, UNIT_2, {})).toBe(false);
+    expect(UNIT_2.chapters.map((c) => chapterStatus(c, view({})))).toEqual(Array(9).fill('locked'));
+  });
+
+  it('opens Part 2 when Part 1\'s final conversation is complete, with three chapters ready', () => {
+    const done = lessonsOf('c12');
+    expect(isUnitOpen(UNITS, UNIT_2, done)).toBe(true);
+    expect(UNIT_2.chapters.slice(0, 4).map((c) => chapterStatus(c, view(done)))).toEqual(['ready', 'ready', 'ready', 'locked']);
+  });
+
+  it('opens Part 2 once any of its lessons is done (for example after the placement test)', () => {
+    expect(isUnitOpen(UNITS, UNIT_2, { 'c13-l1': true })).toBe(true);
   });
 });

@@ -234,9 +234,73 @@ async function run(viewport, label) {
   await browser.close();
 }
 
+/** Part 2 and the placement test, from a fresh start. */
+async function placement() {
+  console.log('\nplacement test and Part 2');
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1 });
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(BASE);
+  await page.getByTestId('name-input').fill('Kato');
+  await page.getByTestId('onb-go').click();
+  await page.getByTestId('screen-home').waitFor();
+  ok(await page.getByTestId('unit-2').isVisible(), 'home shows Part 2');
+  ok((await page.getByTestId('tile-c13').getAttribute('aria-label')).includes('Locked'), 'Part 2 starts locked');
+  ok(await page.getByTestId('placement-offer').isVisible(), 'a new learner is offered the placement test');
+  await shot(page, 'mobile-15-placement-offer');
+
+  await page.getByTestId('placement-open').click();
+  await page.getByTestId('screen-placement').waitFor();
+  await page.getByTestId('placement-start').click();
+  // Know all 11 chapters of Part 1, then miss Part 2's first chapter twice.
+  for (let i = 0; i < 11; i++) {
+    await page.getByTestId('placement-answer').waitFor();
+    if (i === 3) await shot(page, 'mobile-16-placement-question');
+    await page.getByTestId('placement-answer').click();
+    await page.waitForTimeout(750);
+  }
+  for (let i = 0; i < 2; i++) {
+    await page.getByTestId('placement-dont-know').waitFor();
+    await page.getByTestId('placement-dont-know').click();
+    await page.waitForTimeout(750);
+  }
+  await page.getByTestId('placement-result').waitFor();
+  ok((await page.getByTestId('placement-message').innerText()).includes('11 chapters'), 'the result says 11 chapters are known');
+  await shot(page, 'mobile-17-placement-result');
+  await page.getByTestId('placement-skip').click();
+  await page.getByTestId('screen-home').waitFor();
+  ok((await page.getByTestId('tile-c11').getAttribute('aria-label')).includes('Completed'), 'known chapters are marked done');
+  ok((await page.getByTestId('tile-c12').getAttribute('aria-label')).includes('Completed'), 'Part 1\'s final conversation counts as done');
+  ok((await page.getByTestId('tile-c13').getAttribute('aria-label')).includes('Ready to start'), 'Part 2 is now open');
+  ok((await page.getByTestId('placement-offer').count()) === 0, 'the offer is gone after the test');
+  await page.getByTestId('unit-2').scrollIntoViewIfNeeded();
+  await shot(page, 'mobile-18-part-2');
+
+  // Play the first Part 2 lesson.
+  await page.getByTestId('tile-c13').click();
+  await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('chapter-start').click();
+  await page.getByTestId('lesson-player').waitFor();
+  ok(await playLesson(page), 'finished the first lesson of Part 2 (Family)');
+  await page.getByTestId('complete-continue').click();
+  await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('back').click();
+  await page.getByTestId('screen-home').waitFor();
+
+  // The phrasebook includes Part 2.
+  await page.getByTestId('tab-dictionary').click();
+  await page.getByTestId('dict-search').fill('mwannyinaze');
+  ok(await page.getByTestId('dict-mwannyinaze').isVisible(), 'the phrasebook finds Part 2 phrases');
+
+  ok(errors.length === 0, `no page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
+  await browser.close();
+}
+
 try {
   await run({ width: 390, height: 844 }, 'mobile');
   await run({ width: 1280, height: 860 }, 'desktop');
+  await placement();
 } finally {
   server.kill();
 }

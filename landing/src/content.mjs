@@ -55,10 +55,11 @@ export const CONTENT = {
       ],
     },
     course: {
-      title: 'Part 1: Absolute Foundations',
-      lead: '{chapters} chapters, {lessons} lessons, {phrases} phrases and {conversations} conversations. Start where you like: the first three chapters are open, and each chapter you finish opens another.',
+      title: 'The course',
+      lead: '{parts} parts, {chapters} chapters, {lessons} lessons, {phrases} phrases and {conversations} conversations. Start where you like: the first three chapters of each part are open, and each chapter you finish opens another. Already know some Luganda? A short placement test lets you skip what you know.',
+      part: 'Part {n}: {title}',
       chapter: 'Chapter {n}',
-      next: 'Part 2 is on the way: family, food, numbers and getting around.',
+      next: 'More parts are on the way.',
     },
     facts: { title: 'Did you know?', ids: ['crane-flag', 'cowries', 'mujaguzo'] },
     price: {
@@ -67,6 +68,7 @@ export const CONTENT = {
       items: [
         'Every chapter, and new parts as they come',
         'Practice Lab, conversations and the phrasebook',
+        'A daily reminder from Ngaali, if you want one',
         'On your phone, tablet and computer',
         'Your progress saved to your account',
         'Cancel anytime',
@@ -85,7 +87,7 @@ export const CONTENT = {
     faq: {
       title: 'Questions and answers',
       items: [
-        ['Do I need to know any Luganda?', 'No. Part 1 starts from the very beginning: sounds, greetings and polite words.'],
+        ['Do I need to know any Luganda?', 'No. Part 1 starts from the very beginning: sounds, greetings and polite words. If you already know some, take the short placement test and skip the chapters you know.'],
         ['How much does it cost?', 'One plan: {price}, billed every month in your local currency. VAT is included where it applies.'],
         ['How do I cancel?', 'Whenever you like, in the app under Me → Settings → Subscription. You keep access until the end of the month you have paid for.'],
         ['Can I change my mind after paying?', 'Yes. Within 14 days of subscribing you can withdraw from the contract in the app under Me → Settings → Subscription, and we refund your payment in full.'],
@@ -154,10 +156,11 @@ export const CONTENT = {
       ],
     },
     course: {
-      title: 'Del 1: Grunderna',
-      lead: '{chapters} kapitel, {lessons} lektioner, {phrases} fraser och {conversations} samtal. Börja där du vill: de tre första kapitlen är öppna, och varje kapitel du klarar öppnar ett nytt.',
+      title: 'Kursen',
+      lead: '{parts} delar, {chapters} kapitel, {lessons} lektioner, {phrases} fraser och {conversations} samtal. Börja där du vill: de tre första kapitlen i varje del är öppna, och varje kapitel du klarar öppnar ett nytt. Kan du redan lite luganda? Ett kort nivåtest låter dig hoppa över det du kan.',
+      part: 'Del {n}: {title}',
       chapter: 'Kapitel {n}',
-      next: 'Del 2 är på väg: familj, mat, siffror och att ta sig runt.',
+      next: 'Fler delar är på väg.',
     },
     facts: { title: 'Visste du?', ids: ['crane-flag', 'cowries', 'mujaguzo'] },
     price: {
@@ -166,6 +169,7 @@ export const CONTENT = {
       items: [
         'Alla kapitel, och nya delar när de kommer',
         'Övningslabbet, samtalen och parlören',
+        'En daglig påminnelse från Ngaali, om du vill',
         'I mobilen, på surfplattan och på datorn',
         'Dina framsteg sparas på ditt konto',
         'Avsluta när du vill',
@@ -184,7 +188,7 @@ export const CONTENT = {
     faq: {
       title: 'Frågor och svar',
       items: [
-        ['Måste jag kunna någon luganda?', 'Nej. Del 1 börjar från början: ljud, hälsningar och artighetsord.'],
+        ['Måste jag kunna någon luganda?', 'Nej. Del 1 börjar från början: ljud, hälsningar och artighetsord. Kan du redan lite gör du det korta nivåtestet och hoppar över kapitlen du kan.'],
         ['Vad kostar det?', 'Ett abonnemang: {price}, som dras varje månad i din lokala valuta. Moms ingår där det gäller.'],
         ['Hur avslutar jag?', 'När du vill, i appen under Jag → Inställningar → Abonnemang. Du har kvar tillgången till slutet av månaden du har betalat för.'],
         ['Kan jag ångra mig efter att ha betalat?', 'Ja. Inom 14 dagar efter att du har tecknat abonnemanget kan du frånträda avtalet i appen under Jag → Inställningar → Abonnemang, och då får du hela beloppet tillbaka.'],

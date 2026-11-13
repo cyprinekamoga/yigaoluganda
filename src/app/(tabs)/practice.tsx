@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { audioCount } from '@/audio/engine';
-import { DIALOGUES, PHRASES, UNIT_1 } from '@/content';
+import { ALL_CHAPTERS, DIALOGUES, PHRASES } from '@/content';
 import { useT } from '@/i18n';
 import { dayKey } from '@/logic/dates';
 import { dueIds } from '@/logic/srs';
@@ -27,7 +27,7 @@ export default function PracticeLab() {
   const clips = audioCount();
 
   // Every roleplay in the unit, in chapter order; playable once its lesson is finished.
-  const convos = UNIT_1.chapters.flatMap((c) =>
+  const convos = ALL_CHAPTERS.flatMap((c) =>
     c.lessons
       .filter((l) => l.dialogue && DIALOGUES[l.dialogue])
       .map((l, i) => ({ chapter: c, lesson: l, index: c.lessons.indexOf(l), id: l.dialogue!, key: `${l.id}-${i}` })),
@@ -65,6 +65,20 @@ export default function PracticeLab() {
         </View>
         <Button testID="practice-review" kind="neon" label={t('practice.reviewStart')} disabled={!learned.length} onPress={() => router.push('/practice/review')} />
       </Card>
+
+      {/* Placement test: skip the chapters you already know */}
+      <Pressable
+        testID="practice-placement"
+        onPress={() => router.push('/placement')}
+        accessibilityRole="button"
+        style={({ pressed }) => [styles.placement, pressed && { opacity: 0.85 }]}
+      >
+        <View style={{ flex: 1, gap: 2 }}>
+          <Txt variant="h3">{t('practice.placement')}</Txt>
+          <Txt variant="small">{t('practice.placementBody')}</Txt>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={C.ink2} />
+      </Pressable>
 
       {/* Conversations */}
       <View style={styles.section}>
@@ -147,6 +161,7 @@ export default function PracticeLab() {
 
 const styles = StyleSheet.create({
   review: { gap: S.md, backgroundColor: C.tomato, borderColor: C.tomato },
+  placement: { flexDirection: 'row', alignItems: 'center', gap: S.md, padding: S.lg, backgroundColor: C.card, borderRadius: R.lg, borderWidth: 1, borderColor: C.neon },
   potDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: C.paper, alignItems: 'center', justifyContent: 'center' },
   reviewRow: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 6 },

@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ACCOUNTS } from '@/account/config';
 import { selectAccess, selectSignedIn, startAccount, useAccount } from '@/account/store';
 import { initAudio } from '@/audio/engine';
+import { useReminderSchedule } from '@/reminders/useReminders';
 import { useApp } from '@/state/store';
 import { C } from '@/ui/theme';
 
@@ -23,6 +24,7 @@ export default function RootLayout() {
   const access = useAccount(selectAccess);
   const recovering = useAccount((s) => s.recovering);
   useEffect(() => startAccount(), []);
+  useReminderSchedule();
 
   const ready = hydrated && accountReady;
   // With accounts on, the course needs a login and an active subscription (no free trial).
@@ -50,6 +52,7 @@ export default function RootLayout() {
           <Stack.Screen name="lesson/[id]" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="practice/[mode]" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="phrase/[id]" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />

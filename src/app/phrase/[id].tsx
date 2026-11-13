@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { CHAPTERS, PHRASES, TAUGHT_IN, UNIT_1 } from '@/content';
+import { ALL_SENTENCES, CHAPTERS, PHRASES, TAUGHT_IN } from '@/content';
 import { useT } from '@/i18n';
 import { SpeakerButtons } from '@/lesson/SpeakerButtons';
 import { loose } from '@/logic/search';
@@ -26,7 +26,7 @@ export default function PhraseScreen() {
   const taught = TAUGHT_IN[p.id];
   const chapter = taught ? CHAPTERS[taught.chapterId] : null;
   const key = loose(optionForm(p.lg));
-  const examples = UNIT_1.sentences.filter((s) => ` ${loose(s.lg)} `.includes(` ${key} `) && loose(s.lg) !== key).slice(0, 4);
+  const examples = ALL_SENTENCES.filter((s) => ` ${loose(s.lg)} `.includes(` ${key} `) && loose(s.lg) !== key).slice(0, 4);
   const box = card?.box ?? 0;
 
   return (

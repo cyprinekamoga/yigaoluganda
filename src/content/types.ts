@@ -21,7 +21,11 @@ export type Situation =
   | 'stuck'
   | 'around'
   | 'table'
-  | 'sounds';
+  | 'sounds'
+  | 'numbers'
+  | 'time'
+  | 'home'
+  | 'health';
 
 export interface Phrase {
   /** kebab-case, unique. Also the audio file name: assets/audio/<id>.m4a */
@@ -114,7 +118,16 @@ export type SceneId =
   | 'feelings'
   | 'boda'
   | 'meal'
-  | 'journey';
+  | 'journey'
+  | 'family'
+  | 'numbers'
+  | 'market'
+  | 'kitchen'
+  | 'clock'
+  | 'signpost'
+  | 'home'
+  | 'health'
+  | 'village';
 
 export type Hue = 'tomato' | 'neon' | 'blush';
 

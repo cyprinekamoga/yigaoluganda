@@ -25,7 +25,22 @@ export function isComplete(chapter: Chapter, done: ProgressView['done']): boolea
   return lessonsDone(chapter, done) === chapter.lessons.length;
 }
 
-export function isAvailable(unit: Unit, chapter: Chapter, done: ProgressView['done']): boolean {
+/**
+ * A part opens when the part before it is finished (its final conversation is complete),
+ * or once any of its lessons is done, for example after the placement test.
+ */
+export function isUnitOpen(units: Unit[], unit: Unit, done: ProgressView['done']): boolean {
+  const i = units.indexOf(unit);
+  if (i <= 0) return true;
+  if (unit.chapters.some((c) => lessonsDone(c, done) > 0)) return true;
+  const prev = units[i - 1];
+  const final = prev.chapters.find((c) => c.checkpoint) ?? prev.chapters[prev.chapters.length - 1];
+  return isComplete(final, done);
+}
+
+export function isAvailable(unit: Unit, chapter: Chapter, done: ProgressView['done'], unitOpen = true): boolean {
+  if (lessonsDone(chapter, done) > 0) return true;
+  if (!unitOpen) return false;
   const regular = unit.chapters.filter((c) => !c.checkpoint);
   if (chapter.checkpoint) return regular.every((c) => isComplete(c, done));
   if (lessonsDone(chapter, done) > 0) return true;
@@ -33,10 +48,10 @@ export function isAvailable(unit: Unit, chapter: Chapter, done: ProgressView['do
   return regular.indexOf(chapter) < START_OPEN + completed;
 }
 
-export function tileStatus(unit: Unit, chapter: Chapter, p: ProgressView): TileStatus {
+export function tileStatus(unit: Unit, chapter: Chapter, p: ProgressView, unitOpen = true): TileStatus {
   const n = lessonsDone(chapter, p.done);
   if (n === chapter.lessons.length) return 'completed';
-  if (!isAvailable(unit, chapter, p.done)) return 'locked';
+  if (!isAvailable(unit, chapter, p.done, unitOpen)) return 'locked';
   if (n > 0) return chapter.id === p.lastChapterId ? 'active' : 'unfinished';
   const initial = !chapter.checkpoint && unit.chapters.filter((c) => !c.checkpoint).indexOf(chapter) < START_OPEN;
   return !initial && !p.opened[chapter.id] ? 'unlocked' : 'ready';

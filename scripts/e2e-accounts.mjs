@@ -162,6 +162,12 @@ async function run() {
   await page.getByTestId('settings-account').waitFor();
   ok((await page.getByTestId('sub-state').innerText()).startsWith('Active · renews on'), 'settings show the active subscription');
   ok((await page.getByTestId('account-email').innerText()) === 'sara@example.com', 'settings show the account e-mail');
+  // Daily reminder by e-mail: switching it on saves it to the account.
+  await page.getByTestId('reminder-switch').click();
+  await page.getByTestId('reminder-hour-21').click();
+  await page.waitForTimeout(2500);
+  ok(backend.state.profile?.reminder_on === true && backend.state.profile?.reminder_hour === 21, 'the daily reminder (e-mail at 21:00) is saved to the account');
+  ok(typeof backend.state.profile?.timezone === 'string' && backend.state.profile.timezone.length > 0, 'the time zone is saved for the reminder');
   await page.getByTestId('settings-account').scrollIntoViewIfNeeded();
   await shot(page, '03-settings');
   await page.getByTestId('sub-withdraw').click();

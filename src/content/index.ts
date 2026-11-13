@@ -7,6 +7,13 @@ import soundPairs from '../../content/unit-1/sound-pairs.json';
 import tips from '../../content/unit-1/tips.json';
 import dialogues from '../../content/unit-1/dialogues.json';
 import roots from '../../content/unit-1/roots.json';
+import chapters2 from '../../content/unit-2/chapters.json';
+import phrases2 from '../../content/unit-2/phrases.json';
+import sentences2 from '../../content/unit-2/sentences.json';
+import soundPairs2 from '../../content/unit-2/sound-pairs.json';
+import tips2 from '../../content/unit-2/tips.json';
+import dialogues2 from '../../content/unit-2/dialogues.json';
+import roots2 from '../../content/unit-2/roots.json';
 import facts from '../../content/facts.json';
 
 export * from './types';
@@ -25,7 +32,34 @@ export const UNIT_1: Unit = {
   roots: roots as unknown as Root[],
 };
 
-export const UNITS: Unit[] = [UNIT_1];
+export const UNIT_2: Unit = {
+  id: 'unit-2',
+  n: 2,
+  lgTitle: '',
+  title: { en: 'Everyday Life', sv: 'Vardagen' },
+  chapters: chapters2 as unknown as Chapter[],
+  phrases: phrases2 as unknown as Phrase[],
+  sentences: sentences2 as unknown as Sentence[],
+  soundPairs: soundPairs2 as unknown as SoundPair[],
+  tips: tips2 as unknown as Tip[],
+  dialogues: dialogues2 as unknown as Dialogue[],
+  roots: roots2 as unknown as Root[],
+};
+
+/** The course, in order. Each part opens when the one before it is finished (or tested out of). */
+export const UNITS: Unit[] = [UNIT_1, UNIT_2];
+
+/** Every chapter of every part, in order. */
+export const ALL_CHAPTERS: Chapter[] = UNITS.flatMap((u) => u.chapters);
+/** Every phrase of every part. */
+export const ALL_PHRASES: Phrase[] = UNITS.flatMap((u) => u.phrases);
+/** Every sentence of every part. */
+export const ALL_SENTENCES: Sentence[] = UNITS.flatMap((u) => u.sentences);
+
+/** The part a chapter belongs to. */
+export function unitOf(chapter: Chapter): Unit {
+  return UNITS.find((u) => u.chapters.includes(chapter)) ?? UNIT_1;
+}
 
 /** Fun facts about Uganda and Buganda, shown in order so none repeats until all have been seen. */
 export const FACTS = facts as Fact[];

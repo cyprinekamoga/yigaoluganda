@@ -1,167 +1,303 @@
 {
   "counts": {
-    "chapters": 12,
-    "lessons": 26,
-    "phrases": 93,
-    "conversations": 12,
-    "tips": 22
+    "parts": 2,
+    "chapters": 21,
+    "lessons": 44,
+    "phrases": 160,
+    "conversations": 21,
+    "tips": 34
   },
-  "chapters": [
+  "parts": [
     {
       "n": 1,
-      "id": "c01",
-      "lg": "Ennukuta",
       "title": {
-        "en": "Alphabet & Sounds",
-        "sv": "Alfabetet och ljuden"
+        "en": "Absolute Foundations",
+        "sv": "Grunderna"
       },
-      "scenario": {
-        "en": "Hear the sounds",
-        "sv": "Lyssna på ljuden"
-      }
+      "chapters": [
+        {
+          "n": 1,
+          "id": "c01",
+          "lg": "Ennukuta",
+          "title": {
+            "en": "Alphabet & Sounds",
+            "sv": "Alfabetet och ljuden"
+          },
+          "scenario": {
+            "en": "Hear the sounds",
+            "sv": "Lyssna på ljuden"
+          }
+        },
+        {
+          "n": 2,
+          "id": "c02",
+          "lg": "Obuntubulamu",
+          "title": {
+            "en": "Courtesy & Magic Words",
+            "sv": "Artighet och magiska ord"
+          },
+          "scenario": {
+            "en": "Be polite",
+            "sv": "Var artig"
+          }
+        },
+        {
+          "n": 3,
+          "id": "c03",
+          "lg": "Okulamusa",
+          "title": {
+            "en": "Informal Greetings",
+            "sv": "Vardagliga hälsningar"
+          },
+          "scenario": {
+            "en": "Greet a friend",
+            "sv": "Hälsa på en kompis"
+          }
+        },
+        {
+          "n": 4,
+          "id": "c04",
+          "lg": "Ekitiibwa",
+          "title": {
+            "en": "Respect & Formal Titles",
+            "sv": "Respekt och artiga titlar"
+          },
+          "scenario": {
+            "en": "Greet an elder",
+            "sv": "Hälsa på en äldre"
+          }
+        },
+        {
+          "n": 5,
+          "id": "c05",
+          "lg": "Okulagana",
+          "title": {
+            "en": "Goodbyes & Well Wishes",
+            "sv": "Hej då och lyckönskningar"
+          },
+          "scenario": {
+            "en": "Say goodbye",
+            "sv": "Säg hej då"
+          }
+        },
+        {
+          "n": 6,
+          "id": "c06",
+          "lg": "Nze ne Ggwe",
+          "title": {
+            "en": "Personal Pronouns",
+            "sv": "Personliga pronomen"
+          },
+          "scenario": {
+            "en": "Me and you",
+            "sv": "Jag och du"
+          }
+        },
+        {
+          "n": 7,
+          "id": "c07",
+          "lg": "Erinnya",
+          "title": {
+            "en": "Introductions & Names",
+            "sv": "Presentationer och namn"
+          },
+          "scenario": {
+            "en": "Introduce yourself",
+            "sv": "Presentera dig"
+          }
+        },
+        {
+          "n": 8,
+          "id": "c08",
+          "lg": "Ebibuuzo",
+          "title": {
+            "en": "Question Words",
+            "sv": "Frågeord"
+          },
+          "scenario": {
+            "en": "Ask questions",
+            "sv": "Ställ frågor"
+          }
+        },
+        {
+          "n": 9,
+          "id": "c09",
+          "lg": "Okuba",
+          "title": {
+            "en": "To Be",
+            "sv": "Att vara"
+          },
+          "scenario": {
+            "en": "Say how you feel",
+            "sv": "Säg hur du mår"
+          }
+        },
+        {
+          "n": 10,
+          "id": "c10",
+          "lg": "Obubonero",
+          "title": {
+            "en": "Survival Expressions",
+            "sv": "Fraser som räddar dig"
+          },
+          "scenario": {
+            "en": "Take a boda-boda",
+            "sv": "Åk boda-boda"
+          }
+        },
+        {
+          "n": 11,
+          "id": "c11",
+          "lg": "Okwebaza",
+          "title": {
+            "en": "Daily Thanks & Appreciation",
+            "sv": "Tack och uppskattning"
+          },
+          "scenario": {
+            "en": "Thank the cook",
+            "sv": "Tacka för maten"
+          }
+        },
+        {
+          "n": 12,
+          "id": "c12",
+          "lg": "Olugendo Lwatandika",
+          "title": {
+            "en": "Final Conversation",
+            "sv": "Slutsamtal"
+          },
+          "scenario": {
+            "en": "First day in Kampala",
+            "sv": "Första dagen i Kampala"
+          }
+        }
+      ]
     },
     {
       "n": 2,
-      "id": "c02",
-      "lg": "Obuntubulamu",
       "title": {
-        "en": "Courtesy & Magic Words",
-        "sv": "Artighet och magiska ord"
+        "en": "Everyday Life",
+        "sv": "Vardagen"
       },
-      "scenario": {
-        "en": "Be polite",
-        "sv": "Var artig"
-      }
-    },
-    {
-      "n": 3,
-      "id": "c03",
-      "lg": "Okulamusa",
-      "title": {
-        "en": "Informal Greetings",
-        "sv": "Vardagliga hälsningar"
-      },
-      "scenario": {
-        "en": "Greet a friend",
-        "sv": "Hälsa på en kompis"
-      }
-    },
-    {
-      "n": 4,
-      "id": "c04",
-      "lg": "Ekitiibwa",
-      "title": {
-        "en": "Respect & Formal Titles",
-        "sv": "Respekt och artiga titlar"
-      },
-      "scenario": {
-        "en": "Greet an elder",
-        "sv": "Hälsa på en äldre"
-      }
-    },
-    {
-      "n": 5,
-      "id": "c05",
-      "lg": "Okulagana",
-      "title": {
-        "en": "Goodbyes & Well Wishes",
-        "sv": "Hej då och lyckönskningar"
-      },
-      "scenario": {
-        "en": "Say goodbye",
-        "sv": "Säg hej då"
-      }
-    },
-    {
-      "n": 6,
-      "id": "c06",
-      "lg": "Nze ne Ggwe",
-      "title": {
-        "en": "Personal Pronouns",
-        "sv": "Personliga pronomen"
-      },
-      "scenario": {
-        "en": "Me and you",
-        "sv": "Jag och du"
-      }
-    },
-    {
-      "n": 7,
-      "id": "c07",
-      "lg": "Erinnya",
-      "title": {
-        "en": "Introductions & Names",
-        "sv": "Presentationer och namn"
-      },
-      "scenario": {
-        "en": "Introduce yourself",
-        "sv": "Presentera dig"
-      }
-    },
-    {
-      "n": 8,
-      "id": "c08",
-      "lg": "Ebibuuzo",
-      "title": {
-        "en": "Question Words",
-        "sv": "Frågeord"
-      },
-      "scenario": {
-        "en": "Ask questions",
-        "sv": "Ställ frågor"
-      }
-    },
-    {
-      "n": 9,
-      "id": "c09",
-      "lg": "Okuba",
-      "title": {
-        "en": "To Be",
-        "sv": "Att vara"
-      },
-      "scenario": {
-        "en": "Say how you feel",
-        "sv": "Säg hur du mår"
-      }
-    },
-    {
-      "n": 10,
-      "id": "c10",
-      "lg": "Obubonero",
-      "title": {
-        "en": "Survival Expressions",
-        "sv": "Fraser som räddar dig"
-      },
-      "scenario": {
-        "en": "Take a boda-boda",
-        "sv": "Åk boda-boda"
-      }
-    },
-    {
-      "n": 11,
-      "id": "c11",
-      "lg": "Okwebaza",
-      "title": {
-        "en": "Daily Thanks & Appreciation",
-        "sv": "Tack och uppskattning"
-      },
-      "scenario": {
-        "en": "Thank the cook",
-        "sv": "Tacka för maten"
-      }
-    },
-    {
-      "n": 12,
-      "id": "c12",
-      "lg": "Olugendo Lwatandika",
-      "title": {
-        "en": "Final Conversation",
-        "sv": "Slutsamtal"
-      },
-      "scenario": {
-        "en": "First day in Kampala",
-        "sv": "Första dagen i Kampala"
-      }
+      "chapters": [
+        {
+          "n": 13,
+          "id": "c13",
+          "lg": "Ab'omu Maka",
+          "title": {
+            "en": "Family",
+            "sv": "Familjen"
+          },
+          "scenario": {
+            "en": "Introduce your family",
+            "sv": "Presentera din familj"
+          }
+        },
+        {
+          "n": 14,
+          "id": "c14",
+          "lg": "Okubala",
+          "title": {
+            "en": "Numbers 1–10",
+            "sv": "Siffror 1–10"
+          },
+          "scenario": {
+            "en": "Count to ten",
+            "sv": "Räkna till tio"
+          }
+        },
+        {
+          "n": 15,
+          "id": "c15",
+          "lg": "Ssente n'Akatale",
+          "title": {
+            "en": "Money & the Market",
+            "sv": "Pengar och marknaden"
+          },
+          "scenario": {
+            "en": "Shop at the market",
+            "sv": "Handla på marknaden"
+          }
+        },
+        {
+          "n": 16,
+          "id": "c16",
+          "lg": "Emmere n'Ebyokunywa",
+          "title": {
+            "en": "Food & Drink",
+            "sv": "Mat och dryck"
+          },
+          "scenario": {
+            "en": "Order a meal",
+            "sv": "Beställ mat"
+          }
+        },
+        {
+          "n": 17,
+          "id": "c17",
+          "lg": "Ebiseera",
+          "title": {
+            "en": "Time & Days",
+            "sv": "Tid och dagar"
+          },
+          "scenario": {
+            "en": "Make a plan",
+            "sv": "Gör upp en plan"
+          }
+        },
+        {
+          "n": 18,
+          "id": "c18",
+          "lg": "Okutambula",
+          "title": {
+            "en": "Getting Around",
+            "sv": "Ta sig runt"
+          },
+          "scenario": {
+            "en": "Find the way",
+            "sv": "Hitta rätt"
+          }
+        },
+        {
+          "n": 19,
+          "id": "c19",
+          "lg": "Okukyala",
+          "title": {
+            "en": "Visiting a Home",
+            "sv": "På besök"
+          },
+          "scenario": {
+            "en": "Visit a family",
+            "sv": "Besök en familj"
+          }
+        },
+        {
+          "n": 20,
+          "id": "c20",
+          "lg": "Omubiri n'Obulamu",
+          "title": {
+            "en": "Body & Health",
+            "sv": "Kropp och hälsa"
+          },
+          "scenario": {
+            "en": "See a doctor",
+            "sv": "Gå till doktorn"
+          }
+        },
+        {
+          "n": 21,
+          "id": "c21",
+          "lg": "Okukyalira Jjajja",
+          "title": {
+            "en": "Final Conversation",
+            "sv": "Slutsamtal"
+          },
+          "scenario": {
+            "en": "A weekend with jjajja",
+            "sv": "En helg hos jjajja"
+          }
+        }
+      ]
     }
   ],
   "facts": [
