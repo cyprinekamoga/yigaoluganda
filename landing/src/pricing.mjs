@@ -66,16 +66,17 @@ export const COUNTRY_CURRENCY                           = {
 };
 
 /**
- * Standard VAT rates (percent) in the countries where Stripe Tax collects VAT for us:
- * the EU, through the One-Stop Shop. Digital services use the buyer's country's standard rate.
- * Stripe Tax always charges the exact rate at checkout; these are for showing the price.
- * To collect tax somewhere else (e.g. the UK or Norway), register there, turn it on in
- * Stripe Tax, and add the country here.
+ * VAT is Swedish VAT (25%) for every customer in the EU. The company is VAT-registered in Sweden
+ * and, while its sales to other EU countries stay under EUR 10,000 a year, may charge Swedish VAT
+ * to all EU consumers (Stripe Tax: Swedish registration with the "small seller" scheme).
+ * If the company registers for the EU One-Stop Shop later, give each EU country its own rate here
+ * and switch the Stripe Tax registration to OSS.
+ * To collect tax outside the EU (e.g. the UK or Norway), register there, turn it on in Stripe Tax,
+ * and add the country here.
  */
-export const TAX_COLLECTED                         = {
-  AT: 20, BE: 21, BG: 20, HR: 25, CY: 19, CZ: 21, DK: 25, EE: 24, FI: 25.5, FR: 20, DE: 19, GR: 24, HU: 27, IE: 23,
-  IT: 22, LV: 21, LT: 21, LU: 17, MT: 18, NL: 21, PL: 23, PT: 23, RO: 21, SK: 23, SI: 22, ES: 21, SE: 25,
-};
+export const HOME_VAT = 25;
+const EU = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
+export const TAX_COLLECTED                         = Object.fromEntries(EU.map((cc) => [cc, HOME_VAT]));
 
                         
                                                                

@@ -7,9 +7,10 @@ import { COUNTRY_CURRENCY, MONTHLY_NET, TAX_COLLECTED, formatMoney, priceLine, q
 const ROOT = path.resolve(import.meta.dirname, '../..');
 
 describe('pricing', () => {
-  it('charges €3.99 + VAT in the euro area', () => {
-    expect(quote('DE')).toMatchObject({ currency: 'EUR', net: 399, tax: 76, total: 475, taxRate: 19 });
-    expect(quote('nl')).toMatchObject({ currency: 'EUR', total: 483 });
+  it('charges €3.99 + Swedish VAT (25%) everywhere in the EU', () => {
+    expect(quote('DE')).toMatchObject({ currency: 'EUR', net: 399, tax: 100, total: 499, taxRate: 25 });
+    expect(quote('nl')).toMatchObject({ currency: 'EUR', total: 499 });
+    expect(quote('PL')).toMatchObject({ currency: 'PLN', taxRate: 25 });
   });
 
   it('shows Swedish customers kronor including 25% moms', () => {

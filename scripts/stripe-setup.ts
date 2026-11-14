@@ -1,4 +1,5 @@
 // Sets up Stripe for Yiga Oluganda from the price table in src/pricing/pricing.ts:
+//   0. Stripe Tax (Swedish registration, small-seller scheme),
 //   1. the monthly price (net, VAT added by Stripe Tax) in every local currency,
 //   2. a customer-portal configuration (cancel at period end, change card, receipts),
 //   3. the webhook that keeps the app's database in step (with --webhook <supabase url>).
@@ -34,6 +35,28 @@ async function stripe(method: 'GET' | 'POST', path: string, params: Params = {})
   if (!res.ok) throw new Error(`${method} ${path}: ${data.error?.message ?? res.status}`);
   return data;
 }
+
+// 0. VAT (Stripe Tax): head office in Stockholm and a Swedish registration under the EU
+//    "small seller" scheme, so every EU customer pays Swedish VAT (see src/pricing/pricing.ts).
+const taxSettings = await stripe('GET', 'tax/settings');
+if (taxSettings.status !== 'active') {
+  await stripe('POST', 'tax/settings', {
+    'head_office[address][country]': 'SE',
+    'head_office[address][city]': 'Stockholm',
+    'defaults[tax_behavior]': 'exclusive',
+    'defaults[tax_code]': 'txcd_10000000',
+  });
+}
+const regs = (await stripe('GET', 'tax/registrations', { status: 'active', limit: 20 })).data as { country: string }[];
+if (!regs.some((r) => r.country === 'SE')) {
+  await stripe('POST', 'tax/registrations', {
+    country: 'SE',
+    'country_options[se][type]': 'standard',
+    'country_options[se][standard][place_of_supply_scheme]': 'small_seller',
+    active_from: 'now',
+  });
+}
+console.log('✓ Stripe Tax: Swedish VAT for the EU (small seller)');
 
 // 1. Price
 const existing = (await stripe('GET', 'prices', { 'lookup_keys[]': LOOKUP_KEY, active: true })).data[0];

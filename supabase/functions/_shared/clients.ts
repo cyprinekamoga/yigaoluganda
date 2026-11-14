@@ -38,16 +38,26 @@ export async function callingUser(req: Request): Promise<User | null> {
   return error ? null : data.user;
 }
 
-/** The user's Stripe customer id, creating the customer the first time. */
+/**
+ * The user's Stripe customer id, creating the customer the first time. A stored id that Stripe
+ * doesn't know (e.g. a test-mode customer after switching to live keys) is replaced.
+ */
 export async function customerFor(user: User): Promise<string> {
   const { data } = await admin.from('customers').select('stripe_customer_id').eq('user_id', user.id).maybeSingle();
-  if (data?.stripe_customer_id) return data.stripe_customer_id;
+  if (data?.stripe_customer_id) {
+    try {
+      const existing = await stripe.customers.retrieve(data.stripe_customer_id);
+      if (!('deleted' in existing && existing.deleted)) return existing.id;
+    } catch (e) {
+      if ((e as { code?: string }).code !== 'resource_missing') throw e;
+    }
+  }
   const customer = await stripe.customers.create({
     email: user.email,
     name: (user.user_metadata?.name as string | undefined) || undefined,
     metadata: { user_id: user.id },
   });
-  await admin.from('customers').insert({ user_id: user.id, stripe_customer_id: customer.id });
+  await admin.from('customers').upsert({ user_id: user.id, stripe_customer_id: customer.id });
   return customer.id;
 }
 
