@@ -47,3 +47,4 @@ e2e-shots/
 
 # Netlify CLI link state
 .netlify
+docs/social/*.zip
