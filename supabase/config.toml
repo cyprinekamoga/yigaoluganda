@@ -25,3 +25,6 @@ content_path = "./supabase/templates/confirmation.html"
 [auth.email.template.recovery]
 subject = "{{ if eq .Data.ui_lang \"sv\" }}Välj ett nytt lösenord{{ else }}Choose a new password{{ end }} · Yiga Oluganda"
 content_path = "./supabase/templates/recovery.html"
+
+[functions.review-mail]
+verify_jwt = false
