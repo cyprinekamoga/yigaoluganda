@@ -1,7 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { useT } from '../i18n';
 import { useApp } from '../state/store';
+import { useAccount } from './store';
 import { Ngaali } from '../ui/Ngaali';
 import { Screen } from '../ui/Screen';
 import { C, S } from '../ui/theme';
@@ -18,6 +20,9 @@ export function AuthShell({ title, lead, mood = 'wave', testID, children }: { ti
     if (lang === 'sv' || lang === 'en') setLang(lang);
   }, [lang, setLang]);
 
+  const { t } = useT();
+  const linkError = useAccount((s) => s.linkError);
+
   return (
     <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <Screen edges={['top', 'bottom']} testID={testID} contentStyle={styles.col}>
@@ -32,6 +37,7 @@ export function AuthShell({ title, lead, mood = 'wave', testID, children }: { ti
             </Txt>
           ) : null}
         </View>
+        {linkError ? <FormMessage text={t('auth.linkExpired')} /> : null}
         {children}
       </Screen>
     </KeyboardAvoidingView>

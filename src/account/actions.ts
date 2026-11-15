@@ -2,7 +2,7 @@ import { Linking, Platform } from 'react-native';
 import type { Lang } from '../content/types';
 import type { Key } from '../i18n';
 import { useApp } from '../state/store';
-import { refreshSubscriptions, useAccount } from './store';
+import { refreshSubscriptions, setRecovering, useAccount } from './store';
 import { supabase } from './supabase';
 import { stopSync } from './sync';
 
@@ -71,13 +71,14 @@ export async function updatePassword(password: string): Promise<Outcome> {
   if (password.length < 8) return fail('auth.errWeak');
   const { error } = await supabase.auth.updateUser({ password });
   if (error) return fail(explain(error));
-  useAccount.setState({ recovering: false });
+  setRecovering(false);
   return { ok: true };
 }
 
 export async function signOut(): Promise<void> {
   if (!supabase) return;
   stopSync();
+  setRecovering(false);
   await supabase.auth.signOut();
 }
 

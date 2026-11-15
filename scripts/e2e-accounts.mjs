@@ -67,7 +67,13 @@ function fakeBackend() {
     }
     if (p === '/auth/v1/recover') return json(route, {});
     if (p === '/auth/v1/logout') return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
-    if (p === '/auth/v1/user') return json(route, session([...state.users.keys()][0]).user);
+    if (p === '/auth/v1/user') {
+      if (req.method() === 'PUT') {
+        if (body.password) state.users.set([...state.users.keys()][0], body.password);
+        state.passwordChanged = true;
+      }
+      return json(route, session([...state.users.keys()][0]).user);
+    }
 
     if (p === '/rest/v1/subscriptions') return json(route, state.subs);
     if (p === '/rest/v1/profiles') {
@@ -205,6 +211,36 @@ async function run() {
   ok((await page.getByTestId('signup-password-toggle').getAttribute('aria-label')) === 'Visa lösenordet', 'the eye button is labelled in Swedish');
 
   ok(errors.length === 0, `no page errors${errors.length ? `: ${errors.join(' | ')}` : ''}`);
+
+  // The link in the password-reset e-mail. Supabase sends the browser back with the login in the
+  // address (#access_token=…&type=recovery). This fake answers at once, which used to lose the race
+  // and drop the learner on the main page instead of "Choose a new password".
+  const reset = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const resetBackend = fakeBackend();
+  resetBackend.state.users.set('ada@example.com', 'old-password-1');
+  resetBackend.state.profile = { name: 'Ada', ui_lang: 'en', created_at: new Date().toISOString() };
+  await reset.route(`${API}/**`, resetBackend.handle);
+  const now = Math.floor(Date.now() / 1000);
+  await reset.goto(`${BASE}/reset-password#access_token=test-access-token&expires_at=${now + 3600}&expires_in=3600&refresh_token=test-refresh-token&token_type=bearer&type=recovery`);
+  await reset.getByTestId('screen-reset').waitFor({ timeout: 15000 });
+  ok(true, 'the reset link opens "Choose a new password" (backend answering instantly)');
+  await reset.reload();
+  await reset.getByTestId('screen-reset').waitFor({ timeout: 15000 });
+  ok(true, 'and it is still there after reloading the page');
+  await reset.getByTestId('reset-password').fill('new-password-2');
+  await reset.getByTestId('reset-submit').click();
+  await reset.getByTestId('screen-reset').waitFor({ state: 'detached', timeout: 15000 });
+  ok(resetBackend.state.passwordChanged === true, 'saving the new password updates it and leaves the reset screen');
+  await reset.close();
+
+  // An expired or already-used link (mail apps sometimes open links to scan them) explains itself.
+  const expired = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  await expired.route(`${API}/**`, fakeBackend().handle);
+  await expired.goto(`${BASE}/reset-password#error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired`);
+  await expired.getByTestId('form-error').waitFor({ timeout: 15000 });
+  ok((await expired.getByTestId('form-error').innerText()).includes('expired'), 'an expired link says so and offers a new one');
+  await expired.close();
+
   await browser.close();
 }
 

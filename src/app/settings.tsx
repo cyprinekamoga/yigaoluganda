@@ -6,7 +6,7 @@ import { currentSubscription, subscriptionState, withdrawalDaysLeft } from '@/ac
 import { deleteAccount, openBillingPortal, signOut, withdraw } from '@/account/actions';
 import { FormMessage } from '@/account/AuthShell';
 import { ACCOUNTS, SITE_URL } from '@/account/config';
-import { useAccount } from '@/account/store';
+import { setRecovering, useAccount } from '@/account/store';
 import { ReminderSettings } from '@/reminders/ReminderSettings';
 import type { Lang } from '@/content/types';
 import { useT, type Key } from '@/i18n';
@@ -163,6 +163,7 @@ export default function Settings() {
                 {email}
               </Txt>
             </View>
+            <Button kind="secondary" testID="change-password" label={t('settings.changePassword')} onPress={() => setRecovering(true)} />
             <Button kind="secondary" testID="logout" label={t('settings.logOut')} onPress={() => signOut()} />
             <Button kind="ghost" testID="delete-account" label={t('settings.delete')} onPress={() => setSheet('delete')} />
           </Card>
