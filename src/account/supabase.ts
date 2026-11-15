@@ -16,6 +16,17 @@ function readOpeningLink(): { recovery: boolean; error: string | null } {
 }
 export const OPENING_LINK = readOpeningLink();
 
+/**
+ * Removes the login (or the error) an e-mail link put in the address bar, so it isn't left in the
+ * browser's history. Supabase clears it too, but the router can write its first copy of the
+ * address back, so this runs once the app has settled.
+ */
+export function clearOpeningLink() {
+  if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) return;
+  const { hash, pathname, search } = window.location;
+  if (/(^|[#&])(access_token|refresh_token|error_code|error)=/.test(hash)) window.history.replaceState(window.history.state, '', pathname + search);
+}
+
 /** The Supabase client, or null when the build has no accounts (see config.ts). */
 export const supabase: SupabaseClient | null = ACCOUNTS
   ? createClient(SUPABASE_URL, SUPABASE_KEY, {

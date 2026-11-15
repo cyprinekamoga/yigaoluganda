@@ -5,6 +5,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ACCOUNTS } from '@/account/config';
 import { selectAccess, selectSignedIn, startAccount, useAccount } from '@/account/store';
+import { clearOpeningLink } from '@/account/supabase';
 import { initAudio } from '@/audio/engine';
 import { useReminderSchedule } from '@/reminders/useReminders';
 import { useApp } from '@/state/store';
@@ -36,7 +37,11 @@ export default function RootLayout() {
     initAudio();
     useApp.getState().tick();
     const id = setInterval(() => useApp.getState().tick(), 30_000);
-    return () => clearInterval(id);
+    const clear = setTimeout(clearOpeningLink, 300);
+    return () => {
+      clearInterval(id);
+      clearTimeout(clear);
+    };
   }, [ready]);
 
   if (!ready) return null;

@@ -224,6 +224,8 @@ async function run() {
   await reset.goto(`${BASE}/reset-password#access_token=test-access-token&expires_at=${now + 3600}&expires_in=3600&refresh_token=test-refresh-token&token_type=bearer&type=recovery`);
   await reset.getByTestId('screen-reset').waitFor({ timeout: 15000 });
   ok(true, 'the reset link opens "Choose a new password" (backend answering instantly)');
+  await reset.waitForTimeout(800);
+  ok(!reset.url().includes('access_token'), 'the login from the link is removed from the address bar');
   await reset.reload();
   await reset.getByTestId('screen-reset').waitFor({ timeout: 15000 });
   ok(true, 'and it is still there after reloading the page');
