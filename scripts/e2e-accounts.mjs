@@ -6,7 +6,8 @@
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,6 +20,8 @@ const PORT = 8093;
 const BASE = `http://localhost:${PORT}`;
 const API = 'https://mock.supabase.test';
 mkdirSync(OUT, { recursive: true });
+// The service worker (offline copy) is written after the export; add it if this export lacks one.
+if (!existsSync(path.join(ROOT, 'dist-accounts', 'sw.js'))) execFileSync('node', [path.join(ROOT, 'scripts/postexport.mjs'), 'dist-accounts'], { stdio: 'ignore' });
 
 const server = spawn('node', [path.join(ROOT, 'scripts/serve.mjs'), path.join(ROOT, 'dist-accounts'), String(PORT)], { stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 600));
@@ -51,6 +54,7 @@ function fakeBackend() {
     const req = route.request();
     const url = new URL(req.url());
     const p = url.pathname;
+    if (state.offline) return route.abort('internetdisconnected');
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' } });
     const body = req.postData() ? JSON.parse(req.postData()) : {};
     state.calls.push(`${req.method()} ${p}`);
@@ -176,6 +180,21 @@ async function run() {
   ok(typeof backend.state.profile?.timezone === 'string' && backend.state.profile.timezone.length > 0, 'the time zone is saved for the reminder');
   await page.getByTestId('settings-account').scrollIntoViewIfNeeded();
   await shot(page, '03-settings');
+
+  // Offline: the web app keeps a copy of itself, and remembers the subscription, so a paying
+  // learner can open it and keep learning without a connection.
+  await page.waitForFunction(() => Boolean(navigator.serviceWorker?.controller), null, { timeout: 15000 });
+  ok(true, 'the service worker keeps an offline copy of the app');
+  backend.state.offline = true;
+  await page.context().setOffline(true);
+  await page.goto(BASE);
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  ok(true, 'offline, the app still opens the course for a paying learner');
+  await page.context().setOffline(false);
+  backend.state.offline = false;
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-settings').click();
+  await page.getByTestId('settings-account').waitFor();
   await page.getByTestId('sub-withdraw').click();
   await page.getByTestId('account-confirm').click();
   await page.getByTestId('screen-subscribe').waitFor({ timeout: 10000 });

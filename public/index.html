@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="%LANG_ISO_CODE%">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+    <title>%WEB_TITLE%</title>
+    <meta name="description" content="Learn Luganda, the language of Buganda, with Ngaali the crane." />
+    <!-- Installable app: name, icons and colours for "Add to Home Screen" / "Install app". -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#250104" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Yiga Oluganda" />
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <!-- Paint the page maroon before the app loads (no white flash). -->
+    <style id="yiga-bg">
+      html,
+      body {
+        background: #250104;
+        color-scheme: dark;
+      }
+    </style>
+    <!--
+      Works offline: the service worker (sw.js, made by scripts/postexport.mjs after the web export)
+      keeps a copy of the app. Registered only in the exported app, never by the dev server.
+    -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          if (!document.querySelector('script[src*="/_expo/static/js/web/"]')) return;
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run Yiga Oluganda.</noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  </body>
+</html>

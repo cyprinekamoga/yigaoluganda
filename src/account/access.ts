@@ -13,6 +13,20 @@ const UNLOCKS = new Set(['active', 'trialing', 'past_due']);
 const DAY = 24 * 60 * 60 * 1000;
 export const WITHDRAWAL_DAYS = 14;
 
+/** Days a remembered subscription keeps the app open offline after its paid period has ended. */
+export const OFFLINE_GRACE_DAYS = 3;
+
+/**
+ * Subscriptions remembered on the device, for when the server can't be reached. They still unlock
+ * the course, but only until the paid period ends (plus a few days to get back online).
+ */
+export function offlineRows(rows: SubscriptionRow[], now: number): SubscriptionRow[] {
+  return rows.map((r) => {
+    const end = r.current_period_end ? Date.parse(r.current_period_end) : 0;
+    return UNLOCKS.has(r.status) && end + OFFLINE_GRACE_DAYS * DAY < now ? { ...r, status: 'unknown_offline' } : r;
+  });
+}
+
 export function hasAccess(rows: SubscriptionRow[]): boolean {
   return rows.some((r) => UNLOCKS.has(r.status));
 }

@@ -1,7 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { useApp } from '../state/store';
-import { hasAccess, type SubscriptionRow } from './access';
+import { hasAccess, offlineRows, type SubscriptionRow } from './access';
 import { ACCOUNTS } from './config';
 import { OPENING_LINK, supabase } from './supabase';
 import { startSync, stopSync } from './sync';
@@ -58,7 +59,12 @@ supabase?.auth.onAuthStateChange((event) => {
 export const selectSignedIn = (s: AccountState) => Boolean(s.session);
 export const selectAccess = (s: AccountState) => hasAccess(s.subscriptions);
 
-/** Reads the user's subscriptions again (after paying, cancelling or withdrawing). */
+const subsKey = (uid: string) => `yiga-subs:${uid}`;
+
+/**
+ * Reads the user's subscriptions again (after paying, cancelling or withdrawing). The last answer
+ * is kept on the device, so a paying learner can keep learning offline until the paid period ends.
+ */
 export async function refreshSubscriptions(): Promise<SubscriptionRow[]> {
   const uid = useAccount.getState().session?.user.id;
   if (!supabase || !uid) return [];
@@ -66,8 +72,20 @@ export async function refreshSubscriptions(): Promise<SubscriptionRow[]> {
     .from('subscriptions')
     .select('id, status, current_period_end, cancel_at_period_end, created_at, currency')
     .eq('user_id', uid);
-  if (error) return useAccount.getState().subscriptions;
+  if (error) {
+    const current = useAccount.getState().subscriptions;
+    if (current.length) return current;
+    try {
+      const saved = await AsyncStorage.getItem(subsKey(uid));
+      const rows = offlineRows(saved ? (JSON.parse(saved) as SubscriptionRow[]) : [], Date.now());
+      if (useAccount.getState().session?.user.id === uid) useAccount.setState({ subscriptions: rows });
+      return rows;
+    } catch {
+      return [];
+    }
+  }
   useAccount.setState({ subscriptions: data ?? [] });
+  AsyncStorage.setItem(subsKey(uid), JSON.stringify(data ?? [])).catch(() => undefined);
   return data ?? [];
 }
 

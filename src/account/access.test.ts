@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { currentSubscription, hasAccess, subscriptionState, withdrawalDaysLeft, type SubscriptionRow } from './access';
+import { currentSubscription, hasAccess, offlineRows, subscriptionState, withdrawalDaysLeft, type SubscriptionRow } from './access';
 
 const row = (over: Partial<SubscriptionRow> = {}): SubscriptionRow => ({
   id: 'sub_1',
@@ -41,5 +41,14 @@ describe('subscription access', () => {
     expect(subscriptionState(row({ cancel_at_period_end: true }))).toBe('ending');
     expect(subscriptionState(row({ status: 'past_due' }))).toBe('past_due');
     expect(subscriptionState(null)).toBe('none');
+  });
+
+  it('keeps a remembered subscription open offline only until the paid period ends (plus 3 days)', () => {
+    const end = Date.parse('2026-12-12T00:00:00Z');
+    expect(hasAccess(offlineRows([row()], end - day))).toBe(true);
+    expect(hasAccess(offlineRows([row()], end + 2 * day))).toBe(true);
+    expect(hasAccess(offlineRows([row()], end + 4 * day))).toBe(false);
+    expect(hasAccess(offlineRows([row({ status: 'canceled' })], start))).toBe(false);
+    expect(hasAccess(offlineRows([], start))).toBe(false);
   });
 });

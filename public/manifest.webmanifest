@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "Yiga Oluganda",
+  "short_name": "Yiga Oluganda",
+  "description": "Learn Luganda, the language of Buganda, with Ngaali the crane.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#250104",
+  "theme_color": "#250104",
+  "categories": ["education", "kids"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
