@@ -96,10 +96,10 @@ The project is three parts that are deployed separately:
 | `npm run stripe:setup` | Creates the Stripe price (all currencies), customer portal and webhook (see the script) |
 | `npm run e2e:accounts` | Browser test of sign-up, password show/hide, paying, withdrawing and log-in, with Supabase and Stripe mocked |
 
-**Before going live:**
+**Going live** (done for yigaoluganda.com in November 2026; live payments tested with a real payment and refund):
 1. Fill in the company details in [`landing/src/company.mjs`](landing/src/company.mjs), and have the terms and privacy policy ([`landing/src/legal.mjs`](landing/src/legal.mjs)) checked.
-2. Create the Supabase project (EU). Apply [`supabase/migrations`](supabase/migrations) and deploy the five functions in [`supabase/functions`](supabase/functions).
-3. In Stripe, turn on Stripe Tax (EU One-Stop Shop) and set the terms URL under *Public details*. Run `npm run stripe:setup -- --webhook https://<ref>.supabase.co` with a test key, then with the live key.
+2. Create the Supabase project (EU). Apply [`supabase/migrations`](supabase/migrations) and deploy the six functions in [`supabase/functions`](supabase/functions).
+3. In Stripe, set the terms URL under *Public details*. Run `npm run stripe:setup -- --webhook https://<ref>.supabase.co` with a test key, then with the live key. The script turns on Stripe Tax with a Swedish registration under the small-seller scheme, so every EU customer pays Swedish VAT (25%); see `TAX_COLLECTED` in [`src/pricing/pricing.ts`](src/pricing/pricing.ts) if the company later moves to the EU One-Stop Shop.
 4. Save the Edge Function secrets `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` (the functions find the price and the portal by name). For reminder e-mails, also save `RESEND_API_KEY` (the sending domain yigaoluganda.com must be verified in Resend).
 5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml). In Supabase, set *Authentication → URL Configuration* to the app's address, and add your own SMTP (e.g. Resend) so sign-up e-mails reach everyone.
 6. Point yigaoluganda.com at the landing site and app.yigaoluganda.com at the app site.

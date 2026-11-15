@@ -93,7 +93,7 @@ revoke execute on function public.profiles_check_timezone() from public, anon, a
 
 -- Every hour, on the hour.
 create extension if not exists pg_cron;
-create extension if not exists pg_net;
+create extension if not exists pg_net with schema extensions;
 
 select cron.schedule(
   'yiga-daily-reminders',
