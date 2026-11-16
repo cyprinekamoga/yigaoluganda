@@ -24,6 +24,8 @@ Deno.serve(async (req) => {
     line_items: [{ price: await monthlyPrice(), quantity: 1 }],
     subscription_data: { metadata: { user_id: user.id } },
     automatic_tax: { enabled: true },
+    // Lets people with a code from us (e.g. a free first month) enter it on the payment page.
+    allow_promotion_codes: true,
     customer_update: { address: 'auto', name: 'auto' },
     billing_address_collection: 'auto',
     consent_collection: { terms_of_service: 'required' },

@@ -104,6 +104,12 @@ The project is three parts that are deployed separately:
 5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml). In Supabase, set *Authentication → URL Configuration* to the app's address, and add your own SMTP (e.g. Resend) so sign-up e-mails reach everyone.
 6. Point yigaoluganda.com at the landing site and app.yigaoluganda.com at the app site.
 
+**Free first month for chosen people:** the payment page accepts promotion codes. The Stripe coupon
+`yiga-first-month-free` takes 100% off the first month; then the normal price applies until the
+customer cancels. The code `GYEBALEKO` (20 uses, new customers only, until February 2027) uses it.
+To make more codes (for example one per person): Stripe → Product catalog → Coupons →
+*First month free* → Add promotion code.
+
 ### Run it
 
 You need [Node.js](https://nodejs.org) 20 or newer.
