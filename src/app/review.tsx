@@ -21,6 +21,7 @@ import {
 import { useAccount } from '@/account/store';
 import { PHRASES } from '@/content';
 import { Dashboard } from '@/feedback/Dashboard';
+import { Schools } from '@/feedback/Schools';
 import { RATING_ICON, RATING_KEY } from '@/feedback/Inbox';
 import { reportKindKey, useItemLabel } from '@/feedback/Report';
 import { useT, type Key } from '@/i18n';
@@ -33,7 +34,7 @@ import { TextField } from '@/ui/TextField';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
-type Tab = 'overview' | 'recordings' | 'reports' | 'reviewers';
+type Tab = 'overview' | 'recordings' | 'reports' | 'schools' | 'reviewers';
 
 /**
  * For the people who review: learners' recordings to rate, "Report a mistake" reports to close,
@@ -43,7 +44,7 @@ export default function Review() {
   const { t } = useT();
   const role = useAccount((s) => s.role);
   const { tab: startTab } = useLocalSearchParams<{ tab?: string }>();
-  const [tab, setTab] = useState<Tab>(startTab === 'overview' ? 'overview' : 'recordings');
+  const [tab, setTab] = useState<Tab>(startTab === 'overview' || startTab === 'schools' ? startTab : 'recordings');
   const [requests, setRequests] = useState<OpenRequest[] | null | 'error'>(null);
   const [reports, setReports] = useState<ReportRow[] | null | 'error'>(null);
 
@@ -68,7 +69,7 @@ export default function Review() {
     ...(role === 'owner' ? ([['overview', t('dash.title')]] as [Tab, string][]) : []),
     ['recordings', t('review.recordings', { n: count(requests) })],
     ['reports', t('review.reports', { n: count(reports) })],
-    ...(role === 'owner' ? ([['reviewers', t('review.reviewers')]] as [Tab, string][]) : []),
+    ...(role === 'owner' ? ([['schools', t('schools.title')], ['reviewers', t('review.reviewers')]] as [Tab, string][]) : []),
   ];
 
   return (
@@ -103,6 +104,7 @@ export default function Review() {
 
       {tab === 'reviewers' && role === 'owner' && <Reviewers />}
       {tab === 'overview' && role === 'owner' && <Dashboard />}
+      {tab === 'schools' && role === 'owner' && <Schools />}
     </Screen>
   );
 }

@@ -1,5 +1,6 @@
 // Mail for the people who review Yiga Oluganda, sent through Resend.
 //   POST { type: 'report', id }  from a database trigger: e-mails a new "Report a mistake".
+//   POST { type: 'school', id }  from a database trigger: e-mails a school's licence request.
 //   POST { type: 'daily' }       from pg_cron every morning: deletes recordings older than 30 days
 //                                and e-mails a summary of what is waiting for review.
 // Both need the x-cron-secret header (checked against the database). Needs RESEND_API_KEY;
@@ -27,7 +28,7 @@ const KINDS: Record<string, string> = {
   other: 'Something else',
 };
 
-async function send(subject: string, lines: [string, string][], intro: string) {
+async function send(subject: string, lines: [string, string][], intro: string, path = '/review', button = 'Open the review list') {
   const key = Deno.env.get('RESEND_API_KEY');
   if (!key) return false;
   const rows = lines.map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#A8807A;vertical-align:top">${esc(k)}</td><td style="padding:4px 0">${esc(v)}</td></tr>`).join('');
@@ -36,9 +37,9 @@ async function send(subject: string, lines: [string, string][], intro: string) {
 <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#CDF73D;margin:0 0 12px">Yiga Oluganda · Review</p>
 <p style="font-size:17px;line-height:1.5;margin:0 0 16px">${esc(intro)}</p>
 <table style="font-size:15px;line-height:1.4;border-collapse:collapse;margin:0 0 24px">${rows}</table>
-<a href="${APP_URL}/review" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px">Open the review list</a>
+<a href="${APP_URL}${path}" style="display:inline-block;background:#D71A06;color:#FFF1EC;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px">${esc(button)}</a>
 </div></body></html>`;
-  const text = `${intro}\n\n${lines.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${APP_URL}/review`;
+  const text = `${intro}\n\n${lines.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${APP_URL}${path}`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'content-type': 'application/json' },
@@ -63,6 +64,26 @@ async function mailReport(id: string) {
       ['Device', [r.platform, r.app_version].filter(Boolean).join(' · ') || '–'],
     ],
     'A learner reported something that looks wrong in the course.',
+  );
+  return { sent };
+}
+
+async function mailSchool(id: string) {
+  const { data: r } = await admin.from('school_requests').select('*').eq('id', id).maybeSingle();
+  if (!r) return { sent: false, note: 'no such request' };
+  const sent = await send(
+    `School licence request: ${r.school}`,
+    [
+      ['Name', r.name],
+      ['School / municipality', r.school],
+      ['E-mail', r.email],
+      ['Students', r.students ? String(r.students) : '–'],
+      ['Message', r.message || '–'],
+      ['Language', r.lang === 'sv' ? 'Swedish' : 'English'],
+    ],
+    'A school asked about a class licence. Reply to them by e-mail; once agreed, create the class in the app.',
+    '/review?tab=schools',
+    'Open Schools',
   );
   return { sent };
 }
@@ -109,6 +130,7 @@ Deno.serve(async (req) => {
   if (!ok) return new Response('Forbidden', { status: 403 });
   const body = (await req.json().catch(() => ({}))) as { type?: string; id?: string };
   if (body.type === 'report' && body.id) return Response.json(await mailReport(body.id));
+  if (body.type === 'school' && body.id) return Response.json(await mailSchool(body.id));
   if (body.type === 'daily') return Response.json(await daily());
   return Response.json({ error: 'unknown type' }, { status: 400 });
 });

@@ -51,3 +51,18 @@ export function subscriptionState(sub: SubscriptionRow | null): SubscriptionStat
   if (sub.status === 'past_due') return 'past_due';
   return sub.cancel_at_period_end ? 'ending' : 'active';
 }
+
+/** A school's class licence (as a student or the teacher), from public.my_licence. */
+export interface Licence {
+  class_id: string;
+  name: string;
+  school: string;
+  /** Last day of the licence, YYYY-MM-DD. */
+  licence_until: string;
+  teacher: boolean;
+}
+
+/** A class licence that still runs on `today` (YYYY-MM-DD) unlocks the course like a subscription. */
+export function licenceActive(licences: Licence[], today: string): boolean {
+  return licences.some((l) => l.licence_until >= today);
+}

@@ -93,6 +93,7 @@ function footer(t) {
     <nav class="foot-links" aria-label="${t.lang === 'sv' ? 'Sidfot' : 'Footer'}">
       <a href="${t.legal.terms}">${esc(t.footer.terms)}</a>
       <a href="${t.legal.privacy}">${esc(t.footer.privacy)}</a>
+      <a href="${t.schools.path}">${esc(t.schools.footer)}</a>
       <a href="mailto:${esc(company.email)}">${esc(t.footer.contact)}</a>
       <a href="${t.other.path}" hreflang="${t.other.lang}" lang="${t.other.lang}">${esc(t.other.label)}</a>
     </nav>
@@ -365,6 +366,75 @@ ${footer(switchTo)}
 `;
 }
 
+/** "For schools": what a class licence gives, and a form that asks for an offer. */
+function schoolsPage(t) {
+  const s = t.schools;
+  const switchTo = { ...t, other: { ...t.other, path: CONTENT[t.other.lang].schools.path } };
+  const strings = { sending: s.sending, sent: s.sent, error: fill(s.error, { email: company.email }), invalid: s.invalid, send: s.send, lang: t.lang };
+  return `${head(t, { title: `${s.title} – Yiga Oluganda`, description: s.lead, pathname: s.path, alternates: false })}
+<body>
+${header(switchTo)}
+<main id="main" class="legal wrap narrow schools">
+  <p><a href="${t.path}">${esc(t.legal.back)}</a></p>
+  <h1>${esc(s.title)}</h1>
+  <p class="lead">${esc(s.lead)}</p>
+  <div class="cards">
+    ${s.points.map(([h, p]) => `<article class="card"><h3>${esc(h)}</h3><p>${esc(p)}</p></article>`).join('\n    ')}
+  </div>
+  <p>${esc(s.price)}</p>
+  <h2>${esc(s.formTitle)}</h2>
+  <form id="school-form" class="school-form" novalidate>
+    <label>${esc(s.name)}<input name="name" required maxlength="100" autocomplete="name"></label>
+    <label>${esc(s.school)}<input name="school" required maxlength="150" autocomplete="organization"></label>
+    <label>${esc(s.email)}<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
+    <label>${esc(s.students)}<input name="students" type="number" min="1" max="2000" inputmode="numeric"></label>
+    <label>${esc(s.message)}<textarea name="message" rows="4" maxlength="2000"></textarea></label>
+    <button class="btn btn-primary" type="submit">${esc(s.send)}</button>
+    <p class="small">${esc(s.privacy)}</p>
+  </form>
+  <div id="school-result" class="verify-result" role="status" aria-live="polite"></div>
+</main>
+${footer(switchTo)}
+<script>
+(() => {
+  const S = ${JSON.stringify(strings).replace(/</g, '\\u003c')};
+  const URL_ = ${JSON.stringify(`${SUPABASE_URL}/rest/v1/rpc/request_school_licence`)};
+  const KEY = ${JSON.stringify(SUPABASE_KEY)};
+  const form = document.getElementById('school-form');
+  const out = document.getElementById('school-result');
+  const button = form.querySelector('button');
+  const show = (kind, text) => { out.className = 'verify-result ' + kind; out.textContent = text; };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    const v = (k) => String(f.get(k) || '').trim();
+    if (!v('name') || !v('school') || !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v('email'))) return show('bad', S.invalid);
+    const students = parseInt(v('students'), 10);
+    button.disabled = true;
+    button.textContent = S.sending;
+    try {
+      const res = await fetch(URL_, {
+        method: 'POST',
+        headers: { apikey: KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_name: v('name'), p_school: v('school'), p_email: v('email'), p_students: students > 0 ? students : null, p_message: v('message'), p_lang: S.lang }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      show('ok', S.sent);
+    } catch {
+      show('bad', S.error);
+    } finally {
+      button.disabled = false;
+      button.textContent = S.send;
+    }
+  });
+})();
+</script>
+</body>
+</html>
+`;
+}
+
 function notFound() {
   const t = CONTENT.en;
   return `${head(t, { title: 'Not found – Yiga Oluganda', description: 'Page not found', pathname: '/404', alternates: false })}
@@ -395,7 +465,8 @@ for (const t of Object.values(CONTENT)) {
   write(`${t.legal.terms.slice(1)}index.html`, legalPage(t, terms(t.lang, companyIn(t.lang)), t.legal.terms));
   write(`${t.legal.privacy.slice(1)}index.html`, legalPage(t, privacy(t.lang, companyIn(t.lang)), t.legal.privacy));
   write(`${t.verify.path.slice(1)}index.html`, verifyPage(t));
-  pages.push(t.path, t.legal.terms, t.legal.privacy);
+  write(`${t.schools.path.slice(1)}index.html`, schoolsPage(t));
+  pages.push(t.path, t.legal.terms, t.legal.privacy, t.schools.path);
 }
 write('404.html', notFound());
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);

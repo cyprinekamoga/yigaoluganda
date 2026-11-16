@@ -2,7 +2,7 @@ import { Linking, Platform } from 'react-native';
 import type { Lang } from '../content/types';
 import type { Key } from '../i18n';
 import { useApp } from '../state/store';
-import { refreshSubscriptions, setRecovering, useAccount } from './store';
+import { refreshSubscriptions, setRecovering, useAccount, refreshLicence } from './store';
 import { inviteCode } from './invite';
 import { supabase } from './supabase';
 import { stopSync } from './sync';
@@ -134,6 +134,17 @@ export async function startCheckout(lang: Lang): Promise<Outcome> {
     return fail(error ?? 'auth.errGeneric');
   }
   open(data.url);
+  return { ok: true };
+}
+
+/** Joins a school's class with the teacher's code (the course then opens without paying). */
+export async function joinClass(code: string): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  const { data, error } = await supabase.rpc('join_class', { p_code: code });
+  if (error) return fail(explain(error));
+  const r = (data ?? {}) as { ok?: boolean; error?: string };
+  if (!r.ok) return fail(r.error === 'full' ? 'class.errFull' : r.error === 'expired' ? 'class.errExpired' : r.error === 'no_class' ? 'class.errNoClass' : 'auth.errGeneric');
+  await refreshLicence();
   return { ok: true };
 }
 

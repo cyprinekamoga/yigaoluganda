@@ -69,6 +69,7 @@ export default function RootLayout() {
           <Stack.Screen name="certificate/[part]" />
           <Stack.Screen name="feedback" />
           <Stack.Screen name="story/[id]" />
+          <Stack.Screen name="class" />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />

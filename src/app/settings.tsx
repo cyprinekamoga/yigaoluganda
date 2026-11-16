@@ -40,6 +40,7 @@ export default function Settings() {
   const [focused, setFocused] = useState(false);
   const email = useAccount((s) => s.session?.user.email ?? '');
   const role = useAccount((s) => s.role);
+  const licences = useAccount((s) => s.licences);
   const sub = currentSubscription(useAccount((s) => s.subscriptions));
   const [sheet, setSheet] = useState<'withdraw' | 'delete' | null>(null);
   const [busy, setBusy] = useState(false);
@@ -165,6 +166,19 @@ export default function Settings() {
 
       {ACCOUNTS && (
         <View style={styles.section} testID="settings-account">
+          {licences.length > 0 && (
+            <Card style={{ gap: 4 }} testID="licence-card">
+              <Txt variant="label">{t('class.licenceTitle')}</Txt>
+              {licences.map((l) => (
+                <Txt key={l.class_id} variant="body">
+                  {t(l.teacher ? 'class.licenceTeacher' : 'class.licenceLine', {
+                    name: [l.name, l.school].filter(Boolean).join(' · '),
+                    date: new Date(`${l.licence_until}T12:00:00`).toLocaleDateString(lang === 'sv' ? 'sv-SE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+                  })}
+                </Txt>
+              ))}
+            </Card>
+          )}
           <Txt variant="label">{t('settings.subscription')}</Txt>
           <Card style={{ gap: S.md }}>
             {state !== 'none' && (

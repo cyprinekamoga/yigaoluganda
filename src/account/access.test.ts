@@ -52,3 +52,14 @@ describe('subscription access', () => {
     expect(hasAccess(offlineRows([], start))).toBe(false);
   });
 });
+
+describe('school licences', () => {
+  const licence = (until: string) => ({ class_id: 'c1', name: 'Class', school: 'School', licence_until: until, teacher: false });
+  it('a class licence opens the course until its last day', async () => {
+    const { licenceActive } = await import('./access');
+    expect(licenceActive([licence('2026-11-16')], '2026-11-16')).toBe(true);
+    expect(licenceActive([licence('2026-11-15')], '2026-11-16')).toBe(false);
+    expect(licenceActive([licence('2026-11-15'), licence('2027-06-30')], '2026-11-16')).toBe(true);
+    expect(licenceActive([], '2026-11-16')).toBe(false);
+  });
+});

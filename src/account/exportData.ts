@@ -27,6 +27,7 @@ export async function collectMyData(): Promise<string | null> {
       read('feedback_requests', 'phrase_id, lang, status, rating, tip, created_at, answered_at'),
       read('reports', 'kind, item_type, item_id, lesson_id, note, lang, status, created_at, resolved_at'),
     ]);
+    const { data: classes } = await supabase.rpc('my_licence');
     const doc = {
       exported_at: new Date().toISOString(),
       about: 'Everything Yiga Oluganda keeps about your account. Payment details are kept by Stripe.',
@@ -43,6 +44,7 @@ export async function collectMyData(): Promise<string | null> {
       subscriptions,
       feedback_from_native_speakers: feedback,
       reported_mistakes: reports,
+      school_classes: classes ?? [],
     };
     return JSON.stringify(doc, null, 2);
   } catch {

@@ -3,7 +3,8 @@ import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { resetLearners } from '../learners/store';
 import { useApp } from '../state/store';
-import { hasAccess, offlineRows, type SubscriptionRow } from './access';
+import { dayKey } from '../logic/dates';
+import { hasAccess, licenceActive, offlineRows, type Licence, type SubscriptionRow } from './access';
 import { ACCOUNTS } from './config';
 import { OPENING_LINK, supabase } from './supabase';
 import { startSync, stopSync } from './sync';
@@ -23,6 +24,8 @@ interface AccountState {
   payNext: boolean;
   /** Reviews recordings and reports ('owner' also adds reviewers), or null for everyone else. */
   role: 'owner' | 'reviewer' | null;
+  /** Class licences from a school (as a student or the teacher). */
+  licences: Licence[];
 }
 
 /** Kept for the browser tab, so reloading the "new password" page doesn't lose it. */
@@ -44,6 +47,7 @@ export const useAccount = create<AccountState>(() => ({
   confirmLink: ACCOUNTS && OPENING_LINK.confirm,
   payNext: false,
   role: null,
+  licences: [],
 }));
 
 /** Starts or ends "choose a new password" (ends after saving it, or on logging out). */
@@ -67,7 +71,8 @@ supabase?.auth.onAuthStateChange((event) => {
 });
 
 export const selectSignedIn = (s: AccountState) => Boolean(s.session);
-export const selectAccess = (s: AccountState) => hasAccess(s.subscriptions);
+/** A subscription or a school's class licence unlocks the course. */
+export const selectAccess = (s: AccountState) => hasAccess(s.subscriptions) || licenceActive(s.licences, dayKey());
 
 const subsKey = (uid: string) => `yiga-subs:${uid}`;
 
@@ -99,6 +104,29 @@ export async function refreshSubscriptions(): Promise<SubscriptionRow[]> {
   return data ?? [];
 }
 
+const licenceKey = (uid: string) => `yiga-licence:${uid}`;
+
+/** Reads the user's class licences again (after joining a class). Kept on the device for offline use. */
+export async function refreshLicence(): Promise<Licence[]> {
+  const uid = useAccount.getState().session?.user.id;
+  if (!supabase || !uid) return [];
+  const { data, error } = await supabase.rpc('my_licence');
+  if (error) {
+    try {
+      const saved = await AsyncStorage.getItem(licenceKey(uid));
+      const rows = saved ? (JSON.parse(saved) as Licence[]) : [];
+      if (useAccount.getState().session?.user.id === uid) useAccount.setState({ licences: rows });
+      return rows;
+    } catch {
+      return [];
+    }
+  }
+  const rows = (data ?? []) as Licence[];
+  if (useAccount.getState().session?.user.id === uid) useAccount.setState({ licences: rows });
+  AsyncStorage.setItem(licenceKey(uid), JSON.stringify(rows)).catch(() => undefined);
+  return rows;
+}
+
 /** Whether this account reviews recordings and reports (see the reviewers table). */
 async function refreshRole(uid: string) {
   if (!supabase) return;
@@ -123,9 +151,9 @@ async function applySession(session: Session | null) {
       useApp.getState().reset();
     }
     currentUser = uid;
-    useAccount.setState({ session, subscriptions: [], role: null });
+    useAccount.setState({ session, subscriptions: [], role: null, licences: [] });
     // Never let a failed step keep the app from opening.
-    loading = session ? Promise.allSettled([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]) : null;
+    loading = session ? Promise.allSettled([refreshSubscriptions(), refreshLicence(), startSync(session), refreshRole(session.user.id)]) : null;
     await loading;
   } else {
     useAccount.setState({ session });

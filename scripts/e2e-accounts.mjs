@@ -202,6 +202,27 @@ function fakeBackend() {
       return json(route, state.progress ? [{ data: state.progress }] : []);
     }
 
+    // Schools: class licences.
+    if (p === '/rest/v1/rpc/my_licence') return json(route, state.licences ?? []);
+    if (p === '/rest/v1/rpc/join_class') {
+      state.joined = body.p_code;
+      if (body.p_code !== 'ABCD2345') return json(route, { error: 'no_class' });
+      state.licences = [{ class_id: 'cl1', name: 'Luganda 4B', school: 'Uppsala kommun', licence_until: '2099-06-30', teacher: false }];
+      return json(route, { ok: true, name: 'Luganda 4B', licence_until: '2099-06-30' });
+    }
+    if (p === '/rest/v1/classes') return json(route, state.teacherClasses ?? []);
+    if (p === '/rest/v1/rpc/class_progress') return json(route, [{ name: 'Kato', joined_at: new Date().toISOString(), last_active_day: '2026-11-15', lessons: 6, phrases: 21 }, { name: 'Nakato', joined_at: new Date().toISOString(), last_active_day: null, lessons: 0, phrases: 0 }]);
+    if (p === '/rest/v1/rpc/owner_school_requests') return json(route, [{ id: 'sr1', name: 'Ada', school: 'Uppsala kommun', email: 'ada@example.se', students: 12, message: 'Två grupper', lang: 'sv', status: 'new', created_at: new Date().toISOString() }]);
+    if (p === '/rest/v1/rpc/owner_classes') return json(route, state.ownerClasses ?? []);
+    if (p === '/rest/v1/rpc/create_class') {
+      state.createdClass = body;
+      state.ownerClasses = [{ id: 'cl2', name: body.p_name, school: body.p_school, teacher_email: body.p_teacher_email, seats: body.p_seats, members: 0, licence_until: body.p_until, join_code: 'WXYZ6789' }];
+      return json(route, { ok: true, id: 'cl2', code: 'WXYZ6789' });
+    }
+    if (p === '/rest/v1/rpc/handle_school_request') {
+      state.handledRequest = body.p_id;
+      return none();
+    }
     if (p === '/functions/v1/referral-code') {
       state.refCode = 'SARA-7K3D';
       return json(route, { code: state.refCode });
@@ -502,6 +523,27 @@ async function run() {
   ok((await page.getByTestId('dash-revenue').innerText()).includes('8.98'), 'and the monthly revenue before VAT, per currency');
   ok((await page.getByTestId('dashboard').innerText()).includes('Oli otya?'), 'and the most reported phrases');
   await shot(page, '10-dashboard');
+  await page.getByTestId('review-tab-schools').click();
+  await page.getByTestId('school-request').waitFor({ timeout: 8000 });
+  ok((await page.getByTestId('school-request').innerText()).includes('Uppsala kommun'), 'the owner sees requests from the For schools form');
+  await page.getByTestId('new-class-name').fill('Luganda 4B');
+  await page.getByTestId('new-class-school').fill('Uppsala kommun');
+  await page.getByTestId('new-class-teacher').fill('teacher@example.se');
+  await page.getByTestId('new-class-create').click();
+  await page.getByTestId('form-ok').waitFor({ timeout: 5000 });
+  ok((await page.getByTestId('form-ok').innerText()).includes('WXYZ6789') && backend.state.createdClass?.p_seats === 30 && /^\d{4}-\d{2}-\d{2}$/.test(backend.state.createdClass?.p_until ?? ''), 'the owner creates a class for a teacher and gets its code');
+  await page.getByTestId('owner-class').waitFor();
+  backend.state.licences = [{ class_id: 'cl1', name: 'Luganda 4B', school: 'Uppsala kommun', licence_until: '2099-06-30', teacher: true }];
+  backend.state.teacherClasses = [{ id: 'cl1', name: 'Luganda 4B', school: 'Uppsala kommun', join_code: 'ABCD2345', seats: 30, licence_until: '2099-06-30' }];
+  await page.goto(`${BASE}/`);
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-classes').click();
+  await page.getByTestId('class-student').first().waitFor({ timeout: 8000 });
+  ok((await page.getByTestId('class-join-code').innerText()) === 'ABCD2345' && (await page.getByTestId('class-student').count()) === 2, 'a teacher sees the class code and each student');
+  ok((await page.getByTestId('class-student').first().innerText()).includes('6 lessons'), 'with their progress');
+  await shot(page, '12-teacher');
+  backend.state.licences = [];
   backend.state.role = null;
 
   // Settings: tips by e-mail, download my data, and change the e-mail address.
@@ -562,6 +604,11 @@ async function run() {
   await page.getByTestId('signin-submit').click();
   await page.getByTestId('screen-subscribe').waitFor({ timeout: 10000 });
   ok(true, 'logging in without a subscription shows the plan');
+  await page.getByTestId('class-open').click();
+  await page.getByTestId('class-code').fill('wrong-123');
+  await page.getByTestId('class-join').click();
+  await page.getByTestId('form-error').waitFor({ timeout: 5000 });
+  ok((await page.getByTestId('form-error').innerText()).includes('no class with that code'), 'a wrong class code says so');
 
   // Forgot password, and the Swedish sign-up page linked from the landing page.
   await page.getByTestId('sub-logout').click();
@@ -672,6 +719,26 @@ async function run() {
   await changeLink.waitForTimeout(1500);
   ok(clBackend.state.verified === 'email_change', 'and confirming it verifies the address change');
   await changeLink.close();
+
+  // A student who comes with the teacher's class link: sign up, and the class opens the course (no payment).
+  const student = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const sBackend = fakeBackend();
+  await student.route(`${API}/**`, sBackend.handle);
+  await student.route('https://accounts.google.com/**', (route) => route.abort());
+  await student.goto(`${BASE}/sign-up?class=abcd2345`);
+  await student.getByTestId('class-banner').waitFor({ timeout: 15000 });
+  ok(true, 'a student with a class link sees that there is nothing to pay');
+  await student.getByTestId('signup-name').fill('Kato');
+  await student.getByTestId('signup-email').fill('kato@example.com');
+  await student.getByTestId('signup-password').fill('kampala123');
+  await student.getByTestId('signup-submit').click();
+  await student.getByTestId('screen-home').waitFor({ timeout: 20000 });
+  ok(sBackend.state.joined === 'ABCD2345' && !sBackend.state.checkouts, 'signing up joins the class and opens the course without the payment page');
+  await student.getByTestId('tab-profile').click();
+  await student.getByTestId('open-settings').click();
+  await student.getByTestId('licence-card').waitFor({ timeout: 8000 });
+  ok((await student.getByTestId('licence-card').innerText()).includes('Luganda 4B'), 'settings show the school licence');
+  await student.close();
 
   // "Continue with Google" (Google's script replaced by a stand-in that hands back a signed-in token).
   const goog = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'sv-SE' });

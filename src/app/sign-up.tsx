@@ -4,6 +4,7 @@ import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { resendConfirmation, signUp } from '@/account/actions';
 import { AuthShell, FormMessage } from '@/account/AuthShell';
 import { InviteBanner } from '@/account/InviteCard';
+import { ClassBanner } from '@/account/JoinClass';
 import { GoogleButton } from '@/account/GoogleButton';
 import { SITE_URL } from '@/account/config';
 import type { Lang } from '@/content/types';
@@ -95,6 +96,7 @@ export default function SignUp() {
   return (
     <AuthShell testID="screen-sign-up" title={t('auth.signUpTitle')} lead={t('auth.signUpLead')}>
       <InviteBanner />
+      <ClassBanner />
       <View style={styles.field}>
         <Txt variant="strong">{t('auth.language')}</Txt>
         <View style={styles.seg} accessibilityRole="radiogroup">

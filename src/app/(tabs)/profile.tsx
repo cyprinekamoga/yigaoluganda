@@ -9,6 +9,7 @@ import { dayKey, lastWeek } from '@/logic/dates';
 import { visibleStreak } from '@/logic/progress';
 import { isComplete, lessonsDone } from '@/logic/unlock';
 import { InviteCard } from '@/account/InviteCard';
+import { TeacherCard } from '@/account/TeacherCard';
 import { NativeFeedbackCard } from '@/feedback/Inbox';
 import { Avatar } from '@/learners/LearnerChip';
 import { useGrownUpCheck } from '@/learners/ParentGate';
@@ -211,6 +212,8 @@ export default function Profile() {
           ))}
         </View>
       </View>
+
+      <TeacherCard />
 
       <InviteCard />
 

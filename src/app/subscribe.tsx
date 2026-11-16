@@ -5,6 +5,8 @@ import { signOut, startCheckout } from '@/account/actions';
 import { FormMessage } from '@/account/AuthShell';
 import { DeleteAccountButton } from '@/account/DeleteAccount';
 import { InviteBanner } from '@/account/InviteCard';
+import { JoinClassCard } from '@/account/JoinClass';
+import { useClassCode } from '@/account/classCode';
 import { forgetInvite } from '@/account/invite';
 import { useGrownUpCheck } from '@/learners/ParentGate';
 import { useIsKid } from '@/learners/store';
@@ -31,8 +33,10 @@ export default function Subscribe() {
   const email = useAccount((s) => s.session?.user.email ?? '');
   const price = usePrice();
   // Just created the account: go straight on to the payment page (once; not after coming back).
+  const classCode = useClassCode();
   const [autoPay] = useState(() => {
-    const go = useAccount.getState().payNext && !status;
+    // A student with a class code from their teacher joins the class instead of paying.
+    const go = useAccount.getState().payNext && !status && !classCode;
     if (useAccount.getState().payNext) useAccount.setState({ payNext: false });
     return go;
   });
@@ -149,6 +153,8 @@ export default function Subscribe() {
           </Txt>
         </Card>
       )}
+
+      {!waiting && <JoinClassCard />}
 
       <View style={styles.foot}>
         {email ? (
