@@ -26,13 +26,14 @@ import { IntroStep } from './exercises/Intro';
 import { MatchStep } from './exercises/Match';
 import { SpeakStep } from './exercises/Speak';
 import { TipStep } from './exercises/Tip';
+import { TypeStep } from './exercises/Type';
 import { ReportButton, itemForStep } from '../feedback/Report';
 import { FeedbackCard } from './FeedbackCard';
 import type { Result } from './types';
 
 export type PlayMode = { kind: 'lesson'; lessonId: string } | { kind: 'practice'; practice: 'review' | 'dialogue' | 'speak' };
 
-const RETRYABLE = new Set<Step['kind']>(['choice', 'build', 'dictation']);
+const RETRYABLE = new Set<Step['kind']>(['choice', 'build', 'dictation', 'type']);
 
 export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMode; ctx: GenContext }) {
   const router = useRouter();
@@ -180,6 +181,9 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
       break;
     case 'speak':
       body = <SpeakStep key={index} step={step} {...common} />;
+      break;
+    case 'type':
+      body = <TypeStep key={index} step={step} {...common} />;
       break;
     case 'dialogue':
       body = <DialogueStep key={index} step={step} {...common} />;

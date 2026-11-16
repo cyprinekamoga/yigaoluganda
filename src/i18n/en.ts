@@ -503,6 +503,12 @@ export const en = {
   'review.remove': "Remove",
   'review.owner': "Owner",
   'review.reviewer': "Reviewer",
+  'type.title': "Write it in Luganda",
+  'type.placeholder': "Type in Luganda",
+  'type.a11y': "Write “{meaning}” in Luganda",
+  'type.engA11y': "Add the letter ŋ",
+  'type.engHint': "No ŋ on your keyboard? Type ng' instead.",
+  'type.typo': "Small slip, but we'll count it. It's spelt: {answer}",
 } as const;
 
 export type Key = keyof typeof en;

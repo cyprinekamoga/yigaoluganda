@@ -22,11 +22,13 @@ export type Step =
   | { kind: 'build'; sentenceId: string; tiles: string[]; answer: string[] }
   | { kind: 'dictation'; sentenceId: string; tiles: string[]; answer: string[] }
   | { kind: 'speak'; phraseId: string }
+  /** Write the Luganda for a meaning (the hardest check, for phrases already met). */
+  | { kind: 'type'; phraseId: string }
   | { kind: 'dialogue'; dialogueId: string };
 
 export type StepKind = Step['kind'];
 
-export const GRADED: ReadonlySet<StepKind> = new Set(['choice', 'match', 'build', 'dictation', 'dialogue']);
+export const GRADED: ReadonlySet<StepKind> = new Set(['choice', 'match', 'build', 'dictation', 'dialogue', 'type']);
 
 export interface GenContext {
   lang: Lang;
@@ -156,16 +158,26 @@ export function buildLesson(ref: LessonRef, ctx: GenContext): Step[] {
     core.push({ kind: 'match', phraseIds: matchIds });
   }
 
-  // 5. Review checks (up to 2).
+  // 5. Write one new phrase from memory, once it has been introduced, checked and matched.
+  const typeTarget = newIds.find((id) => checked.has(id)) ?? newIds[0];
+  const typing: Step[] = typeTarget ? [{ kind: 'type', phraseId: typeTarget }] : [];
+  core.push(...typing);
+
+  // 6. Review checks (up to 2): a phrase the learner already knows is written, the other picked.
+  let typedReview = false;
   const reviewChecks: Step[] = shuffle(reviewIds, rng)
     .slice(0, 2)
     .map((id) => {
       checked.add(id);
+      if (!typedReview && ctx.known?.(id)) {
+        typedReview = true;
+        return { kind: 'type', phraseId: id } as Step;
+      }
       return choiceStep(id, ctx, rng, pool);
     });
   core.push(...reviewChecks);
 
-  // 6. Sentence building, then dictation and speaking when recordings exist.
+  // 7. Sentence building, then dictation and speaking when recordings exist.
   const sentenceIds = (lesson.sentences ?? []).filter((id) => SENTENCES[id]);
   const nearby = wordsOf(pool, sentenceIds);
   const builds: Step[] = sentenceIds.slice(0, 3).map((id) => ({ kind: 'build', sentenceId: id, ...buildTiles(SENTENCES[id], ctx.name, rng, nearby) }));
@@ -177,20 +189,21 @@ export function buildLesson(ref: LessonRef, ctx: GenContext): Step[] {
   const speakId = [...newIds, ...reviewIds].find((id) => ctx.hasAudio(id));
   if (speakId) core.push({ kind: 'speak', phraseId: speakId });
 
-  // 7. Pad short lessons with extra spelling checks before the dialogue.
+  // 8. Pad short lessons with extra spelling checks before the dialogue.
   const unchecked = shuffle(pool.filter((id) => !checked.has(id)), rng);
   while (core.length < MIN_STEPS - (lesson.dialogue ? 1 : 0) && unchecked.length) {
     core.push(choiceStep(unchecked.shift()!, ctx, rng, pool));
   }
 
-  // 8. Trim long lessons: review checks first, then a third build, then extra intro checks.
-  const trimOrder: Step[] = [...reviewChecks, ...builds.slice(2), ...introChecks.slice(1), ...builds.slice(1, 2)];
+  // 9. Trim long lessons: review checks first, then a third build, then extra intro checks.
+  // Writing from memory is the last to go.
+  const trimOrder: Step[] = [...reviewChecks, ...builds.slice(2), ...introChecks.slice(1), ...builds.slice(1, 2), ...typing];
   while (core.length > MAX_STEPS - (lesson.dialogue ? 1 : 0) && trimOrder.length) {
     const victim = trimOrder.shift()!;
     core.splice(core.indexOf(victim), 1);
   }
 
-  // 9. Finish with the roleplay.
+  // 10. Finish with the roleplay.
   if (lesson.dialogue && DIALOGUES[lesson.dialogue]) core.push({ kind: 'dialogue', dialogueId: lesson.dialogue });
 
   return core;
@@ -208,7 +221,8 @@ export function buildReview(phraseIds: string[], sentenceIds: string[], ctx: Gen
   const firstHalf = ids.slice(0, 4);
   firstHalf.forEach((id) => steps.push(choiceStep(id, ctx, rng, ids)));
   if (ids.length >= 3) steps.push({ kind: 'match', phraseIds: shuffle(ids, rng).slice(0, 4) });
-  ids.slice(4, 7).forEach((id) => steps.push(choiceStep(id, ctx, rng, ids)));
+  // The weakest phrases are picked first; the rest (already met) are written from memory.
+  ids.slice(4, 7).forEach((id) => steps.push({ kind: 'type', phraseId: id }));
   const nearby = wordsOf(ids, sentenceIds);
   for (const sid of shuffle(sentenceIds.filter((s) => SENTENCES[s]), rng).slice(0, 2)) {
     steps.push({ kind: 'build', sentenceId: sid, ...buildTiles(SENTENCES[sid], ctx.name, rng, nearby) });
@@ -238,6 +252,7 @@ export function phrasesInStep(step: Step): string[] {
     case 'intro':
     case 'choice':
     case 'speak':
+    case 'type':
       return [step.phraseId];
     case 'match':
       return step.phraseIds;

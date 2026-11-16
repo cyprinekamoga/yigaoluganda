@@ -36,6 +36,9 @@ async function shot(page, name) {
 }
 
 /** Play whatever lesson is open until the completion screen. `wrongOnce` answers one choice wrongly. */
+/** How many "write it in Luganda" steps the lessons played so far had. */
+let typedSteps = 0;
+
 async function playLesson(page, { wrongOnce = false, shotPrefix = null } = {}) {
   let wrongDone = !wrongOnce;
   const seen = new Set();
@@ -60,6 +63,21 @@ async function playLesson(page, { wrongOnce = false, shotPrefix = null } = {}) {
         wrongDone = true;
       } else await page.getByTestId('option-answer').click();
       await page.getByTestId('check').click();
+      continue;
+    }
+    if (await vis(page, 'type-input', 100)) {
+      if (shotPrefix && !seen.has('type')) {
+        seen.add('type');
+        await page.getByTestId('type-input').fill('');
+        await shot(page, `${shotPrefix}-type`);
+      }
+      const expected = await page.getByTestId('type-expected').textContent();
+      // The ŋ key and a capital letter at the start must not matter.
+      const typed = expected.charAt(0).toUpperCase() + expected.slice(1);
+      await page.getByTestId('type-input').fill(wrongDone ? typed : 'xx');
+      wrongDone = true;
+      await page.getByTestId('check').click();
+      typedSteps++;
       continue;
     }
     if (await vis(page, 'tile-ans-0', 100)) {
@@ -163,6 +181,7 @@ async function run(viewport, label) {
   await page.getByTestId('lesson-player').waitFor();
   ok(await page.getByTestId('fun-fact').waitFor({ timeout: 3000 }).then(() => true, () => false), 'new-phrase screen shows a fun fact about Uganda');
   ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c07-l1');
+  ok(typedSteps > 0, 'the lesson asks to write a phrase in Luganda from memory');
   ok((await page.getByTestId('done-cowries').innerText()).includes('+10'), 'perfect lesson gives 10 cowries');
   ok((await page.getByTestId('done-summary').innerText()).includes('new phrase'), 'completion lists the phrases learned');
   ok((await page.getByTestId('done-phrases').count()) > 0, 'completion shows the learned phrases');

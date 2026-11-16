@@ -505,4 +505,10 @@ export const sv: Record<Key, string> = {
   'review.remove': "Ta bort",
   'review.owner': "Ägare",
   'review.reviewer': "Granskare",
+  'type.title': "Skriv det på luganda",
+  'type.placeholder': "Skriv på luganda",
+  'type.a11y': "Skriv ”{meaning}” på luganda",
+  'type.engA11y': "Lägg till bokstaven ŋ",
+  'type.engHint': "Inget ŋ på tangentbordet? Skriv ng' i stället.",
+  'type.typo': "Liten miss, men den räknas. Det stavas: {answer}",
 };

@@ -19,6 +19,7 @@ export function itemForStep(step: Step, lessonId?: string): ReportItem {
     case 'intro':
     case 'choice':
     case 'speak':
+    case 'type':
       return { type: 'phrase', id: step.phraseId, lessonId };
     case 'match':
       return { type: 'phrase', id: step.phraseIds.join(','), lessonId };
