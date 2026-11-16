@@ -109,6 +109,9 @@ export async function mountGoogleButton(el: HTMLElement, options: GoogleButtonOp
     },
   });
   el.replaceChildren();
+  // Google's button lives in an iframe with a light colour scheme. On our dark page the browser
+  // would paint that iframe white; matching the scheme keeps its background transparent.
+  el.style.colorScheme = 'light';
   google.renderButton(el, {
     type: 'standard',
     theme: 'filled_black',
