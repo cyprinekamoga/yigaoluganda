@@ -269,10 +269,10 @@
       {
         "kind": "say",
         "who": "nakato",
-        "lg": "Agandi, {name}!",
+        "lg": "Bigenda bitya, {name}?",
         "tr": {
-          "en": "How's it going, {name}!",
-          "sv": "Hur är läget, {name}!"
+          "en": "How's it going, {name}?",
+          "sv": "Hur är läget, {name}?"
         }
       },
       {
@@ -1675,10 +1675,10 @@
       {
         "kind": "say",
         "who": "nakato",
-        "lg": "Agandi, {name}!",
+        "lg": "Bigenda bitya, {name}?",
         "tr": {
-          "en": "How's it going, {name}!",
-          "sv": "Hur är läget, {name}!"
+          "en": "How's it going, {name}?",
+          "sv": "Hur är läget, {name}?"
         }
       },
       {

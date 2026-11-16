@@ -17,6 +17,7 @@ import {
   type Stats,
 } from '../logic/progress';
 import { DEFAULT_REMINDER_HOUR } from '../logic/reminders';
+import { renamePhrases } from '../logic/renamed';
 import { grade, introduce, type SrsCard } from '../logic/srs';
 
 export interface Profile {
@@ -160,7 +161,8 @@ export function snapshot(s: Data): Data {
 /** Fills any field a saved snapshot lacks, so an older or partial copy loads safely. */
 export function restore(saved: Partial<Data>): Data {
   const base = fresh();
-  return { ...base, ...saved, settings: { ...base.settings, ...saved.settings }, stats: { ...base.stats, ...saved.stats } };
+  const srs = renamePhrases(saved.srs);
+  return { ...base, ...saved, ...(srs ? { srs } : {}), settings: { ...base.settings, ...saved.settings }, stats: { ...base.stats, ...saved.stats } };
 }
 
 export const useApp = create<AppState>()(
@@ -292,8 +294,9 @@ export const useApp = create<AppState>()(
     },
     {
       name: STORE_KEY,
-      version: 2,
-      // v1 counted XP per day; v2 counts finished lessons and practice rounds per day.
+      version: 3,
+      // v1 counted XP per day; v2 counts finished lessons and practice rounds per day; v3 renames
+      // phrases whose id changed (RENAMED_PHRASES).
       migrate: (persisted, from) => {
         const s = (persisted ?? {}) as Partial<Data> & { stats?: Partial<Stats> & { xpByDay?: Record<string, number> } };
         if (from < 2 && s.stats) {
@@ -302,6 +305,7 @@ export const useApp = create<AppState>()(
           const activityByDay = Object.fromEntries(Object.entries(xpByDay ?? {}).filter(([, v]) => v > 0).map(([d]) => [d, 1]));
           s.stats = { ...initialStats(Date.now()), ...rest, activityByDay };
         }
+        if (from < 3) s.srs = renamePhrases(s.srs);
         return s as Data;
       },
       storage: createJSONStorage(() => AsyncStorage),

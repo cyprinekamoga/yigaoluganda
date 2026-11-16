@@ -13,7 +13,7 @@ Part 1 follows the curriculum in the product requirements (12 chapters).
 
 | # | Luganda title | Title | Lessons | Phrases taught |
 |---|---|---|---|---|
-| 1 | Okulamusa | Informal Greetings | 2 | Oli otya?, gyendi, bulungi, naawe, Agandi?, Ki kati?, mukwano gwange |
+| 1 | Okulamusa | Informal Greetings | 2 | Oli otya?, gyendi, bulungi, naawe, Bigenda bitya?, Ki kati?, mukwano gwange |
 | 2 | Erinnya | Introductions & Names | 2 | erinnya, erinnya lyange, mpitibwa, Erinnya lyo ggwe ani?, Ggwe ani?, nsanyuse okukulaba, tukusanyukidde |
 | 3 | Ebigambo Ebikulu | Everyday Words | 3 | kirungi, kibi, nnyo, katono, naye, kino, ekyo, ekintu, wano, eyo, njagala, saagala, nnina, sirina, waliwo |
 | 4 | Obuntubulamu | Courtesy & Magic Words | 2 | weebale, weebale nnyo, mwattu, kale, yee, nedda, nsonyiwa, bambi |
@@ -40,7 +40,7 @@ Part 1 follows the curriculum in the product requirements (12 chapters).
 | `bambi` | bambi | please / oh, I'm sorry | Confirm both uses of bambi (pleading 'please' and sympathy). |
 | `gyendi` | gyendi | I'm fine | Confirm gyendi as the standard reply and its literal sense. |
 | `naawe` | naawe | you too / and you? | Confirm spelling naawe (vs nawe) and use as 'and you?'. |
-| `agandi` | Agandi? | How's it going? | Casual greeting. Confirm it is natural for peers. |
+| `bigenda-bitya` | Bigenda bitya? | How's it going? | Replaces a Runyankole/Rukiga greeting that was used here by mistake. Confirm it sounds natural between friends. |
 | `ki-kati` | Ki kati? | What's up? | The PRD listed 'Ki kano?'. 'Ki kati?' was used because it is the more widely attested casual greeting. Please confirm which one to teach. |
 | `osiibye-otya` | Osiibye otya? | Good afternoon | Confirm spelling osiibye and use from midday on. |
 | `jjajja` | jjajja | grandparent | Spelling jjajja vs jjaja (the book used both). Confirm. |

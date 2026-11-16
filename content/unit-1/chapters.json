@@ -5,7 +5,7 @@
     "scenario": { "en": "Greet a friend", "sv": "Hälsa på en kompis" },
     "lessons": [
       { "id": "c03-l1", "title": { "en": "How are you?", "sv": "Hur mår du?" }, "phrases": ["oli-otya", "gyendi", "bulungi", "naawe"], "sentences": ["s-gyendi-naawe", "s-bulungi-weebale"], "tip": "tip-greet-question" },
-      { "id": "c03-l2", "title": { "en": "Hey, friend!", "sv": "Hej, kompis!" }, "phrases": ["agandi", "ki-kati", "mukwano-gwange"], "review": ["oli-otya", "gyendi"], "sentences": ["s-oli-otya-mukwano", "s-ki-kati-mukwano"], "dialogue": "dlg-friend" }
+      { "id": "c03-l2", "title": { "en": "Hey, friend!", "sv": "Hej, kompis!" }, "phrases": ["bigenda-bitya", "ki-kati", "mukwano-gwange"], "review": ["oli-otya", "gyendi"], "sentences": ["s-oli-otya-mukwano", "s-ki-kati-mukwano"], "dialogue": "dlg-friend" }
     ]
   },
   {
@@ -125,7 +125,7 @@
       {
         "id": "c12-l2", "title": { "en": "First day in Kampala", "sv": "Första dagen i Kampala" },
         "phrases": [],
-        "review": ["tukusanyukidde", "gyebale-ko", "agandi", "ogenda-wa", "simanyi", "mukwano-gwange"],
+        "review": ["tukusanyukidde", "gyebale-ko", "bigenda-bitya", "ogenda-wa", "simanyi", "mukwano-gwange"],
         "sentences": ["s-olugendo-lwatandika", "s-weebale-okufumba-maama"],
         "dialogue": "dlg-checkpoint"
       }

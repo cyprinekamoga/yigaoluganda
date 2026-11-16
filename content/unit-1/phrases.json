@@ -28,7 +28,7 @@
   { "id": "gyendi", "lg": "gyendi", "tr": { "en": "I'm fine", "sv": "jag mår bra" }, "category": "greet", "note": { "en": "The usual answer to Oli otya?", "sv": "Det vanliga svaret på Oli otya?" }, "check": "Confirm gyendi as the standard reply and its literal sense." },
   { "id": "bulungi", "lg": "bulungi", "tr": { "en": "well, fine, good", "sv": "bra" }, "category": "greet" },
   { "id": "naawe", "lg": "naawe", "tr": { "en": "you too / and you?", "sv": "du också / och du?" }, "category": "greet", "check": "Confirm spelling naawe (vs nawe) and use as 'and you?'." },
-  { "id": "agandi", "lg": "Agandi?", "tr": { "en": "How's it going?", "sv": "Hur är läget?" }, "category": "greet", "check": "Casual greeting. Confirm it is natural for peers." },
+  { "id": "bigenda-bitya", "lg": "Bigenda bitya?", "tr": { "en": "How's it going?", "sv": "Hur är läget?" }, "literal": { "en": "How are things going?", "sv": "Hur går det för sakerna?" }, "category": "greet", "note": { "en": "A relaxed greeting between friends. The answer: bigenda bulungi (things are going well).", "sv": "En avslappnad hälsning mellan vänner. Svaret: bigenda bulungi (det går bra)." }, "check": "Replaces a Runyankole/Rukiga greeting that was used here by mistake. Confirm it sounds natural between friends." },
   { "id": "ki-kati", "lg": "Ki kati?", "tr": { "en": "What's up?", "sv": "Läget?" }, "literal": { "en": "What now?", "sv": "Vad nu?" }, "category": "greet", "check": "The PRD listed 'Ki kano?'. 'Ki kati?' was used because it is the more widely attested casual greeting. Please confirm which one to teach." },
   { "id": "mukwano-gwange", "lg": "mukwano gwange", "tr": { "en": "my friend", "sv": "min vän" }, "category": "greet" },
 
