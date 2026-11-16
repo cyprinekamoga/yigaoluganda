@@ -108,6 +108,9 @@ async function refreshRole(uid: string) {
 
 let currentUser: string | null = null;
 
+/** The account loading for the current user (subscription, progress, role), while it runs. */
+let loading: Promise<unknown> | null = null;
+
 async function applySession(session: Session | null) {
   const uid = session?.user.id ?? null;
   // A reset link that logged nobody in (expired, already used) must not ask for a new password later.
@@ -121,9 +124,14 @@ async function applySession(session: Session | null) {
     }
     currentUser = uid;
     useAccount.setState({ session, subscriptions: [], role: null });
-    if (session) await Promise.all([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]);
+    loading = session ? Promise.all([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]) : null;
+    await loading;
   } else {
     useAccount.setState({ session });
+    // At start-up the saved login is announced twice. The second time must not mark the account
+    // ready before the first has loaded the subscription, or a paying learner's deep link (a lesson,
+    // a certificate, the review list) is sent to the start page as if they had no subscription.
+    await loading;
   }
   useAccount.setState({ ready: true });
 }

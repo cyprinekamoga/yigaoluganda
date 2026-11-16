@@ -41,6 +41,9 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Me** | Phrases learned (out of every phrase in the course), drumbeat, cowries, this week (one drum per day), a chapter map with a bead string per chapter, your shields, and a **Practise with family** card |
 | **Kids mode** | *Who's learning?* (on the Me tab): a parent adds up to four children, each with their own progress, kept in the account (`child_profiles`). In a child's profile there are no water pots to lose, no settings, payments or account actions, and leaving it, or adding and changing profiles, takes a grown-up check (a times-table question written in words) |
 | **Certificates** | Finishing every chapter of a part, with its final conversation played (not skipped by the placement test), earns a certificate. The learner writes the name to print; the `issue_certificate` function checks the subscription and gives a code like `YO-ABCD-EFGH-JK23`. The certificate saves as an A4 PDF (the browser's print window on the web, `expo-print` + `expo-sharing` on phones) and its link opens [yigaoluganda.com/verify](https://yigaoluganda.com/verify/), where anyone can check the code (`verify_certificate` shows only the name, part, phrase count and date). Children get their own. Listed on the Me tab; the end of a part's last lesson offers it |
+| **Native-speaker feedback** | After recording in Speak & compare, *Ask a native speaker* uploads the recording (private bucket `recordings`, the learner's own folder) and puts it on the review list (`request_feedback`, at most 5 waiting). A reviewer rates it (*Sounds right / Almost there / Try again*) with an optional tip; the answer shows on the Me tab under *Feedback from native speakers*. Recordings are deleted after 30 days |
+| **Report a mistake** | A flag in the lesson's top bar (it reports the step on screen) and a link on each phrase's page. The learner picks what is wrong and can add a note; each report is e-mailed to the support address (`review-mail`) |
+| **Reviewing** | `/review` (Settings → *Review recordings and reports*, also linked from the daily e-mail) is open to the owner and the reviewers the owner adds by e-mail (`reviewers` table). Three tabs: recordings to rate, reports to close as *Fixed* or *Not a mistake*, and (owner) who may review. None of this shows in a child's profile |
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
 | **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (27 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
 | **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
@@ -211,7 +214,7 @@ scripts/            audio, icons, sound effects, content report, e2e
 
 ### Privacy
 
-There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device. A certificate's name, part, phrase count and date can be seen by anyone with its code. Learners can delete their account in the app.
+There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device unless the learner sends one for native-speaker feedback; it is then stored privately (bucket `recordings`) and deleted after 30 days. A certificate's name, part, phrase count and date can be seen by anyone with its code. Learners can delete their account in the app.
 
 The previous web version of the app, based on the book *Luganda för beginners* by Cyprine Kamoga, is in the git history at commit `6a7fad7`.
 
@@ -226,6 +229,8 @@ The previous web version of the app, based on the book *Luganda för beginners* 
 - Ett nivåtest (”Kan du redan lite luganda?”) som låter dig hoppa över kapitlen du redan kan.
 - En daglig påminnelse om du vill: en notis i mobilen, ett mejl på webben.
 - Barnläge: upp till fyra barnprofiler med egna framsteg, utan vattenkrukor, och en vuxenkontroll för att lämna profilen.
+- Fråga en modersmålstalare: skicka en inspelning från Prata och jämför och få ett omdöme och ett tips.
+- Rapportera ett fel: en flagga i lektionen och en länk på varje fras. Granskare (ägaren och de som ägaren lägger till) svarar och stänger rapporter på `/review`.
 - Diplom när en del är klar, med en kod som vem som helst kan kontrollera på yigaoluganda.com/sv/verify/, och som PDF att skriva ut.
 - Lektioner med cirka 10 steg av 7 övningstyper: ljud- och vokalmatchning, para ihop, bygga meningar, diktamen, prata och jämföra, rollspel och kulturtips.
 - Ett eget spelsystem från Buganda: vattenkrukor (ett fel spiller en kruka), kaurisnäckor, trumslag för dagar i rad och sköldar. Framsteg räknas i fraser du kan, inte poäng.

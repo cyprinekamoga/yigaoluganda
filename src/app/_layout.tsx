@@ -31,6 +31,7 @@ export default function RootLayout() {
   const access = useAccount(selectAccess);
   const recovering = useAccount((s) => s.recovering);
   const confirmLink = useAccount((s) => s.confirmLink);
+  const reviewer = useAccount((s) => s.role !== null);
   useEffect(() => startAccount(), []);
   useReminderSchedule();
 
@@ -67,6 +68,7 @@ export default function RootLayout() {
           <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="learners" />
           <Stack.Screen name="certificate/[part]" />
+          <Stack.Screen name="feedback" />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />
@@ -88,6 +90,12 @@ export default function RootLayout() {
         </Stack.Protected>
         {/* Where the sign-up and password e-mails lead, signed in or not. Only when opened from such a link,
             so it is never where the app sends someone by default. */}
+        {/* For the people who review recordings and reports, with or without a subscription of their own.
+            Only open to them: a blocked screen sends people to the first open screen in file order, and
+            "review" comes before "subscribe". */}
+        <Stack.Protected guard={ACCOUNTS && signedIn && !recovering && reviewer}>
+          <Stack.Screen name="review" />
+        </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && confirmLink}>
           <Stack.Screen name="confirm" />
         </Stack.Protected>

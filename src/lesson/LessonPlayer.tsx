@@ -26,6 +26,7 @@ import { IntroStep } from './exercises/Intro';
 import { MatchStep } from './exercises/Match';
 import { SpeakStep } from './exercises/Speak';
 import { TipStep } from './exercises/Tip';
+import { ReportButton, itemForStep } from '../feedback/Report';
 import { FeedbackCard } from './FeedbackCard';
 import type { Result } from './types';
 
@@ -201,6 +202,7 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
           </View>
         )}
         <Beads fit total={queue.length} done={index} current={index} size={12} style={styles.beads} accessibilityLabel={t('lesson.stepOf', { n: index + 1, total: queue.length })} />
+        <ReportButton item={itemForStep(step, mode.kind === 'lesson' ? mode.lessonId : undefined)} />
         <Pressable testID="lesson-close" onPress={() => setQuitOpen(true)} accessibilityRole="button" accessibilityLabel={t('lesson.leave')} hitSlop={10} style={[styles.side, styles.leave]}>
           <Txt style={styles.leaveText}>{t('lesson.leave')}</Txt>
         </Pressable>

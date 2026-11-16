@@ -37,6 +37,7 @@ export default function Settings() {
   const [confirm, setConfirm] = useState(false);
   const [focused, setFocused] = useState(false);
   const email = useAccount((s) => s.session?.user.email ?? '');
+  const role = useAccount((s) => s.role);
   const sub = currentSubscription(useAccount((s) => s.subscriptions));
   const [sheet, setSheet] = useState<'withdraw' | 'delete' | null>(null);
   const [busy, setBusy] = useState(false);
@@ -165,6 +166,7 @@ export default function Settings() {
                 {email}
               </Txt>
             </View>
+            {role && <Button kind="secondary" testID="open-review" label={t('review.open')} onPress={() => router.push('/review')} />}
             <Button kind="secondary" testID="change-password" label={t('settings.changePassword')} onPress={() => setRecovering(true)} />
             <Button kind="secondary" testID="logout" label={t('settings.logOut')} onPress={() => signOut()} />
             <Button kind="ghost" testID="delete-account" label={t('settings.delete')} onPress={() => setSheet('delete')} />

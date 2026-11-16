@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ALL_SENTENCES, CHAPTERS, PHRASES, TAUGHT_IN } from '@/content';
+import { ReportButton } from '@/feedback/Report';
 import { useT } from '@/i18n';
 import { SpeakerButtons } from '@/lesson/SpeakerButtons';
 import { loose } from '@/logic/search';
@@ -81,6 +82,7 @@ export default function PhraseScreen() {
       )}
 
       <Button kind="secondary" label={t('practice.speaking')} onPress={() => router.push(`/practice/speak?id=${p.id}`)} />
+      <ReportButton look="link" item={{ type: 'phrase', id: p.id }} />
     </Screen>
   );
 }

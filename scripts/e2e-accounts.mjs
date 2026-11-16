@@ -58,8 +58,52 @@ function fakeBackend() {
     const p = url.pathname;
     if (state.offline) return route.abort('internetdisconnected');
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' } });
-    const body = req.postData() ? JSON.parse(req.postData()) : {};
+    let body = {};
+    if (!p.startsWith('/storage/')) body = req.postData() ? JSON.parse(req.postData()) : {};
     state.calls.push(`${req.method()} ${p}`);
+    const none = () => route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
+
+    // Native-speaker feedback, reports and reviewing.
+    if (p.startsWith('/storage/v1/object/recordings/')) {
+      state.uploads = [...(state.uploads ?? []), { path: decodeURIComponent(p.slice('/storage/v1/object/recordings/'.length)), type: req.headers()['content-type'] ?? '', size: req.postDataBuffer()?.length ?? 0 }];
+      return json(route, { Key: p.slice('/storage/v1/object/'.length), Id: 'obj-1' });
+    }
+    if (p.startsWith('/storage/v1/object/sign/')) {
+      if (req.method() === 'POST') return json(route, { signedURL: '/object/sign/recordings/x.webm?token=t' });
+      return route.fulfill({ status: 404, headers: { 'access-control-allow-origin': '*' } });
+    }
+    if (p === '/rest/v1/rpc/request_feedback') {
+      state.feedbackCalls = [...(state.feedbackCalls ?? []), body];
+      return json(route, '11111111-1111-4111-8111-111111111111');
+    }
+    if (p === '/rest/v1/feedback_requests') return json(route, url.searchParams.get('status') === 'eq.open' ? (state.openRequests ?? []) : (state.feedback ?? []));
+    if (p === '/rest/v1/rpc/mark_feedback_seen') {
+      state.seen = true;
+      return none();
+    }
+    if (p === '/rest/v1/rpc/answer_feedback') {
+      state.answered = body;
+      return none();
+    }
+    if (p === '/rest/v1/reports') {
+      if (req.method() === 'POST') {
+        state.reports = [...(state.reports ?? []), Array.isArray(body) ? body[0] : body];
+        return route.fulfill({ status: 201, headers: { 'access-control-allow-origin': '*' } });
+      }
+      return json(route, state.openReports ?? []);
+    }
+    if (p === '/rest/v1/rpc/resolve_report') {
+      state.resolved = body;
+      return none();
+    }
+    if (p === '/rest/v1/reviewers') return json(route, state.role ? [{ role: state.role }] : []);
+    if (p === '/rest/v1/rpc/list_reviewers') return json(route, state.reviewerList ?? [{ email: 'sara@example.com', role: 'owner', added_at: new Date().toISOString() }]);
+    if (p === '/rest/v1/rpc/set_reviewer') {
+      state.setReviewer = body;
+      if (body.p_email.includes('nobody')) return json(route, 'no_account');
+      state.reviewerList = [{ email: 'sara@example.com', role: 'owner', added_at: new Date().toISOString() }, { email: body.p_email, role: 'reviewer', added_at: new Date().toISOString() }];
+      return json(route, body.p_on ? 'added' : 'removed');
+    }
 
     if (p === '/auth/v1/signup') {
       if (state.users.has(body.email)) return json(route, { code: 'user_already_exists', msg: 'User already registered' }, 422);
@@ -167,8 +211,9 @@ function fakeBackend() {
 
 async function run() {
   console.log('\naccounts (mocked Supabase and Stripe)');
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1, locale: 'en-US' });
+  // A fake microphone, so Speak & compare can record.
+  const browser = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1, locale: 'en-US', permissions: ['microphone'] });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const backend = fakeBackend();
@@ -268,6 +313,12 @@ async function run() {
   // The child does something (opens their first chapter): that is saved to the child's profile.
   await page.getByTestId('tile-c03').click();
   await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('chapter-start').click();
+  await page.getByTestId('lesson-player').waitFor();
+  ok((await page.getByTestId('report-open').count()) === 0, 'a child\'s lesson has no "Report a mistake" button');
+  await page.getByTestId('lesson-close').click();
+  await page.getByTestId('quit-confirm').click();
+  await page.getByTestId('screen-chapter').waitFor();
   await page.getByTestId('back').click();
   await page.getByTestId('screen-home').waitFor();
   await page.waitForTimeout(2500);
@@ -322,6 +373,103 @@ async function run() {
   await page.getByTestId('certificates-card').waitFor();
   ok((await page.getByTestId('cert-open-1').getAttribute('aria-label')).includes('YO-ABCD-EFGH-JK23'), 'the Me tab lists the certificate by its code');
   await page.getByTestId('tab-home').click();
+
+  // Report a mistake, from inside a lesson.
+  // Opened directly (a link, or reloading the page): a paying learner stays where the link leads.
+  const trail = [];
+  const onNav = (f) => f === page.mainFrame() && trail.push(new URL(f.url()).pathname);
+  page.on('framenavigated', onNav);
+  await page.goto(`${BASE}/lesson/c03-l1`);
+  await page.getByTestId('lesson-player').waitFor({ timeout: 15000 });
+  await page.waitForTimeout(1000);
+  page.off('framenavigated', onNav);
+  ok(trail.every((x) => x === '/lesson/c03-l1'), `a direct link to a lesson opens the lesson${trail.length > 1 ? ` (went ${trail.join(' → ')})` : ''}`);
+  await page.getByTestId('report-open').click();
+  await page.getByTestId('report-sheet').waitFor();
+  ok(await page.getByTestId('report-send').isDisabled(), 'a report needs to say what is wrong');
+  await page.getByTestId('report-kind-translation').click();
+  await page.getByTestId('report-note').fill('Should be "hello, friend"');
+  await shot(page, '06-report');
+  await page.getByTestId('report-send').click();
+  await page.getByTestId('report-sent').waitFor({ timeout: 10000 });
+  const rep = backend.state.reports?.[0] ?? {};
+  ok(rep.kind === 'translation' && rep.item_type === 'phrase' && rep.lesson_id === 'c03-l1' && rep.note === 'Should be "hello, friend"' && rep.platform === 'web', '"Report a mistake" sends what is wrong, where, and the note');
+  await page.getByRole('button', { name: 'Close' }).last().click();
+  await page.getByTestId('lesson-close').click();
+  await page.getByTestId('quit-confirm').click();
+
+  // Ask a native speaker, from Speak & compare.
+  await page.goto(`${BASE}/practice/speak?id=oli-otya`);
+  await page.getByTestId('mic').waitFor({ timeout: 15000 });
+  await page.getByTestId('mic').click();
+  await page.waitForTimeout(1200);
+  await page.getByTestId('mic').click();
+  const asked = await page.getByTestId('ask-native').waitFor({ timeout: 8000 }).then(() => true, () => false);
+  ok(asked, 'after recording, Speak & compare offers "Ask a native speaker"');
+  if (asked) {
+    await page.getByTestId('ask-send').click();
+    await page.getByTestId('ask-sent').waitFor({ timeout: 10000 }).catch(() => undefined);
+    const up = backend.state.uploads?.[0];
+    const fc = backend.state.feedbackCalls?.[0];
+    ok(Boolean(up) && up.size > 0 && up.type.startsWith('audio/') && !up.type.includes(';'), `the recording is uploaded as audio${up ? ` (${up.type}, ${up.size} bytes)` : ''}`);
+    ok(fc?.p_phrase === 'oli-otya' && fc?.p_audio_path === up?.path && fc?.p_lang === 'en', 'and sent to the review list for that phrase');
+    await shot(page, '07-ask-native');
+  }
+
+  // The answer shows on the Me tab.
+  backend.state.feedback = [
+    { id: 'f1', phrase_id: 'oli-otya', status: 'answered', rating: 'almost', tip: 'Make the first syllable a little longer.', created_at: new Date().toISOString(), answered_at: new Date().toISOString(), seen_at: null },
+    { id: 'f2', phrase_id: 'gyendi', status: 'open', rating: null, tip: null, created_at: new Date().toISOString(), answered_at: null, seen_at: null },
+  ];
+  await page.goto(BASE);
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('feedback-new').waitFor({ timeout: 8000 });
+  ok((await page.getByTestId('feedback-status').innerText()) === '1 new answer', 'the Me tab says there is a new answer');
+  await page.getByTestId('feedback-open').click();
+  await page.getByTestId('screen-feedback').waitFor();
+  ok((await page.getByTestId('feedback-rating').innerText()) === 'Almost there' && (await page.getByTestId('feedback-tip').innerText()).includes('first syllable'), 'the feedback page shows the rating and the tip');
+  await page.waitForTimeout(500);
+  ok(backend.state.seen === true, 'and marks the answer as read');
+  await shot(page, '08-feedback');
+
+  // Reviewing (the owner): rate a recording, close a report, add a reviewer.
+  backend.state.role = 'owner';
+  backend.state.openRequests = [{ id: 'r1', phrase_id: 'oli-otya', status: 'open', rating: null, tip: null, created_at: new Date().toISOString(), answered_at: null, seen_at: null, lang: 'sv', audio_path: 'u/oli-otya-1.webm' }];
+  backend.state.openReports = [{ id: 'rep1', kind: 'audio', item_type: 'phrase', item_id: 'oli-otya', lesson_id: 'c03-l1', note: 'Too quiet', lang: 'en', platform: 'web', app_version: '2.0.0', created_at: new Date().toISOString() }];
+  await page.goto(`${BASE}/settings`);
+  await page.getByTestId('open-review').waitFor({ timeout: 15000 });
+  await page.getByTestId('open-review').click();
+  await page.getByTestId('review-recording').waitFor({ timeout: 10000 });
+  ok((await page.getByTestId('review-recording').innerText()).includes('Write the tip in Swedish'), 'a reviewer sees the recording and which language to answer in');
+  await page.getByTestId('review-play').click();
+  await page.waitForTimeout(500);
+  ok(backend.state.calls.some((c) => c.startsWith('POST /storage/v1/object/sign/recordings/')), 'playing a recording asks for a private, short-lived link');
+  await page.getByTestId('review-rate-good').click();
+  await page.getByTestId('review-tip').fill('Bulungi nnyo!');
+  await shot(page, '09-review');
+  await page.getByTestId('review-send').click();
+  await page.waitForTimeout(800);
+  ok(backend.state.answered?.p_id === 'r1' && backend.state.answered?.p_rating === 'good' && backend.state.answered?.p_tip === 'Bulungi nnyo!', 'the answer is sent with the rating and tip');
+  ok((await page.getByTestId('review-recording').count()) === 0, 'and the recording leaves the list');
+  await page.getByTestId('review-tab-reports').click();
+  await page.getByTestId('review-report').waitFor();
+  ok((await page.getByTestId('review-report').innerText()).toLowerCase().includes('the audio is wrong'), 'reports show what is wrong');
+  await page.getByTestId('review-fixed').click();
+  await page.waitForTimeout(800);
+  ok(backend.state.resolved?.p_id === 'rep1' && backend.state.resolved?.p_status === 'fixed', 'a report can be closed as fixed');
+  await page.getByTestId('review-tab-reviewers').click();
+  await page.getByTestId('reviewer-email').fill('nobody@example.com');
+  await page.getByTestId('reviewer-add').click();
+  await page.getByTestId('form-error').waitFor({ timeout: 5000 });
+  ok((await page.getByTestId('form-error').innerText()).includes('No account'), 'adding an address with no account says so');
+  await page.getByTestId('reviewer-email').fill('nakato@example.com');
+  await page.getByTestId('reviewer-add').click();
+  await page.getByText('nakato@example.com').waitFor({ timeout: 5000 });
+  ok(backend.state.setReviewer?.p_email === 'nakato@example.com' && backend.state.setReviewer?.p_on === true, 'the owner adds a reviewer by e-mail');
+  backend.state.role = null;
+  await page.goto(`${BASE}/`);
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
 
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('open-settings').click();

@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { signOut, startCheckout } from '@/account/actions';
@@ -22,6 +22,8 @@ import { Txt } from '@/ui/Txt';
  * payment. Payment happens on the website only; the phone apps never sell anything.
  */
 export default function Subscribe() {
+  const router = useRouter();
+  const role = useAccount((s) => s.role);
   const { t, lang } = useT();
   const { status } = useLocalSearchParams<{ status?: string }>();
   const email = useAccount((s) => s.session?.user.email ?? '');
@@ -149,6 +151,7 @@ export default function Subscribe() {
             {t('sub.signedInAs', { email })}
           </Txt>
         ) : null}
+        {role && <Button testID="open-review" kind="secondary" label={t('review.open')} onPress={() => router.push('/review')} />}
         <Button testID="sub-logout" kind="ghost" label={t('sub.logOut')} onPress={() => signOut()} />
         {!kid && <DeleteAccountButton />}
         {gate}

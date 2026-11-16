@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { hasAudio, playClip } from '../../audio/engine';
 import { PHRASES } from '../../content';
+import { AskNative } from '../../feedback/AskNative';
 import { useT } from '../../i18n';
 import { useApp } from '../../state/store';
 import { Button } from '../../ui/Button';
@@ -34,6 +35,7 @@ export function SpeakStep({ step, onNext }: ExerciseProps<{ kind: 'speak'; phras
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const noteRecording = useApp((s) => s.noteRecording);
   const [phase, setPhase] = useState<Phase>('idle');
+  const [uri, setUri] = useState<string | null>(null);
   const mine = useRef<AudioPlayer | null>(null);
   const native = hasAudio(p.id);
 
@@ -69,6 +71,7 @@ export function SpeakStep({ step, onNext }: ExerciseProps<{ kind: 'speak'; phras
     if (!uri) return setPhase('error');
     mine.current?.remove();
     mine.current = createAudioPlayer({ uri });
+    setUri(uri);
     setPhase('recorded');
     noteRecording();
   };
@@ -129,6 +132,7 @@ export function SpeakStep({ step, onNext }: ExerciseProps<{ kind: 'speak'; phras
             <Txt variant="small">{t('speak.selfCheck')}</Txt>
           </View>
         )}
+        {phase === 'recorded' && uri && <AskNative key={uri} phraseId={p.id} uri={uri} />}
       </ScrollView>
       <Footer>
         {phase === 'recorded' ? (

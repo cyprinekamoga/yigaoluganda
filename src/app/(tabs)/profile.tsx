@@ -8,6 +8,7 @@ import { partFinished } from '@/logic/certificate';
 import { dayKey, lastWeek } from '@/logic/dates';
 import { visibleStreak } from '@/logic/progress';
 import { isComplete, lessonsDone } from '@/logic/unlock';
+import { NativeFeedbackCard } from '@/feedback/Inbox';
 import { Avatar } from '@/learners/LearnerChip';
 import { useGrownUpCheck } from '@/learners/ParentGate';
 import { MAIN, useLearners } from '@/learners/store';
@@ -209,6 +210,8 @@ export default function Profile() {
           ))}
         </View>
       </View>
+
+      <NativeFeedbackCard />
 
       {/* Who's learning: the account holder and the children's profiles (kids mode). */}
       <Card style={{ gap: S.md }} testID="learners-card">
