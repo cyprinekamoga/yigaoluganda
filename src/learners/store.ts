@@ -5,7 +5,7 @@ import type { Lang } from '../content';
 import { restore, snapshot, useApp, type Data } from '../state/store';
 
 /**
- * Who is learning on this account: the account holder ("main") and up to four children, each
+ * Who is learning on this account: the account holder ("main") and up to five children, each
  * with their own progress. The app's state (useApp) always holds the active learner's progress;
  * the others wait in `saved` until someone switches to them. A child profile is kids mode:
  * no water pots to lose, nothing to buy or send, and a grown-up check to leave it.
@@ -14,11 +14,12 @@ import { restore, snapshot, useApp, type Data } from '../state/store';
 export const MAIN = 'main';
 
 /**
- * Children's profiles come with the Family plan, which is not built yet. Until it is, kids mode
- * stays off so the profiles are not free; test builds turn it on with EXPO_PUBLIC_KIDS=1.
+ * Children's profiles come with the Family plan (see selectKids in account/store). The app without
+ * accounts (development and the offline test) has them only when built with EXPO_PUBLIC_KIDS=1.
  */
 export const KIDS_MODE = process.env.EXPO_PUBLIC_KIDS === '1';
-export const MAX_CHILDREN = 4;
+/** A Family plan is for 6 people: the payer and up to 5 more (adults who joined, and children). */
+export const MAX_CHILDREN = 5;
 
 export interface ChildProfile {
   id: string;

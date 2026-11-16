@@ -29,8 +29,7 @@ export function ChoiceStep({ step, locked, onResult, after, footer }: ExercisePr
     if (!picked) return;
     setChecked(true);
     const correct = normalize(picked) === normalize(step.answer);
-    const isLength = !correct && normalize(picked).replace(/(.)\1/g, '$1') === normalize(step.answer).replace(/(.)\1/g, '$1');
-    onResult({ correct, answer: step.answer, meaning, hint: isLength ? t('fb.lengthHint') : undefined });
+    onResult({ correct, answer: step.answer, meaning });
   };
 
   return (

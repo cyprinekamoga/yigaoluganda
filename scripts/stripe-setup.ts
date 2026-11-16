@@ -1,16 +1,16 @@
 // Sets up Stripe for Yiga Oluganda from the price table in src/pricing/pricing.ts:
 //   0. Stripe Tax (Swedish registration, small-seller scheme),
-//   1. the monthly price (net, VAT added by Stripe Tax) in every local currency,
-//   2. a customer-portal configuration (cancel at period end, change card, receipts),
+//   1. a price per plan (monthly, yearly, Family monthly and yearly; net, VAT added by Stripe Tax)
+//      in every local currency,
+//   2. a customer-portal configuration (cancel at period end, change card, receipts, switch plan),
 //   2b. the refer-a-friend coupons,
 //   3. the webhook that keeps the app's database in step (with --webhook <supabase url>).
 // Safe to run again: it reuses what exists. Never prints secret keys.
 //
 // Usage:  STRIPE_SECRET_KEY=sk_test_... npm run stripe:setup -- [--webhook https://<ref>.supabase.co] [--new-price]
 // Run it with a test-mode key first, then again with the live key.
-import { DEFAULT_CURRENCY, MONTHLY_NET } from '../src/pricing/pricing.ts';
+import { DEFAULT_CURRENCY, PLAN_LOOKUP_KEY, PLAN_NET, PLANS, isFamilyPlan, isYearlyPlan, type Plan } from '../src/pricing/pricing.ts';
 
-const LOOKUP_KEY = 'yiga-oluganda-monthly';
 const SITE = 'https://yigaoluganda.com';
 const APP = 'https://app.yigaoluganda.com';
 const key = process.env.STRIPE_SECRET_KEY;
@@ -59,36 +59,55 @@ if (!regs.some((r) => r.country === 'SE')) {
 }
 console.log('✓ Stripe Tax: Swedish VAT for the EU (small seller)');
 
-// 1. Price
-const existing = (await stripe('GET', 'prices', { 'lookup_keys[]': LOOKUP_KEY, active: true })).data[0];
-let priceId: string = existing?.id;
-if (!existing || flag('--new-price')) {
-  const base = DEFAULT_CURRENCY.toLowerCase();
-  const params: Params = {
-    currency: base,
-    unit_amount: MONTHLY_NET[DEFAULT_CURRENCY],
-    'recurring[interval]': 'month',
-    tax_behavior: 'exclusive',
-    lookup_key: LOOKUP_KEY,
-    transfer_lookup_key: true,
-    nickname: 'Monthly',
-  };
-  if (existing) params.product = typeof existing.product === 'string' ? existing.product : existing.product.id;
-  else {
-    params['product_data[name]'] = 'Yiga Oluganda';
-    // Electronically supplied services.
-    params['product_data[tax_code]'] = 'txcd_10000000';
+// 1. Prices: one per plan, every currency. Monthly and yearly belong to the product "Yiga Oluganda",
+//    the two Family plans to "Yiga Oluganda Family" (the names on receipts and in the portal).
+const NICKNAME: Record<Plan, string> = { monthly: 'Monthly', yearly: 'Yearly', family_monthly: 'Family, monthly', family_yearly: 'Family, yearly' };
+const PRODUCT_NAME = { single: 'Yiga Oluganda', family: 'Yiga Oluganda Family' };
+const products: Partial<Record<'single' | 'family', string>> = {};
+const priceIds = {} as Record<Plan, string>;
+type Price = { id: string; product: string | { id: string } };
+const productOf = (p: Price) => (typeof p.product === 'string' ? p.product : p.product.id);
+const existingPrices = {} as Record<Plan, Price | undefined>;
+for (const plan of PLANS) {
+  existingPrices[plan] = (await stripe('GET', 'prices', { 'lookup_keys[]': PLAN_LOOKUP_KEY[plan], active: true })).data[0];
+  const kind = isFamilyPlan(plan) ? 'family' : 'single';
+  if (existingPrices[plan]) products[kind] ??= productOf(existingPrices[plan]!);
+}
+for (const kind of ['single', 'family'] as const) {
+  if (products[kind]) continue;
+  // Electronically supplied services.
+  const product = await stripe('POST', 'products', { name: PRODUCT_NAME[kind], tax_code: 'txcd_10000000' });
+  products[kind] = product.id;
+  console.log(`✓ product ${PRODUCT_NAME[kind]} created`);
+}
+for (const plan of PLANS) {
+  const existing = existingPrices[plan];
+  if (existing && !flag('--new-price')) {
+    priceIds[plan] = existing.id;
+    console.log(`✓ ${NICKNAME[plan]} price ${existing.id} already exists (use --new-price after changing the table)`);
+    continue;
   }
-  for (const [cur, amount] of Object.entries(MONTHLY_NET)) {
+  const net = PLAN_NET[plan];
+  const params: Params = {
+    currency: DEFAULT_CURRENCY.toLowerCase(),
+    unit_amount: net[DEFAULT_CURRENCY],
+    'recurring[interval]': isYearlyPlan(plan) ? 'year' : 'month',
+    tax_behavior: 'exclusive',
+    lookup_key: PLAN_LOOKUP_KEY[plan],
+    transfer_lookup_key: true,
+    nickname: NICKNAME[plan],
+    product: products[isFamilyPlan(plan) ? 'family' : 'single'],
+  };
+  for (const [cur, amount] of Object.entries(net)) {
     if (cur === DEFAULT_CURRENCY) continue;
     params[`currency_options[${cur.toLowerCase()}][unit_amount]`] = amount;
     params[`currency_options[${cur.toLowerCase()}][tax_behavior]`] = 'exclusive';
   }
   const price = await stripe('POST', 'prices', params);
-  priceId = price.id;
+  priceIds[plan] = price.id;
   if (existing) await stripe('POST', `prices/${existing.id}`, { active: false });
-  console.log(`✓ price ${priceId} (${Object.keys(MONTHLY_NET).length} currencies)`);
-} else console.log(`✓ price ${priceId} already exists (use --new-price after changing the table)`);
+  console.log(`✓ ${NICKNAME[plan]} price ${price.id} (${Object.keys(net).length} currencies)`);
+}
 
 // 2. Customer portal (tagged so the billing-portal function can find it)
 const portals = (await stripe('GET', 'billing_portal/configurations', { active: true, limit: 100 })).data as { id: string; metadata?: Record<string, string> }[];
@@ -110,15 +129,25 @@ const portal = await stripe('POST', ours ? `billing_portal/configurations/${ours
   'features[subscription_cancel][cancellation_reason][options][0]': 'too_expensive',
   'features[subscription_cancel][cancellation_reason][options][1]': 'unused',
   'features[subscription_cancel][cancellation_reason][options][2]': 'other',
+  // Switching plan: upgrades now (the difference is charged at once), and anything cheaper or
+  // shorter (Family to single, yearly to monthly) from the end of the period already paid for.
+  'features[subscription_update][enabled]': true,
+  'features[subscription_update][default_allowed_updates][0]': 'price',
+  'features[subscription_update][proration_behavior]': 'always_invoice',
+  'features[subscription_update][products][0][product]': products.single,
+  'features[subscription_update][products][0][prices][0]': priceIds.monthly,
+  'features[subscription_update][products][0][prices][1]': priceIds.yearly,
+  'features[subscription_update][products][1][product]': products.family,
+  'features[subscription_update][products][1][prices][0]': priceIds.family_monthly,
+  'features[subscription_update][products][1][prices][1]': priceIds.family_yearly,
+  'features[subscription_update][schedule_at_period_end][conditions][0][type]': 'decreasing_item_amount',
+  'features[subscription_update][schedule_at_period_end][conditions][1][type]': 'shortening_interval',
 });
 console.log(`✓ customer portal ${portal.id}`);
 
-// 2b. Refer a friend: the friend's first month free, and a free month for the one who invited them.
-//     100% off one invoice each (with VAT, the invoice is then 0).
-for (const [id, name] of [
-  ['yiga-referral-friend', 'First month free (invited by a friend)'],
-  ['yiga-referral-reward', 'A free month: thanks for inviting a friend'],
-]) {
+// 2b. Refer a friend: the friend's first month free (100% off one invoice; with VAT, it is then 0).
+//     The one who invited them gets a free month by moving their next payment (no coupon).
+for (const [id, name] of [['yiga-referral-friend', 'First month free (invited by a friend)']]) {
   try {
     await stripe('GET', `coupons/${id}`);
     console.log(`✓ coupon ${id}`);

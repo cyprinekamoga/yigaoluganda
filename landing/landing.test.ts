@@ -19,6 +19,13 @@ describe('landing page price', () => {
     for (const cc of ['SE', 'DE', 'GB', 'US', 'UG', '']) expect(built.quote(cc)).toEqual(quote(cc));
   });
 
+  it('gives each plan its own price (data-plan)', () => {
+    const html = '<span data-price>x</span><span class="price" data-price data-plan="family_yearly">x</span>';
+    const out = injectPrice(html, (plan) => priceLine(quote('SE', plan as 'monthly'), 'sv', plan.endsWith('yearly') ? 'year' : 'month'));
+    expect(out).toContain('55,00');
+    expect(out).toMatch(/799,00\s*kr\/år inkl\. moms/);
+  });
+
   it('only changes data-price spans', () => {
     expect(injectPrice('<span class="price">keep</span>', 'new')).toBe('<span class="price">keep</span>');
   });
@@ -27,5 +34,9 @@ describe('landing page price', () => {
     execFileSync('node', ['build.mjs'], { cwd: import.meta.dirname, stdio: 'ignore' });
     const page = readFileSync(path.join(import.meta.dirname, 'dist/index.html'), 'utf8');
     expect(page.match(/data-price/g)?.length).toBeGreaterThanOrEqual(3);
+    for (const plan of ['yearly', 'family_monthly', 'family_yearly']) {
+      expect(page).toContain(`data-plan="${plan}"`);
+      expect(page).toContain(`sign-up?lang=en&plan=${plan}`);
+    }
   });
 });

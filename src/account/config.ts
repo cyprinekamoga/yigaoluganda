@@ -13,6 +13,8 @@ export const GOOGLE_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 /** The landing page, which holds the terms and the privacy policy. */
 export const SITE_URL = 'https://yigaoluganda.com';
+/** The web app's address, for links people share (class and family invites). */
+export const APP_URL = 'https://app.yigaoluganda.com';
 
 /** Where learners write to us (forwarded to the company's inbox). Same as on the landing page. */
 export const SUPPORT_EMAIL = 'hello@yigaoluganda.com';

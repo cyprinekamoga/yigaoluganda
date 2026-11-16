@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Linking, Pressable, StyleSheet, Switch, TextInput, View } from 'react-native';
 import { currentSubscription, subscriptionState, withdrawalDaysLeft } from '@/account/access';
+import { isPlan } from '@/pricing/pricing';
 import { openBillingPortal, signOut, withdraw } from '@/account/actions';
 import { DeleteAccountButton } from '@/account/DeleteAccount';
 import { FormMessage } from '@/account/AuthShell';
@@ -182,6 +183,11 @@ export default function Settings() {
           )}
           <Txt variant="label">{t('settings.subscription')}</Txt>
           <Card style={{ gap: S.md }}>
+            {state !== 'none' && isPlan(sub?.plan) && (
+              <Txt variant="body" testID="sub-plan">
+                {t(`plan.name.${sub.plan}`)}
+              </Txt>
+            )}
             {state !== 'none' && (
               <Txt variant="strong" testID="sub-state" style={state === 'past_due' ? { color: C.tomatoDeep } : undefined}>
                 {state === 'active' ? t('settings.subActive', { date }) : state === 'ending' ? t('settings.subEnding', { date }) : t('settings.subPastDue')}

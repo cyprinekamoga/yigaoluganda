@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
-import { resetLearners } from '../learners/store';
+import { KIDS_MODE, resetLearners } from '../learners/store';
 import { useApp } from '../state/store';
 import { dayKey } from '../logic/dates';
-import { hasAccess, licenceActive, offlineRows, type Licence, type SubscriptionRow } from './access';
+import { familyAccess, hasAccess, licenceActive, offlineRows, paysForFamily, type FamilyInfo, type Licence, type SubscriptionRow } from './access';
 import { ACCOUNTS } from './config';
 import { OPENING_LINK, supabase } from './supabase';
 import { startSync, stopSync } from './sync';
@@ -26,6 +26,8 @@ interface AccountState {
   role: 'owner' | 'reviewer' | null;
   /** Class licences from a school (as a student or the teacher). */
   licences: Licence[];
+  /** The Family plan this account pays for or belongs to, or null. */
+  family: FamilyInfo | null;
 }
 
 /** Kept for the browser tab, so reloading the "new password" page doesn't lose it. */
@@ -48,6 +50,7 @@ export const useAccount = create<AccountState>(() => ({
   payNext: false,
   role: null,
   licences: [],
+  family: null,
 }));
 
 /** Starts or ends "choose a new password" (ends after saving it, or on logging out). */
@@ -71,8 +74,10 @@ supabase?.auth.onAuthStateChange((event) => {
 });
 
 export const selectSignedIn = (s: AccountState) => Boolean(s.session);
-/** A subscription or a school's class licence unlocks the course. */
-export const selectAccess = (s: AccountState) => hasAccess(s.subscriptions) || licenceActive(s.licences, dayKey());
+/** A subscription, a school's class licence or a place on someone's Family plan unlocks the course. */
+export const selectAccess = (s: AccountState) => hasAccess(s.subscriptions) || licenceActive(s.licences, dayKey()) || familyAccess(s.family);
+/** Children's profiles come with the Family plan (test builds without accounts turn them on with EXPO_PUBLIC_KIDS=1). */
+export const selectKids = (s: AccountState) => (ACCOUNTS ? paysForFamily(s.subscriptions) : KIDS_MODE);
 
 const subsKey = (uid: string) => `yiga-subs:${uid}`;
 
@@ -85,7 +90,7 @@ export async function refreshSubscriptions(): Promise<SubscriptionRow[]> {
   if (!supabase || !uid) return [];
   const { data, error } = await supabase
     .from('subscriptions')
-    .select('id, status, current_period_end, cancel_at_period_end, created_at, currency')
+    .select('id, status, current_period_end, cancel_at_period_end, created_at, currency, plan')
     .eq('user_id', uid);
   if (error) {
     const current = useAccount.getState().subscriptions;
@@ -127,6 +132,29 @@ export async function refreshLicence(): Promise<Licence[]> {
   return rows;
 }
 
+const familyKey = (uid: string) => `yiga-family:${uid}`;
+
+/** Reads the account's Family plan again (after paying, joining or leaving). Kept on the device for offline use. */
+export async function refreshFamily(): Promise<FamilyInfo | null> {
+  const uid = useAccount.getState().session?.user.id;
+  if (!supabase || !uid) return null;
+  const { data, error } = await supabase.rpc('my_family');
+  let family: FamilyInfo | null;
+  if (error) {
+    try {
+      const saved = await AsyncStorage.getItem(familyKey(uid));
+      family = saved ? (JSON.parse(saved) as FamilyInfo) : null;
+    } catch {
+      family = null;
+    }
+  } else {
+    family = (data as FamilyInfo | null)?.role ? (data as FamilyInfo) : null;
+    AsyncStorage.setItem(familyKey(uid), JSON.stringify(family)).catch(() => undefined);
+  }
+  if (useAccount.getState().session?.user.id === uid) useAccount.setState({ family });
+  return family;
+}
+
 /** Whether this account reviews recordings and reports (see the reviewers table). */
 async function refreshRole(uid: string) {
   if (!supabase) return;
@@ -151,9 +179,9 @@ async function applySession(session: Session | null) {
       useApp.getState().reset();
     }
     currentUser = uid;
-    useAccount.setState({ session, subscriptions: [], role: null, licences: [] });
+    useAccount.setState({ session, subscriptions: [], role: null, licences: [], family: null });
     // Never let a failed step keep the app from opening.
-    loading = session ? Promise.allSettled([refreshSubscriptions(), refreshLicence(), startSync(session), refreshRole(session.user.id)]) : null;
+    loading = session ? Promise.allSettled([refreshSubscriptions(), refreshLicence(), refreshFamily(), startSync(session), refreshRole(session.user.id)]) : null;
     await loading;
   } else {
     useAccount.setState({ session });

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Platform, Share, StyleSheet, View } from 'react-native';
 import { FormMessage } from '@/account/AuthShell';
 import { classLink, classProgress, myClasses, type StudentProgress, type TeacherClass } from '@/account/schools';
+import { APP_URL } from '@/account/config';
 import { useAccount } from '@/account/store';
 import { useT, type Key } from '@/i18n';
 import { BackBar } from '@/ui/BackBar';
@@ -11,7 +12,6 @@ import { Screen } from '@/ui/Screen';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
-const APP_URL = 'https://app.yigaoluganda.com';
 
 /** "Your classes", for teachers with a school licence: the class link, and each student's progress. */
 export default function Classes() {

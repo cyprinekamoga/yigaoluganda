@@ -1,6 +1,7 @@
 // Copies what the separately deployed sites need from the app, so each site can be deployed
 // from its own folder:
-//   - the price table (src/pricing/pricing.ts) → the app's and the landing page's edge functions,
+//   - the price table (src/pricing/pricing.ts) → the app's and the landing page's edge functions and
+//     the Supabase functions (which find each plan's Stripe price by its lookup key),
 //     plus a plain-JavaScript copy for the landing page's build
 //   - course facts (chapters, counts, fun facts) → landing/src/course.json
 // Usage: npm run sites:sync
@@ -13,7 +14,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => JSON.parse(readFileSync(path.join(ROOT, p), 'utf8'));
 
 const source = path.join(ROOT, 'src/pricing/pricing.ts');
-for (const target of ['netlify/lib/pricing.ts', 'landing/netlify/lib/pricing.ts']) {
+for (const target of ['netlify/lib/pricing.ts', 'landing/netlify/lib/pricing.ts', 'supabase/functions/_shared/pricing.ts']) {
   copyFileSync(source, path.join(ROOT, target));
   console.log(`copied pricing → ${target}`);
 }

@@ -1,6 +1,6 @@
 import { ALL_CHAPTERS, PHRASES, UNITS, unitOf, type Chapter, type Lang } from '../content';
+import { looksAlike } from './generator';
 import { hashString, makeRng, shuffle } from './rng';
-import { normalize } from './text';
 
 /**
  * "Already know some Luganda?" A short test, chapter by chapter in course order.
@@ -46,17 +46,17 @@ export function questionFor(state: PlacementState, lang: Lang): PlacementQuestio
   const own = shuffle(taught(chapter), rng);
   const phraseId = own[state.attempt % own.length];
   const mode: QuestionMode = (state.index + state.attempt) % 2 === 0 ? 'toLg' : 'toMeaning';
-  // Wrong options: phrases from other chapters of the same part, that look and mean something different.
+  // Wrong options: phrases from other chapters of the same part that mean something different and
+  // are clearly different words (never the same word spelled differently).
   const unit = unitOf(chapter);
-  const key = (id: string) => (mode === 'toLg' ? normalize(PHRASES[id].lg) : PHRASES[id].tr[lang].toLowerCase());
-  const seen = new Set([key(phraseId)]);
+  const meaning = (id: string) => PHRASES[id].tr[lang].toLowerCase();
+  const chosen = [phraseId];
   const pool = shuffle(
     unit.chapters.filter((c) => c !== chapter).flatMap(taught),
     rng,
   ).filter((id) => {
-    const k = key(id);
-    if (seen.has(k)) return false;
-    seen.add(k);
+    if (chosen.some((c) => meaning(c) === meaning(id) || looksAlike(PHRASES[c].lg, PHRASES[id].lg))) return false;
+    chosen.push(id);
     return true;
   });
   const options = shuffle([phraseId, ...pool.slice(0, 2)], rng);

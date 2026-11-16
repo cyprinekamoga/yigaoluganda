@@ -182,6 +182,14 @@ async function run(viewport, label) {
   await page.getByTestId('chapter-start').click();
   await page.getByTestId('lesson-player').waitFor();
   ok(await page.getByTestId('fun-fact').waitFor({ timeout: 3000 }).then(() => true, () => false), 'new-phrase screen shows a fun fact about Uganda');
+  // The back button returns to the previous step (and does nothing on the first one).
+  ok((await page.getByTestId('lesson-back').getAttribute('aria-disabled')) === 'true', 'on the first step there is nothing to go back to');
+  const firstPhrase = await page.getByTestId('intro-lg').innerText();
+  await page.getByTestId('continue').click();
+  await page.waitForTimeout(300);
+  await page.getByTestId('lesson-back').click();
+  await page.getByTestId('intro-lg').waitFor({ timeout: 3000 });
+  ok((await page.getByTestId('intro-lg').innerText()) === firstPhrase, 'the back button goes to the previous step');
   ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c07-l1');
   ok(typedSteps > 0, 'the lesson asks to write a phrase in Luganda from memory');
   ok((await page.getByTestId('done-cowries').innerText()).includes('+10'), 'perfect lesson gives 10 cowries');

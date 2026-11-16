@@ -211,6 +211,10 @@ export interface OwnerStats {
   signups_by_day: { day: string; n: number }[];
   paying: number;
   paying_by_currency: Record<string, number>;
+  /** Per plan and currency (newer servers). */
+  paying_by_plan?: { plan: string; currency: string; n: number }[];
+  /** Adults on someone else's Family plan. */
+  family_members?: number;
   past_due: number;
   ending: number;
   new_subs_30d: number;

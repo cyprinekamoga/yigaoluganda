@@ -69,7 +69,7 @@ export default function Learners() {
         const r = await createChildProfile(clean);
         if ('error' in r) {
           setBusy(false);
-          return setError(r.error === 'limit' ? 'learners.errLimit' : 'auth.errNetwork');
+          return setError(r.error === 'limit' ? 'learners.errLimit' : r.error === 'family' ? 'learners.errFamily' : 'auth.errNetwork');
         }
         addChildLocal({ id: r.id, name: clean, createdAt: r.createdAt });
       } else addChildLocal({ id: localId(), name: clean, createdAt: Date.now() });

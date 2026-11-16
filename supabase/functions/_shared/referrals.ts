@@ -1,12 +1,12 @@
 // Refer a friend. A learner's code is a Stripe promotion code for FRIEND_COUPON (first month free,
-// first-time customers only). The friend's sign-up is recorded at checkout; once the friend pays for
-// a month after the free one, the learner earns REWARD_COUPON (one free month), applied to their
-// subscription one at a time. Coupons are created by scripts/stripe-setup.ts.
+// first-time customers, monthly plans only). The friend's sign-up is recorded at checkout; once the
+// friend pays for a month after the free one, the learner earns a free month: their next payment
+// moves one month later (a free period on the subscription), whatever their plan, one at a time.
+// The coupon is created by scripts/stripe-setup.ts.
 import type Stripe from 'npm:stripe@23.1.0';
 import { admin, saveSubscription, stripe } from './clients.ts';
 
 export const FRIEND_COUPON = 'yiga-referral-friend';
-export const REWARD_COUPON = 'yiga-referral-reward';
 const ACTIVE = ['active', 'trialing', 'past_due'];
 /** No look-alikes (0/O, 1/I). */
 const ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -99,7 +99,21 @@ export async function onInvoicePaid(invoice: Stripe.Invoice) {
   await applyReward(uid);
 }
 
-/** Puts one earned free month on the learner's subscription, if one is waiting and none is pending. */
+/** One calendar month after `seconds` (a Unix time), as a Unix time. */
+export function oneMonthLater(seconds: number): number {
+  const d = new Date(seconds * 1000);
+  const day = d.getUTCDate();
+  d.setUTCMonth(d.getUTCMonth() + 1);
+  // 31 January + 1 month is the end of February, not 3 March.
+  if (d.getUTCDate() !== day) d.setUTCDate(0);
+  return Math.floor(d.getTime() / 1000);
+}
+
+/**
+ * Gives one earned free month, if one is waiting and none is running: the paid period carries on
+ * as a free period that ends a month later, when the next payment is taken. Works the same for
+ * monthly, yearly and Family plans (a discount coupon would make a whole year free).
+ */
 export async function applyReward(userId: string) {
   const { data: waiting } = await admin.from('referrals').select('id').eq('referrer_id', userId).eq('status', 'earned').order('earned_at').limit(1);
   if (!waiting?.length) return;
@@ -107,8 +121,12 @@ export async function applyReward(userId: string) {
   const sub = subs?.find((s) => ACTIVE.includes(s.status));
   if (!sub) return; // kept until they subscribe again
   const live = await stripe.subscriptions.retrieve(sub.id);
-  if ((live.discounts ?? []).length > 0) return; // a discount is still to be used: one at a time
-  await stripe.subscriptions.update(sub.id, { discounts: [{ coupon: REWARD_COUPON }] });
+  // A free month is running ('trialing'), or a payment is late: one at a time, after a paid period.
+  if (live.status !== 'active') return;
+  const end = (live.items.data[0] as unknown as { current_period_end?: number })?.current_period_end ?? (live as unknown as { current_period_end?: number }).current_period_end;
+  if (!end) return;
+  const updated = await stripe.subscriptions.update(sub.id, { trial_end: oneMonthLater(end), proration_behavior: 'none' });
+  await saveSubscription(updated, userId);
   await admin.from('referrals').update({ status: 'rewarded', rewarded_at: new Date().toISOString() }).eq('id', waiting[0].id);
 }
 

@@ -251,10 +251,10 @@ export async function startSync(session: Session) {
 }
 
 /** Creates a child profile in the account. Returns its id, or null when offline or at the limit. */
-export async function createChildProfile(name: string): Promise<{ id: string; createdAt: number } | { error: 'offline' | 'limit' }> {
+export async function createChildProfile(name: string): Promise<{ id: string; createdAt: number } | { error: 'offline' | 'limit' | 'family' }> {
   if (!supabase || !userId) return { error: 'offline' };
   const { data, error } = await supabase.from('child_profiles').insert({ user_id: userId, name: name.trim() }).select('id, created_at').single();
-  if (error) return { error: error.message.includes('child_profile_limit') ? 'limit' : 'offline' };
+  if (error) return { error: error.message.includes('child_profile_limit') ? 'limit' : error.message.includes('family_plan_required') ? 'family' : 'offline' };
   return { id: data.id as string, createdAt: Date.parse(data.created_at as string) };
 }
 

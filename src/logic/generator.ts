@@ -1,11 +1,11 @@
 import { DIALOGUES, PHRASES, SENTENCES, SOUND_PAIRS, TIPS, UNITS, type Lang, type LessonRef, type Sentence } from '../content';
 import { hashString, makeRng, pick, shuffle, type Rng } from './rng';
-import { spellingDistractors } from './spelling';
 import { normalize, optionForm, tilesOf } from './text';
 
 /**
  * Lesson engine. A lesson is a list of ~10 steps built from 7 exercise patterns:
- *  - choice     Sound & Vowel Matcher (listen, or read the meaning, then pick the right spelling)
+ *  - choice     Pick the word (listen, or read the meaning, then pick the right Luganda word;
+ *               the other options are different words, never the same word spelled differently)
  *  - match      Tap & Match pairs
  *  - build      Word-bank sentence builder
  *  - dictation  Audio dictation (only when a recording exists)
@@ -43,48 +43,85 @@ export interface GenContext {
 export const MIN_STEPS = 8;
 export const MAX_STEPS = 13;
 
-/** Every real Luganda form in the course, so a real word is never shown as a misspelling. */
-const REAL_FORMS: Set<string> = (() => {
-  const s = new Set<string>();
-  for (const p of Object.values(PHRASES)) {
-    s.add(normalize(p.lg));
-    for (const v of p.variants ?? []) s.add(normalize(v));
-  }
-  return s;
-})();
+/** Letters only, with doubled letters as one: "okusiiba" and "okusiba" squash to the same. */
+const squash = (s: string) =>
+  normalize(s)
+    .replace(/[^a-zŋ]/g, '')
+    .replace(/(.)\1+/g, '$1');
 
-/** Sound & Vowel Matcher for one phrase: the answer plus wrong spellings (or other phrases as a fallback). */
+function editDistance(a: string, b: string): number {
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+/**
+ * Two forms a beginner would take for the same word spelled differently: the same once doubled
+ * letters are counted once (siba / siiba), one letter apart, or one inside the other
+ * (bulungi / ndi bulungi). Such forms are never offered side by side.
+ */
+export function looksAlike(a: string, b: string): boolean {
+  const x = squash(a);
+  const y = squash(b);
+  if (x === y) return true;
+  if (Math.min(x.length, y.length) < 3) return false;
+  return editDistance(x, y) <= 1 || x.includes(y) || y.includes(x);
+}
+
+const meaningKey = (id: string) => [normalize(PHRASES[id].tr.en), normalize(PHRASES[id].tr.sv)];
+const UNIT_OF: Record<string, number> = Object.fromEntries(UNITS.flatMap((u) => u.phrases.map((p) => [p.id, u.n])));
+
+/**
+ * Wrong options for a phrase: other words with other meanings. First the lesson's own phrases (just
+ * seen), then phrases of the same kind (greetings, numbers…) in the same part, then the part, then
+ * the whole course. Never the same word spelled differently, and never another way to say the same
+ * thing (that would be a second right answer).
+ */
+export function wordDistractors(phraseId: string, rng: Rng, pool: string[] = [], n = 2): string[] {
+  const p = PHRASES[phraseId];
+  const forms = [p.lg, ...(p.variants ?? [])];
+  const [en, sv] = meaningKey(phraseId);
+  const unit = UNIT_OF[phraseId];
+  const all = Object.keys(PHRASES);
+  const tiers = [
+    pool,
+    all.filter((id) => UNIT_OF[id] === unit && PHRASES[id].category === p.category),
+    all.filter((id) => UNIT_OF[id] === unit),
+    all,
+  ];
+  const out: string[] = [];
+  for (const tier of tiers) {
+    for (const id of shuffle(tier, rng)) {
+      if (out.length >= n) return out;
+      const q = PHRASES[id];
+      if (!q || id === phraseId) continue;
+      const [qen, qsv] = meaningKey(id);
+      if (qen === en || qsv === sv) continue;
+      const f = optionForm(q.lg);
+      const candidate = [q.lg, ...(q.variants ?? [])];
+      if (forms.some((a) => candidate.some((b) => looksAlike(a, b)))) continue;
+      if (out.some((o) => looksAlike(o, f))) continue;
+      out.push(f);
+    }
+  }
+  return out;
+}
+
+/** Pick the word: the answer and two other words (different meanings, never look-alike spellings). */
 export function choiceStep(phraseId: string, ctx: GenContext, rng: Rng, pool: string[] = []): Step {
   const p = PHRASES[phraseId];
   const answer = optionForm(p.lg);
-  const options = [answer, ...spellingDistractors(p.lg, REAL_FORMS, rng, 2)];
-  // Short words may have no believable misspelling: fill with other phrases.
-  const fillers = shuffle(pool.filter((id) => id !== phraseId), rng);
-  for (const id of fillers) {
-    if (options.length >= 3) break;
-    const f = optionForm(PHRASES[id].lg);
-    if (!options.some((o) => normalize(o) === normalize(f))) options.push(f);
-  }
+  const options = [answer, ...wordDistractors(phraseId, rng, pool, 2)];
   return {
     kind: 'choice',
     mode: ctx.hasAudio(phraseId) ? 'listen' : 'read',
     phraseId,
     options: shuffle(options, rng),
     answer,
-  };
-}
-
-/** Sound pair (siba / siiba): the learner must tell two real words apart by length. */
-function soundPairStep(pairId: string, ctx: GenContext, rng: Rng): Step {
-  const pair = SOUND_PAIRS[pairId];
-  const target = rng() < 0.5 ? pair.a : pair.b;
-  const options = [pair.a, pair.b].map((id) => optionForm(PHRASES[id].lg));
-  return {
-    kind: 'choice',
-    mode: ctx.hasAudio(target) ? 'listen' : 'read',
-    phraseId: target,
-    options: shuffle(options, rng),
-    answer: optionForm(PHRASES[target].lg),
   };
 }
 
@@ -149,8 +186,12 @@ export function buildLesson(ref: LessonRef, ctx: GenContext): Step[] {
   // 2. Cultural tip.
   if (lesson.tip && TIPS[lesson.tip]) core.push({ kind: 'tip', tipId: lesson.tip });
 
-  // 3. Minimal pairs (long vs short sounds).
-  for (const pairId of lesson.sounds ?? []) if (SOUND_PAIRS[pairId]) core.push(soundPairStep(pairId, ctx, rng));
+  // 3. A word from each sound pair (siba / siiba), picked among different words: beginners learn
+  //    the long and short sounds from the intro cards, not from look-alike options.
+  for (const pairId of lesson.sounds ?? []) {
+    const pair = SOUND_PAIRS[pairId];
+    if (pair) core.push(choiceStep(rng() < 0.5 ? pair.a : pair.b, ctx, rng, pool));
+  }
 
   // 4. Tap & match with up to 4 pairs, new phrases first.
   if (pool.length >= 3) {
@@ -189,7 +230,7 @@ export function buildLesson(ref: LessonRef, ctx: GenContext): Step[] {
   const speakId = [...newIds, ...reviewIds].find((id) => ctx.hasAudio(id));
   if (speakId) core.push({ kind: 'speak', phraseId: speakId });
 
-  // 8. Pad short lessons with extra spelling checks before the dialogue.
+  // 8. Pad short lessons with extra word checks before the dialogue.
   const unchecked = shuffle(pool.filter((id) => !checked.has(id)), rng);
   while (core.length < MIN_STEPS - (lesson.dialogue ? 1 : 0) && unchecked.length) {
     core.push(choiceStep(unchecked.shift()!, ctx, rng, pool));
@@ -210,7 +251,7 @@ export function buildLesson(ref: LessonRef, ctx: GenContext): Step[] {
 }
 
 /**
- * Practice Lab review round: spelling checks and a match over the weakest phrases,
+ * Practice Lab review round: word checks and a match over the weakest phrases,
  * plus a sentence or two the learner has already met.
  */
 export function buildReview(phraseIds: string[], sentenceIds: string[], ctx: GenContext): Step[] {

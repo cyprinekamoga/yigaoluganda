@@ -2,7 +2,8 @@ import { Linking, Platform } from 'react-native';
 import type { Lang } from '../content/types';
 import type { Key } from '../i18n';
 import { useApp } from '../state/store';
-import { refreshSubscriptions, setRecovering, useAccount, refreshLicence } from './store';
+import type { Plan } from '../pricing/pricing';
+import { refreshFamily, refreshSubscriptions, setRecovering, useAccount, refreshLicence } from './store';
 import { inviteCode } from './invite';
 import { supabase } from './supabase';
 import { stopSync } from './sync';
@@ -126,8 +127,8 @@ function open(url: string) {
 }
 
 /** Sends the learner to Stripe Checkout (with a friend's invite code, if they came with one). */
-export async function startCheckout(lang: Lang): Promise<Outcome> {
-  const { data, error } = await call<{ url?: string; error?: string }>('create-checkout', { lang, ref: (await inviteCode()) ?? undefined });
+export async function startCheckout(lang: Lang, plan: Plan = 'monthly'): Promise<Outcome> {
+  const { data, error } = await call<{ url?: string; error?: string }>('create-checkout', { lang, plan, ref: (await inviteCode()) ?? undefined });
   if (error || !data?.url) {
     // Already paid (for example in another tab): just unlock.
     if ((await refreshSubscriptions()).length) return { ok: true };
@@ -145,6 +146,38 @@ export async function joinClass(code: string): Promise<Outcome> {
   const r = (data ?? {}) as { ok?: boolean; error?: string };
   if (!r.ok) return fail(r.error === 'full' ? 'class.errFull' : r.error === 'expired' ? 'class.errExpired' : r.error === 'no_class' ? 'class.errNoClass' : 'auth.errGeneric');
   await refreshLicence();
+  return { ok: true };
+}
+
+/** Joins someone's Family plan with their invite code (the course then opens without paying). */
+export async function joinFamily(code: string): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  const { data, error } = await supabase.rpc('join_family', { p_code: code });
+  if (error) return fail(explain(error));
+  const r = (data ?? {}) as { ok?: boolean; error?: string };
+  if (!r.ok) {
+    const key: Key = r.error === 'full' ? 'family.errFull' : r.error === 'other_family' ? 'family.errOther' : r.error === 'no_family' ? 'family.errNoFamily' : 'auth.errGeneric';
+    return fail(key);
+  }
+  await refreshFamily();
+  return { ok: true };
+}
+
+/** Leaves the Family plan this account belongs to (the course then needs a plan of its own). */
+export async function leaveFamily(): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  const { error } = await supabase.rpc('leave_family');
+  if (error) return fail(explain(error));
+  await refreshFamily();
+  return { ok: true };
+}
+
+/** The payer takes someone off their Family plan. */
+export async function removeFamilyMember(userId: string): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  const { error } = await supabase.rpc('remove_family_member', { p_user: userId });
+  if (error) return fail(explain(error));
+  await refreshFamily();
   return { ok: true };
 }
 

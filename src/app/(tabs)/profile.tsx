@@ -13,7 +13,9 @@ import { TeacherCard } from '@/account/TeacherCard';
 import { NativeFeedbackCard } from '@/feedback/Inbox';
 import { Avatar } from '@/learners/LearnerChip';
 import { useGrownUpCheck } from '@/learners/ParentGate';
-import { KIDS_MODE, MAIN, useLearners } from '@/learners/store';
+import { MAIN, useLearners } from '@/learners/store';
+import { selectKids, useAccount } from '@/account/store';
+import { FamilyCard } from '@/account/FamilyCard';
 import { useApp } from '@/state/store';
 import { BadgeMedal } from '@/ui/Badge';
 import { Beads } from '@/ui/Beads';
@@ -32,6 +34,7 @@ import { Txt } from '@/ui/Txt';
 export default function Profile() {
   const { t, tr, lang } = useT();
   const router = useRouter();
+  const kids = useAccount(selectKids);
   const profile = useApp((s) => s.profile);
   const stats = useApp((s) => s.stats);
   const done = useApp((s) => s.done);
@@ -215,12 +218,14 @@ export default function Profile() {
 
       <TeacherCard />
 
+      <FamilyCard />
+
       <InviteCard />
 
       <NativeFeedbackCard />
 
       {/* Who's learning: the account holder and the children's profiles (kids mode). */}
-      {KIDS_MODE && (
+      {kids && (
         <Card style={{ gap: S.md }} testID="learners-card">
           <View style={styles.rowBetween}>
             <Txt variant="h3">{t('learners.profileCard')}</Txt>

@@ -63,7 +63,7 @@ export const CONTENT = {
     },
     facts: { title: 'Did you know?', ids: ['crane-flag', 'cowries', 'mujaguzo'] },
     price: {
-      title: 'One plan. Everything included.',
+      title: 'Everything included, whichever plan you choose.',
       per: '{price}',
       items: [
         'Every chapter, and new parts as they come',
@@ -74,8 +74,15 @@ export const CONTENT = {
         'Cancel anytime',
       ],
       cta: 'Get started',
+      choose: 'Choose',
+      plans: [
+        ['monthly', 'Monthly', 'Pay month by month.'],
+        ['yearly', 'Yearly', '3 months free.'],
+        ['family_monthly', 'Family', 'Up to 6 people: each adult has their own login, and children get their own profiles.'],
+        ['family_yearly', 'Family, yearly', 'Up to 6 people, 3 months free.'],
+      ],
       web: 'Why pay on the website? It’s cheaper than paying through an app store, and it keeps Yiga Oluganda affordable.',
-      small: 'Prices are in your local currency and include VAT where it applies. Your subscription renews every month until you cancel.',
+      small: 'Prices are in your local currency and include VAT where it applies. Your subscription renews every month or year, as you choose, until you cancel.',
     },
     story: {
       title: 'Why Yiga Oluganda?',
@@ -88,7 +95,8 @@ export const CONTENT = {
       title: 'Questions and answers',
       items: [
         ['Do I need to know any Luganda?', 'No. Part 1 starts from the very beginning: greetings, introducing yourself and the words you’ll hear every day. If you already know some, take the short placement test and skip the chapters you know.'],
-        ['How much does it cost?', 'One plan: {price}, billed every month in your local currency. VAT is included where it applies.'],
+        ['How much does it cost?', '{price} for one person, billed every month in your local currency, or pay for a year and get 3 months free. VAT is included where it applies.'],
+        ['Is there a family plan?', 'Yes. The Family plan is for up to 6 people. You pay, and invite the adults in your family with a link: each gets their own login and progress. Children get their own profiles in kids mode, with no water pots to lose and a grown-up check to leave it.'],
         ['How do I cancel?', 'Whenever you like, in the app under Me → Settings → Subscription. You keep access until the end of the month you have paid for.'],
         ['Can I change my mind after paying?', 'Yes. Within 14 days of subscribing you can withdraw from the contract in the app under Me → Settings → Subscription, and we refund the part you haven’t used. The first time you withdraw, we refund your payment in full.'],
         ['Which devices can I use?', 'Any up-to-date web browser on a phone, tablet or computer. Log in with the same account everywhere and your progress follows you. Apps for iPhone and Android are on the way.'],
@@ -209,7 +217,7 @@ export const CONTENT = {
     },
     facts: { title: 'Visste du?', ids: ['crane-flag', 'cowries', 'mujaguzo'] },
     price: {
-      title: 'Ett abonnemang. Allt ingår.',
+      title: 'Allt ingår, vilket abonnemang du än väljer.',
       per: '{price}',
       items: [
         'Alla kapitel, och nya delar när de kommer',
@@ -220,8 +228,15 @@ export const CONTENT = {
         'Avsluta när du vill',
       ],
       cta: 'Kom igång',
+      choose: 'Välj',
+      plans: [
+        ['monthly', 'Månadsvis', 'Betala en månad i taget.'],
+        ['yearly', 'Årsvis', '3 månader gratis.'],
+        ['family_monthly', 'Familj', 'Upp till 6 personer: varje vuxen har en egen inloggning och barnen får egna profiler.'],
+        ['family_yearly', 'Familj, årsvis', 'Upp till 6 personer, 3 månader gratis.'],
+      ],
       web: 'Varför betala på webben? Det är billigare än att betala via en appbutik, och det håller Yiga Oluganda prisvärt.',
-      small: 'Priserna visas i din lokala valuta och inkluderar moms där det gäller. Abonnemanget förnyas varje månad tills du avslutar det.',
+      small: 'Priserna visas i din lokala valuta och inkluderar moms där det gäller. Abonnemanget förnyas varje månad eller år, som du väljer, tills du avslutar det.',
     },
     story: {
       title: 'Varför Yiga Oluganda?',
@@ -234,7 +249,8 @@ export const CONTENT = {
       title: 'Frågor och svar',
       items: [
         ['Måste jag kunna någon luganda?', 'Nej. Del 1 börjar från början: hälsningar, att presentera sig och orden du hör varje dag. Kan du redan lite gör du det korta nivåtestet och hoppar över kapitlen du kan.'],
-        ['Vad kostar det?', 'Ett abonnemang: {price}, som dras varje månad i din lokala valuta. Moms ingår där det gäller.'],
+        ['Vad kostar det?', '{price} för en person, som dras varje månad i din lokala valuta, eller betala för ett år och få 3 månader gratis. Moms ingår där det gäller.'],
+        ['Finns det ett familjeabonnemang?', 'Ja. Familjeabonnemanget är för upp till 6 personer. Du betalar och bjuder in de vuxna i familjen med en länk: var och en får en egen inloggning och egna framsteg. Barnen får egna profiler i barnläget, utan vattenkrukor att förlora och med en vuxenkontroll för att lämna profilen.'],
         ['Hur avslutar jag?', 'När du vill, i appen under Jag → Inställningar → Abonnemang. Du har kvar tillgången till slutet av månaden du har betalat för.'],
         ['Kan jag ångra mig efter att ha betalat?', 'Ja. Inom 14 dagar efter att du har tecknat abonnemanget kan du frånträda avtalet i appen under Jag → Inställningar → Abonnemang, och då får du tillbaka den del du inte har använt. Första gången du frånträder får du hela beloppet tillbaka.'],
         ['Vilka enheter kan jag använda?', 'Alla uppdaterade webbläsare i mobil, surfplatta eller dator. Logga in med samma konto överallt så följer dina framsteg med. Appar för iPhone och Android är på väg.'],

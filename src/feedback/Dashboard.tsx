@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { FormMessage } from '../account/AuthShell';
 import { ownerStats, type OwnerStats } from '../account/feedback';
 import { useT } from '../i18n';
-import { monthlyRevenue } from '../logic/revenue';
+import { countByPlan, monthlyRevenue } from '../logic/revenue';
 import { formatMoney } from '../pricing/pricing';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -25,7 +25,8 @@ export function Dashboard() {
 
   if (stats === 'error') return <FormMessage text={t('auth.errNetwork')} />;
   if (!stats) return <Txt variant="small">{t('dash.loading')}</Txt>;
-  const revenue = monthlyRevenue(stats.paying_by_currency);
+  const revenue = monthlyRevenue(stats.paying_by_plan ?? stats.paying_by_currency);
+  const plans = countByPlan(stats.paying_by_plan ?? []);
   const maxDay = Math.max(1, ...stats.signups_by_day.map((d) => d.n));
 
   return (
@@ -49,6 +50,17 @@ export function Dashboard() {
           <Txt variant="body">–</Txt>
         )}
         <Txt variant="small">{t('dash.revenueNote')}</Txt>
+        {plans.length > 0 && (
+          <View style={{ gap: 2, marginTop: S.xs }} testID="dash-plans">
+            <Txt variant="label">{t('dash.plans')}</Txt>
+            {plans.map((p) => (
+              <Txt key={p.plan} variant="body">
+                {t('dash.planLine', { plan: t(`plan.name.${p.plan}`), n: p.n })}
+              </Txt>
+            ))}
+            {(stats.family_members ?? 0) > 0 && <Txt variant="small">{t('dash.familyMembers', { n: stats.family_members ?? 0 })}</Txt>}
+          </View>
+        )}
         {stats.past_due > 0 && (
           <Txt variant="small" style={{ color: C.tomatoDeep }}>
             {t('dash.pastDue', { n: stats.past_due })}

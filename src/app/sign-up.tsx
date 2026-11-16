@@ -6,6 +6,7 @@ import { resendConfirmation, signUp } from '@/account/actions';
 import { AuthShell, FormMessage } from '@/account/AuthShell';
 import { InviteBanner } from '@/account/InviteCard';
 import { ClassBanner } from '@/account/JoinClass';
+import { FamilyBanner } from '@/account/JoinFamily';
 import { GoogleButton } from '@/account/GoogleButton';
 import { SITE_URL } from '@/account/config';
 import type { Lang } from '@/content/types';
@@ -100,6 +101,7 @@ export default function SignUp() {
     <AuthShell testID="screen-sign-up" title={t('auth.signUpTitle')} lead={t('auth.signUpLead')}>
       <InviteBanner />
       <ClassBanner />
+      <FamilyBanner />
       <View style={styles.field}>
         <Txt variant="strong">{t('auth.language')}</Txt>
         <View style={styles.seg} accessibilityRole="radiogroup">

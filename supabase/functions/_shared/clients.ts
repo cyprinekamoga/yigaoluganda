@@ -1,6 +1,9 @@
 import { createClient, type User } from 'npm:@supabase/supabase-js@2';
 import Stripe from 'npm:stripe@23.1.0';
 import { env } from './http.ts';
+import { isPlan, PLAN_LOOKUP_KEY, PLANS, type Plan } from './pricing.ts';
+
+export { isPlan };
 
 export const stripe = new Stripe(env('STRIPE_SECRET_KEY'), { httpClient: Stripe.createFetchHttpClient() });
 
@@ -10,16 +13,20 @@ export const admin = createClient(env('SUPABASE_URL'), env('SUPABASE_SERVICE_ROL
 });
 
 /** Set up by scripts/stripe-setup.ts. Found by name, so no ids need copying into secrets. */
-export const PRICE_LOOKUP_KEY = 'yiga-oluganda-monthly';
 export const PORTAL_TAG = 'yiga-oluganda';
 
-/** The monthly price (all currencies), by its lookup key. */
-export async function monthlyPrice(): Promise<string> {
-  const fromEnv = Deno.env.get('STRIPE_PRICE_ID');
-  if (fromEnv) return fromEnv;
-  const { data } = await stripe.prices.list({ lookup_keys: [PRICE_LOOKUP_KEY], active: true, limit: 1 });
-  if (!data[0]) throw new Error('No active Stripe price with lookup key ' + PRICE_LOOKUP_KEY);
+/** A plan's price (all currencies), by its lookup key (see PLAN_LOOKUP_KEY in pricing.ts). */
+export async function planPrice(plan: Plan): Promise<string> {
+  const key = PLAN_LOOKUP_KEY[plan];
+  const { data } = await stripe.prices.list({ lookup_keys: [key], active: true, limit: 1 });
+  if (!data[0]) throw new Error('No active Stripe price with lookup key ' + key);
   return data[0].id;
+}
+
+/** The plan a Stripe price belongs to (by its lookup key); monthly for anything older. */
+export function planOf(price: { lookup_key?: string | null } | null | undefined): Plan {
+  const found = PLANS.find((p) => PLAN_LOOKUP_KEY[p] === price?.lookup_key);
+  return found ?? 'monthly';
 }
 
 /** Our customer-portal configuration (tagged in its metadata), or Stripe's default. */
@@ -95,6 +102,7 @@ export async function saveSubscription(sub: Stripe.Subscription, userId?: string
     user_id: uid,
     status: sub.status,
     price_id: item?.price.id ?? null,
+    plan: planOf(item?.price),
     currency: sub.currency,
     current_period_end: iso(periodEnd),
     cancel_at_period_end: sub.cancel_at_period_end,

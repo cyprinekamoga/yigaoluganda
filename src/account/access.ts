@@ -1,3 +1,5 @@
+import { isFamilyPlan } from '../pricing/pricing';
+
 /** Pure rules about subscriptions. Rows mirror public.subscriptions, which Stripe keeps up to date. */
 export interface SubscriptionRow {
   id: string;
@@ -6,6 +8,8 @@ export interface SubscriptionRow {
   cancel_at_period_end: boolean;
   created_at: string;
   currency: string | null;
+  /** monthly, yearly, family_monthly or family_yearly (missing on rows saved by older versions). */
+  plan?: string | null;
 }
 
 /** Statuses that unlock the course. past_due keeps access while Stripe retries the card. */
@@ -65,4 +69,28 @@ export interface Licence {
 /** A class licence that still runs on `today` (YYYY-MM-DD) unlocks the course like a subscription. */
 export function licenceActive(licences: Licence[], today: string): boolean {
   return licences.some((l) => l.licence_until >= today);
+}
+
+/** The account pays for a Family plan that is running: children's profiles and invites come with it. */
+export function paysForFamily(rows: SubscriptionRow[]): boolean {
+  return rows.some((r) => UNLOCKS.has(r.status) && isFamilyPlan(r.plan));
+}
+
+/** The caller's family, from public.my_family. */
+export interface FamilyInfo {
+  role: 'owner' | 'member' | null;
+  /** The payer's Family plan is running. */
+  active?: boolean;
+  /** Owner only: the invite code, the places (6) and how many are taken (owner, members, children). */
+  code?: string;
+  seats?: number;
+  used?: number;
+  members?: { user_id: string; name: string; joined_at: string }[];
+  /** Member only: the payer's first name. */
+  owner_name?: string;
+}
+
+/** Someone else's running Family plan unlocks the course for its members. */
+export function familyAccess(f: FamilyInfo | null): boolean {
+  return f?.role === 'member' && f.active === true;
 }

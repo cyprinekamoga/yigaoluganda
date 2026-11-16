@@ -2,10 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { LESSONS, PHRASES, UNIT_1, UNIT_2, UNITS } from '../content';
 import { chapterStatus } from './course';
 import { addDays, diffDays } from './dates';
-import { buildLesson, choiceStep, type Step } from './generator';
+import { buildLesson, choiceStep, looksAlike, type Step } from './generator';
 import { HEART_REGEN_MS, MAX_HEARTS, initialStats, lessonReward, loseHeart, nextHeartIn, recordActivity, regenHearts, visibleStreak, buyRefill, REFILL_COST } from './progress';
 import { makeRng } from './rng';
-import { lengthVariants, spellingDistractors } from './spelling';
 import { dueIds, grade, introduce } from './srs';
 import { normalize, sameText, tilesOf } from './text';
 import { tileStatus, isAvailable, isUnitOpen } from './unlock';
@@ -27,24 +26,51 @@ describe('text', () => {
   });
 });
 
-describe('spelling distractors', () => {
-  it('makes length-only misspellings', () => {
-    const v = lengthVariants('weebale');
-    expect(v).toContain('webale');
-    expect(v).toContain('weebbale');
-    expect(v).not.toContain('weebale');
+describe('answer choices', () => {
+  const part1 = UNITS[0].chapters.flatMap((c) => c.lessons);
+  it('offer different words, never the same word spelled differently, for every phrase', () => {
+    for (const unit of UNITS) {
+      for (const ch of unit.chapters) {
+        for (const lesson of ch.lessons) {
+          const pool = [...lesson.phrases, ...(lesson.review ?? [])];
+          for (const id of pool) {
+            const step = choiceStep(id, ctx, makeRng(7), pool) as Extract<Step, { kind: 'choice' }>;
+            expect(step.options, id).toHaveLength(3);
+            expect(step.options).toContain(step.answer);
+            const others = step.options.filter((o) => o !== step.answer);
+            for (const o of others) expect(looksAlike(o, step.answer), `${id}: ${o} / ${step.answer}`).toBe(false);
+            expect(looksAlike(others[0], others[1]), `${id}: ${others.join(' / ')}`).toBe(false);
+          }
+        }
+      }
+    }
+    expect(part1.length).toBeGreaterThan(10);
   });
-  it('never offers a real word as a misspelling', () => {
-    const real = new Set(Object.values(PHRASES).map((p) => normalize(p.lg)));
-    for (let seed = 1; seed < 30; seed++) {
-      const d = spellingDistractors('okusiba', real, makeRng(seed), 3);
-      expect(d.map(normalize)).not.toContain('okusiiba');
+  it('never offers another way to say the same thing (a second right answer)', () => {
+    const step = choiceStep('gyendi', ctx, makeRng(3), ['gyendi', 'ndi-bulungi', 'bulungi', 'oli-otya']) as Extract<Step, { kind: 'choice' }>;
+    const meanings = step.options.map((o) => Object.values(PHRASES).find((p) => normalize(p.lg) === normalize(o))?.tr.en);
+    expect(meanings.filter((m) => m === PHRASES.gyendi.tr.en)).toHaveLength(1);
+  });
+  it('tells look-alike spellings apart from different words', () => {
+    expect(looksAlike('okusiba', 'okusiiba')).toBe(true);
+    expect(looksAlike('weebale', 'webale')).toBe(true);
+    expect(looksAlike('bulungi', 'ndi bulungi')).toBe(true);
+    expect(looksAlike('nze', 'ffe')).toBe(false);
+    expect(looksAlike('Oli otya?', 'Ki kati?')).toBe(false);
+  });
+  it('a sound-pair lesson does not put the pair side by side', () => {
+    for (const ref of Object.values(LESSONS).filter((r) => (r.lesson.sounds ?? []).length > 0)) {
+      for (const step of buildLesson(ref, ctx)) {
+        if (step.kind !== 'choice') continue;
+        const others = step.options.filter((o) => o !== step.answer);
+        for (const o of others) expect(looksAlike(o, step.answer), `${ref.lesson.id}: ${o} / ${step.answer}`).toBe(false);
+      }
     }
   });
-  it('always gives at least two options, even for very short words', () => {
+  it('always gives three options, even for very short words', () => {
     for (const id of ['ye', 'bo', 'wa', 'yee']) {
       const step = choiceStep(id, ctx, makeRng(1), ['ffe', 'nze', 'ggwe']) as Extract<Step, { kind: 'choice' }>;
-      expect(step.options.length).toBeGreaterThanOrEqual(2);
+      expect(step.options.length).toBe(3);
       expect(step.options).toContain(step.answer);
     }
   });

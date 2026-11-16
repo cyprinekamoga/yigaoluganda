@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -50,6 +51,9 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const attempts = useRef(0);
   const mistakes = useRef(0);
   const retried = useRef(new Set<number>());
+  /** Steps already answered: going back to one lets the learner look again or try it again, but
+   *  it isn't graded twice (no second water pot, no second mistake). */
+  const answered = useRef(new Set<number>());
 
   const name = useApp((s) => s.profile?.name ?? '');
   const meet = useApp((s) => s.meet);
@@ -84,12 +88,19 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   };
 
   const onMistake = () => {
+    if (answered.current.has(index)) return;
     attempts.current += 1;
     mistakes.current += 1;
     spendHeart();
   };
 
   const onResult = (r: Result) => {
+    if (answered.current.has(index)) {
+      if (step.kind !== 'match') (r.correct ? correctFeedback : wrongFeedback)();
+      setFeedback({ result: r, heartLost: false });
+      return;
+    }
+    answered.current.add(index);
     attempts.current += 1;
     const ids = phrasesInStep(step);
     if (ids.length) gradePhrases(ids, r.correct);
@@ -131,6 +142,13 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   };
 
   const exit = () => (router.canGoBack() ? router.back() : router.replace('/'));
+
+  /** Back to the previous step (to read an intro card again, or look at an exercise again). */
+  const back = () => {
+    if (index === 0) return;
+    setFeedback(null);
+    setIndex((i) => Math.max(0, i - 1));
+  };
 
   // New phrases this lesson introduced, or for practice every phrase it went over.
   const phrases = useMemo(() => {
@@ -193,6 +211,18 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']} testID="lesson-player">
       <View style={styles.top}>
+        <Pressable
+          testID="lesson-back"
+          onPress={back}
+          disabled={index === 0}
+          accessibilityRole="button"
+          accessibilityLabel={t('lesson.back')}
+          accessibilityState={{ disabled: index === 0 }}
+          hitSlop={10}
+          style={({ pressed }) => [styles.back, index === 0 && { opacity: 0.3 }, pressed && { opacity: 0.6 }]}
+        >
+          <Ionicons name="chevron-back" size={24} color={C.ink} />
+        </Pressable>
         {usesHearts ? (
           <View style={styles.side} accessible accessibilityLabel={t('stats.heartsA11y', { n: hearts })} testID="lesson-hearts">
             <PotIcon size={24} off={hearts === 0} />
@@ -246,7 +276,8 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: C.paper },
   top: { flexDirection: 'row', alignItems: 'center', gap: S.md, paddingHorizontal: S.lg, paddingVertical: S.sm, minHeight: 56, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
-  side: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 64, minHeight: 44 },
+  side: { flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 52, minHeight: 44 },
+  back: { width: 36, height: 44, alignItems: 'center', justifyContent: 'center', marginLeft: -S.sm },
   potsText: { ...F.semi, fontSize: 17, color: C.tomatoDeep },
   practiceTag: { color: C.neon },
   beads: { flex: 1 },

@@ -4,11 +4,11 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useSyncExternalStore } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ACCOUNTS } from '@/account/config';
-import { selectAccess, selectSignedIn, startAccount, useAccount } from '@/account/store';
+import { selectAccess, selectKids, selectSignedIn, startAccount, useAccount } from '@/account/store';
 import { clearOpeningLink } from '@/account/supabase';
 import { initAudio } from '@/audio/engine';
 import { useReminderSchedule } from '@/reminders/useReminders';
-import { KIDS_MODE, useLearners } from '@/learners/store';
+import { MAIN, switchLearner, useLearners } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { C } from '@/ui/theme';
 
@@ -32,6 +32,8 @@ export default function RootLayout() {
   const recovering = useAccount((s) => s.recovering);
   const confirmLink = useAccount((s) => s.confirmLink);
   const reviewer = useAccount((s) => s.role !== null);
+  const kids = useAccount(selectKids);
+  const activeLearner = useLearners((s) => s.active);
   useEffect(() => startAccount(), []);
   useReminderSchedule();
 
@@ -51,6 +53,12 @@ export default function RootLayout() {
       clearTimeout(clear);
     };
   }, [ready]);
+
+  // Children's profiles come with the Family plan: when it ends, the app goes back to the grown-up.
+  // Their progress is kept and comes back with the plan.
+  useEffect(() => {
+    if (ready && !kids && activeLearner !== MAIN) switchLearner(MAIN);
+  }, [ready, kids, activeLearner]);
 
   if (!ready) return null;
 
@@ -91,8 +99,8 @@ export default function RootLayout() {
         </Stack.Protected>
         {/* Where the sign-up and password e-mails lead, signed in or not. Only when opened from such a link,
             so it is never where the app sends someone by default. */}
-        {/* Kids mode, off until the Family plan exists (see KIDS_MODE). */}
-        <Stack.Protected guard={canLearn && KIDS_MODE}>
+        {/* Kids mode comes with the Family plan (see selectKids). */}
+        <Stack.Protected guard={canLearn && kids}>
           <Stack.Screen name="learners" />
         </Stack.Protected>
         {/* For the people who review recordings and reports, with or without a subscription of their own.

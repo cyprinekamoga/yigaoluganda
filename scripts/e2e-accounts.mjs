@@ -1,7 +1,7 @@
 // End-to-end check of accounts and payment in the web build, with Supabase and Stripe replaced
 // by an in-browser stand-in (Playwright request interception). Nothing leaves the machine.
 // Usage:
-//   EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_KIDS=1 EXPO_PUBLIC_SUPABASE_URL=https://mock.supabase.test \
+//   EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_SUPABASE_URL=https://mock.supabase.test \
 //   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_test \
 //   EXPO_PUBLIC_GOOGLE_CLIENT_ID=test-client.apps.googleusercontent.com \
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]
@@ -102,6 +102,7 @@ function fakeBackend() {
       return json(route, {
         accounts: 12, new_today: 1, new_7d: 4, new_30d: 9, paying: 3, paying_by_currency: { USD: 2, SEK: 1 }, past_due: 0, ending: 1, new_subs_30d: 3, cancelled_30d: 1, active_7d: 5,
         reminders_on: 2, children: 0, certificates: 1, open_feedback: 1, answered_feedback: 2, open_reports: 1,
+        paying_by_plan: [{ plan: 'monthly', currency: 'USD', n: 2 }, { plan: 'family_yearly', currency: 'SEK', n: 1 }], family_members: 2,
         signups_by_day: Array.from({ length: 14 }, (_, i) => ({ day: `2026-11-${String(i + 3).padStart(2, '0')}`, n: i % 3 })),
         top_reported: [{ item_type: 'phrase', item_id: 'oli-otya', n: 2, open: 1 }],
       });
@@ -203,6 +204,32 @@ function fakeBackend() {
       return json(route, state.progress ? [{ data: state.progress }] : []);
     }
 
+    // Family plans. The payer's family exists once they pay for a Family plan; FAMX2345 is the
+    // invite code of another payer's family (named Sara) that this fake knows about.
+    if (p === '/rest/v1/rpc/my_family') {
+      const paysFamily = state.subs.some((s) => ['active', 'trialing', 'past_due'].includes(s.status) && String(s.plan).startsWith('family'));
+      if (paysFamily) {
+        const members = state.familyMembers ?? [];
+        return json(route, { role: 'owner', active: true, code: 'OWNR2345', seats: 6, used: 1 + members.length + (state.children?.length ?? 0), members });
+      }
+      if (state.familyMember) return json(route, { role: 'member', active: true, owner_name: 'Sara' });
+      return json(route, { role: null });
+    }
+    if (p === '/rest/v1/rpc/join_family') {
+      state.joinedFamily = body.p_code;
+      if (body.p_code !== 'FAMX2345') return json(route, { error: 'no_family' });
+      state.familyMember = true;
+      return json(route, { ok: true });
+    }
+    if (p === '/rest/v1/rpc/leave_family') {
+      state.familyMember = false;
+      return none();
+    }
+    if (p === '/rest/v1/rpc/remove_family_member') {
+      state.familyMembers = (state.familyMembers ?? []).filter((m) => m.user_id !== body.p_user);
+      return none();
+    }
+
     // Schools: class licences.
     if (p === '/rest/v1/rpc/my_licence') return json(route, state.licences ?? []);
     if (p === '/rest/v1/rpc/join_class') {
@@ -232,11 +259,12 @@ function fakeBackend() {
     if (p === '/rest/v1/referrals') return json(route, state.referrals ?? []);
     if (p === '/functions/v1/create-checkout') {
       state.checkoutRef = body.ref;
+      state.checkoutPlan = body.plan;
       state.checkouts = (state.checkouts ?? 0) + 1;
       // The first time (straight after sign-up) the learner backs out of Stripe's page.
       if (state.checkouts === 1 && state.backOutFirst) return json(route, { url: `${BASE}/subscribe?status=cancelled` });
       // Pretend Stripe took the payment and the webhook saved the subscription.
-      state.subs = [{ id: 'sub_test', status: 'active', current_period_end: new Date(Date.now() + 30 * 864e5).toISOString(), cancel_at_period_end: false, created_at: new Date().toISOString(), currency: 'usd' }];
+      state.subs = [{ id: 'sub_test', status: 'active', current_period_end: new Date(Date.now() + 30 * 864e5).toISOString(), cancel_at_period_end: false, created_at: new Date().toISOString(), currency: 'usd', plan: body.plan ?? 'monthly' }];
       return json(route, { url: `${BASE}/subscribe?status=success` });
     }
     if (p === '/functions/v1/withdraw') {
@@ -277,6 +305,9 @@ async function run() {
   await page.getByTestId('go-sign-up').click();
   await page.getByTestId('screen-sign-up').waitFor();
   ok(true, 'and leads on to "Create your account"');
+  // As from the website's price list, with the Family plan chosen.
+  await page.goto(`${BASE}/sign-up?plan=family_monthly`);
+  await page.getByTestId('screen-sign-up').waitFor();
 
   // The password is hidden by default, and the learner can choose to show it.
   const pw = page.getByTestId('signup-password');
@@ -302,10 +333,18 @@ async function run() {
   backend.state.backOutFirst = true;
   await page.getByTestId('signup-submit').click();
   await page.waitForURL(/status=cancelled/, { timeout: 15000 });
-  ok(backend.state.checkouts === 1, 'after sign-up the app goes straight to the payment page');
+  ok(backend.state.checkouts === 1 && backend.state.checkoutPlan === 'family_monthly', 'after sign-up the app goes straight to the payment page, for the plan chosen on the website');
   await page.getByTestId('screen-subscribe').waitFor({ timeout: 10000 });
-  ok(true, 'backing out of the payment page shows the plan (no free trial)');
-  ok(/\$4\.49 \/ month/.test(await page.getByTestId('sub-price').innerText()), 'the plan shows the local price (US: $4.49 / month)');
+  ok(true, 'backing out of the payment page shows the plans (no free trial)');
+  ok(/\$7\.49 \/ month/.test(await page.getByTestId('sub-price').innerText()), 'the plan chosen on the website stays selected (Family, US: $7.49 / month)');
+  await page.getByTestId('plan-just').click();
+  ok(/\$4\.49 \/ month/.test(await page.getByTestId('sub-price').innerText()), 'just me: the local price (US: $4.49 / month)');
+  await page.getByTestId('period-year').click();
+  ok(/\$39\.99 \/ year/.test(await page.getByTestId('sub-price').innerText()), 'yearly: $39.99 / year');
+  ok((await page.getByTestId('sub-per-month').innerText()).includes('$3.33'), 'and what that is per month');
+  await page.getByTestId('plan-family').click();
+  ok(/\$66\.99 \/ year/.test(await page.getByTestId('sub-price').innerText()), 'Family, yearly: $66.99 / year');
+  await page.getByTestId('period-month').click();
   ok((await page.getByText('cheaper than through an app store').count()) > 0, 'it says paying on the website is cheaper');
   ok((await page.locator('[data-testid="tab-home"]').count()) === 0, 'the course stays locked before paying');
   await page.goto(`${BASE}/lesson/c01-l1`);
@@ -317,6 +356,7 @@ async function run() {
   await page.getByTestId('sub-pay').click();
   await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
   ok(true, 'after paying, the course unlocks');
+  ok(backend.state.checkoutPlan === 'family_monthly', 'the payment page was for the plan picked (Family, monthly)');
   ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'home greets the learner by the name from sign-up');
   await page.waitForTimeout(2000);
   ok(backend.state.progress?.profile?.name === 'Sara', 'progress is saved to the account');
@@ -326,6 +366,7 @@ async function run() {
   await page.getByTestId('open-settings').click();
   await page.getByTestId('settings-account').waitFor();
   ok((await page.getByTestId('sub-state').innerText()).startsWith('Active · renews on'), 'settings show the active subscription');
+  ok((await page.getByTestId('sub-plan').innerText()) === 'Family plan, monthly', 'and which plan it is');
   ok((await page.getByTestId('account-email').innerText()) === 'sara@example.com', 'settings show the account e-mail');
   // Daily reminder by e-mail: switching it on saves it to the account.
   await page.getByTestId('reminder-switch').click();
@@ -384,6 +425,25 @@ async function run() {
   await page.getByTestId('gate-submit').click();
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'a grown-up switches back to the parent');
+
+  // The Family plan on the Me tab: places, the invite link, and taking an adult off the plan.
+  backend.state.familyMembers = [{ user_id: '22222222-2222-4222-8222-222222222222', name: 'Ada', joined_at: new Date().toISOString() }];
+  await page.reload();
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('family-plan-card').waitFor({ timeout: 10000 });
+  ok((await page.getByTestId('family-places').innerText()) === '3 of 6 places taken', 'the payer sees how many of the 6 places are taken (payer, an adult, a child)');
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: BASE });
+  await page.evaluate(() => Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }));
+  await page.getByTestId('family-share').click();
+  await page.getByTestId('form-ok').waitFor({ timeout: 5000 }).catch(() => undefined);
+  ok((await page.evaluate(() => navigator.clipboard.readText())) === 'https://app.yigaoluganda.com/sign-up?family=OWNR2345&lang=en', 'the invite link signs people up into the family');
+  await shot(page, '04b-family');
+  await page.getByTestId('family-remove-Ada').click();
+  await page.waitForTimeout(1500);
+  ok((backend.state.familyMembers ?? []).length === 0 && (await page.getByTestId('family-places').innerText()) === '2 of 6 places taken', 'the payer can take an adult off the plan');
+  await page.getByTestId('tab-home').click();
+  await page.getByTestId('screen-home').waitFor();
 
   // Certificates: once Part 1 is finished, the account's server issues one with a code.
   const part1 = JSON.parse(readFileSync(path.join(ROOT, 'content/unit-1/chapters.json'), 'utf8')).flatMap((c) => c.lessons.map((l) => l.id));
@@ -529,6 +589,7 @@ async function run() {
   await page.getByTestId('open-dashboard').click();
   await page.getByTestId('dashboard').waitFor({ timeout: 10000 });
   ok((await page.getByTestId('dash-paying').innerText()).includes('3'), 'the owner\'s dashboard shows paying learners');
+  ok((await page.getByTestId('dash-plans').innerText()).includes('Family plan, yearly: 1'), 'and how many pay for each plan');
   ok((await page.getByTestId('dash-revenue').innerText()).includes('8.98'), 'and the monthly revenue before VAT, per currency');
   ok((await page.getByTestId('dashboard').innerText()).includes('Oli otya?'), 'and the most reported phrases');
   await shot(page, '10-dashboard');
@@ -748,6 +809,30 @@ async function run() {
   await student.getByTestId('licence-card').waitFor({ timeout: 8000 });
   ok((await student.getByTestId('licence-card').innerText()).includes('Luganda 4B'), 'settings show the school licence');
   await student.close();
+
+  // Someone invited to a Family plan: sign up with the link, and the plan opens the course (no payment).
+  const member = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const mBackend = fakeBackend();
+  await member.route(`${API}/**`, mBackend.handle);
+  await member.route('https://accounts.google.com/**', (route) => route.abort());
+  await member.goto(`${BASE}/sign-up?family=famx2345`);
+  await member.getByTestId('family-banner').waitFor({ timeout: 15000 });
+  ok(true, 'someone with a family invite link sees that there is nothing to pay');
+  await member.getByTestId('signup-name').fill('Ada');
+  await member.getByTestId('signup-email').fill('ada@example.com');
+  await member.getByTestId('signup-password').fill('kampala123');
+  await member.getByTestId('signup-submit').click();
+  await member.getByTestId('screen-home').waitFor({ timeout: 20000 });
+  ok(mBackend.state.joinedFamily === 'FAMX2345' && !mBackend.state.checkouts, 'signing up joins the Family plan and opens the course without the payment page');
+  ok((await member.getByTestId('learner-chip').count()) === 0, 'an adult on someone else\'s Family plan has no children\'s profiles of their own');
+  await member.getByTestId('tab-profile').click();
+  await member.getByTestId('family-member-card').waitFor({ timeout: 8000 });
+  ok((await member.getByTestId('family-member-card').innerText()).includes('Sara pays for'), 'the Me tab says whose Family plan it is');
+  await member.getByTestId('family-leave').click();
+  await member.getByTestId('family-leave-confirm').click();
+  await member.getByTestId('screen-subscribe').waitFor({ timeout: 10000 });
+  ok(mBackend.state.familyMember === false, 'leaving the Family plan ends access (a plan of their own is needed)');
+  await member.close();
 
   // Deleting the account asks for the password again.
   const del = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });

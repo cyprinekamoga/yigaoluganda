@@ -11,7 +11,8 @@ import { chapterStatus, lockedReason, unitOpen } from '@/logic/course';
 import { isComplete, lessonsDone } from '@/logic/unlock';
 import { LearnerChip } from '@/learners/LearnerChip';
 import { DailyGoalCard } from '@/ui/DailyGoal';
-import { KIDS_MODE, useIsKid } from '@/learners/store';
+import { useIsKid } from '@/learners/store';
+import { selectKids, useAccount } from '@/account/store';
 import { ReminderOffer } from '@/reminders/ReminderSettings';
 import { useApp } from '@/state/store';
 import { Button } from '@/ui/Button';
@@ -39,6 +40,7 @@ export default function Home() {
   const setPlacementSeen = useApp((s) => s.setPlacementSeen);
   const [lockedMsg, setLockedMsg] = useState<string | null>(null);
   const kid = useIsKid();
+  const kids = useAccount(selectKids);
   const now = useNow();
   const name = profile?.name ?? '';
 
@@ -81,7 +83,7 @@ export default function Home() {
 
   return (
     <LargeTitleScreen testID="screen-home" title={t('tabs.home')} trailing={<StatsBar />} compactAlign="leading">
-      {KIDS_MODE && <LearnerChip />}
+      {kids && <LearnerChip />}
 
       <Card style={styles.hello}>
         <Ngaali mood={kid ? 'wave' : 'idle'} size={78} />

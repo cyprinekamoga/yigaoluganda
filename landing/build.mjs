@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { APP_URL, COMPANY, SITE_URL, SUPABASE_KEY, SUPABASE_URL, TURNSTILE_SITE_KEY } from './src/company.mjs';
 import { CONTENT } from './src/content.mjs';
 import { privacy, terms } from './src/legal.mjs';
-import { priceLine, quote } from './src/pricing.mjs';
+import { isYearlyPlan, priceLine, quote } from './src/pricing.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'dist');
@@ -23,10 +23,11 @@ const company = Object.fromEntries(Object.entries(COMPANY).map(([k, v]) => [k, v
 const companyIn = (lang) => ({ ...company, address: typeof company.address === 'object' ? company.address[lang] : company.address });
 
 /** The visitor's price. The edge function replaces the text inside every data-price span. */
-const priceSpan = (lang) => `<span class="price" data-price>${esc(priceLine(quote(''), lang))}</span>`;
+const priceSpan = (lang, plan = 'monthly') =>
+  `<span class="price" data-price${plan === 'monthly' ? '' : ` data-plan="${plan}"`}>${esc(priceLine(quote('', plan), lang, isYearlyPlan(plan) ? 'year' : 'month'))}</span>`;
 const factById = Object.fromEntries(course.facts.map((f) => [f.id, f.text]));
 
-const signUp = (lang) => `${APP_URL}/sign-up?lang=${lang}`;
+const signUp = (lang, plan) => `${APP_URL}/sign-up?lang=${lang}${plan ? `&plan=${plan}` : ''}`;
 const signIn = (lang) => `${APP_URL}/sign-in?lang=${lang}`;
 
 function head(t, { title, description, pathname, alternates }) {
@@ -222,6 +223,14 @@ ${header(t)}
           ${t.price.items.map((x) => `<li>${esc(x)}</li>`).join('\n          ')}
         </ul>
         <a class="btn btn-primary btn-wide" href="${signUp(t.lang)}">${esc(t.price.cta)}</a>
+        <ul class="plans">
+          ${t.price.plans
+            .map(
+              ([plan, name, note]) =>
+                `<li class="plan"><div><strong>${esc(name)}</strong><span class="small">${esc(note)}</span></div><div class="plan-buy">${priceSpan(t.lang, plan)}<a class="btn btn-ghost btn-small" href="${signUp(t.lang, plan)}" aria-label="${esc(`${t.price.choose}: ${name}`)}">${esc(t.price.choose)}</a></div></li>`,
+            )
+            .join('\n          ')}
+        </ul>
         <p class="web-note">${esc(t.price.web)}</p>
         <p class="small">${esc(t.price.small)}</p>
       </div>

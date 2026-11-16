@@ -44,6 +44,7 @@ export const PLANS: Plan[] = ['monthly', 'yearly', 'family_monthly', 'family_yea
 export const FAMILY_SIZE = 6;
 export const isFamilyPlan = (plan: Plan | string | null | undefined): boolean => plan === 'family_monthly' || plan === 'family_yearly';
 export const isYearlyPlan = (plan: Plan | string | null | undefined): boolean => plan === 'yearly' || plan === 'family_yearly';
+export const isPlan = (p: unknown): p is Plan => typeof p === 'string' && (PLANS as string[]).includes(p);
 /** Stripe lookup keys, so the Edge Functions find each price by name. */
 export const PLAN_LOOKUP_KEY: Record<Plan, string> = {
   monthly: 'yiga-oluganda-monthly',

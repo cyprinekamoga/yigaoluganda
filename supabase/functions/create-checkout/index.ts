@@ -1,7 +1,8 @@
-// POST /create-checkout { lang } → { url } of a Stripe Checkout page for the monthly plan.
-// Stripe picks the customer's local currency from the price's currency options and adds VAT
-// (Stripe Tax). The customer must accept the terms, which explain the 14-day right of withdrawal.
-import { admin, callingUser, customerFor, monthlyPrice, stripe } from '../_shared/clients.ts';
+// POST /create-checkout { lang, plan, ref } → { url } of a Stripe Checkout page for the plan
+// (monthly, yearly, family_monthly or family_yearly; monthly when left out). Stripe picks the
+// customer's local currency from the price's currency options and adds VAT (Stripe Tax). The
+// customer must accept the terms, which explain the 14-day right of withdrawal.
+import { admin, callingUser, customerFor, isPlan, planPrice, stripe } from '../_shared/clients.ts';
 import { appUrl, cors, json, siteUrl } from '../_shared/http.ts';
 import { cardUsedElsewhere, promotionFor } from '../_shared/referrals.ts';
 
@@ -11,8 +12,12 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   const user = await callingUser(req);
   if (!user) return json({ error: 'not_signed_in' }, 401);
-  const { lang, ref } = await req.json().catch(() => ({ lang: 'en', ref: undefined }));
-  const sv = lang === 'sv';
+  const body = (await req.json().catch(() => ({}))) as { lang?: string; ref?: unknown; plan?: unknown };
+  const sv = body.lang === 'sv';
+  const plan = isPlan(body.plan) ? body.plan : 'monthly';
+  // Free months (an invite, or a code like GYEBALEKO) are 100% off one invoice: only on the monthly
+  // plans, never a free year.
+  const monthly = plan === 'monthly' || plan === 'family_monthly';
 
   const { data: subs } = await admin.from('subscriptions').select('status').eq('user_id', user.id);
   if (subs?.some((s) => ACTIVE.includes(s.status))) return json({ error: 'already_subscribed' }, 409);
@@ -20,16 +25,16 @@ Deno.serve(async (req) => {
   const terms = sv ? `${siteUrl()}/sv/villkor/` : `${siteUrl()}/terms/`;
   // A friend's invite code (refer a friend) is applied for them; otherwise anyone can type a code.
   // A card that another account has used gets no free months: no invite and no codes.
-  const codesAllowed = !(await cardUsedElsewhere(user.id));
-  const invite = codesAllowed ? await promotionFor(typeof ref === 'string' ? ref : undefined, user.id) : null;
+  const codesAllowed = monthly && !(await cardUsedElsewhere(user.id));
+  const invite = codesAllowed ? await promotionFor(typeof body.ref === 'string' ? body.ref : undefined, user.id) : null;
   const customer = await customerFor(user);
-  const price = await monthlyPrice();
+  const price = await planPrice(plan);
   const create = (withInvite: boolean) => stripe.checkout.sessions.create({
     mode: 'subscription',
     customer,
     client_reference_id: user.id,
     line_items: [{ price, quantity: 1 }],
-    subscription_data: { metadata: { user_id: user.id } },
+    subscription_data: { metadata: { user_id: user.id, plan } },
     automatic_tax: { enabled: true },
     // An invite applies itself; without one, people with a code from us (e.g. a free first month)
     // can enter it on the payment page. Stripe allows one or the other.
