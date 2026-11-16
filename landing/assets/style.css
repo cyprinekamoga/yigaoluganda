@@ -181,3 +181,7 @@ p { margin: 0 0 1em; }
 .verify-badge { color: var(--neon); font-weight: 800; }
 .verify-name { font-size: 1.6rem; font-weight: 800; color: var(--ink) !important; }
 .verify-meta { font-size: 0.95rem; }
+
+/* Refer a friend: shown when the page is opened from an invite link */
+.invite { margin: 0; padding: 12px 16px; background: var(--neon); color: var(--paper); font-weight: 700; text-align: center; }
+.invite[hidden] { display: none; }

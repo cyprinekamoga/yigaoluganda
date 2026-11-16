@@ -571,6 +571,14 @@ export const en = {
   'dash.refresh': "Refresh",
   'settings.tips': "Tips by e-mail",
   'settings.tipsHint': "A few e-mails in your first week with tips for learning, and one if your subscription ends. Never more than one a day.",
+  'invite.title': "Give a friend a free month",
+  'invite.body': "Share your invite link. Your friend gets their first month free, and when they’ve paid for a month after that, you get a month free too.",
+  'invite.get': "Get my invite link",
+  'invite.share': "Share my invite link",
+  'invite.copied': "Invite link copied.",
+  'invite.shareText': "I’m learning Luganda with Yiga Oluganda. Here’s a free first month for you:",
+  'invite.counts': "{joined} friend(s) joined · {earned} free month(s) earned",
+  'invite.banner': "Invited by a friend: your first month is free (code {code}).",
 } as const;
 
 export type Key = keyof typeof en;

@@ -4,6 +4,8 @@ import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { signOut, startCheckout } from '@/account/actions';
 import { FormMessage } from '@/account/AuthShell';
 import { DeleteAccountButton } from '@/account/DeleteAccount';
+import { InviteBanner } from '@/account/InviteCard';
+import { forgetInvite } from '@/account/invite';
 import { useGrownUpCheck } from '@/learners/ParentGate';
 import { useIsKid } from '@/learners/store';
 import { usePrice } from '@/account/price';
@@ -58,6 +60,8 @@ export default function Subscribe() {
     const id = setInterval(async () => {
       tries += 1;
       const subs = await refreshSubscriptions();
+      // Paid: an invite code has done its job.
+      if (subs.length) forgetInvite();
       if (subs.length || tries >= 15) {
         clearInterval(id);
         if (!subs.length) setSlow(true);
@@ -89,6 +93,7 @@ export default function Subscribe() {
           {t('sub.title')}
         </Txt>
       </View>
+      {!waiting && <InviteBanner />}
 
       {waiting ? (
         <Card style={styles.card}>

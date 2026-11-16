@@ -3,6 +3,7 @@
 // (Stripe Tax). The customer must accept the terms, which explain the 14-day right of withdrawal.
 import { admin, callingUser, customerFor, monthlyPrice, stripe } from '../_shared/clients.ts';
 import { appUrl, cors, json, siteUrl } from '../_shared/http.ts';
+import { promotionFor } from '../_shared/referrals.ts';
 
 const ACTIVE = ['active', 'trialing', 'past_due'];
 
@@ -10,22 +11,27 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   const user = await callingUser(req);
   if (!user) return json({ error: 'not_signed_in' }, 401);
-  const { lang } = await req.json().catch(() => ({ lang: 'en' }));
+  const { lang, ref } = await req.json().catch(() => ({ lang: 'en', ref: undefined }));
   const sv = lang === 'sv';
 
   const { data: subs } = await admin.from('subscriptions').select('status').eq('user_id', user.id);
   if (subs?.some((s) => ACTIVE.includes(s.status))) return json({ error: 'already_subscribed' }, 409);
 
   const terms = sv ? `${siteUrl()}/sv/villkor/` : `${siteUrl()}/terms/`;
-  const session = await stripe.checkout.sessions.create({
+  // A friend's invite code (refer a friend) is applied for them; otherwise anyone can type a code.
+  const invite = await promotionFor(typeof ref === 'string' ? ref : undefined, user.id);
+  const customer = await customerFor(user);
+  const price = await monthlyPrice();
+  const create = (withInvite: boolean) => stripe.checkout.sessions.create({
     mode: 'subscription',
-    customer: await customerFor(user),
+    customer,
     client_reference_id: user.id,
-    line_items: [{ price: await monthlyPrice(), quantity: 1 }],
+    line_items: [{ price, quantity: 1 }],
     subscription_data: { metadata: { user_id: user.id } },
     automatic_tax: { enabled: true },
-    // Lets people with a code from us (e.g. a free first month) enter it on the payment page.
-    allow_promotion_codes: true,
+    // An invite applies itself; without one, people with a code from us (e.g. a free first month)
+    // can enter it on the payment page. Stripe allows one or the other.
+    ...(withInvite && invite ? { discounts: [{ promotion_code: invite }] } : { allow_promotion_codes: true }),
     customer_update: { address: 'auto', name: 'auto' },
     billing_address_collection: 'auto',
     consent_collection: { terms_of_service: 'required' },
@@ -40,5 +46,13 @@ Deno.serve(async (req) => {
     success_url: `${appUrl()}/subscribe?status=success`,
     cancel_url: `${appUrl()}/subscribe?status=cancelled`,
   });
+  let session;
+  try {
+    session = await create(true);
+  } catch (e) {
+    // An invite only works for a first-time customer: without it, they can still pay.
+    if (!invite) throw e;
+    session = await create(false);
+  }
   return json({ url: session.url });
 });

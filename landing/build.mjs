@@ -123,6 +123,7 @@ function home(t) {
   return `${head(t, { title: t.meta.title, description: t.meta.description, pathname: t.path, alternates: true })}
 <body>
 ${header(t)}
+<p id="invite" class="invite" hidden>🎁 <span>${esc(t.invite)}</span></p>
 <main id="main">
   <section class="hero">
     <div class="wrap hero-grid">
@@ -251,6 +252,19 @@ ${header(t)}
 </main>
 ${footer(t)}
 <script type="application/ld+json">${JSON.stringify(faqLd)}</script>
+<script>
+// Refer a friend: an invite link (?ref=CODE) shows the offer and carries the code on to sign-up.
+(() => {
+  const ref = (new URLSearchParams(location.search).get('ref') || '').trim().toUpperCase();
+  if (!/^[A-Z0-9-]{4,24}$/.test(ref)) return;
+  document.getElementById('invite').hidden = false;
+  for (const a of document.querySelectorAll('a[href*="/sign-up"]')) {
+    const u = new URL(a.href);
+    u.searchParams.set('ref', ref);
+    a.href = u.toString();
+  }
+})();
+</script>
 </body>
 </html>
 `;

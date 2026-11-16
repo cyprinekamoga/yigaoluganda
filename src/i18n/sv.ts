@@ -573,4 +573,12 @@ export const sv: Record<Key, string> = {
   'dash.refresh': "Uppdatera",
   'settings.tips': "Tips via mejl",
   'settings.tipsHint': "Några mejl första veckan med tips för att lära dig, och ett om ditt abonnemang tar slut. Aldrig mer än ett om dagen.",
+  'invite.title': "Ge en vän en gratis månad",
+  'invite.body': "Dela din inbjudningslänk. Din vän får första månaden gratis, och när hen har betalat för en månad efter det får du också en gratis månad.",
+  'invite.get': "Hämta min inbjudningslänk",
+  'invite.share': "Dela min inbjudningslänk",
+  'invite.copied': "Inbjudningslänken är kopierad.",
+  'invite.shareText': "Jag lär mig luganda med Yiga Oluganda. Här är en gratis första månad till dig:",
+  'invite.counts': "{joined} vän(ner) har gått med · {earned} gratis månad(er) intjänade",
+  'invite.banner': "Inbjuden av en vän: din första månad är gratis (kod {code}).",
 };

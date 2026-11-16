@@ -202,7 +202,14 @@ function fakeBackend() {
       return json(route, state.progress ? [{ data: state.progress }] : []);
     }
 
+    if (p === '/functions/v1/referral-code') {
+      state.refCode = 'SARA-7K3D';
+      return json(route, { code: state.refCode });
+    }
+    if (p === '/rest/v1/referral_codes') return json(route, state.refCode ? [{ code: state.refCode }] : []);
+    if (p === '/rest/v1/referrals') return json(route, state.referrals ?? []);
     if (p === '/functions/v1/create-checkout') {
+      state.checkoutRef = body.ref;
       state.checkouts = (state.checkouts ?? 0) + 1;
       // The first time (straight after sign-up) the learner backs out of Stripe's page.
       if (state.checkouts === 1 && state.backOutFirst) return json(route, { url: `${BASE}/subscribe?status=cancelled` });
@@ -514,6 +521,21 @@ async function run() {
   await page.getByTestId('email-save').click();
   await page.getByTestId('form-ok').waitFor({ timeout: 5000 });
   ok(backend.state.emailChange === 'sara.new@example.com' && (await page.getByTestId('form-ok').innerText()).includes('sara.new@example.com'), 'changing the e-mail sends a link to the new address and says where to look');
+
+  // Refer a friend, the inviter's side.
+  backend.state.referrals = [{ status: 'joined' }, { status: 'rewarded' }];
+  await page.goto(`${BASE}/`);
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('invite-get').click();
+  await page.getByTestId('invite-code').waitFor({ timeout: 8000 });
+  ok((await page.getByTestId('invite-code').innerText()) === 'SARA-7K3D', 'a paying learner gets a personal invite code');
+  ok((await page.getByTestId('invite-counts').innerText()) === '2 friend(s) joined · 1 free month(s) earned', 'and sees how many friends joined and the free months earned');
+  await page.evaluate(() => Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }));
+  await page.getByTestId('invite-share').click();
+  await page.getByTestId('form-ok').waitFor({ timeout: 5000 }).catch(() => undefined);
+  ok((await page.evaluate(() => navigator.clipboard.readText())) === 'https://yigaoluganda.com/?ref=SARA-7K3D', 'the invite link goes to the website with the code');
+  await shot(page, '11-invite');
   await page.goto(`${BASE}/`);
   await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
 
@@ -672,9 +694,10 @@ async function run() {
       } } };`,
     }),
   );
-  await goog.goto(`${BASE}/sign-up?lang=sv`);
+  await goog.goto(`${BASE}/sign-up?lang=sv&ref=sara-7k3d`);
   await goog.getByTestId('gis-button').waitFor({ timeout: 15000 });
   ok(true, 'sign-up shows "Continue with Google"');
+  ok(await goog.getByTestId('invite-banner').isVisible(), 'a friend who comes with an invite sees that the first month is free');
   ok((await goog.evaluate(() => window.__gisOptions?.locale)) === 'sv', 'Google\'s button follows the app language');
   await goog.getByTestId('gis-button').click();
   await goog.getByTestId('screen-home').waitFor({ timeout: 20000 }).catch(async (e) => {
@@ -684,6 +707,7 @@ async function run() {
   });
   ok(gBackend.state.googleSignIns === 1, 'Google sign-in logs in through Supabase (nonce checked)');
   ok(gBackend.state.checkouts === 1, 'a new Google account goes straight to the payment page');
+  ok(gBackend.state.checkoutRef === 'SARA-7K3D', 'and the invite code goes with them to the payment page');
   ok((await goog.getByTestId('home-greeting').innerText()).includes('Ada'), 'and is greeted by first name');
   await goog.waitForTimeout(2500);
   ok(gBackend.state.profile?.ui_lang === 'sv', 'the account keeps the language chosen on the page (Swedish)');

@@ -3,6 +3,7 @@ import type { Lang } from '../content/types';
 import type { Key } from '../i18n';
 import { useApp } from '../state/store';
 import { refreshSubscriptions, setRecovering, useAccount } from './store';
+import { inviteCode } from './invite';
 import { supabase } from './supabase';
 import { stopSync } from './sync';
 
@@ -124,9 +125,9 @@ function open(url: string) {
   else Linking.openURL(url);
 }
 
-/** Sends the learner to Stripe Checkout. */
+/** Sends the learner to Stripe Checkout (with a friend's invite code, if they came with one). */
 export async function startCheckout(lang: Lang): Promise<Outcome> {
-  const { data, error } = await call<{ url?: string; error?: string }>('create-checkout', { lang });
+  const { data, error } = await call<{ url?: string; error?: string }>('create-checkout', { lang, ref: (await inviteCode()) ?? undefined });
   if (error || !data?.url) {
     // Already paid (for example in another tab): just unlock.
     if ((await refreshSubscriptions()).length) return { ok: true };
@@ -134,6 +135,13 @@ export async function startCheckout(lang: Lang): Promise<Outcome> {
   }
   open(data.url);
   return { ok: true };
+}
+
+/** The learner's own invite code (refer a friend), created the first time. */
+export async function getInviteCode(): Promise<{ code: string } | { error: Key }> {
+  const { data, error } = await call<{ code?: string }>('referral-code');
+  if (error || !data?.code) return { error: error ?? 'auth.errGeneric' };
+  return { code: data.code };
 }
 
 /** Opens Stripe's customer portal: cancel, change card, receipts. */

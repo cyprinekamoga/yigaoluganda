@@ -101,6 +101,7 @@ export const CONTENT = {
     final: { title: 'Gyebale ko! Ready to start?', cta: 'Get started' },
     footer: { tagline: 'Learn Luganda with Ngaali the crested crane.', terms: 'Terms', privacy: 'Privacy', contact: 'Contact', orgNo: 'Org. no.' },
     legal: { terms: '/terms/', privacy: '/privacy/', back: '← Back to Yiga Oluganda', updated: 'Last updated' },
+    invite: 'A friend invited you: your first month is free when you sign up from this page.',
     verify: {
       path: '/verify/',
       title: 'Check a certificate',
@@ -218,6 +219,7 @@ export const CONTENT = {
     final: { title: 'Gyebale ko! Redo att börja?', cta: 'Kom igång' },
     footer: { tagline: 'Lär dig luganda med kronstranen Ngaali.', terms: 'Villkor', privacy: 'Integritet', contact: 'Kontakt', orgNo: 'Org.nr' },
     legal: { terms: '/sv/villkor/', privacy: '/sv/integritet/', back: '← Tillbaka till Yiga Oluganda', updated: 'Senast uppdaterad' },
+    invite: 'En vän har bjudit in dig: din första månad är gratis när du registrerar dig från den här sidan.',
     verify: {
       path: '/sv/verify/',
       title: 'Kontrollera ett diplom',

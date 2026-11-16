@@ -2,6 +2,7 @@
 //   0. Stripe Tax (Swedish registration, small-seller scheme),
 //   1. the monthly price (net, VAT added by Stripe Tax) in every local currency,
 //   2. a customer-portal configuration (cancel at period end, change card, receipts),
+//   2b. the refer-a-friend coupons,
 //   3. the webhook that keeps the app's database in step (with --webhook <supabase url>).
 // Safe to run again: it reuses what exists. Never prints secret keys.
 //
@@ -112,6 +113,21 @@ const portal = await stripe('POST', ours ? `billing_portal/configurations/${ours
 });
 console.log(`✓ customer portal ${portal.id}`);
 
+// 2b. Refer a friend: the friend's first month free, and a free month for the one who invited them.
+//     100% off one invoice each (with VAT, the invoice is then 0).
+for (const [id, name] of [
+  ['yiga-referral-friend', 'First month free (invited by a friend)'],
+  ['yiga-referral-reward', 'A free month: thanks for inviting a friend'],
+]) {
+  try {
+    await stripe('GET', `coupons/${id}`);
+    console.log(`✓ coupon ${id}`);
+  } catch {
+    await stripe('POST', 'coupons', { id, name, percent_off: 100, duration: 'once' });
+    console.log(`✓ coupon ${id} created`);
+  }
+}
+
 // 3. Webhook
 const supabaseUrl = value('--webhook');
 if (supabaseUrl) {
@@ -127,6 +143,8 @@ if (supabaseUrl) {
     'enabled_events[3]': 'customer.subscription.deleted',
     'enabled_events[4]': 'customer.subscription.paused',
     'enabled_events[5]': 'customer.subscription.resumed',
+    // Refer a friend: a friend's first real payment earns the inviter a free month.
+    'enabled_events[6]': 'invoice.paid',
   });
   console.log(`✓ webhook ${endpoint.id} → ${endpoint.url}`);
   console.log('  Its signing secret is shown in the Stripe dashboard (Developers → Webhooks). Save it as STRIPE_WEBHOOK_SECRET.');
