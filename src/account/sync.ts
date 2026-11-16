@@ -163,7 +163,8 @@ export async function startSync(session: Session) {
     useApp.setState({
       profile: {
         name: profile.data.name || local?.name || '',
-        lang: (profile.data.ui_lang as 'en' | 'sv') ?? local?.lang ?? 'en',
+        // A new account (nothing saved in it yet) keeps the language chosen on this device.
+        lang: (!saved.data?.data && local?.lang) || ((profile.data.ui_lang as 'en' | 'sv') ?? local?.lang ?? 'en'),
         createdAt: local?.createdAt ?? Date.parse(profile.data.created_at),
       },
     });

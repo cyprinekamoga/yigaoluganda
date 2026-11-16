@@ -382,6 +382,8 @@ export const en = {
   'settings.contact': "Questions?",
   'settings.contactBody': "Write to us and we’ll get back to you.",
   'sub.redirecting': "Taking you to the payment page…",
+  'auth.or': "or",
+  'auth.errGoogle': "Signing in with Google didn’t work. Try again, or use your e-mail.",
 } as const;
 
 export type Key = keyof typeof en;

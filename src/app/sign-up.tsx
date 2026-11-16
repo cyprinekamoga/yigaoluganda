@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { resendConfirmation, signUp } from '@/account/actions';
 import { AuthShell, FormMessage } from '@/account/AuthShell';
+import { GoogleButton } from '@/account/GoogleButton';
 import { SITE_URL } from '@/account/config';
 import type { Lang } from '@/content/types';
 import { useT, type Key } from '@/i18n';
@@ -109,6 +110,7 @@ export default function SignUp() {
           ))}
         </View>
       </View>
+      <GoogleButton mode="signup" />
       <TextField testID="signup-name" label={t('auth.name')} value={name} onChangeText={setName} maxLength={24} autoCapitalize="words" autoComplete="given-name" textContentType="givenName" />
       <TextField
         testID="signup-email"

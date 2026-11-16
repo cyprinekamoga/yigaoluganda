@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { resendConfirmation, signIn } from '@/account/actions';
 import { AuthShell, FormMessage } from '@/account/AuthShell';
+import { GoogleButton } from '@/account/GoogleButton';
 import { useT, type Key } from '@/i18n';
 import { Button } from '@/ui/Button';
 import { PasswordField, TextField } from '@/ui/TextField';
@@ -27,6 +28,7 @@ export default function SignIn() {
 
   return (
     <AuthShell testID="screen-sign-in" title={t('auth.signInTitle')} mood="idle">
+      <GoogleButton mode="signin" />
       <TextField
         testID="signin-email"
         label={t('auth.email')}

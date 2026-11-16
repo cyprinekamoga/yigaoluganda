@@ -11,6 +11,8 @@
   # Accounts and payments (both values are public; without them the app runs without accounts).
   EXPO_PUBLIC_SUPABASE_URL = "https://qbagcpemtsqaoykwqger.supabase.co"
   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_uYoU_bNVB5jhL3_nPzegBQ_DqqKF4KJ"
+  # "Continue with Google": the public client id of the Google Cloud web client (empty: no button).
+  # EXPO_PUBLIC_GOOGLE_CLIENT_ID = "….apps.googleusercontent.com"
 
 # Single-page app: every route serves index.html (real files are served first).
 [[redirects]]

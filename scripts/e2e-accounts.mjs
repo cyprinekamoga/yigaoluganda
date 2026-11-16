@@ -3,11 +3,13 @@
 // Usage:
 //   EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_SUPABASE_URL=https://mock.supabase.test \
 //   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_test \
+//   EXPO_PUBLIC_GOOGLE_CLIENT_ID=test-client.apps.googleusercontent.com \
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -78,6 +80,18 @@ function fakeBackend() {
       state.verified = body.type;
       return json(route, session([...state.users.keys()][0] ?? 'ada@example.com'));
     }
+    if (p === '/auth/v1/token' && url.searchParams.get('grant_type') === 'id_token') {
+      // Like Supabase: the token's nonce must be the SHA-256 of the nonce the page sends.
+      const claims = JSON.parse(Buffer.from(body.id_token.split('.')[1], 'base64url').toString());
+      if (body.provider !== 'google' || claims.nonce !== createHash('sha256').update(body.nonce ?? '').digest('hex')) {
+        return json(route, { code: 'bad_nonce', msg: 'Nonces mismatch' }, 400);
+      }
+      state.users.set(claims.email, null);
+      state.googleSignIns = (state.googleSignIns ?? 0) + 1;
+      // What the sign-up trigger makes from Google's data: the first name, English by default.
+      state.profile ??= { name: claims.given_name, ui_lang: 'en', created_at: new Date().toISOString() };
+      return json(route, session(claims.email));
+    }
     if (p === '/auth/v1/token') {
       if (state.users.get(body.email) !== body.password) return json(route, { code: 'invalid_credentials', error: 'invalid_grant', error_description: 'Invalid login credentials' }, 400);
       return json(route, session(body.email));
@@ -134,6 +148,8 @@ async function run() {
   page.on('pageerror', (e) => errors.push(e.message));
   const backend = fakeBackend();
   await page.route(`${API}/**`, backend.handle);
+  // No Google here (it has its own check below): its script is blocked, so the button stays hidden.
+  await page.route('https://accounts.google.com/**', (route) => route.abort());
 
   // Signed out: the course is locked and the app asks the visitor to log in or create an account.
   await page.goto(BASE);
@@ -159,6 +175,7 @@ async function run() {
   await page.getByTestId('signup-email').fill('sara@example.com');
   await pw.fill('short');
   await page.getByTestId('signup-submit').click();
+  ok((await page.getByTestId('google-button').count()) === 0, 'without Google\'s script the e-mail form stands alone');
   ok(await page.getByTestId('form-error').isVisible(), 'a short password gets a clear message');
   ok(!backend.state.calls.includes('POST /auth/v1/signup'), 'and is not sent');
 
@@ -330,6 +347,40 @@ async function run() {
   await resetLink.getByTestId('screen-reset').waitFor({ timeout: 15000 });
   ok(rlBackend.state.verified === 'recovery', 'the new password e-mail leads to "Choose a new password"');
   await resetLink.close();
+
+  // "Continue with Google" (Google's script replaced by a stand-in that hands back a signed-in token).
+  const goog = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'sv-SE' });
+  const gBackend = fakeBackend();
+  await goog.route(`${API}/**`, gBackend.handle);
+  await goog.route('https://accounts.google.com/**', (route) =>
+    route.fulfill({
+      contentType: 'text/javascript',
+      body: `window.google = { accounts: { id: {
+        initialize(o) { window.__gis = o; },
+        renderButton(el, opts) {
+          window.__gisOptions = opts;
+          const b = document.createElement('button');
+          b.textContent = 'Fortsätt med Google';
+          b.setAttribute('data-testid', 'gis-button');
+          const enc = (o) => btoa(JSON.stringify(o)).replace(/=+$/, '').replace(/\\+/g, '-').replace(/\\//g, '_');
+          b.onclick = () => window.__gis.callback({ credential: enc({ alg: 'RS256' }) + '.' + enc({ email: 'ada@gmail.com', given_name: 'Ada', name: 'Ada Nakato', nonce: window.__gis.nonce }) + '.sig' });
+          el.appendChild(b);
+        },
+      } } };`,
+    }),
+  );
+  await goog.goto(`${BASE}/sign-up?lang=sv`);
+  await goog.getByTestId('gis-button').waitFor({ timeout: 15000 });
+  ok(true, 'sign-up shows "Continue with Google"');
+  ok((await goog.evaluate(() => window.__gisOptions?.locale)) === 'sv', 'Google\'s button follows the app language');
+  await goog.getByTestId('gis-button').click();
+  await goog.getByTestId('screen-home').waitFor({ timeout: 20000 });
+  ok(gBackend.state.googleSignIns === 1, 'Google sign-in logs in through Supabase (nonce checked)');
+  ok(gBackend.state.checkouts === 1, 'a new Google account goes straight to the payment page');
+  ok((await goog.getByTestId('home-greeting').innerText()).includes('Ada'), 'and is greeted by first name');
+  await goog.waitForTimeout(2500);
+  ok(gBackend.state.profile?.ui_lang === 'sv', 'the account keeps the language chosen on the page (Swedish)');
+  await goog.close();
 
   // An expired or already-used link (mail apps sometimes open links to scan them) explains itself.
   const expired = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });

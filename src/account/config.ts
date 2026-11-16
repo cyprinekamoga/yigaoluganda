@@ -8,6 +8,9 @@ export const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
 export const SUPABASE_KEY = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 export const ACCOUNTS = Boolean(SUPABASE_URL && SUPABASE_KEY);
 
+/** Google's public client id for "Continue with Google" (web). Without it the button is hidden. */
+export const GOOGLE_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID ?? '';
+
 /** The landing page, which holds the terms and the privacy policy. */
 export const SITE_URL = 'https://yigaoluganda.com';
 

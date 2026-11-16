@@ -384,4 +384,6 @@ export const sv: Record<Key, string> = {
   'settings.contact': "Frågor?",
   'settings.contactBody': "Skriv till oss så hör vi av oss.",
   'sub.redirecting': "Du skickas vidare till betalningen…",
+  'auth.or': "eller",
+  'auth.errGoogle': "Inloggningen med Google fungerade inte. Försök igen eller använd din e-post.",
 };

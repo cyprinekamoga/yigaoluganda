@@ -104,6 +104,15 @@ The project is three parts that are deployed separately:
 5. Put the Supabase URL and publishable key in [`netlify.toml`](netlify.toml). In Supabase, set *Authentication → URL Configuration* to the app's address, and add your own SMTP (e.g. Resend) so sign-up e-mails reach everyone.
 6. Point yigaoluganda.com at the landing site and app.yigaoluganda.com at the app site.
 
+**Sign in with Google (web):** the sign-up and log-in screens show Google's own button when the
+build has `EXPO_PUBLIC_GOOGLE_CLIENT_ID`. Google hands the page an ID token and Supabase checks it
+(`signInWithIdToken`), so Google's window shows app.yigaoluganda.com. To set it up: in Google Cloud,
+create an OAuth client of type *Web application* with `https://app.yigaoluganda.com` under
+*Authorized JavaScript origins*; in Supabase → Authentication → Sign In / Providers → Google, switch
+it on with that client id and secret; put the client id in [`netlify.toml`](netlify.toml). New
+Google accounts get the first name (see `handle_new_user`), keep the language chosen on the page and
+go straight to payment.
+
 **Free first month for chosen people:** the payment page accepts promotion codes. The Stripe coupon
 `yiga-first-month-free` takes 100% off the first month; then the normal price applies until the
 customer cancels. The code `GYEBALEKO` (20 uses, new customers only, until February 2027) uses it.
