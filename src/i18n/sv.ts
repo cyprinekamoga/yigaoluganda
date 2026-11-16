@@ -383,4 +383,5 @@ export const sv: Record<Key, string> = {
   'confirm.newLink': "Få en ny länk",
   'settings.contact': "Frågor?",
   'settings.contactBody': "Skriv till oss så hör vi av oss.",
+  'sub.redirecting': "Du skickas vidare till betalningen…",
 };

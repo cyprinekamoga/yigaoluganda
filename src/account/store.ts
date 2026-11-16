@@ -18,6 +18,8 @@ interface AccountState {
   linkError: boolean;
   /** Opened from an e-mail's link to /confirm, and the button hasn't been used yet. */
   confirmLink: boolean;
+  /** The account was just created (or confirmed): go straight on to the payment page. */
+  payNext: boolean;
 }
 
 /** Kept for the browser tab, so reloading the "new password" page doesn't lose it. */
@@ -37,6 +39,7 @@ export const useAccount = create<AccountState>(() => ({
   recovering: ACCOUNTS && (OPENING_LINK.recovery || savedRecovery()),
   linkError: ACCOUNTS && Boolean(OPENING_LINK.error),
   confirmLink: ACCOUNTS && OPENING_LINK.confirm,
+  payNext: false,
 }));
 
 /** Starts or ends "choose a new password" (ends after saving it, or on logging out). */

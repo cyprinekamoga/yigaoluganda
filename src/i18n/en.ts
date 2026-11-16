@@ -381,6 +381,7 @@ export const en = {
   'confirm.newLink': "Get a new link",
   'settings.contact': "Questions?",
   'settings.contactBody': "Write to us and we’ll get back to you.",
+  'sub.redirecting': "Taking you to the payment page…",
 } as const;
 
 export type Key = keyof typeof en;

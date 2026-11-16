@@ -24,9 +24,27 @@ export default function Subscribe() {
   const { status } = useLocalSearchParams<{ status?: string }>();
   const email = useAccount((s) => s.session?.user.email ?? '');
   const price = usePrice();
-  const [busy, setBusy] = useState(false);
+  // Just created the account: go straight on to the payment page (once; not after coming back).
+  const [autoPay] = useState(() => {
+    const go = useAccount.getState().payNext && !status;
+    if (useAccount.getState().payNext) useAccount.setState({ payNext: false });
+    return go;
+  });
+  const [busy, setBusy] = useState(autoPay);
   const [error, setError] = useState<Key | null>(null);
   const [waiting, setWaiting] = useState(status === 'success');
+
+  useEffect(() => {
+    if (!autoPay) return;
+    startCheckout(lang).then((r) => {
+      if (!r.ok) {
+        setError(r.error);
+        setBusy(false);
+      }
+    });
+    // Runs once, when the screen opens after sign-up.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPay]);
   const [slow, setSlow] = useState(false);
 
   // Back from Stripe: the webhook unlocks the course within seconds; check until it has.
@@ -103,6 +121,7 @@ export default function Subscribe() {
           </View>
           {status === 'cancelled' && <FormMessage text={t('sub.cancelled')} tone="ok" />}
           <FormMessage text={error ? t(error) : null} />
+          {autoPay && busy ? <FormMessage text={t('sub.redirecting')} tone="ok" /> : null}
           <Button testID="sub-pay" label={t('sub.pay')} onPress={pay} loading={busy} />
           <Txt variant="strong" style={styles.center}>
             {t('sub.web')}

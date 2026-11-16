@@ -109,6 +109,9 @@ function fakeBackend() {
     }
 
     if (p === '/functions/v1/create-checkout') {
+      state.checkouts = (state.checkouts ?? 0) + 1;
+      // The first time (straight after sign-up) the learner backs out of Stripe's page.
+      if (state.checkouts === 1 && state.backOutFirst) return json(route, { url: `${BASE}/subscribe?status=cancelled` });
       // Pretend Stripe took the payment and the webhook saved the subscription.
       state.subs = [{ id: 'sub_test', status: 'active', current_period_end: new Date(Date.now() + 30 * 864e5).toISOString(), cancel_at_period_end: false, created_at: new Date().toISOString(), currency: 'usd' }];
       return json(route, { url: `${BASE}/subscribe?status=success` });
@@ -160,9 +163,12 @@ async function run() {
   ok(!backend.state.calls.includes('POST /auth/v1/signup'), 'and is not sent');
 
   await pw.fill('kampala123');
+  backend.state.backOutFirst = true;
   await page.getByTestId('signup-submit').click();
+  await page.waitForURL(/status=cancelled/, { timeout: 15000 });
+  ok(backend.state.checkouts === 1, 'after sign-up the app goes straight to the payment page');
   await page.getByTestId('screen-subscribe').waitFor({ timeout: 10000 });
-  ok(true, 'after sign-up the app asks for the plan (no free trial)');
+  ok(true, 'backing out of the payment page shows the plan (no free trial)');
   ok(/\$4\.49 \/ month/.test(await page.getByTestId('sub-price').innerText()), 'the plan shows the local price (US: $4.49 / month)');
   ok((await page.getByText('cheaper than through an app store').count()) > 0, 'it says paying on the website is cheaper');
   ok((await page.locator('[data-testid="tab-home"]').count()) === 0, 'the course stays locked before paying');

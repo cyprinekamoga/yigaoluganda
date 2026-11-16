@@ -46,6 +46,8 @@ export async function signUp(name: string, email: string, password: string, lang
   // An existing, confirmed address comes back with no identities (Supabase hides that it exists).
   if (data.user && data.user.identities?.length === 0) return fail('auth.errExists');
   useApp.getState().start(name, lang);
+  // Logged in straight away (no e-mail confirmation): on to the payment page.
+  if (data.session) useAccount.setState({ payNext: true });
   return { ok: true, confirm: !data.session };
 }
 
@@ -66,6 +68,7 @@ export async function confirmFromLink(tokenHash: string, kind: 'email' | 'recove
   const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: kind });
   if (error) return fail(explain(error) === 'auth.errNetwork' ? 'auth.errNetwork' : 'auth.linkExpired');
   if (kind === 'recovery') setRecovering(true);
+  else useAccount.setState({ payNext: true });
   return { ok: true };
 }
 
