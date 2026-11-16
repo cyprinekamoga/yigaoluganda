@@ -62,13 +62,13 @@ export async function resendConfirmation(email: string): Promise<Outcome> {
  * using it only when the person taps the button means mail scanners that open links ahead of
  * them (Gmail does) can't use it up first.
  */
-export async function confirmFromLink(tokenHash: string, kind: 'email' | 'recovery'): Promise<Outcome> {
+export async function confirmFromLink(tokenHash: string, kind: 'email' | 'recovery' | 'email_change'): Promise<Outcome> {
   if (!supabase) return fail('auth.errGeneric');
   if (!tokenHash) return fail('auth.linkExpired');
   const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: kind });
   if (error) return fail(explain(error) === 'auth.errNetwork' ? 'auth.errNetwork' : 'auth.linkExpired');
   if (kind === 'recovery') setRecovering(true);
-  else useAccount.setState({ payNext: true });
+  else if (kind === 'email') useAccount.setState({ payNext: true });
   return { ok: true };
 }
 

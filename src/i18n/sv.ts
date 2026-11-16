@@ -531,4 +531,7 @@ export const sv: Record<Key, string> = {
   'email.sent': "Titta i {email} och klicka på länken. Kommer det en länk till din nuvarande adress också, klicka på den med. Till dess loggar du in med din nuvarande adress.",
   'data.download': "Ladda ner mina uppgifter",
   'data.hint': "En fil med allt vi sparar om ditt konto: framsteg, diplom, feedback och prenumeration.",
+  'confirm.emailTitle': "Bekräfta din e-postadress",
+  'confirm.emailLead': "Tryck nedan för att slutföra bytet av adress på ditt konto.",
+  'confirm.emailButton': "Bekräfta adressen",
 };

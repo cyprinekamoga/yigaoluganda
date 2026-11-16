@@ -216,7 +216,8 @@ async function run() {
   console.log('\naccounts (mocked Supabase and Stripe)');
   // A fake microphone, so Speak & compare can record.
   const browser = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1, locale: 'en-US', permissions: ['microphone'] });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1, locale: 'en-US', permissions: ['microphone'] });
+  const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const backend = fakeBackend();
@@ -378,15 +379,22 @@ async function run() {
   await page.getByTestId('tab-home').click();
 
   // Report a mistake, from inside a lesson.
-  // Opened directly (a link, or reloading the page): a paying learner stays where the link leads.
-  const trail = [];
-  const onNav = (f) => f === page.mainFrame() && trail.push(new URL(f.url()).pathname);
-  page.on('framenavigated', onNav);
+  // Opened straight from a link (an e-mail, a bookmark) in a new tab: a paying learner lands on the
+  // lesson, not on the start page or the plan.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const tab = await page.context().newPage();
+    await tab.route(`${API}/**`, backend.handle);
+    await tab.route('https://accounts.google.com/**', (route) => route.abort());
+    const trail = [];
+    tab.on('framenavigated', (f) => f === tab.mainFrame() && trail.push(new URL(f.url()).pathname));
+    await tab.goto(`${BASE}/lesson/c03-l1`);
+    const opened = await tab.getByTestId('lesson-player').waitFor({ timeout: 15000 }).then(() => true, () => false);
+    await tab.waitForTimeout(800);
+    ok(opened && trail.every((x) => x === '/lesson/c03-l1'), `a link to a lesson opens the lesson (try ${attempt + 1}: ${trail.join(' → ')})`);
+    await tab.close();
+  }
   await page.goto(`${BASE}/lesson/c03-l1`);
   await page.getByTestId('lesson-player').waitFor({ timeout: 15000 });
-  await page.waitForTimeout(1000);
-  page.off('framenavigated', onNav);
-  ok(trail.every((x) => x === '/lesson/c03-l1'), `a direct link to a lesson opens the lesson${trail.length > 1 ? ` (went ${trail.join(' → ')})` : ''}`);
   await page.getByTestId('report-open').click();
   await page.getByTestId('report-sheet').waitFor();
   ok(await page.getByTestId('report-send').isDisabled(), 'a report needs to say what is wrong');
@@ -609,6 +617,20 @@ async function run() {
   ok(rlBackend.state.verified === 'recovery', 'the new password e-mail leads to "Choose a new password"');
   await resetLink.close();
 
+  // The link in the "change e-mail address" e-mail.
+  const changeLink = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const clBackend = fakeBackend();
+  clBackend.state.users.set('ada@example.com', 'a-good-password');
+  clBackend.state.profile = { name: 'Ada', ui_lang: 'en', created_at: new Date().toISOString() };
+  await changeLink.route(`${API}/**`, clBackend.handle);
+  await changeLink.goto(`${BASE}/confirm?token_hash=good-code&type=email_change&lang=en`);
+  await changeLink.getByTestId('confirm-submit').waitFor({ timeout: 15000 });
+  ok((await changeLink.getByText('Confirm your e-mail address').count()) > 0, 'the change-address link opens "Confirm your e-mail address"');
+  await changeLink.getByTestId('confirm-submit').click();
+  await changeLink.waitForTimeout(1500);
+  ok(clBackend.state.verified === 'email_change', 'and confirming it verifies the address change');
+  await changeLink.close();
+
   // "Continue with Google" (Google's script replaced by a stand-in that hands back a signed-in token).
   const goog = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'sv-SE' });
   const gBackend = fakeBackend();
@@ -635,7 +657,11 @@ async function run() {
   ok(true, 'sign-up shows "Continue with Google"');
   ok((await goog.evaluate(() => window.__gisOptions?.locale)) === 'sv', 'Google\'s button follows the app language');
   await goog.getByTestId('gis-button').click();
-  await goog.getByTestId('screen-home').waitFor({ timeout: 20000 });
+  await goog.getByTestId('screen-home').waitFor({ timeout: 20000 }).catch(async (e) => {
+    await goog.screenshot({ path: path.join(OUT, 'google-fail.png') });
+    console.log('google step stuck at', goog.url());
+    throw e;
+  });
   ok(gBackend.state.googleSignIns === 1, 'Google sign-in logs in through Supabase (nonce checked)');
   ok(gBackend.state.checkouts === 1, 'a new Google account goes straight to the payment page');
   ok((await goog.getByTestId('home-greeting').innerText()).includes('Ada'), 'and is greeted by first name');

@@ -529,6 +529,9 @@ export const en = {
   'email.sent': "Check {email} and click the link. If a link also comes to your current address, click that one too. Until then you log in with your current address.",
   'data.download': "Download my data",
   'data.hint': "A file with everything we keep about your account: progress, certificates, feedback and subscription.",
+  'confirm.emailTitle': "Confirm your e-mail address",
+  'confirm.emailLead': "Tap below to finish changing the address on your account.",
+  'confirm.emailButton': "Confirm the address",
 } as const;
 
 export type Key = keyof typeof en;

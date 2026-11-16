@@ -124,7 +124,8 @@ async function applySession(session: Session | null) {
     }
     currentUser = uid;
     useAccount.setState({ session, subscriptions: [], role: null });
-    loading = session ? Promise.all([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]) : null;
+    // Never let a failed step keep the app from opening.
+    loading = session ? Promise.allSettled([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]) : null;
     await loading;
   } else {
     useAccount.setState({ session });

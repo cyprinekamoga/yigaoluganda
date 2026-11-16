@@ -10,8 +10,16 @@ import { useApp } from '@/state/store';
 
 export default function LessonRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  // Opened straight from a link, the first render can come before the address is read: wait for it
+  // rather than treat the lesson as unknown and send the learner home.
+  if (!id) return null;
+  if (!LESSONS[id]) return <Redirect href="/" />;
+  return <Lesson key={id} id={id} />;
+}
+
+function Lesson({ id }: { id: string }) {
   const lang = useLang();
-  const ref = LESSONS[id ?? ''];
+  const ref = LESSONS[id];
   // Build the lesson once, from the state at the moment it opens.
   const [setup] = useState(() => {
     if (!ref) return null;
@@ -28,7 +36,7 @@ export default function LessonRoute() {
     return { open, ctx, steps: buildLesson(ref, ctx) };
   });
 
-  if (!ref || !setup) return <Redirect href="/" />;
+  if (!setup) return null;
   if (!setup.open) return <Redirect href={`/chapter/${ref.chapter.id}`} />;
   return <LessonPlayer steps={setup.steps} mode={{ kind: 'lesson', lessonId: ref.lesson.id }} ctx={setup.ctx} />;
 }

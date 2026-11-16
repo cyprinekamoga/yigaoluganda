@@ -26,6 +26,8 @@ import { Txt } from '@/ui/Txt';
  */
 export default function CertificateScreen() {
   const { part } = useLocalSearchParams<{ part: string }>();
+  // Wait for the address to be read before deciding the part doesn't exist.
+  if (!part) return null;
   const unit = UNITS.find((u) => String(u.n) === part);
   if (!unit) return <Redirect href="/" />;
   return <CertificateFor unit={unit} />;
