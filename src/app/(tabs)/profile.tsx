@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ALL_CHAPTERS, ALL_PHRASES, UNITS } from '@/content';
 import { useT } from '@/i18n';
 import { BADGES } from '@/logic/badges';
+import { partFinished } from '@/logic/certificate';
 import { dayKey, lastWeek } from '@/logic/dates';
 import { visibleStreak } from '@/logic/progress';
 import { isComplete, lessonsDone } from '@/logic/unlock';
@@ -33,6 +34,7 @@ export default function Profile() {
   const done = useApp((s) => s.done);
   const srs = useApp((s) => s.srs);
   const badges = useApp((s) => s.badges);
+  const certs = useApp((s) => s.certs);
   const children = useLearners((s) => s.children);
   const active = useLearners((s) => s.active);
   const savedMainName = useLearners((s) => s.saved[MAIN]?.profile?.name ?? '');
@@ -155,6 +157,39 @@ export default function Profile() {
               })}
             </View>
           ))}
+        </Card>
+      </View>
+
+      {/* Certificates: one per part, checkable by anyone with its code. */}
+      <View style={{ gap: S.sm }}>
+        <Txt variant="label">{t('cert.profileTitle')}</Txt>
+        <Card style={styles.map} testID="certificates-card">
+          {UNITS.map((unit, i) => {
+            const finished = partFinished(unit, done);
+            const cert = certs?.[String(unit.n)];
+            const status = finished ? (cert ? cert.code : t('cert.view')) : t('cert.profileLocked', { n: unit.n });
+            return (
+              <Pressable
+                key={unit.id}
+                testID={`cert-open-${unit.n}`}
+                onPress={() => router.push(`/certificate/${unit.n}`)}
+                accessibilityRole="button"
+                accessibilityLabel={`${t('cert.title')}: ${t('home.unit', { n: unit.n })} · ${tr(unit.title)}. ${status}`}
+                style={({ pressed }) => [styles.mapRow, i > 0 && styles.mapRule, pressed && { opacity: 0.8 }]}
+              >
+                <Ionicons name={finished ? 'ribbon' : 'ribbon-outline'} size={26} color={finished ? C.neon : C.ink3} />
+                <View style={{ flex: 1, paddingVertical: S.xs }}>
+                  <Txt variant="strong" numberOfLines={1}>
+                    {t('home.unit', { n: unit.n })} · {tr(unit.title)}
+                  </Txt>
+                  <Txt variant="small" style={finished ? { color: C.neon } : undefined}>
+                    {status}
+                  </Txt>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color={C.ink3} />
+              </Pressable>
+            );
+          })}
         </Card>
       </View>
 

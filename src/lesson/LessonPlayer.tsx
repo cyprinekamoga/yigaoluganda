@@ -4,7 +4,9 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { preloadClips, releaseClips } from '../audio/engine';
 import { completeFeedback, correctFeedback, wrongFeedback } from '../audio/feedback';
+import { UNITS } from '../content';
 import { useT } from '../i18n';
+import { partFinished } from '../logic/certificate';
 import { phrasesInStep, retryStep, type GenContext, type Step } from '../logic/generator';
 import { regenHearts } from '../logic/progress';
 import { useIsKid } from '../learners/store';
@@ -38,6 +40,7 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const [index, setIndex] = useState(0);
   const [feedback, setFeedback] = useState<{ result: Result; heartLost: boolean } | null>(null);
   const [reward, setReward] = useState<Reward | null>(null);
+  const [partDone, setPartDone] = useState<number | null>(null);
   const [quitOpen, setQuitOpen] = useState(false);
   // Opening a lesson with every water pot empty shows the empty-pots sheet straight away.
   const kid = useIsKid();
@@ -107,10 +110,14 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
 
   const finish = () => {
     const graded = attempts.current;
+    // Did this lesson finish a part? Then the completion screen offers the certificate.
+    const unit = mode.kind === 'lesson' ? UNITS.find((u) => u.chapters.some((c) => c.lessons.some((l) => l.id === mode.lessonId))) : undefined;
+    const wasFinished = unit ? partFinished(unit, useApp.getState().done) : true;
     const rw =
       mode.kind === 'lesson'
         ? completeLesson({ lessonId: mode.lessonId, graded, mistakes: mistakes.current })
         : completePractice(mode.practice);
+    if (unit && !wasFinished && partFinished(unit, useApp.getState().done)) setPartDone(unit.n);
     completeFeedback();
     setReward(rw);
   };
@@ -130,7 +137,16 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   }, [steps, mode.kind]);
 
   if (reward) {
-    return <Complete reward={reward} phrases={phrases} practice={mode.kind === 'practice'} onDone={exit} />;
+    return (
+      <Complete
+        reward={reward}
+        phrases={phrases}
+        practice={mode.kind === 'practice'}
+        onDone={exit}
+        partDone={partDone}
+        onCertificate={() => partDone && router.replace(`/certificate/${partDone}`)}
+      />
+    );
   }
   if (!step) return null;
 

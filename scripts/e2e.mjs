@@ -321,6 +321,35 @@ async function placement() {
   await page.getByTestId('unit-2').scrollIntoViewIfNeeded();
   await shot(page, 'mobile-18-part-2');
 
+  // Certificates: skipping chapters with the test counts, but Part 1's final conversation must be played.
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('certificates-card').waitFor();
+  ok((await page.getByTestId('cert-open-1').getAttribute('aria-label')).includes('Finish Part 1 to get it'), 'the certificate waits for the final conversation to be played');
+  await page.getByTestId('cert-open-1').click();
+  ok(await page.getByTestId('cert-not-yet').waitFor({ timeout: 5000 }).then(() => true, () => false), 'and its page says what is left to do');
+  await page.goto(`${BASE}/chapter/c12`);
+  await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('lesson-row-c12-l1').click();
+  await page.getByTestId('lesson-player').waitFor();
+  ok(await playLesson(page), 'played the first part of the final conversation');
+  ok((await page.getByTestId('done-certificate').count()) === 0, 'no certificate yet halfway through');
+  await page.getByTestId('complete-continue').click();
+  await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('lesson-row-c12-l2').click();
+  await page.getByTestId('lesson-player').waitFor();
+  ok(await playLesson(page), 'played the rest of the final conversation');
+  ok(await page.getByTestId('done-certificate').waitFor({ timeout: 3000 }).then(() => true, () => false), 'finishing Part 1 offers the certificate');
+  await shot(page, 'mobile-18b-part-done');
+  await page.getByTestId('complete-certificate').click();
+  await page.getByTestId('cert-card').waitFor();
+  ok((await page.getByTestId('cert-name').inputValue()) === 'Kato', 'the certificate starts with the learner\'s name');
+  await page.getByTestId('cert-name').fill('Kato Ssemakula');
+  ok((await page.getByTestId('cert-card-name').innerText()) === 'Kato Ssemakula', 'the preview shows the name as it is typed');
+  ok((await page.getByTestId('cert-card').getAttribute('aria-label')).includes('has completed Part 1 · Absolute Foundations'), 'it names the part');
+  await shot(page, 'mobile-18c-certificate');
+  await page.goto(BASE);
+  await page.getByTestId('screen-home').waitFor();
+
   // Play the first Part 2 lesson.
   await page.getByTestId('tile-c13').click();
   await page.getByTestId('screen-chapter').waitFor();

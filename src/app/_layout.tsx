@@ -66,6 +66,7 @@ export default function RootLayout() {
           <Stack.Screen name="phrase/[id]" options={{ presentation: 'modal' }} />
           <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="learners" />
+          <Stack.Screen name="certificate/[part]" />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />

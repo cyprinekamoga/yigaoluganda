@@ -7,7 +7,7 @@
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -133,6 +133,12 @@ function fakeBackend() {
       }
       return json(route, state.children);
     }
+    if (p === '/rest/v1/rpc/issue_certificate') {
+      state.certCalls = [...(state.certCalls ?? []), body];
+      state.cert ??= { code: 'YO-ABCD-EFGH-JK23', issued_at: '2026-11-16T09:00:00Z' };
+      return json(route, state.cert.code);
+    }
+    if (p === '/rest/v1/certificates') return json(route, state.cert ? [{ issued_at: state.cert.issued_at }] : []);
     if (p === '/rest/v1/progress') {
       if (req.method() === 'POST') {
         state.progress = body.data ?? (Array.isArray(body) ? body[0]?.data : null);
@@ -278,6 +284,44 @@ async function run() {
   await page.getByTestId('gate-submit').click();
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'a grown-up switches back to the parent');
+
+  // Certificates: once Part 1 is finished, the account's server issues one with a code.
+  const part1 = JSON.parse(readFileSync(path.join(ROOT, 'content/unit-1/chapters.json'), 'utf8')).flatMap((c) => c.lessons.map((l) => l.id));
+  const finished = Object.fromEntries(part1.map((id) => [id, { completedAt: Date.now(), bestAccuracy: 1, plays: 1 }]));
+  backend.state.progress = { ...backend.state.progress, done: { ...backend.state.progress?.done, ...finished } };
+  await page.evaluate((done) => {
+    const raw = JSON.parse(localStorage.getItem('yiga-oluganda-v2'));
+    raw.state.done = { ...raw.state.done, ...done };
+    localStorage.setItem('yiga-oluganda-v2', JSON.stringify(raw));
+  }, finished);
+  await page.reload();
+  await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('cert-open-1').click();
+  await page.getByTestId('cert-name').waitFor();
+  ok((await page.getByTestId('cert-name').inputValue()) === 'Sara', 'the certificate page starts with the learner\'s name');
+  await page.getByTestId('cert-name').fill('Sara Nalwoga');
+  await page.getByTestId('cert-issue').click();
+  await page.getByTestId('cert-pdf').waitFor({ timeout: 10000 });
+  ok((await page.getByTestId('cert-code').innerText()) === 'YO-ABCD-EFGH-JK23', 'the server issues the certificate with its code');
+  const call = backend.state.certCalls?.[0] ?? {};
+  ok(call.p_learner === 'main' && call.p_part === 1 && call.p_name === 'Sara Nalwoga' && call.p_lang === 'en', 'it is issued to the account holder, for Part 1, with the name given');
+  await shot(page, '05-certificate');
+  await page.getByTestId('cert-pdf').click();
+  await page.waitForTimeout(800);
+  const printed = await page.evaluate(() => [...document.querySelectorAll('iframe')].map((f) => f.contentDocument?.body?.innerText ?? '').join(' '));
+  ok(printed.includes('Sara Nalwoga') && printed.includes('YO-ABCD-EFGH-JK23') && printed.includes('yigaoluganda.com/verify/?c=YO-ABCD-EFGH-JK23'), '"Save as PDF" prints the certificate page with the name, code and check link');
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: BASE });
+  await page.evaluate(() => Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }));
+  await page.getByTestId('cert-share').click();
+  await page.getByTestId('form-ok').waitFor({ timeout: 5000 }).catch(() => undefined);
+  ok((await page.evaluate(() => navigator.clipboard.readText())) === 'https://yigaoluganda.com/verify/?c=YO-ABCD-EFGH-JK23', 'without a share sheet, "Share the link" copies the check link');
+  await page.waitForTimeout(2500);
+  ok(backend.state.progress?.certs?.['1']?.code === 'YO-ABCD-EFGH-JK23', 'the certificate is kept with the learner\'s progress in the account');
+  await page.getByTestId('back').click();
+  await page.getByTestId('certificates-card').waitFor();
+  ok((await page.getByTestId('cert-open-1').getAttribute('aria-label')).includes('YO-ABCD-EFGH-JK23'), 'the Me tab lists the certificate by its code');
+  await page.getByTestId('tab-home').click();
 
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('open-settings').click();

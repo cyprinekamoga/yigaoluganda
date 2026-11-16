@@ -4,7 +4,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { APP_URL, COMPANY, SITE_URL } from './src/company.mjs';
+import { APP_URL, COMPANY, SITE_URL, SUPABASE_KEY, SUPABASE_URL } from './src/company.mjs';
 import { CONTENT } from './src/content.mjs';
 import { privacy, terms } from './src/legal.mjs';
 import { priceLine, quote } from './src/pricing.mjs';
@@ -272,6 +272,84 @@ ${footer(t)}
 `;
 }
 
+/** "Check a certificate": looks the code up with the public verify_certificate function. */
+function verifyPage(t) {
+  const v = t.verify;
+  const parts = Object.fromEntries(course.parts.map((p) => [p.n, p.title[t.lang]]));
+  const strings = { ...v, parts };
+  // The language switch leads to the same page in the other language.
+  const switchTo = { ...t, other: { ...t.other, path: CONTENT[t.other.lang].verify.path } };
+  return `${head(t, { title: `${v.title} – Yiga Oluganda`, description: v.lead, pathname: v.path, alternates: false })}
+<body>
+${header(switchTo)}
+<main id="main" class="legal wrap narrow verify">
+  <p><a href="${t.path}">${esc(t.legal.back)}</a></p>
+  <h1>${esc(v.title)}</h1>
+  <p>${esc(v.lead)}</p>
+  <form id="verify-form" class="verify-form" novalidate>
+    <label for="code">${esc(v.label)}</label>
+    <div class="verify-row">
+      <input id="code" name="c" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="YO-XXXX-XXXX-XXXX" maxlength="24" required>
+      <button class="btn btn-primary" type="submit">${esc(v.button)}</button>
+    </div>
+  </form>
+  <div id="verify-result" class="verify-result" role="status" aria-live="polite"></div>
+</main>
+${footer(switchTo)}
+<script>
+(() => {
+  const S = ${JSON.stringify(strings).replace(/</g, '\\u003c')};
+  const URL_ = ${JSON.stringify(`${SUPABASE_URL}/rest/v1/rpc/verify_certificate`)};
+  const KEY = ${JSON.stringify(SUPABASE_KEY)};
+  const form = document.getElementById('verify-form');
+  const input = document.getElementById('code');
+  const out = document.getElementById('verify-result');
+  const fill = (s, vars) => s.replace(/\\{(\\w+)\\}/g, (m, k) => (k in vars ? vars[k] : m));
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  function normalize(raw) {
+    const s = raw.toUpperCase().replace(/[^0-9A-Z]/g, '');
+    const body = s.startsWith('YO') ? s.slice(2) : s;
+    if (body.length !== 12) return null;
+    const code = 'YO-' + body.slice(0, 4) + '-' + body.slice(4, 8) + '-' + body.slice(8);
+    return /^YO-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/.test(code) ? code : null;
+  }
+  function show(kind, nodes) {
+    out.className = 'verify-result ' + kind;
+    out.replaceChildren(...nodes);
+  }
+  async function check(raw) {
+    const code = normalize(raw);
+    if (!code) return show('bad', [el('p', null, S.badCode)]);
+    input.value = code;
+    history.replaceState(null, '', '?c=' + encodeURIComponent(code));
+    show('wait', [el('p', null, S.checking)]);
+    try {
+      const res = await fetch(URL_, { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: code }) });
+      if (!res.ok) throw new Error(String(res.status));
+      const rows = await res.json();
+      if (!rows.length) return show('bad', [el('p', null, S.invalid)]);
+      const r = rows[0];
+      const date = new Date(r.issued_at).toLocaleDateString(S.dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+      show('ok', [
+        el('p', 'verify-badge', '✓ ' + S.valid),
+        el('p', 'verify-name', r.learner_name),
+        el('p', null, fill(S.completed, { n: r.part, title: S.parts[r.part] || '' })),
+        el('p', 'verify-meta', [r.phrases > 0 ? fill(S.phrases, { n: r.phrases }) : '', fill(S.issued, { date }), code].filter(Boolean).join(' · ')),
+      ]);
+    } catch {
+      show('bad', [el('p', null, S.error)]);
+    }
+  }
+  form.addEventListener('submit', (e) => { e.preventDefault(); check(input.value); });
+  const start = new URLSearchParams(location.search).get('c');
+  if (start) { input.value = start; check(start); }
+})();
+</script>
+</body>
+</html>
+`;
+}
+
 function notFound() {
   const t = CONTENT.en;
   return `${head(t, { title: 'Not found – Yiga Oluganda', description: 'Page not found', pathname: '/404', alternates: false })}
@@ -301,6 +379,7 @@ for (const t of Object.values(CONTENT)) {
   write(`${t.path.slice(1)}index.html`, home(t));
   write(`${t.legal.terms.slice(1)}index.html`, legalPage(t, terms(t.lang, companyIn(t.lang)), t.legal.terms));
   write(`${t.legal.privacy.slice(1)}index.html`, legalPage(t, privacy(t.lang, companyIn(t.lang)), t.legal.privacy));
+  write(`${t.verify.path.slice(1)}index.html`, verifyPage(t));
   pages.push(t.path, t.legal.terms, t.legal.privacy);
 }
 write('404.html', notFound());

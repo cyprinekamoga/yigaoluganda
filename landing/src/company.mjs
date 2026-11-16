@@ -19,3 +19,8 @@ export const APP_URL = 'https://app.yigaoluganda.com';
 
 /** The landing page's own address, for canonical links, the sitemap and social previews. */
 export const SITE_URL = 'https://yigaoluganda.com';
+
+/** The app's Supabase project. The publishable key is public; the check page uses it to look
+ * up a certificate by its code (and nothing else: the database only allows that lookup). */
+export const SUPABASE_URL = 'https://qbagcpemtsqaoykwqger.supabase.co';
+export const SUPABASE_KEY = 'sb_publishable_uYoU_bNVB5jhL3_nPzegBQ_DqqKF4KJ';

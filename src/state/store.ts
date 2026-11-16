@@ -68,6 +68,17 @@ export interface Data {
   factIndex: number;
   /** The placement test has been taken or declined (hides the offer on the home screen). */
   placementSeen: boolean;
+  /** Certificates issued for finished parts, by part number. */
+  certs: Record<string, IssuedCert>;
+}
+
+/** A certificate the account's server issued (the code is what makes it checkable). */
+export interface IssuedCert {
+  code: string;
+  /** The name printed on it. */
+  name: string;
+  issuedAt: number;
+  phrases: number;
 }
 
 interface Actions {
@@ -89,6 +100,7 @@ interface Actions {
   /** Marks whole chapters as done after the placement test, and adds their phrases to review. */
   placeOut(chapterIds: string[]): void;
   setPlacementSeen(): void;
+  saveCert(part: number, cert: IssuedCert): void;
   reset(): void;
 }
 
@@ -105,6 +117,7 @@ const fresh = (): Data => ({
   badges: {},
   factIndex: 0,
   placementSeen: false,
+  certs: {},
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
@@ -122,6 +135,7 @@ export function snapshot(s: Data): Data {
     badges: s.badges,
     factIndex: s.factIndex,
     placementSeen: s.placementSeen,
+    certs: s.certs,
   };
 }
 
@@ -248,6 +262,7 @@ export const useApp = create<AppState>()(
           }),
 
         setPlacementSeen: () => set({ placementSeen: true }),
+        saveCert: (part, cert) => set((s) => ({ certs: { ...s.certs, [String(part)]: cert } })),
 
         reset: () => set({ ...fresh() }),
       };

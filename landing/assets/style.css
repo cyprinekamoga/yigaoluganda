@@ -166,3 +166,18 @@ p { margin: 0 0 1em; }
 .notfound { text-align: center; padding: 80px 16px; }
 .notfound img { margin: 0 auto 16px; }
 .notfound .btn { margin: 6px; }
+
+/* Check a certificate */
+.verify-form { display: grid; gap: 8px; margin: 24px 0 18px; }
+.verify-form label { font-weight: 700; }
+.verify-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.verify-row input { flex: 1 1 220px; min-height: 52px; padding: 0 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 1.1rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.verify-row input:focus { outline: none; border-color: var(--neon); }
+.verify-row .btn { border: 0; cursor: pointer; font-family: inherit; }
+.verify-result:empty { display: none; }
+.verify-result { border-radius: var(--radius); padding: 20px 22px; border: 1px solid var(--line); background: var(--card); }
+.verify-result p { margin: 0.3em 0; }
+.verify-result.ok { border-color: var(--neon); }
+.verify-badge { color: var(--neon); font-weight: 800; }
+.verify-name { font-size: 1.6rem; font-weight: 800; color: var(--ink) !important; }
+.verify-meta { font-size: 0.95rem; }

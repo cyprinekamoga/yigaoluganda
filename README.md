@@ -39,6 +39,8 @@ It is for absolute beginners, diaspora heritage learners, travellers and anyone 
 | **Practice Lab** | Spaced-repetition review, which fills your water pots. You can replay finished conversations. There is audio matching and Speak & compare. Practice never spills water |
 | **Phrasebook** | Works offline. Search accepts *ng'* for ŋ and single letters for doubled ones. Phrases are grouped by everyday situation, and a **Roots & prefixes** guide covers *oku-*, *si-*, *n-/m-/ŋ-*, *tu-/mu-/ba-*, *w-/mw-* and *-ange* |
 | **Me** | Phrases learned (out of every phrase in the course), drumbeat, cowries, this week (one drum per day), a chapter map with a bead string per chapter, your shields, and a **Practise with family** card |
+| **Kids mode** | *Who's learning?* (on the Me tab): a parent adds up to four children, each with their own progress, kept in the account (`child_profiles`). In a child's profile there are no water pots to lose, no settings, payments or account actions, and leaving it, or adding and changing profiles, takes a grown-up check (a times-table question written in words) |
+| **Certificates** | Finishing every chapter of a part, with its final conversation played (not skipped by the placement test), earns a certificate. The learner writes the name to print; the `issue_certificate` function checks the subscription and gives a code like `YO-ABCD-EFGH-JK23`. The certificate saves as an A4 PDF (the browser's print window on the web, `expo-print` + `expo-sharing` on phones) and its link opens [yigaoluganda.com/verify](https://yigaoluganda.com/verify/), where anyone can check the code (`verify_certificate` shows only the name, part, phrase count and date). Children get their own. Listed on the Me tab; the end of a part's last lesson offers it |
 | **Languages** | The interface is in English or Swedish. You choose it at the start and can change it in Settings |
 | **Did you know?** | Each new-phrase screen ends with a fun fact about Uganda or Buganda (27 so far, in [`content/facts.json`](content/facts.json)). They are shown in order, so none repeats until you have seen them all |
 | **Type** | The device's system font: San Francisco on iPhone, iPad and Mac (and in Safari), Roboto on Android. Nothing is bundled, and every weight covers Luganda's ŋ and Swedish å ä ö |
@@ -209,7 +211,7 @@ scripts/            audio, icons, sound effects, content report, e2e
 
 ### Privacy
 
-There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device. Learners can delete their account in the app.
+There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device. A certificate's name, part, phrase count and date can be seen by anyone with its code. Learners can delete their account in the app.
 
 The previous web version of the app, based on the book *Luganda för beginners* by Cyprine Kamoga, is in the git history at commit `6a7fad7`.
 
@@ -223,6 +225,8 @@ The previous web version of the app, based on the book *Luganda för beginners* 
 - En startsida med två delar: del 1 (12 kapitel) och del 2, Vardagen (9 kapitel om familj, siffror, marknaden, mat, tid, vägbeskrivningar, besök och hälsa), med ett pärlband per kapitel. Kapitlen öppnas i den ordning du själv väljer.
 - Ett nivåtest (”Kan du redan lite luganda?”) som låter dig hoppa över kapitlen du redan kan.
 - En daglig påminnelse om du vill: en notis i mobilen, ett mejl på webben.
+- Barnläge: upp till fyra barnprofiler med egna framsteg, utan vattenkrukor, och en vuxenkontroll för att lämna profilen.
+- Diplom när en del är klar, med en kod som vem som helst kan kontrollera på yigaoluganda.com/sv/verify/, och som PDF att skriva ut.
 - Lektioner med cirka 10 steg av 7 övningstyper: ljud- och vokalmatchning, para ihop, bygga meningar, diktamen, prata och jämföra, rollspel och kulturtips.
 - Ett eget spelsystem från Buganda: vattenkrukor (ett fel spiller en kruka), kaurisnäckor, trumslag för dagar i rad och sköldar. Framsteg räknas i fraser du kan, inte poäng.
 - Ett övningslabb med repetition som fyller vattenkrukorna.

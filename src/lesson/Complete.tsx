@@ -16,7 +16,22 @@ import { Footer } from './Footer';
  * The end of a lesson: what you can now say, not a score. Lists the phrases the lesson taught
  * (or, for practice, the ones it went over), then the cowries earned and any new shield.
  */
-export function Complete({ reward, phrases, practice, onDone }: { reward: Reward; phrases: string[]; practice: boolean; onDone: () => void }) {
+export function Complete({
+  reward,
+  phrases,
+  practice,
+  onDone,
+  partDone,
+  onCertificate,
+}: {
+  reward: Reward;
+  phrases: string[];
+  practice: boolean;
+  onDone: () => void;
+  /** This lesson finished a part: its number, for the certificate card. */
+  partDone?: number | null;
+  onCertificate?: () => void;
+}) {
   const { t, tr } = useT();
   const badge = reward.badges[0];
   const n = phrases.length;
@@ -65,6 +80,14 @@ export function Complete({ reward, phrases, practice, onDone }: { reward: Reward
           )}
         </View>
 
+        {partDone ? (
+          <Card style={styles.cert} testID="done-certificate">
+            <Txt variant="h3">{t('cert.ready', { n: partDone })}</Txt>
+            <Txt variant="small">{t('cert.readyBody')}</Txt>
+            <Button kind="neon" testID="complete-certificate" label={t('cert.get')} onPress={onCertificate} />
+          </Card>
+        ) : null}
+
         {reward.badges.map((id) => (
           <Card key={id} style={styles.badge} testID={`new-badge-${id}`}>
             <BadgeMedal id={id} earned size={60} />
@@ -98,4 +121,5 @@ const styles = StyleSheet.create({
   pillNeon: { backgroundColor: C.neon },
   pillText: { ...F.semi, fontSize: 15, color: C.ink },
   badge: { flexDirection: 'row', alignItems: 'center', gap: S.md, alignSelf: 'stretch' },
+  cert: { alignSelf: 'stretch', gap: S.sm, borderColor: C.neon },
 });
