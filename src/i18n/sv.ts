@@ -524,4 +524,11 @@ export const sv: Record<Key, string> = {
   'goal.three': "3 om dagen: seriöst",
   'goal.threeHint': "Ungefär 15 minuter",
   'goal.doneToday': "Dagens mål nått!",
+  'email.change': "Byt e-postadress",
+  'email.new': "Ny e-postadress",
+  'email.hint': "Vi skickar en länk till den nya adressen. Adressen byts när du klickar på den.",
+  'email.save': "Skicka länken",
+  'email.sent': "Titta i {email} och klicka på länken. Kommer det en länk till din nuvarande adress också, klicka på den med. Till dess loggar du in med din nuvarande adress.",
+  'data.download': "Ladda ner mina uppgifter",
+  'data.hint': "En fil med allt vi sparar om ditt konto: framsteg, diplom, feedback och prenumeration.",
 };

@@ -522,6 +522,13 @@ export const en = {
   'goal.three': "3 a day: serious",
   'goal.threeHint': "About 15 minutes",
   'goal.doneToday': "Daily goal reached!",
+  'email.change': "Change e-mail address",
+  'email.new': "New e-mail address",
+  'email.hint': "We’ll send a link to the new address. Your address changes when you click it.",
+  'email.save': "Send the link",
+  'email.sent': "Check {email} and click the link. If a link also comes to your current address, click that one too. Until then you log in with your current address.",
+  'data.download': "Download my data",
+  'data.hint': "A file with everything we keep about your account: progress, certificates, feedback and subscription.",
 } as const;
 
 export type Key = keyof typeof en;

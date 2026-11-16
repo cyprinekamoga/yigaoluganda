@@ -48,7 +48,7 @@ function fakeBackend() {
     expires_in: 3600,
     expires_at: Math.floor(Date.now() / 1000) + 3600,
     refresh_token: 'test-refresh-token',
-    user: { id: uid, aud: 'authenticated', role: 'authenticated', email, identities: [{ id: uid }], user_metadata: { name: state.profile?.name ?? '' }, app_metadata: {}, created_at: new Date().toISOString() },
+    user: { id: uid, aud: 'authenticated', role: 'authenticated', email, identities: [{ id: uid, provider: 'email' }], user_metadata: { name: state.profile?.name ?? '' }, app_metadata: {}, created_at: new Date().toISOString() },
   });
   const json = (route, body, status = 200) => route.fulfill({ status, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) });
 
@@ -144,8 +144,11 @@ function fakeBackend() {
     if (p === '/auth/v1/logout') return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
     if (p === '/auth/v1/user') {
       if (req.method() === 'PUT') {
-        if (body.password) state.users.set([...state.users.keys()][0], body.password);
-        state.passwordChanged = true;
+        if (body.password) {
+          state.users.set([...state.users.keys()][0], body.password);
+          state.passwordChanged = true;
+        }
+        if (body.email) state.emailChange = body.email;
       }
       return json(route, session([...state.users.keys()][0]).user);
     }
@@ -468,6 +471,21 @@ async function run() {
   await page.getByText('nakato@example.com').waitFor({ timeout: 5000 });
   ok(backend.state.setReviewer?.p_email === 'nakato@example.com' && backend.state.setReviewer?.p_on === true, 'the owner adds a reviewer by e-mail');
   backend.state.role = null;
+
+  // Settings: download my data, and change the e-mail address.
+  await page.goto(`${BASE}/settings`);
+  await page.getByTestId('download-data').waitFor({ timeout: 15000 });
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('download-data').click()]);
+  const exported = JSON.parse(readFileSync(await download.path(), 'utf8'));
+  ok(
+    download.suggestedFilename().startsWith('yiga-oluganda-data-') && exported.account?.email === 'sara@example.com' && exported.this_device?.profile?.name === 'Sara' && Array.isArray(exported.certificates) && Array.isArray(exported.reported_mistakes),
+    '"Download my data" saves a file with the account, progress, certificates and reports',
+  );
+  await page.getByTestId('change-email').click();
+  await page.getByTestId('new-email').fill('sara.new@example.com');
+  await page.getByTestId('email-save').click();
+  await page.getByTestId('form-ok').waitFor({ timeout: 5000 });
+  ok(backend.state.emailChange === 'sara.new@example.com' && (await page.getByTestId('form-ok').innerText()).includes('sara.new@example.com'), 'changing the e-mail sends a link to the new address and says where to look');
   await page.goto(`${BASE}/`);
   await page.getByTestId('screen-home').waitFor({ timeout: 15000 });
 

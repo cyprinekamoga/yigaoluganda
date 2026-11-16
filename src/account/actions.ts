@@ -94,6 +94,16 @@ export async function updatePassword(password: string): Promise<Outcome> {
   return { ok: true };
 }
 
+/** Asks to move the account to a new e-mail address. Supabase e-mails a link; the address changes once it is clicked. */
+export async function changeEmail(email: string): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  const clean = email.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) return fail('auth.errEmail');
+  const { error } = await supabase.auth.updateUser({ email: clean }, { emailRedirectTo: returnUrl('/settings') });
+  if (error) return fail(explain(error));
+  return { ok: true };
+}
+
 export async function signOut(): Promise<void> {
   if (!supabase) return;
   stopSync();

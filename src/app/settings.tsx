@@ -16,6 +16,7 @@ import { BackBar } from '@/ui/BackBar';
 import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
 import { GoalPicker } from '@/ui/DailyGoal';
+import { ChangeEmailButton, DownloadDataButton } from '@/account/AccountData';
 import { Screen } from '@/ui/Screen';
 import { Sheet } from '@/ui/Sheet';
 import { C, F, R, S } from '@/ui/theme';
@@ -173,8 +174,10 @@ export default function Settings() {
               </Txt>
             </View>
             {role && <Button kind="secondary" testID="open-review" label={t('review.open')} onPress={() => router.push('/review')} />}
+            <ChangeEmailButton />
             <Button kind="secondary" testID="change-password" label={t('settings.changePassword')} onPress={() => setRecovering(true)} />
             <Button kind="secondary" testID="logout" label={t('settings.logOut')} onPress={() => signOut()} />
+            <DownloadDataButton />
             <Button kind="ghost" testID="delete-account" label={t('settings.delete')} onPress={() => setSheet('delete')} />
           </Card>
         </View>
