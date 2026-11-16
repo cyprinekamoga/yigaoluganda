@@ -24,6 +24,7 @@ export default function RootLayout() {
   const signedIn = useAccount(selectSignedIn);
   const access = useAccount(selectAccess);
   const recovering = useAccount((s) => s.recovering);
+  const confirmLink = useAccount((s) => s.confirmLink);
   useEffect(() => startAccount(), []);
   useReminderSchedule();
 
@@ -76,6 +77,11 @@ export default function RootLayout() {
         {/* Without a subscription, "Choose your plan" is the only screen, so it is where the app goes. */}
         <Stack.Protected guard={canLearn}>
           <Stack.Screen name="settings" />
+        </Stack.Protected>
+        {/* Where the sign-up and password e-mails lead, signed in or not. Only when opened from such a link,
+            so it is never where the app sends someone by default. */}
+        <Stack.Protected guard={ACCOUNTS && confirmLink}>
+          <Stack.Screen name="confirm" />
         </Stack.Protected>
       </Stack>
     </SafeAreaProvider>

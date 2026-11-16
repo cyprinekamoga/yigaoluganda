@@ -62,8 +62,21 @@ function fakeBackend() {
     if (p === '/auth/v1/signup') {
       if (state.users.has(body.email)) return json(route, { code: 'user_already_exists', msg: 'User already registered' }, 422);
       state.users.set(body.email, body.password);
+      state.signedUpWith = body.email;
       state.profile = { name: body.data?.name ?? '', ui_lang: body.data?.ui_lang ?? 'en', created_at: new Date().toISOString() };
+      // With e-mail confirmation on, Supabase answers with the user only (no session).
+      if (state.confirmRequired) return json(route, session(body.email).user);
       return json(route, session(body.email));
+    }
+    if (p === '/auth/v1/resend') {
+      state.resends = (state.resends ?? 0) + 1;
+      return json(route, {});
+    }
+    if (p === '/auth/v1/verify' && req.method() === 'POST') {
+      // The button on /confirm uses the one-time code from the e-mail.
+      if (body.token_hash !== 'good-code') return json(route, { code: 'otp_expired', msg: 'Email link is invalid or has expired' }, 403);
+      state.verified = body.type;
+      return json(route, session([...state.users.keys()][0] ?? 'ada@example.com'));
     }
     if (p === '/auth/v1/token') {
       if (state.users.get(body.email) !== body.password) return json(route, { code: 'invalid_credentials', error: 'invalid_grant', error_description: 'Invalid login credentials' }, 400);
@@ -253,6 +266,64 @@ async function run() {
   await reset.getByTestId('screen-reset').waitFor({ state: 'detached', timeout: 15000 });
   ok(resetBackend.state.passwordChanged === true, 'saving the new password updates it and leaves the reset screen');
   await reset.close();
+
+  // Sign-up with e-mail confirmation on (as on the live site).
+  const conf = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const confBackend = fakeBackend();
+  confBackend.state.confirmRequired = true;
+  await conf.route(`${API}/**`, confBackend.handle);
+  await conf.goto(`${BASE}/sign-up`);
+  await conf.getByTestId('screen-sign-up').waitFor({ timeout: 15000 });
+  await conf.getByTestId('signup-name').fill('Ada');
+  await conf.getByTestId('signup-email').fill('ada@gmail.clm');
+  await conf.getByTestId('signup-password').fill('a-good-password');
+  await conf.getByTestId('signup-submit').click();
+  await conf.getByTestId('email-suggestion').waitFor({ timeout: 5000 });
+  ok((await conf.getByTestId('email-suggestion').innerText()).includes('ada@gmail.com'), 'a typo like gmail.clm is caught: "Did you mean ada@gmail.com?"');
+  ok(!confBackend.state.signedUpWith, 'and nothing is sent until the learner answers');
+  await conf.getByTestId('email-suggestion-use').click();
+  await conf.getByTestId('screen-check-email').waitFor({ timeout: 10000 });
+  ok(confBackend.state.signedUpWith === 'ada@gmail.com', 'the corrected address is used');
+  const checkText = await conf.getByTestId('screen-check-email').innerText();
+  ok(checkText.includes('newest') && checkText.includes('Spam'), '"Check your inbox" says to open the newest e-mail and look in Spam');
+  ok((await conf.getByTestId('resend').innerText()).includes('Send again in'), '"Send again" waits a minute, so earlier links aren\'t cancelled by accident');
+  await conf.getByTestId('change-email').click();
+  await conf.getByTestId('screen-sign-up').waitFor();
+  ok(true, 'a wrong address can be changed');
+  await conf.close();
+
+  // The e-mail's link opens /confirm; the code is only used when the person taps the button.
+  const link = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const linkBackend = fakeBackend();
+  linkBackend.state.users.set('ada@example.com', 'a-good-password');
+  linkBackend.state.profile = { name: 'Ada', ui_lang: 'en', created_at: new Date().toISOString() };
+  await link.route(`${API}/**`, linkBackend.handle);
+  await link.goto(`${BASE}/confirm?token_hash=good-code&type=email&lang=en`);
+  await link.getByTestId('screen-confirm').waitFor({ timeout: 15000 });
+  ok(!linkBackend.state.verified, 'opening the link alone uses nothing up (mail scanners can\'t spoil it)');
+  await link.getByTestId('confirm-submit').click();
+  await link.getByTestId('screen-subscribe').waitFor({ timeout: 15000 });
+  ok(linkBackend.state.verified === 'email', 'tapping "Confirm my account" logs in and leads to the plan');
+  await link.close();
+
+  const old = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  await old.route(`${API}/**`, fakeBackend().handle);
+  await old.goto(`${BASE}/confirm?token_hash=old-code&type=email`);
+  await old.getByTestId('confirm-submit').click();
+  await old.getByTestId('form-error').waitFor({ timeout: 10000 });
+  ok((await old.getByTestId('form-error').innerText()).includes('expired'), 'an old link says it has expired and offers to log in');
+  await old.close();
+
+  const resetLink = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const rlBackend = fakeBackend();
+  rlBackend.state.users.set('ada@example.com', 'a-good-password');
+  rlBackend.state.profile = { name: 'Ada', ui_lang: 'en', created_at: new Date().toISOString() };
+  await resetLink.route(`${API}/**`, rlBackend.handle);
+  await resetLink.goto(`${BASE}/confirm?token_hash=good-code&type=recovery&lang=en`);
+  await resetLink.getByTestId('confirm-submit').click();
+  await resetLink.getByTestId('screen-reset').waitFor({ timeout: 15000 });
+  ok(rlBackend.state.verified === 'recovery', 'the new password e-mail leads to "Choose a new password"');
+  await resetLink.close();
 
   // An expired or already-used link (mail apps sometimes open links to scan them) explains itself.
   const expired = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });

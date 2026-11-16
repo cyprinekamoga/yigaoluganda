@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { signIn } from '@/account/actions';
+import { resendConfirmation, signIn } from '@/account/actions';
 import { AuthShell, FormMessage } from '@/account/AuthShell';
 import { useT, type Key } from '@/i18n';
 import { Button } from '@/ui/Button';
@@ -15,6 +15,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<Key | null>(null);
+  const [resent, setResent] = useState(false);
 
   const submit = async () => {
     setBusy(true);
@@ -48,6 +49,22 @@ export default function SignIn() {
         onSubmitEditing={submit}
       />
       <FormMessage text={error ? t(error) : null} />
+      {/* Not confirmed yet: send a fresh link from here (the newest e-mail is the one that works). */}
+      {error === 'auth.errConfirm' && (
+        <>
+          <FormMessage text={resent ? t('auth.resentNewest') : null} tone="ok" />
+          <Button
+            testID="signin-resend"
+            kind="secondary"
+            label={t('auth.resend')}
+            onPress={async () => {
+              const r = await resendConfirmation(email);
+              if (r.ok) setResent(true);
+              else setError(r.error);
+            }}
+          />
+        </>
+      )}
       <Button testID="signin-submit" label={t('auth.logIn')} onPress={submit} loading={busy} disabled={!email.trim() || !password} />
       <Link href="/forgot-password" style={styles.link} testID="go-forgot">
         {t('auth.forgot')}

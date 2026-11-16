@@ -16,6 +16,8 @@ interface AccountState {
   recovering: boolean;
   /** The app was opened from an e-mail link that had expired or was already used. */
   linkError: boolean;
+  /** Opened from an e-mail's link to /confirm, and the button hasn't been used yet. */
+  confirmLink: boolean;
 }
 
 /** Kept for the browser tab, so reloading the "new password" page doesn't lose it. */
@@ -34,6 +36,7 @@ export const useAccount = create<AccountState>(() => ({
   subscriptions: [],
   recovering: ACCOUNTS && (OPENING_LINK.recovery || savedRecovery()),
   linkError: ACCOUNTS && Boolean(OPENING_LINK.error),
+  confirmLink: ACCOUNTS && OPENING_LINK.confirm,
 }));
 
 /** Starts or ends "choose a new password" (ends after saving it, or on logging out). */

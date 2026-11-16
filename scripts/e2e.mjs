@@ -1,8 +1,8 @@
 // End-to-end check of the web build with Playwright (pre-installed Chromium).
 // Usage: EXPO_PUBLIC_E2E=1 npx expo export -p web && node scripts/e2e.mjs [--shots]
 import { createRequire } from 'node:module';
-import { spawn } from 'node:child_process';
-import { mkdirSync } from 'node:fs';
+import { execFileSync, spawn } from 'node:child_process';
+import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,6 +15,8 @@ const PORT = 8099;
 const BASE = `http://localhost:${PORT}`;
 mkdirSync(OUT, { recursive: true });
 
+// The service worker (offline copy) is written after the export, as on the live site; add it if missing.
+if (!existsSync(path.join(ROOT, 'dist', 'sw.js'))) execFileSync('node', [path.join(ROOT, 'scripts/postexport.mjs'), 'dist'], { stdio: 'ignore' });
 const server = spawn('node', [path.join(ROOT, 'scripts/serve.mjs'), path.join(ROOT, 'dist'), String(PORT)], { stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 600));
 

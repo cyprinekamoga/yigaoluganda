@@ -9,10 +9,12 @@ import { ACCOUNTS, SUPABASE_KEY, SUPABASE_URL } from './config';
  * A password-reset link arrives as …#access_token=…&type=recovery; a link that has expired or was
  * already used (some mail apps open links to scan them) arrives as …#error_code=otp_expired&….
  */
-function readOpeningLink(): { recovery: boolean; error: string | null } {
-  if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) return { recovery: false, error: null };
+function readOpeningLink(): { recovery: boolean; error: string | null; confirm: boolean } {
+  if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) return { recovery: false, error: null, confirm: false };
   const params = new URLSearchParams(`${window.location.search.slice(1)}&${window.location.hash.slice(1)}`);
-  return { recovery: params.get('type') === 'recovery', error: params.get('error_code') ?? params.get('error') };
+  // The e-mails' links open /confirm (a page with a button); the hash form is Supabase's older one.
+  const confirm = window.location.pathname.replace(/\/+$/, '') === '/confirm';
+  return { recovery: !confirm && params.get('type') === 'recovery', error: params.get('error_code') ?? params.get('error'), confirm };
 }
 export const OPENING_LINK = readOpeningLink();
 

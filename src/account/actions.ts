@@ -20,6 +20,8 @@ function explain(e: unknown): Key {
   if (code === 'user_already_exists' || code === 'email_exists' || msg.includes('already registered')) return 'auth.errExists';
   if (code === 'weak_password' || msg.includes('password should')) return 'auth.errWeak';
   if (code === 'email_not_confirmed') return 'auth.errConfirm';
+  if (code === 'over_email_send_rate_limit' || err?.status === 429) return 'auth.errRate';
+  if (code === 'otp_expired' || code === 'flow_state_expired' || msg.includes('has expired')) return 'auth.linkExpired';
   if (code === 'email_address_invalid' || code === 'validation_failed' || msg.includes('invalid email')) return 'auth.errEmail';
   if (err?.name === 'AuthRetryableFetchError' || msg.includes('fetch') || msg.includes('network')) return 'auth.errNetwork';
   return 'auth.errGeneric';
@@ -51,6 +53,20 @@ export async function resendConfirmation(email: string): Promise<Outcome> {
   if (!supabase) return fail('auth.errGeneric');
   const { error } = await supabase.auth.resend({ type: 'signup', email: email.trim(), options: { emailRedirectTo: returnUrl('/subscribe') } });
   return error ? fail(explain(error)) : { ok: true };
+}
+
+/**
+ * The button on the page an e-mail link opens (/confirm). The e-mail carries a one-time code;
+ * using it only when the person taps the button means mail scanners that open links ahead of
+ * them (Gmail does) can't use it up first.
+ */
+export async function confirmFromLink(tokenHash: string, kind: 'email' | 'recovery'): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  if (!tokenHash) return fail('auth.linkExpired');
+  const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: kind });
+  if (error) return fail(explain(error) === 'auth.errNetwork' ? 'auth.errNetwork' : 'auth.linkExpired');
+  if (kind === 'recovery') setRecovering(true);
+  return { ok: true };
 }
 
 export async function signIn(email: string, password: string): Promise<Outcome> {
