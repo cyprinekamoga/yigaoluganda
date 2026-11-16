@@ -1,7 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createAudioPlayer, type AudioPlayer } from 'expo-audio';
+import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { FormMessage } from '@/account/AuthShell';
 import {
   answerFeedback,
@@ -19,6 +20,7 @@ import {
 } from '@/account/feedback';
 import { useAccount } from '@/account/store';
 import { PHRASES } from '@/content';
+import { Dashboard } from '@/feedback/Dashboard';
 import { RATING_ICON, RATING_KEY } from '@/feedback/Inbox';
 import { reportKindKey, useItemLabel } from '@/feedback/Report';
 import { useT, type Key } from '@/i18n';
@@ -31,7 +33,7 @@ import { TextField } from '@/ui/TextField';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
-type Tab = 'recordings' | 'reports' | 'reviewers';
+type Tab = 'overview' | 'recordings' | 'reports' | 'reviewers';
 
 /**
  * For the people who review: learners' recordings to rate, "Report a mistake" reports to close,
@@ -40,7 +42,8 @@ type Tab = 'recordings' | 'reports' | 'reviewers';
 export default function Review() {
   const { t } = useT();
   const role = useAccount((s) => s.role);
-  const [tab, setTab] = useState<Tab>('recordings');
+  const { tab: startTab } = useLocalSearchParams<{ tab?: string }>();
+  const [tab, setTab] = useState<Tab>(startTab === 'overview' ? 'overview' : 'recordings');
   const [requests, setRequests] = useState<OpenRequest[] | null | 'error'>(null);
   const [reports, setReports] = useState<ReportRow[] | null | 'error'>(null);
 
@@ -62,6 +65,7 @@ export default function Review() {
 
   const count = (x: unknown[] | null | 'error') => (Array.isArray(x) ? x.length : 0);
   const tabs: [Tab, string][] = [
+    ...(role === 'owner' ? ([['overview', t('dash.title')]] as [Tab, string][]) : []),
     ['recordings', t('review.recordings', { n: count(requests) })],
     ['reports', t('review.reports', { n: count(reports) })],
     ...(role === 'owner' ? ([['reviewers', t('review.reviewers')]] as [Tab, string][]) : []),
@@ -69,7 +73,7 @@ export default function Review() {
 
   return (
     <Screen header={<BackBar title={t('review.title')} />} testID="screen-review">
-      <View style={styles.tabs} accessibilityRole="tablist">
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabs} accessibilityRole="tablist">
         {tabs.map(([id, label]) => (
           <Pressable key={id} testID={`review-tab-${id}`} onPress={() => setTab(id)} accessibilityRole="tab" accessibilityState={{ selected: tab === id }} style={[styles.tab, tab === id && styles.tabOn]}>
             <Txt variant="small" style={[styles.tabText, tab === id && { color: C.onNeon }]} numberOfLines={1}>
@@ -77,7 +81,7 @@ export default function Review() {
             </Txt>
           </Pressable>
         ))}
-      </View>
+      </ScrollView>
 
       {tab === 'recordings' &&
         (requests === 'error' ? (
@@ -98,6 +102,7 @@ export default function Review() {
         ))}
 
       {tab === 'reviewers' && role === 'owner' && <Reviewers />}
+      {tab === 'overview' && role === 'owner' && <Dashboard />}
     </Screen>
   );
 }
@@ -278,7 +283,7 @@ function Reviewers() {
 }
 
 const styles = StyleSheet.create({
-  tabs: { flexDirection: 'row', gap: S.xs, backgroundColor: C.card, borderRadius: R.pill, padding: 4 },
+  tabs: { flexDirection: 'row', gap: S.xs, backgroundColor: C.card, borderRadius: R.pill, padding: 4, flexGrow: 1 },
   tab: { flexGrow: 1, minHeight: 40, borderRadius: R.pill, alignItems: 'center', justifyContent: 'center', paddingHorizontal: S.md },
   tabText: { ...F.semi, color: C.ink },
   tabOn: { backgroundColor: C.neon },

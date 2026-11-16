@@ -173,6 +173,7 @@ export default function Settings() {
                 {email}
               </Txt>
             </View>
+            {role === 'owner' && <Button kind="secondary" testID="open-dashboard" label={t('dash.open')} onPress={() => router.push('/review?tab=overview')} />}
             {role && <Button kind="secondary" testID="open-review" label={t('review.open')} onPress={() => router.push('/review')} />}
             <ChangeEmailButton />
             <Button kind="secondary" testID="change-password" label={t('settings.changePassword')} onPress={() => setRecovering(true)} />

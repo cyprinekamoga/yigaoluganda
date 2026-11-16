@@ -97,6 +97,14 @@ function fakeBackend() {
       return none();
     }
     if (p === '/rest/v1/reviewers') return json(route, state.role ? [{ role: state.role }] : []);
+    if (p === '/rest/v1/rpc/owner_stats') {
+      return json(route, {
+        accounts: 12, new_today: 1, new_7d: 4, new_30d: 9, paying: 3, paying_by_currency: { USD: 2, SEK: 1 }, past_due: 0, ending: 1, new_subs_30d: 3, cancelled_30d: 1, active_7d: 5,
+        reminders_on: 2, children: 0, certificates: 1, open_feedback: 1, answered_feedback: 2, open_reports: 1,
+        signups_by_day: Array.from({ length: 14 }, (_, i) => ({ day: `2026-11-${String(i + 3).padStart(2, '0')}`, n: i % 3 })),
+        top_reported: [{ item_type: 'phrase', item_id: 'oli-otya', n: 2, open: 1 }],
+      });
+    }
     if (p === '/rest/v1/rpc/list_reviewers') return json(route, state.reviewerList ?? [{ email: 'sara@example.com', role: 'owner', added_at: new Date().toISOString() }]);
     if (p === '/rest/v1/rpc/set_reviewer') {
       state.setReviewer = body;
@@ -478,6 +486,15 @@ async function run() {
   await page.getByTestId('reviewer-add').click();
   await page.getByText('nakato@example.com').waitFor({ timeout: 5000 });
   ok(backend.state.setReviewer?.p_email === 'nakato@example.com' && backend.state.setReviewer?.p_on === true, 'the owner adds a reviewer by e-mail');
+  // The owner's dashboard.
+  await page.goto(`${BASE}/settings`);
+  await page.getByTestId('open-dashboard').waitFor({ timeout: 15000 });
+  await page.getByTestId('open-dashboard').click();
+  await page.getByTestId('dashboard').waitFor({ timeout: 10000 });
+  ok((await page.getByTestId('dash-paying').innerText()).includes('3'), 'the owner\'s dashboard shows paying learners');
+  ok((await page.getByTestId('dash-revenue').innerText()).includes('8.98'), 'and the monthly revenue before VAT, per currency');
+  ok((await page.getByTestId('dashboard').innerText()).includes('Oli otya?'), 'and the most reported phrases');
+  await shot(page, '10-dashboard');
   backend.state.role = null;
 
   // Settings: download my data, and change the e-mail address.

@@ -196,3 +196,35 @@ export async function setReviewer(email: string, on: boolean): Promise<'added' |
   const { data, error } = await supabase.rpc('set_reviewer', { p_email: email.trim(), p_on: on });
   return error ? null : (data as 'added' | 'removed' | 'no_account');
 }
+
+// ---------------------------------------------------------------------------------------------
+// The owner's dashboard
+// ---------------------------------------------------------------------------------------------
+
+export interface OwnerStats {
+  accounts: number;
+  new_today: number;
+  new_7d: number;
+  new_30d: number;
+  signups_by_day: { day: string; n: number }[];
+  paying: number;
+  paying_by_currency: Record<string, number>;
+  past_due: number;
+  ending: number;
+  new_subs_30d: number;
+  cancelled_30d: number;
+  active_7d: number;
+  reminders_on: number;
+  children: number;
+  certificates: number;
+  open_feedback: number;
+  answered_feedback: number;
+  open_reports: number;
+  top_reported: { item_type: ItemType; item_id: string | null; n: number; open: number }[];
+}
+
+export async function ownerStats(): Promise<OwnerStats | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('owner_stats');
+  return error ? null : (data as OwnerStats);
+}
