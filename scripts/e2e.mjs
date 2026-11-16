@@ -227,6 +227,46 @@ async function run(viewport, label) {
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Klar'), 'progress persists after reload');
 
+  // Kids mode: a child's profile with its own progress, no water pots, and a grown-up check.
+  const WORDS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, noll: 0, ett: 1, två: 2, tre: 3, fyra: 4, fem: 5, sex: 6, sju: 7, åtta: 8, nio: 9 };
+  const passGate = async (wrongFirst = false) => {
+    await page.getByTestId('parent-gate').waitFor();
+    if (wrongFirst) {
+      await page.getByTestId('gate-answer').fill('1');
+      await page.getByTestId('gate-submit').click();
+    }
+    const q = await page.getByTestId('gate-question').innerText();
+    const [a, b] = q.toLowerCase().match(/[a-zåäö]+/g).map((w) => WORDS[w]).filter((n) => n !== undefined);
+    await page.getByTestId('gate-answer').fill(String(a * b));
+    await page.getByTestId('gate-submit').click();
+  };
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-learners').click();
+  await page.getByTestId('screen-learners').waitFor();
+  await page.getByTestId('learner-add').click();
+  await page.getByTestId('learner-name').fill('Nakato');
+  await page.getByTestId('learner-save').click();
+  await page.getByTestId('learner-Nakato').waitFor();
+  ok(true, 'a parent adds a child\'s profile');
+  await page.getByTestId('learner-Nakato').click();
+  await page.getByTestId('screen-home').waitFor();
+  ok((await page.getByTestId('home-greeting').innerText()).includes('Nakato'), 'switching to the child greets them by name');
+  ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Redo'), 'the child starts with their own progress');
+  ok((await page.getByTestId('stat-hearts').count()) === 0, 'a child\'s profile has no water pots');
+  await shot(page, `${label}-12-kid-home`);
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-settings').click();
+  await passGate(true);
+  await page.getByTestId('screen-settings').waitFor();
+  ok(true, 'settings in a child\'s profile need a grown-up (and a wrong answer doesn\'t pass)');
+  await page.getByTestId('back').click();
+  await page.getByTestId('open-learners').click();
+  await page.getByTestId('learner-main').click();
+  await passGate();
+  await page.getByTestId('screen-home').waitFor();
+  ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'leaving the child\'s profile needs a grown-up, then the parent is back');
+  ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Klar'), 'and the parent\'s progress is as it was');
+
   // Reset erases progress and returns to onboarding
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('open-settings').click();

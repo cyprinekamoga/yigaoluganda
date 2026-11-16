@@ -7,6 +7,9 @@ import { BADGES } from '@/logic/badges';
 import { dayKey, lastWeek } from '@/logic/dates';
 import { visibleStreak } from '@/logic/progress';
 import { isComplete, lessonsDone } from '@/logic/unlock';
+import { Avatar } from '@/learners/LearnerChip';
+import { useGrownUpCheck } from '@/learners/ParentGate';
+import { MAIN, useLearners } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { BadgeMedal } from '@/ui/Badge';
 import { Beads } from '@/ui/Beads';
@@ -30,6 +33,10 @@ export default function Profile() {
   const done = useApp((s) => s.done);
   const srs = useApp((s) => s.srs);
   const badges = useApp((s) => s.badges);
+  const children = useLearners((s) => s.children);
+  const active = useLearners((s) => s.active);
+  const savedMainName = useLearners((s) => s.saved[MAIN]?.profile?.name ?? '');
+  const { ask, gate } = useGrownUpCheck();
   const today = dayKey();
   if (!profile) return null; // between a reset and the redirect to onboarding
   const week = lastWeek(today);
@@ -47,7 +54,7 @@ export default function Profile() {
       testID="screen-profile"
       title={t('profile.title')}
       trailing={
-        <Pressable testID="open-settings" onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel={t('profile.settings')} style={styles.gear} hitSlop={8}>
+        <Pressable testID="open-settings" onPress={() => ask(() => router.push('/settings'))} accessibilityRole="button" accessibilityLabel={t('profile.settings')} style={styles.gear} hitSlop={8}>
           <Ionicons name="settings-outline" size={22} color={C.ink} />
         </Pressable>
       }
@@ -168,6 +175,22 @@ export default function Profile() {
         </View>
       </View>
 
+      {/* Who's learning: the account holder and the children's profiles (kids mode). */}
+      <Card style={{ gap: S.md }} testID="learners-card">
+        <View style={styles.rowBetween}>
+          <Txt variant="h3">{t('learners.profileCard')}</Txt>
+          <View style={styles.avatars}>
+            {[MAIN, ...children.map((c) => c.id)].slice(0, 5).map((id, i) => (
+              <View key={id} style={[styles.avatarRing, id === active && styles.avatarOn]}>
+                <Avatar name={id === MAIN ? (id === active ? profile.name : savedMainName) : (children.find((c) => c.id === id)?.name ?? '')} index={i} size={28} />
+              </View>
+            ))}
+          </View>
+        </View>
+        <Txt variant="small">{children.length ? t('learners.profileCardKids', { n: children.length + 1 }) : t('learners.profileCardBody')}</Txt>
+        <Button kind="secondary" testID="open-learners" label={children.length ? t('learners.title') : t('learners.add')} onPress={() => router.push('/learners')} />
+      </Card>
+
       {/* Instead of a leaderboard: learn with the people you already know. */}
       <Card style={styles.family} testID="family-card">
         <View style={styles.familyHead}>
@@ -183,11 +206,15 @@ export default function Profile() {
         </Txt>
         <Button kind="secondary" label={t('profile.familyCta')} onPress={() => router.navigate('/practice')} />
       </Card>
+      {gate}
     </LargeTitleScreen>
   );
 }
 
 const styles = StyleSheet.create({
+  avatars: { flexDirection: 'row', gap: 4 },
+  avatarRing: { borderRadius: 18, padding: 2, borderWidth: 2, borderColor: 'transparent' },
+  avatarOn: { borderColor: C.neon },
   head: { flexDirection: 'row', alignItems: 'center', gap: S.md },
   gear: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.card, borderWidth: 1, borderColor: C.line, alignItems: 'center', justifyContent: 'center' },
   phrases: { gap: 4 },

@@ -114,6 +114,25 @@ function fakeBackend() {
       }
       return json(route, state.profile ? [state.profile] : []);
     }
+    if (p === '/rest/v1/child_profiles') {
+      state.children ??= [];
+      const id = (url.searchParams.get('id') ?? '').replace(/^eq\./, '');
+      if (req.method() === 'POST') {
+        const child = { id: `0000000${state.children.length + 1}-0000-4000-8000-000000000000`, name: body.name, data: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
+        state.children.push(child);
+        return json(route, { id: child.id, created_at: child.created_at }, 201);
+      }
+      if (req.method() === 'PATCH') {
+        const child = state.children.find((c) => c.id === id);
+        if (child) Object.assign(child, body);
+        return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
+      }
+      if (req.method() === 'DELETE') {
+        state.children = state.children.filter((c) => c.id !== id);
+        return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
+      }
+      return json(route, state.children);
+    }
     if (p === '/rest/v1/progress') {
       if (req.method() === 'POST') {
         state.progress = body.data ?? (Array.isArray(body) ? body[0]?.data : null);
@@ -228,6 +247,38 @@ async function run() {
   ok(true, 'offline, the app still opens the course for a paying learner');
   await page.context().setOffline(false);
   backend.state.offline = false;
+
+  // Kids mode with an account: the child's profile and progress are kept in the account.
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-learners').click();
+  await page.getByTestId('learner-add').click();
+  await page.getByTestId('learner-name').fill('Kato');
+  await page.getByTestId('learner-save').click();
+  await page.getByTestId('learner-Kato').waitFor({ timeout: 10000 });
+  ok(backend.state.children?.[0]?.name === 'Kato', 'a child\'s profile is created in the account');
+  await page.getByTestId('learner-Kato').click();
+  await page.getByTestId('screen-home').waitFor();
+  ok((await page.getByTestId('home-greeting').innerText()).includes('Kato'), 'and the app switches to the child');
+  // The child does something (opens their first chapter): that is saved to the child's profile.
+  await page.getByTestId('tile-c03').click();
+  await page.getByTestId('screen-chapter').waitFor();
+  await page.getByTestId('back').click();
+  await page.getByTestId('screen-home').waitFor();
+  await page.waitForTimeout(2500);
+  ok(backend.state.children[0].data?.profile?.name === 'Kato' && backend.state.children[0].data?.opened?.c03 === true, 'the child\'s progress is saved to their profile in the account');
+  ok(backend.state.progress?.profile?.name === 'Sara', 'and the parent\'s progress stays in the parent\'s place');
+  await page.getByTestId('tab-profile').click();
+  await page.getByTestId('open-learners').click();
+  await page.getByTestId('learner-main').click();
+  await page.getByTestId('parent-gate').waitFor();
+  const q = (await page.getByTestId('gate-question').innerText()).toLowerCase();
+  const n = { four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
+  const [x, y] = q.match(/[a-z]+/g).map((w) => n[w]).filter(Boolean);
+  await page.getByTestId('gate-answer').fill(String(x * y));
+  await page.getByTestId('gate-submit').click();
+  await page.getByTestId('screen-home').waitFor();
+  ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'a grown-up switches back to the parent');
+
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('open-settings').click();
   await page.getByTestId('settings-account').waitFor();

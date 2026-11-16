@@ -9,6 +9,8 @@ import { activeToday, regenHearts, visibleStreak } from '@/logic/progress';
 import { dueIds } from '@/logic/srs';
 import { chapterStatus, lockedReason, unitOpen } from '@/logic/course';
 import { isComplete, lessonsDone } from '@/logic/unlock';
+import { LearnerChip } from '@/learners/LearnerChip';
+import { useIsKid } from '@/learners/store';
 import { ReminderOffer } from '@/reminders/ReminderSettings';
 import { useApp } from '@/state/store';
 import { Button } from '@/ui/Button';
@@ -35,6 +37,7 @@ export default function Home() {
   const placementSeen = useApp((s) => s.placementSeen);
   const setPlacementSeen = useApp((s) => s.setPlacementSeen);
   const [lockedMsg, setLockedMsg] = useState<string | null>(null);
+  const kid = useIsKid();
   const now = useNow();
   const name = profile?.name ?? '';
 
@@ -77,12 +80,13 @@ export default function Home() {
 
   return (
     <LargeTitleScreen testID="screen-home" title={t('tabs.home')} trailing={<StatsBar />} compactAlign="leading">
+      <LearnerChip />
 
       <Card style={styles.hello}>
-        <Ngaali mood="idle" size={78} />
+        <Ngaali mood={kid ? 'wave' : 'idle'} size={78} />
         <View style={styles.helloText}>
           <Txt variant="h2" testID="home-greeting">
-            {t('home.greeting', { name })}
+            {kid ? t('kid.greeting', { name }) : t('home.greeting', { name })}
           </Txt>
           <Txt variant="body" style={{ color: C.ink2 }}>
             {adviceText}
@@ -96,7 +100,7 @@ export default function Home() {
         </View>
       </Card>
 
-      <ReminderOffer />
+      {!kid && <ReminderOffer />}
 
       {/* New learners can test out of what they already know. */}
       {!placementSeen && Object.keys(done).length === 0 && (

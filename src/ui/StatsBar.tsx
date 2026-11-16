@@ -6,6 +6,7 @@ import { dayKey } from '../logic/dates';
 import { MAX_HEARTS, nextHeartIn, REFILL_COST, regenHearts, visibleStreak } from '../logic/progress';
 import { useApp } from '../state/store';
 import { Button } from './Button';
+import { useIsKid } from '../learners/store';
 import { CowrieIcon, DrumIcon, PotIcon } from './Icons';
 import { Sheet } from './Sheet';
 import { C, F, R, S } from './theme';
@@ -38,13 +39,19 @@ export function StatsBar() {
   const stats = useApp((s) => s.stats);
   const now = useNow();
   const [open, setOpen] = useState(false);
+  const kid = useIsKid();
   const pots = regenHearts(stats, now).hearts;
   const beat = visibleStreak(stats, dayKey(new Date(now)));
   const show = () => setOpen(true);
   return (
     <View style={styles.capsule}>
-      <Segment testID="stat-hearts" icon={<PotIcon size={19} off={pots === 0} />} value={pots} label={t('stats.heartsA11y', { n: pots })} onPress={show} />
-      <View style={styles.divider} />
+      {/* Children's profiles have no water pots to lose. */}
+      {!kid && (
+        <>
+          <Segment testID="stat-hearts" icon={<PotIcon size={19} off={pots === 0} />} value={pots} label={t('stats.heartsA11y', { n: pots })} onPress={show} />
+          <View style={styles.divider} />
+        </>
+      )}
       <Segment testID="stat-streak" icon={<DrumIcon size={19} off={beat === 0} />} value={beat} label={t('stats.streakA11y', { n: beat })} onPress={show} />
       <View style={styles.divider} />
       <Segment testID="stat-gems" icon={<CowrieIcon size={19} />} value={stats.gems} label={t('stats.gemsA11y', { n: stats.gems })} onPress={show} />

@@ -10,6 +10,7 @@ import { setRecovering, useAccount } from '@/account/store';
 import { ReminderSettings } from '@/reminders/ReminderSettings';
 import type { Lang } from '@/content/types';
 import { useT, type Key } from '@/i18n';
+import { useIsKid } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { BackBar } from '@/ui/BackBar';
 import { Button } from '@/ui/Button';
@@ -31,6 +32,7 @@ export default function Settings() {
   const setName = useApp((s) => s.setName);
   const setSetting = useApp((s) => s.setSetting);
   const reset = useApp((s) => s.reset);
+  const kid = useIsKid();
   const [name, setLocalName] = useState(profile?.name ?? '');
   const [confirm, setConfirm] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -131,7 +133,7 @@ export default function Settings() {
         </View>
       </Card>
 
-      <ReminderSettings />
+      {!kid && <ReminderSettings />}
 
       {ACCOUNTS && (
         <View style={styles.section} testID="settings-account">
@@ -206,8 +208,8 @@ export default function Settings() {
             // With an account, the name and language belong to the account and are kept.
             const keep = profile;
             reset();
-            if (ACCOUNTS && keep) useApp.setState({ profile: keep });
-            router.replace(ACCOUNTS ? '/' : '/onboarding');
+            if ((ACCOUNTS || kid) && keep) useApp.setState({ profile: keep });
+            router.replace(ACCOUNTS || kid ? '/' : '/onboarding');
           }}
         />
         <Button kind="ghost" label={t('common.cancel')} onPress={() => setConfirm(false)} />

@@ -4,6 +4,8 @@ import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { signOut, startCheckout } from '@/account/actions';
 import { FormMessage } from '@/account/AuthShell';
 import { DeleteAccountButton } from '@/account/DeleteAccount';
+import { useGrownUpCheck } from '@/learners/ParentGate';
+import { useIsKid } from '@/learners/store';
 import { usePrice } from '@/account/price';
 import { refreshSubscriptions, useAccount } from '@/account/store';
 import { useT, type Key } from '@/i18n';
@@ -61,6 +63,9 @@ export default function Subscribe() {
     }, 2000);
     return () => clearInterval(id);
   }, [waiting]);
+
+  const kid = useIsKid();
+  const { ask, gate } = useGrownUpCheck();
 
   const pay = async () => {
     setBusy(true);
@@ -122,7 +127,7 @@ export default function Subscribe() {
           {status === 'cancelled' && <FormMessage text={t('sub.cancelled')} tone="ok" />}
           <FormMessage text={error ? t(error) : null} />
           {autoPay && busy ? <FormMessage text={t('sub.redirecting')} tone="ok" /> : null}
-          <Button testID="sub-pay" label={t('sub.pay')} onPress={pay} loading={busy} />
+          <Button testID="sub-pay" label={t('sub.pay')} onPress={() => ask(pay)} loading={busy} />
           <Txt variant="strong" style={styles.center}>
             {t('sub.web')}
           </Txt>
@@ -145,7 +150,8 @@ export default function Subscribe() {
           </Txt>
         ) : null}
         <Button testID="sub-logout" kind="ghost" label={t('sub.logOut')} onPress={() => signOut()} />
-        <DeleteAccountButton />
+        {!kid && <DeleteAccountButton />}
+        {gate}
       </View>
     </Screen>
   );

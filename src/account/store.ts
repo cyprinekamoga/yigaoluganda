@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
+import { resetLearners } from '../learners/store';
 import { useApp } from '../state/store';
 import { hasAccess, offlineRows, type SubscriptionRow } from './access';
 import { ACCOUNTS } from './config';
@@ -20,6 +21,8 @@ interface AccountState {
   confirmLink: boolean;
   /** The account was just created (or confirmed): go straight on to the payment page. */
   payNext: boolean;
+  /** Reviews recordings and reports ('owner' also adds reviewers), or null for everyone else. */
+  role: 'owner' | 'reviewer' | null;
 }
 
 /** Kept for the browser tab, so reloading the "new password" page doesn't lose it. */
@@ -40,6 +43,7 @@ export const useAccount = create<AccountState>(() => ({
   linkError: ACCOUNTS && Boolean(OPENING_LINK.error),
   confirmLink: ACCOUNTS && OPENING_LINK.confirm,
   payNext: false,
+  role: null,
 }));
 
 /** Starts or ends "choose a new password" (ends after saving it, or on logging out). */
@@ -95,6 +99,13 @@ export async function refreshSubscriptions(): Promise<SubscriptionRow[]> {
   return data ?? [];
 }
 
+/** Whether this account reviews recordings and reports (see the reviewers table). */
+async function refreshRole(uid: string) {
+  if (!supabase) return;
+  const { data } = await supabase.from('reviewers').select('role').eq('user_id', uid).maybeSingle();
+  if (useAccount.getState().session?.user.id === uid) useAccount.setState({ role: (data?.role as 'owner' | 'reviewer' | undefined) ?? null });
+}
+
 let currentUser: string | null = null;
 
 async function applySession(session: Session | null) {
@@ -105,11 +116,12 @@ async function applySession(session: Session | null) {
     // A different person (or nobody) on this device: start from their own saved progress.
     if (currentUser) {
       stopSync();
+      resetLearners();
       useApp.getState().reset();
     }
     currentUser = uid;
-    useAccount.setState({ session, subscriptions: [] });
-    if (session) await Promise.all([refreshSubscriptions(), startSync(session)]);
+    useAccount.setState({ session, subscriptions: [], role: null });
+    if (session) await Promise.all([refreshSubscriptions(), startSync(session), refreshRole(session.user.id)]);
   } else {
     useAccount.setState({ session });
   }

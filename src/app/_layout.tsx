@@ -8,6 +8,7 @@ import { selectAccess, selectSignedIn, startAccount, useAccount } from '@/accoun
 import { clearOpeningLink } from '@/account/supabase';
 import { initAudio } from '@/audio/engine';
 import { useReminderSchedule } from '@/reminders/useReminders';
+import { useLearners } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { C } from '@/ui/theme';
 
@@ -15,10 +16,15 @@ SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
   // No custom fonts to load: the app uses the system font (San Francisco on Apple devices).
-  const hydrated = useSyncExternalStore(
+  const appHydrated = useSyncExternalStore(
     (onChange) => useApp.persist.onFinishHydration(onChange),
     () => useApp.persist.hasHydrated(),
   );
+  const learnersHydrated = useSyncExternalStore(
+    (onChange) => useLearners.persist.onFinishHydration(onChange),
+    () => useLearners.persist.hasHydrated(),
+  );
+  const hydrated = appHydrated && learnersHydrated;
 
   const accountReady = useAccount((s) => s.ready);
   const signedIn = useAccount(selectSignedIn);
@@ -59,6 +65,7 @@ export default function RootLayout() {
           <Stack.Screen name="practice/[mode]" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="phrase/[id]" options={{ presentation: 'modal' }} />
           <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
+          <Stack.Screen name="learners" />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />
