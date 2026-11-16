@@ -10,3 +10,6 @@ export const ACCOUNTS = Boolean(SUPABASE_URL && SUPABASE_KEY);
 
 /** The landing page, which holds the terms and the privacy policy. */
 export const SITE_URL = 'https://yigaoluganda.com';
+
+/** Where learners write to us (forwarded to the company's inbox). Same as on the landing page. */
+export const SUPPORT_EMAIL = 'hello@yigaoluganda.com';

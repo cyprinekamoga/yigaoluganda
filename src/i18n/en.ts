@@ -378,6 +378,8 @@ export const en = {
   'confirm.resetLead': "Tap below to choose a new password.",
   'confirm.resetButton': "Choose a new password",
   'confirm.newLink': "Get a new link",
+  'settings.contact': "Questions?",
+  'settings.contactBody': "Write to us and we’ll get back to you.",
 } as const;
 
 export type Key = keyof typeof en;

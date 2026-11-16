@@ -10,8 +10,8 @@ export const COMPANY = {
    * want one shown (e-commerce rules normally expect a geographic address).
    */
   address: { en: 'Stockholm, Sweden', sv: 'Stockholm, Sverige' },
-  /** Support e-mail address shown on the site. */
-  email: 'info@nordvra.se',
+  /** Support e-mail address shown on the site (forwarded to the company's inbox by ImprovMX). */
+  email: 'hello@yigaoluganda.com',
 };
 
 /** Where the app runs. "Get started" and "Log in" link here. */

@@ -5,7 +5,7 @@ import { Linking, Pressable, StyleSheet, Switch, TextInput, View } from 'react-n
 import { currentSubscription, subscriptionState, withdrawalDaysLeft } from '@/account/access';
 import { deleteAccount, openBillingPortal, signOut, withdraw } from '@/account/actions';
 import { FormMessage } from '@/account/AuthShell';
-import { ACCOUNTS, SITE_URL } from '@/account/config';
+import { ACCOUNTS, SITE_URL, SUPPORT_EMAIL } from '@/account/config';
 import { setRecovering, useAccount } from '@/account/store';
 import { ReminderSettings } from '@/reminders/ReminderSettings';
 import type { Lang } from '@/content/types';
@@ -179,6 +179,13 @@ export default function Settings() {
         <Txt variant="body">{ACCOUNTS ? t('settings.privacyCloud') : t('settings.privacyBody')}</Txt>
         <Txt style={styles.link} accessibilityRole="link" onPress={() => Linking.openURL(lang === 'sv' ? `${SITE_URL}/sv/villkor/` : `${SITE_URL}/terms/`)}>
           {t('settings.legal')}
+        </Txt>
+        <Txt variant="h3" style={{ marginTop: S.sm }}>
+          {t('settings.contact')}
+        </Txt>
+        <Txt variant="body">{t('settings.contactBody')}</Txt>
+        <Txt testID="support-email" style={styles.link} accessibilityRole="link" onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}>
+          {SUPPORT_EMAIL}
         </Txt>
         <Txt variant="small" style={{ marginTop: S.sm }}>
           {t('settings.version', { v: Constants.expoConfig?.version ?? '2.0.0' })}

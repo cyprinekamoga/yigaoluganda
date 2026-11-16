@@ -380,4 +380,6 @@ export const sv: Record<Key, string> = {
   'confirm.resetLead': "Tryck nedan för att välja ett nytt lösenord.",
   'confirm.resetButton': "Välj ett nytt lösenord",
   'confirm.newLink': "Få en ny länk",
+  'settings.contact': "Frågor?",
+  'settings.contactBody': "Skriv till oss så hör vi av oss.",
 };
