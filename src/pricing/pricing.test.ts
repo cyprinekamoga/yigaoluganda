@@ -47,3 +47,40 @@ describe('pricing', () => {
     }
   });
 });
+
+describe('plans', () => {
+  it('every plan has a price in every currency', async () => {
+    const { PLAN_NET, PLANS, MONTHLY_NET } = await import('./pricing');
+    for (const plan of PLANS) for (const cur of Object.keys(MONTHLY_NET)) expect(PLAN_NET[plan][cur as keyof typeof MONTHLY_NET], `${plan} ${cur}`).toBeGreaterThan(0);
+  });
+
+  it('shows the approved prices', async () => {
+    const { quote } = await import('./pricing');
+    expect(quote('SE', 'yearly').total).toBe(49900);
+    expect(quote('SE', 'family_monthly').total).toBe(8900);
+    expect(quote('SE', 'family_yearly').total).toBe(79900);
+    expect(quote('DE', 'yearly').total).toBe(4499);
+    expect(quote('DE', 'family_monthly').total).toBe(799);
+    expect(quote('DE', 'family_yearly').total).toBe(6999);
+    expect(quote('US', 'yearly').total).toBe(3999);
+    expect(quote('US', 'family_monthly').total).toBe(749);
+    expect(quote('US', 'family_yearly').total).toBe(6699);
+  });
+
+  it('yearly saves about three months, and Family costs less than two single plans', async () => {
+    const { PLAN_NET, MONTHLY_NET } = await import('./pricing');
+    for (const cur of Object.keys(MONTHLY_NET) as (keyof typeof MONTHLY_NET)[]) {
+      const m = MONTHLY_NET[cur];
+      expect(PLAN_NET.yearly[cur] / m, cur).toBeGreaterThan(8.5);
+      expect(PLAN_NET.yearly[cur] / m, cur).toBeLessThan(9.5);
+      expect(PLAN_NET.family_monthly[cur] / m, cur).toBeLessThan(2);
+      expect(PLAN_NET.family_yearly[cur] / PLAN_NET.family_monthly[cur], cur).toBeLessThan(9.5);
+    }
+  });
+
+  it('writes the period', async () => {
+    const { priceLine, quote } = await import('./pricing');
+    expect(priceLine(quote('SE', 'yearly'), 'sv', 'year')).toMatch(/499,00\s?kr\/år inkl\. moms/);
+    expect(priceLine(quote('US', 'yearly'), 'en', 'year')).toBe('$39.99 / year');
+  });
+});

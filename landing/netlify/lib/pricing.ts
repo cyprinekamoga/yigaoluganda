@@ -38,6 +38,41 @@ export const MONTHLY_NET: Record<Currency, number> = {
   ZAR: 7900,
 };
 
+/** The plans. Family is for up to FAMILY_SIZE people (adults with their own login and children's profiles). */
+export type Plan = 'monthly' | 'yearly' | 'family_monthly' | 'family_yearly';
+export const PLANS: Plan[] = ['monthly', 'yearly', 'family_monthly', 'family_yearly'];
+export const FAMILY_SIZE = 6;
+export const isFamilyPlan = (plan: Plan | string | null | undefined): boolean => plan === 'family_monthly' || plan === 'family_yearly';
+export const isYearlyPlan = (plan: Plan | string | null | undefined): boolean => plan === 'yearly' || plan === 'family_yearly';
+/** Stripe lookup keys, so the Edge Functions find each price by name. */
+export const PLAN_LOOKUP_KEY: Record<Plan, string> = {
+  monthly: 'yiga-oluganda-monthly',
+  yearly: 'yiga-oluganda-yearly',
+  family_monthly: 'yiga-oluganda-family-monthly',
+  family_yearly: 'yiga-oluganda-family-yearly',
+};
+
+/**
+ * Every plan's price excluding VAT, in the smallest unit. Shown prices (with VAT in the EU) are
+ * round: yearly is 9 × monthly (three months free), Family about 1.6 × monthly, and Family yearly
+ * 9 × Family monthly. Set from the same approximate exchange rates as MONTHLY_NET.
+ */
+export const PLAN_NET: Record<Plan, Record<Currency, number>> = {
+  monthly: MONTHLY_NET,
+  yearly: {
+    EUR: 3599, SEK: 39920, NOK: 40900, DKK: 27120, PLN: 15279, CZK: 88720, HUF: 1431200, RON: 17999,
+    GBP: 3099, CHF: 3399, USD: 3999, CAD: 5799, AUD: 6299, UGX: 149000, KES: 539900, ZAR: 70900,
+  },
+  family_monthly: {
+    EUR: 639, SEK: 7120, NOK: 6900, DKK: 4720, PLN: 2719, CZK: 15920, HUF: 255200, RON: 3199,
+    GBP: 599, CHF: 599, USD: 749, CAD: 999, AUD: 1099, UGX: 29000, KES: 99900, ZAR: 12900,
+  },
+  family_yearly: {
+    EUR: 5599, SEK: 63920, NOK: 61900, DKK: 42320, PLN: 24479, CZK: 143120, HUF: 2295200, RON: 28799,
+    GBP: 5399, CHF: 5399, USD: 6699, CAD: 8999, AUD: 9899, UGX: 259000, KES: 899900, ZAR: 115900,
+  },
+};
+
 /** Currencies with no minor unit in Stripe's API (amounts are whole units). */
 export const ZERO_DECIMAL: ReadonlySet<Currency> = new Set<Currency>(['UGX']);
 
@@ -91,11 +126,11 @@ export interface Quote {
   taxRate: number | null;
 }
 
-/** The monthly price for a visitor from `country` (ISO code, any case). */
-export function quote(country?: string | null): Quote {
+/** A plan's price (monthly by default) for a visitor from `country` (ISO code, any case). */
+export function quote(country?: string | null, plan: Plan = 'monthly'): Quote {
   const cc = (country ?? '').trim().toUpperCase();
   const currency = COUNTRY_CURRENCY[cc] ?? DEFAULT_CURRENCY;
-  const net = MONTHLY_NET[currency];
+  const net = PLAN_NET[plan][currency];
   const rate = cc in TAX_COLLECTED ? TAX_COLLECTED[cc] : null;
   // Stripe rounds the tax to the nearest minor unit (whole units for zero-decimal currencies).
   const tax = rate === null ? 0 : Math.round((net * rate) / 100);
@@ -121,10 +156,13 @@ export function formatMoney(amount: number, currency: Currency, locale = 'en'): 
   }).format(major);
 }
 
-/** Short price line for a page: "€4.99 / month incl. VAT" or "£3.49 / month". */
-export function priceLine(q: Quote, lang: 'en' | 'sv'): string {
+/** Short price line for a page: "€4.99 / month incl. VAT", "£30.99 / year"… */
+export function priceLine(q: Quote, lang: 'en' | 'sv', period: 'month' | 'year' = 'month'): string {
   const locale = lang === 'sv' ? 'sv-SE' : 'en-GB';
   const money = formatMoney(q.total, q.currency, locale);
-  if (lang === 'sv') return q.taxRate !== null ? `${money}/månad inkl. moms` : `${money}/månad`;
-  return q.taxRate !== null ? `${money} / month incl. VAT` : `${money} / month`;
+  if (lang === 'sv') {
+    const per = period === 'year' ? 'år' : 'månad';
+    return q.taxRate !== null ? `${money}/${per} inkl. moms` : `${money}/${per}`;
+  }
+  return q.taxRate !== null ? `${money} / ${period} incl. VAT` : `${money} / ${period}`;
 }
