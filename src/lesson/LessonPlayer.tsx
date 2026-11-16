@@ -7,6 +7,7 @@ import { completeFeedback, correctFeedback, wrongFeedback } from '../audio/feedb
 import { useT } from '../i18n';
 import { phrasesInStep, retryStep, type GenContext, type Step } from '../logic/generator';
 import { regenHearts } from '../logic/progress';
+import { useIsKid } from '../learners/store';
 import { useApp, type Reward } from '../state/store';
 import { Button } from '../ui/Button';
 import { Beads } from '../ui/Beads';
@@ -39,7 +40,8 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const [reward, setReward] = useState<Reward | null>(null);
   const [quitOpen, setQuitOpen] = useState(false);
   // Opening a lesson with every water pot empty shows the empty-pots sheet straight away.
-  const [outOfHearts, setOutOfHearts] = useState(() => mode.kind === 'lesson' && regenHearts(useApp.getState().stats, Date.now()).hearts <= 0);
+  const kid = useIsKid();
+  const [outOfHearts, setOutOfHearts] = useState(() => mode.kind === 'lesson' && !kid && regenHearts(useApp.getState().stats, Date.now()).hearts <= 0);
   const attempts = useRef(0);
   const mistakes = useRef(0);
   const retried = useRef(new Set<number>());
@@ -53,7 +55,8 @@ export function LessonPlayer({ steps, mode, ctx }: { steps: Step[]; mode: PlayMo
   const stats = useApp((s) => s.stats);
   const now = useNow(5_000);
   const hearts = regenHearts(stats, now).hearts;
-  const usesHearts = mode.kind === 'lesson';
+  // Children learn without water pots: a mistake costs nothing, and the lesson just goes on.
+  const usesHearts = mode.kind === 'lesson' && !kid;
 
   const step = queue[index];
 
