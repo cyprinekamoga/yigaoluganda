@@ -24,3 +24,9 @@ export const SITE_URL = 'https://yigaoluganda.com';
  * up a certificate by its code (and nothing else: the database only allows that lookup). */
 export const SUPABASE_URL = 'https://qbagcpemtsqaoykwqger.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_uYoU_bNVB5jhL3_nPzegBQ_DqqKF4KJ';
+
+/** Cloudflare Turnstile site key for the bot test on the "For schools" form (public, like the
+ * publishable key). Empty: no bot test, and the form relies on the per-visitor limit alone. Set the
+ * TURNSTILE_SITE_KEY build variable on Netlify, or write the key here. The matching secret is the
+ * TURNSTILE_SECRET function secret in Supabase. */
+export const TURNSTILE_SITE_KEY = process.env.TURNSTILE_SITE_KEY ?? '';

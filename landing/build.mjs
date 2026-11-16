@@ -4,7 +4,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { APP_URL, COMPANY, SITE_URL, SUPABASE_KEY, SUPABASE_URL } from './src/company.mjs';
+import { APP_URL, COMPANY, SITE_URL, SUPABASE_KEY, SUPABASE_URL, TURNSTILE_SITE_KEY } from './src/company.mjs';
 import { CONTENT } from './src/content.mjs';
 import { privacy, terms } from './src/legal.mjs';
 import { priceLine, quote } from './src/pricing.mjs';
@@ -254,19 +254,7 @@ ${header(t)}
 </main>
 ${footer(t)}
 <script type="application/ld+json">${JSON.stringify(faqLd)}</script>
-<script>
-// Refer a friend: an invite link (?ref=CODE) shows the offer and carries the code on to sign-up.
-(() => {
-  const ref = (new URLSearchParams(location.search).get('ref') || '').trim().toUpperCase();
-  if (!/^[A-Z0-9-]{4,24}$/.test(ref)) return;
-  document.getElementById('invite').hidden = false;
-  for (const a of document.querySelectorAll('a[href*="/sign-up"]')) {
-    const u = new URL(a.href);
-    u.searchParams.set('ref', ref);
-    a.href = u.toString();
-  }
-})();
-</script>
+<script src="/assets/js/invite.js" defer></script>
 </body>
 </html>
 `;
@@ -310,57 +298,11 @@ ${header(switchTo)}
     </div>
   </form>
   <div id="verify-result" class="verify-result" role="status" aria-live="polite"></div>
+  <p class="small">${esc(v.nameNote)}</p>
 </main>
 ${footer(switchTo)}
-<script>
-(() => {
-  const S = ${JSON.stringify(strings).replace(/</g, '\\u003c')};
-  const URL_ = ${JSON.stringify(`${SUPABASE_URL}/rest/v1/rpc/verify_certificate`)};
-  const KEY = ${JSON.stringify(SUPABASE_KEY)};
-  const form = document.getElementById('verify-form');
-  const input = document.getElementById('code');
-  const out = document.getElementById('verify-result');
-  const fill = (s, vars) => s.replace(/\\{(\\w+)\\}/g, (m, k) => (k in vars ? vars[k] : m));
-  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  function normalize(raw) {
-    const s = raw.toUpperCase().replace(/[^0-9A-Z]/g, '');
-    const body = s.startsWith('YO') ? s.slice(2) : s;
-    if (body.length !== 12) return null;
-    const code = 'YO-' + body.slice(0, 4) + '-' + body.slice(4, 8) + '-' + body.slice(8);
-    return /^YO-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/.test(code) ? code : null;
-  }
-  function show(kind, nodes) {
-    out.className = 'verify-result ' + kind;
-    out.replaceChildren(...nodes);
-  }
-  async function check(raw) {
-    const code = normalize(raw);
-    if (!code) return show('bad', [el('p', null, S.badCode)]);
-    input.value = code;
-    history.replaceState(null, '', '?c=' + encodeURIComponent(code));
-    show('wait', [el('p', null, S.checking)]);
-    try {
-      const res = await fetch(URL_, { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: code }) });
-      if (!res.ok) throw new Error(String(res.status));
-      const rows = await res.json();
-      if (!rows.length) return show('bad', [el('p', null, S.invalid)]);
-      const r = rows[0];
-      const date = new Date(r.issued_at).toLocaleDateString(S.dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
-      show('ok', [
-        el('p', 'verify-badge', '✓ ' + S.valid),
-        el('p', 'verify-name', r.learner_name),
-        el('p', null, fill(S.completed, { n: r.part, title: S.parts[r.part] || '' })),
-        el('p', 'verify-meta', [r.phrases > 0 ? fill(S.phrases, { n: r.phrases }) : '', fill(S.issued, { date }), code].filter(Boolean).join(' · ')),
-      ]);
-    } catch {
-      show('bad', [el('p', null, S.error)]);
-    }
-  }
-  form.addEventListener('submit', (e) => { e.preventDefault(); check(input.value); });
-  const start = new URLSearchParams(location.search).get('c');
-  if (start) { input.value = start; check(start); }
-})();
-</script>
+<script id="page-data" type="application/json">${JSON.stringify({ strings, url: `${SUPABASE_URL}/rest/v1/rpc/verify_certificate`, key: SUPABASE_KEY }).replace(/</g, '\\u003c')}</script>
+<script src="/assets/js/verify.js" defer></script>
 </body>
 </html>
 `;
@@ -370,7 +312,7 @@ ${footer(switchTo)}
 function schoolsPage(t) {
   const s = t.schools;
   const switchTo = { ...t, other: { ...t.other, path: CONTENT[t.other.lang].schools.path } };
-  const strings = { sending: s.sending, sent: s.sent, error: fill(s.error, { email: company.email }), invalid: s.invalid, send: s.send, lang: t.lang };
+  const strings = { sending: s.sending, sent: s.sent, error: fill(s.error, { email: company.email }), tooMany: fill(s.tooMany, { email: company.email }), captcha: s.captcha, invalid: s.invalid, send: s.send, lang: t.lang };
   return `${head(t, { title: `${s.title} – Yiga Oluganda`, description: s.lead, pathname: s.path, alternates: false })}
 <body>
 ${header(switchTo)}
@@ -389,47 +331,16 @@ ${header(switchTo)}
     <label>${esc(s.email)}<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
     <label>${esc(s.students)}<input name="students" type="number" min="1" max="2000" inputmode="numeric"></label>
     <label>${esc(s.message)}<textarea name="message" rows="4" maxlength="2000"></textarea></label>
+    ${TURNSTILE_SITE_KEY ? `<div class="cf-turnstile" data-sitekey="${esc(TURNSTILE_SITE_KEY)}" data-language="${t.lang}" data-theme="dark"></div>` : ''}
     <button class="btn btn-primary" type="submit">${esc(s.send)}</button>
     <p class="small">${esc(s.privacy)}</p>
   </form>
   <div id="school-result" class="verify-result" role="status" aria-live="polite"></div>
 </main>
 ${footer(switchTo)}
-<script>
-(() => {
-  const S = ${JSON.stringify(strings).replace(/</g, '\\u003c')};
-  const URL_ = ${JSON.stringify(`${SUPABASE_URL}/rest/v1/rpc/request_school_licence`)};
-  const KEY = ${JSON.stringify(SUPABASE_KEY)};
-  const form = document.getElementById('school-form');
-  const out = document.getElementById('school-result');
-  const button = form.querySelector('button');
-  const show = (kind, text) => { out.className = 'verify-result ' + kind; out.textContent = text; };
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const f = new FormData(form);
-    const v = (k) => String(f.get(k) || '').trim();
-    if (!v('name') || !v('school') || !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v('email'))) return show('bad', S.invalid);
-    const students = parseInt(v('students'), 10);
-    button.disabled = true;
-    button.textContent = S.sending;
-    try {
-      const res = await fetch(URL_, {
-        method: 'POST',
-        headers: { apikey: KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_name: v('name'), p_school: v('school'), p_email: v('email'), p_students: students > 0 ? students : null, p_message: v('message'), p_lang: S.lang }),
-      });
-      if (!res.ok) throw new Error(String(res.status));
-      form.hidden = true;
-      show('ok', S.sent);
-    } catch {
-      show('bad', S.error);
-    } finally {
-      button.disabled = false;
-      button.textContent = S.send;
-    }
-  });
-})();
-</script>
+<script id="page-data" type="application/json">${JSON.stringify({ strings, url: `${SUPABASE_URL}/functions/v1/school-request`, turnstile: TURNSTILE_SITE_KEY }).replace(/</g, '\\u003c')}</script>
+${TURNSTILE_SITE_KEY ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : ''}
+<script src="/assets/js/school.js" defer></script>
 </body>
 </html>
 `;

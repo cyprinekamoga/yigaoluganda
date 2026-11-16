@@ -3,6 +3,7 @@
 //   POST { type: 'school', id }  from a database trigger: e-mails a school's licence request.
 //   POST { type: 'daily' }       from pg_cron every morning: deletes recordings older than 30 days
 //                                and e-mails a summary of what is waiting for review.
+//                                Also clears old anti-abuse records (card fingerprints, withdrawals).
 // Both need the x-cron-secret header (checked against the database). Needs RESEND_API_KEY;
 // without it nothing is e-mailed (the clean-up still runs). Deployed without Supabase login.
 import { createClient } from 'npm:@supabase/supabase-js@2';
@@ -119,6 +120,15 @@ async function daily() {
       if (answered?.length) await admin.from('feedback_requests').update({ audio_path: null }).in('id', answered.map((r) => r.id));
     }
   }
+
+  // 1c. Anti-abuse records, as the privacy policy says: card fingerprints and withdrawals for two
+  //     years, hashed form-visitor keys for two days.
+  const twoYears = new Date(Date.now() - 730 * 864e5).toISOString();
+  await Promise.all([
+    admin.from('card_fingerprints').delete().lt('created_at', twoYears),
+    admin.from('withdrawals').delete().lt('created_at', twoYears),
+    admin.from('request_limits').delete().lt('created_at', new Date(Date.now() - 2 * 864e5).toISOString()),
+  ]);
 
   // 2. What is waiting for the reviewers.
   const [{ count: recordings }, { count: reports }] = await Promise.all([

@@ -40,8 +40,8 @@ Deno.serve(async (req) => {
     custom_text: {
       terms_of_service_acceptance: {
         message: sv
-          ? `Jag godkänner [villkoren](${terms}) och vill få tillgång direkt. Jag kan frånträda avtalet inom 14 dagar och får då hela beloppet tillbaka.`
-          : `I agree to the [terms](${terms}) and want access straight away. I can withdraw within 14 days and get a full refund.`,
+          ? `Jag godkänner [villkoren](${terms}) och vill få tillgång direkt. Jag kan frånträda avtalet inom 14 dagar och får då tillbaka det jag inte har använt (första gången hela beloppet).`
+          : `I agree to the [terms](${terms}) and want access straight away. I can withdraw within 14 days and get back the part I haven't used (the full amount the first time).`,
       },
     },
     locale: sv ? 'sv' : 'en',

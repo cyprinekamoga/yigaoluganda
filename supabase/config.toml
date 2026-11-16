@@ -26,5 +26,14 @@ content_path = "./supabase/templates/confirmation.html"
 subject = "{{ if eq .Data.ui_lang \"sv\" }}Välj ett nytt lösenord{{ else }}Choose a new password{{ end }} · Yiga Oluganda"
 content_path = "./supabase/templates/recovery.html"
 
+# Called by database triggers and pg_cron, with a shared secret.
 [functions.review-mail]
+verify_jwt = false
+
+# Called by pg_cron (with a shared secret) and by the "no more tips" link in e-mails (signed).
+[functions.lifecycle-mail]
+verify_jwt = false
+
+# The public "For schools" form on yigaoluganda.com: limited per visitor, optional bot test.
+[functions.school-request]
 verify_jwt = false

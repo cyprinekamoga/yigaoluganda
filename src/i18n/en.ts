@@ -78,7 +78,7 @@ export const en = {
   'sub.item4': 'Cancel anytime',
   'sub.pay': 'Continue to payment',
   'sub.web': 'Paying here on the website is cheaper than through an app store, and it keeps Yiga Oluganda affordable.',
-  'sub.small': 'Shown in your local currency, including VAT where it applies. Renews every month until you cancel. You can withdraw within 14 days and get a full refund.',
+  'sub.small': 'Shown in your local currency, including VAT where it applies. Renews every month until you cancel. You can withdraw within 14 days: the first time, you get a full refund.',
   'sub.signedInAs': 'Logged in as {email}',
   'sub.logOut': 'Log out',
   'sub.waiting': 'Payment received! Unlocking your course…',

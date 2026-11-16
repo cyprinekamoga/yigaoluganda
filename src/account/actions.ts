@@ -186,12 +186,12 @@ async function functionErrorCode(error: unknown): Promise<string | null> {
  * Deletes the account. Accounts with a password confirm it first; the server also refuses unless the
  * person logged in within the last 10 minutes (so an open session alone can't delete the account).
  */
-export async function deleteAccount(password?: string): Promise<Outcome> {
+export async function deleteAccount(password?: string, captchaToken?: string): Promise<Outcome> {
   if (!supabase) return fail('auth.errGeneric');
   if (password !== undefined) {
     const email = useAccount.getState().session?.user.email;
     if (!email || !password) return fail('auth.errWrong');
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } });
     if (authError) return fail(explain(authError));
   }
   const { error } = await supabase.functions.invoke('delete-account', { body: {} });

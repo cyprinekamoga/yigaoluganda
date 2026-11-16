@@ -99,7 +99,7 @@ The project is three parts that are deployed separately:
 
 - **Price.** One monthly plan: €3.99 + VAT, shown in each visitor's local currency (16 currencies, e.g. 55,00 kr incl. moms in Sweden, £3.49 in the UK). The table is [`src/pricing/pricing.ts`](src/pricing/pricing.ts). Stripe Tax adds 25% Swedish VAT for every EU customer (Swedish registration under the EU small-seller rule, below EUR 10,000 a year of sales to other EU countries), so EU visitors see the price including VAT, e.g. €4.99 in Germany. Visitors from other countries see the net price. There is no free trial.
 - **Accounts.** Sign up with name, e-mail and password. The password field has an eye button to show or hide what you typed. Log in, forgot password, a new password from the e-mail link, log out and delete account. Progress is saved to the account and follows the learner between devices.
-- **Paying.** Only on the website, through Stripe Checkout. The plan screen says why: it's cheaper than an app store and keeps the app affordable. The phone apps never sell anything. After paying, the course unlocks. Settings shows the subscription, *Manage subscription* (Stripe's portal: cancel, change card, receipts) and, for 14 days, *Withdraw from contract* (ends it and refunds in full).
+- **Paying.** Only on the website, through Stripe Checkout. The plan screen says why: it's cheaper than an app store and keeps the app affordable. The phone apps never sell anything. After paying, the course unlocks. Settings shows the subscription, *Manage subscription* (Stripe's portal: cancel, change card, receipts) and, for 14 days, *Withdraw from contract* (ends it; refunds in full the first time, after that the unused part of the period).
 - **Without Supabase settings** (`EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), the app runs as before, with no accounts and progress on the device only. Development and the offline e2e test use this mode.
 
 | Command | What it does |
@@ -108,6 +108,7 @@ The project is three parts that are deployed separately:
 | `cd landing && node build.mjs` | Builds the landing page into `landing/dist/` (the landing site deploys from the `landing/` folder) |
 | `npm run stripe:setup` | Creates the Stripe price (all currencies), customer portal and webhook (see the script) |
 | `npm run e2e:accounts` | Browser test of sign-up, password show/hide, paying, withdrawing and log-in, with Supabase and Stripe mocked |
+| `npm run e2e:landing` | Browser test of the landing site with its security policy: invite links, the certificate check and the For schools form |
 
 **Going live** (done for yigaoluganda.com in November 2026; live payments tested with a real payment and refund):
 1. Fill in the company details in [`landing/src/company.mjs`](landing/src/company.mjs), and have the terms and privacy policy ([`landing/src/legal.mjs`](landing/src/legal.mjs)) checked.
@@ -220,6 +221,16 @@ src/i18n/           English and Swedish interface text
 scripts/            audio, icons, sound effects, content report, e2e
 ```
 
+### Security
+
+- **Both sites send a strict Content-Security-Policy** (see [`netlify.toml`](netlify.toml) and [`landing/netlify.toml`](landing/netlify.toml)): scripts only from the site itself, Google Sign-In and Cloudflare's bot test. The pages carry no inline scripts; the landing pages keep their data in `<script type="application/json">` blocks and run `landing/assets/js/*.js`. The browser tests serve each site with its policy and fail if the policy blocks anything, so change the policy and the code together.
+- **The database decides who may do what** (row-level security, functions that check the caller). The publishable key in the sites is public by design; anonymous visitors can only check a certificate code.
+- **Limits:** reports (20 a day), recordings waiting for review (20), sizes of saved progress and names, and the For schools form (3 an hour and 10 a day per visitor, by a hashed IP address).
+- **Bot test (optional):** create a Cloudflare Turnstile widget for yigaoluganda.com and app.yigaoluganda.com. Put the site key in the app's build as `EXPO_PUBLIC_TURNSTILE_SITE_KEY` and in the landing build as `TURNSTILE_SITE_KEY` (both in Netlify), turn on *Authentication → Attack Protection → CAPTCHA* (Turnstile) in Supabase with the secret, and save the same secret as the `TURNSTILE_SECRET` function secret. Without a key, the forms work without a bot test. Supabase's setting covers every app, and only the web app shows the widget: the phone apps (when they are published) need one too before the setting is turned on, or their password log-in stops working.
+- **Deleting an account** asks for the password again (or a fresh Google login), checked by the function, not only by the app.
+- **Free months and refunds:** a free first month goes to a card only once (Stripe's card fingerprint), and the full refund on withdrawal applies to the first withdrawal; later withdrawals refund the unused part.
+- **Report a problem** to hello@yigaoluganda.com.
+
 ### Privacy
 
 There are no ads, analytics or tracking. With accounts on, the name, e-mail, progress and subscription status are stored in Supabase in the EU. Stripe handles payments, and card details never reach the app. Voice recordings stay on the device unless the learner sends one for native-speaker feedback; it is then stored privately (bucket `recordings`) and deleted after 30 days. A certificate's name, part, phrase count and date can be seen by anyone with its code. Learners can delete their account in the app.
@@ -276,3 +287,5 @@ Appen använder aldrig datorröst för luganda.
 **Webbplats och betalning:** landningssidan ligger i `landing/` (yigaoluganda.com). Appen kräver ett konto och ett abonnemang: 3,99 € + moms i månaden, i besökarens egen valuta, utan gratisperiod. Betalningen sker bara på webben, via Stripe. Lösenordsfältet har en ögonknapp för att visa eller dölja lösenordet.
 
 **Integritet:** ingen reklam och ingen spårning. Konto och framsteg sparas inom EU (Supabase), och betalningar sköts av Stripe.
+
+**Säkerhet:** båda webbplatserna har en strikt Content-Security-Policy, databasen kontrollerar varje behörighet, och formulär och rapporter har gränser. Ett robottest (Cloudflare Turnstile) kan slås på; se avsnittet *Security* på engelska. Hittar du ett säkerhetsproblem, mejla hello@yigaoluganda.com.

@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 
 /**
- * A bot test (Cloudflare Turnstile) on sign-up, log-in and "forgot password", when the build has a
- * site key (EXPO_PUBLIC_TURNSTILE_SITE_KEY) and Supabase Auth has CAPTCHA turned on with the secret.
- * Phones don't show it (the web version is captcha.web.tsx).
+ * A bot test (Cloudflare Turnstile) on sign-up, log-in, "forgot password" and the password check
+ * before deleting an account, when the build has a site key (EXPO_PUBLIC_TURNSTILE_SITE_KEY) and
+ * Supabase Auth has CAPTCHA turned on with the secret. Only the web version has it
+ * (captcha.web.tsx): Supabase's CAPTCHA setting applies to every app, so the phone apps need a
+ * Turnstile widget of their own before it is turned on. Google sign-in needs no token.
  */
 export interface Captcha {
   /** The widget to place above the button, or null when there is no bot test. */

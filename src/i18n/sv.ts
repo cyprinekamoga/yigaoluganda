@@ -80,7 +80,7 @@ export const sv: Record<Key, string> = {
   'sub.item4': 'Avsluta när du vill',
   'sub.pay': 'Gå vidare till betalning',
   'sub.web': 'Att betala här på webben är billigare än via en appbutik, och det håller Yiga Oluganda prisvärt.',
-  'sub.small': 'Visas i din lokala valuta, inklusive moms där det gäller. Förnyas varje månad tills du avslutar. Du kan frånträda avtalet inom 14 dagar och få hela beloppet tillbaka.',
+  'sub.small': 'Visas i din lokala valuta, inklusive moms där det gäller. Förnyas varje månad tills du avslutar. Du kan frånträda avtalet inom 14 dagar: första gången får du hela beloppet tillbaka.',
   'sub.signedInAs': 'Inloggad som {email}',
   'sub.logOut': 'Logga ut',
   'sub.waiting': 'Betalningen är klar! Vi låser upp kursen…',

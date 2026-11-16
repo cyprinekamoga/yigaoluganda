@@ -58,7 +58,8 @@
     "lint": "expo lint",
     "sites:sync": "node scripts/sync-sites.mjs",
     "stripe:setup": "node scripts/stripe-setup.ts",
-    "e2e:accounts": "node scripts/e2e-accounts.mjs"
+    "e2e:accounts": "node scripts/e2e-accounts.mjs",
+    "e2e:landing": "node landing/build.mjs && node scripts/e2e-landing.mjs"
   },
   "private": true
 }
