@@ -12,6 +12,12 @@ import { restore, snapshot, useApp, type Data } from '../state/store';
  */
 
 export const MAIN = 'main';
+
+/**
+ * Children's profiles come with the Family plan, which is not built yet. Until it is, kids mode
+ * stays off so the profiles are not free; test builds turn it on with EXPO_PUBLIC_KIDS=1.
+ */
+export const KIDS_MODE = process.env.EXPO_PUBLIC_KIDS === '1';
 export const MAX_CHILDREN = 4;
 
 export interface ChildProfile {

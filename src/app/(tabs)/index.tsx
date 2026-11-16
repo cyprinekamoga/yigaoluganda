@@ -10,7 +10,7 @@ import { dueIds } from '@/logic/srs';
 import { chapterStatus, lockedReason, unitOpen } from '@/logic/course';
 import { isComplete, lessonsDone } from '@/logic/unlock';
 import { LearnerChip } from '@/learners/LearnerChip';
-import { useIsKid } from '@/learners/store';
+import { KIDS_MODE, useIsKid } from '@/learners/store';
 import { ReminderOffer } from '@/reminders/ReminderSettings';
 import { useApp } from '@/state/store';
 import { Button } from '@/ui/Button';
@@ -80,7 +80,7 @@ export default function Home() {
 
   return (
     <LargeTitleScreen testID="screen-home" title={t('tabs.home')} trailing={<StatsBar />} compactAlign="leading">
-      <LearnerChip />
+      {KIDS_MODE && <LearnerChip />}
 
       <Card style={styles.hello}>
         <Ngaali mood={kid ? 'wave' : 'idle'} size={78} />

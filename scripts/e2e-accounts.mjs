@@ -1,7 +1,7 @@
 // End-to-end check of accounts and payment in the web build, with Supabase and Stripe replaced
 // by an in-browser stand-in (Playwright request interception). Nothing leaves the machine.
 // Usage:
-//   EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_SUPABASE_URL=https://mock.supabase.test \
+//   EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_KIDS=1 EXPO_PUBLIC_SUPABASE_URL=https://mock.supabase.test \
 //   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_test \
 //   EXPO_PUBLIC_GOOGLE_CLIENT_ID=test-client.apps.googleusercontent.com \
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]

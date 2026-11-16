@@ -11,7 +11,7 @@ import { isComplete, lessonsDone } from '@/logic/unlock';
 import { NativeFeedbackCard } from '@/feedback/Inbox';
 import { Avatar } from '@/learners/LearnerChip';
 import { useGrownUpCheck } from '@/learners/ParentGate';
-import { MAIN, useLearners } from '@/learners/store';
+import { KIDS_MODE, MAIN, useLearners } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { BadgeMedal } from '@/ui/Badge';
 import { Beads } from '@/ui/Beads';
@@ -214,20 +214,22 @@ export default function Profile() {
       <NativeFeedbackCard />
 
       {/* Who's learning: the account holder and the children's profiles (kids mode). */}
-      <Card style={{ gap: S.md }} testID="learners-card">
-        <View style={styles.rowBetween}>
-          <Txt variant="h3">{t('learners.profileCard')}</Txt>
-          <View style={styles.avatars}>
-            {[MAIN, ...children.map((c) => c.id)].slice(0, 5).map((id, i) => (
-              <View key={id} style={[styles.avatarRing, id === active && styles.avatarOn]}>
-                <Avatar name={id === MAIN ? (id === active ? profile.name : savedMainName) : (children.find((c) => c.id === id)?.name ?? '')} index={i} size={28} />
-              </View>
-            ))}
+      {KIDS_MODE && (
+        <Card style={{ gap: S.md }} testID="learners-card">
+          <View style={styles.rowBetween}>
+            <Txt variant="h3">{t('learners.profileCard')}</Txt>
+            <View style={styles.avatars}>
+              {[MAIN, ...children.map((c) => c.id)].slice(0, 5).map((id, i) => (
+                <View key={id} style={[styles.avatarRing, id === active && styles.avatarOn]}>
+                  <Avatar name={id === MAIN ? (id === active ? profile.name : savedMainName) : (children.find((c) => c.id === id)?.name ?? '')} index={i} size={28} />
+                </View>
+              ))}
+            </View>
           </View>
-        </View>
-        <Txt variant="small">{children.length ? t('learners.profileCardKids', { n: children.length + 1 }) : t('learners.profileCardBody')}</Txt>
-        <Button kind="secondary" testID="open-learners" label={children.length ? t('learners.title') : t('learners.add')} onPress={() => router.push('/learners')} />
-      </Card>
+          <Txt variant="small">{children.length ? t('learners.profileCardKids', { n: children.length + 1 }) : t('learners.profileCardBody')}</Txt>
+          <Button kind="secondary" testID="open-learners" label={children.length ? t('learners.title') : t('learners.add')} onPress={() => router.push('/learners')} />
+        </Card>
+      )}
 
       {/* Instead of a leaderboard: learn with the people you already know. */}
       <Card style={styles.family} testID="family-card">

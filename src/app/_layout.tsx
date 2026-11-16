@@ -8,7 +8,7 @@ import { selectAccess, selectSignedIn, startAccount, useAccount } from '@/accoun
 import { clearOpeningLink } from '@/account/supabase';
 import { initAudio } from '@/audio/engine';
 import { useReminderSchedule } from '@/reminders/useReminders';
-import { useLearners } from '@/learners/store';
+import { KIDS_MODE, useLearners } from '@/learners/store';
 import { useApp } from '@/state/store';
 import { C } from '@/ui/theme';
 
@@ -66,7 +66,6 @@ export default function RootLayout() {
           <Stack.Screen name="practice/[mode]" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="phrase/[id]" options={{ presentation: 'modal' }} />
           <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
-          <Stack.Screen name="learners" />
           <Stack.Screen name="certificate/[part]" />
           <Stack.Screen name="feedback" />
         </Stack.Protected>
@@ -90,6 +89,10 @@ export default function RootLayout() {
         </Stack.Protected>
         {/* Where the sign-up and password e-mails lead, signed in or not. Only when opened from such a link,
             so it is never where the app sends someone by default. */}
+        {/* Kids mode, off until the Family plan exists (see KIDS_MODE). */}
+        <Stack.Protected guard={canLearn && KIDS_MODE}>
+          <Stack.Screen name="learners" />
+        </Stack.Protected>
         {/* For the people who review recordings and reports, with or without a subscription of their own.
             Only open to them: a blocked screen sends people to the first open screen in file order, and
             "review" comes before "subscribe". */}

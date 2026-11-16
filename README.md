@@ -151,7 +151,7 @@ Scan the QR code with **Expo Go** on your phone, or press `w` to open it in a br
 End-to-end test in a real browser (mobile and desktop sizes):
 
 ```bash
-EXPO_PUBLIC_E2E=1 npm run export:web && npm run e2e
+EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_KIDS=1 npm run export:web && npm run e2e
 ```
 
 ### Build for the App Store and Google Play

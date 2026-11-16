@@ -1,5 +1,5 @@
 // End-to-end check of the web build with Playwright (pre-installed Chromium).
-// Usage: EXPO_PUBLIC_E2E=1 npx expo export -p web && node scripts/e2e.mjs [--shots]
+// Usage: EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_KIDS=1 npx expo export -p web && node scripts/e2e.mjs [--shots]
 import { createRequire } from 'node:module';
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
