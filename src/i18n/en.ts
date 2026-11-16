@@ -532,6 +532,18 @@ export const en = {
   'confirm.emailTitle': "Confirm your e-mail address",
   'confirm.emailLead': "Tap below to finish changing the address on your account.",
   'confirm.emailButton': "Confirm the address",
+  'story.section': "Reading stories",
+  'story.sectionBody': "Short stories in Luganda, made from what you've learned. Tap a line to see what it means.",
+  'story.locked': "Opens after chapter {n}: {title}",
+  'story.showAll': "Show all translations",
+  'story.tapHint': "Read it in Luganda first. Tap a line if you need its meaning.",
+  'story.tapA11y': "Shows or hides the translation",
+  'story.questions': "Did you follow it?",
+  'story.tryAgain': "Not quite. Read the story again and try another answer.",
+  'story.finish': "Finish the story",
+  'story.doneTitle': "Bulungi nnyo!",
+  'story.doneBody': "You read a whole story in Luganda.",
+  'story.back': "Back to the Practice Lab",
 } as const;
 
 export type Key = keyof typeof en;

@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { audioCount } from '@/audio/engine';
-import { ALL_CHAPTERS, DIALOGUES, PHRASES } from '@/content';
+import { ALL_CHAPTERS, CHAPTERS, DIALOGUES, PHRASES, STORIES } from '@/content';
+import { isComplete } from '@/logic/unlock';
 import { useT } from '@/i18n';
 import { dayKey } from '@/logic/dates';
 import { dueIds } from '@/logic/srs';
@@ -21,6 +22,7 @@ export default function PracticeLab() {
   const router = useRouter();
   const srs = useApp((s) => s.srs);
   const done = useApp((s) => s.done);
+  const storiesRead = useApp((s) => s.stories);
   const learned = Object.keys(srs);
   const due = dueIds(srs, dayKey(), 50).length;
   const reviewCount = Math.min(8, Math.max(due, Math.min(learned.length, 8)));
@@ -109,6 +111,39 @@ export default function PracticeLab() {
                 </Txt>
               </View>
               {open && <Ionicons name="play-circle" size={28} color={h.deep} />}
+            </Pressable>
+          );
+        })}
+      </View>
+
+      {/* Reading stories */}
+      <View style={styles.section}>
+        <Txt variant="label">{t('story.section')}</Txt>
+        <Txt variant="small">{t('story.sectionBody')}</Txt>
+        {STORIES.map((st) => {
+          const chapter = CHAPTERS[st.after];
+          const open = Boolean(chapter && isComplete(chapter, done));
+          const read = Boolean(storiesRead?.[st.id]);
+          return (
+            <Pressable
+              key={st.id}
+              testID={`story-${st.id}`}
+              disabled={!open}
+              onPress={() => router.push(`/story/${st.id}`)}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: !open }}
+              style={({ pressed }) => [styles.row, pressed && { opacity: 0.85 }]}
+            >
+              <View style={[styles.icon, { backgroundColor: open ? C.neonSoft : C.paperDeep }]}>
+                <Ionicons name={!open ? 'lock-closed' : read ? 'checkmark' : 'book'} size={20} color={open ? C.neon : C.ink2} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Txt variant="strong">{st.lgTitle}</Txt>
+                <Txt variant="small" numberOfLines={1}>
+                  {open ? tr(st.title) : t('story.locked', { n: chapter?.n ?? 0, title: chapter ? tr(chapter.title) : '' })}
+                </Txt>
+              </View>
+              {open && <Ionicons name="chevron-forward" size={20} color={C.ink3} />}
             </Pressable>
           );
         })}

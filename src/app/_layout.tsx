@@ -68,6 +68,7 @@ export default function RootLayout() {
           <Stack.Screen name="placement" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
           <Stack.Screen name="certificate/[part]" />
           <Stack.Screen name="feedback" />
+          <Stack.Screen name="story/[id]" />
         </Stack.Protected>
         <Stack.Protected guard={ACCOUNTS && !signedIn}>
           <Stack.Screen name="sign-up" />

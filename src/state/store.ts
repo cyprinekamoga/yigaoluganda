@@ -75,6 +75,8 @@ export interface Data {
   placementSeen: boolean;
   /** Certificates issued for finished parts, by part number. */
   certs: Record<string, IssuedCert>;
+  /** Reading stories finished: story id → when. */
+  stories: Record<string, number>;
 }
 
 /** A certificate the account's server issued (the code is what makes it checkable). */
@@ -97,7 +99,9 @@ interface Actions {
   gradePhrases(phraseIds: string[], correct: boolean): void;
   loseHeart(): void;
   completeLesson(result: LessonResult): Reward;
-  completePractice(kind: 'review' | 'dialogue' | 'speak'): Reward;
+  completePractice(kind: 'review' | 'dialogue' | 'speak' | 'story'): Reward;
+  /** A reading story was read to the end (and its questions answered). */
+  finishStory(id: string): Reward;
   buyRefill(): boolean;
   noteRecording(): void;
   /** The next fun fact to show (index into FACTS); advances the rotation. */
@@ -123,6 +127,7 @@ const fresh = (): Data => ({
   factIndex: 0,
   placementSeen: false,
   certs: {},
+  stories: {},
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
@@ -146,6 +151,7 @@ export function snapshot(s: Data): Data {
     factIndex: s.factIndex,
     placementSeen: s.placementSeen,
     certs: s.certs,
+    stories: s.stories,
   };
 }
 
@@ -236,6 +242,11 @@ export const useApp = create<AppState>()(
             return { stats };
           });
           return { gems: PRACTICE_GEMS, perfect: false, badges: awardBadges(), heartsRefilled: kind === 'review', goalReached: reachedGoal(get()) };
+        },
+
+        finishStory: (id) => {
+          set((s) => ({ stories: { ...s.stories, [id]: Date.now() } }));
+          return get().completePractice('story');
         },
 
         buyRefill: () => {

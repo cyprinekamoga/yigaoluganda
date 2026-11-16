@@ -220,6 +220,25 @@ async function run(viewport, label) {
   ok(await playLesson(page, { shotPrefix: `${label}-09` }), 'replayed a conversation');
   await page.getByTestId('complete-continue').click();
 
+  // Reading stories: the first one opens after Introductions (chapter 2), the next stay locked.
+  await page.getByTestId('screen-practice').waitFor();
+  ok(await page.getByTestId('story-st-mpola').isDisabled(), 'stories for later chapters are locked');
+  await page.getByTestId('story-st-nakato').click();
+  await page.getByTestId('screen-story').waitFor();
+  ok((await page.getByTestId('story-line-4').innerText()).includes('Erinnya lyange nze Sara'), 'the story puts the learner in it by name');
+  ok((await page.getByTestId('story-tr-0').count()) === 0, 'translations are hidden at first');
+  await page.getByTestId('story-line-0').click();
+  ok((await page.getByTestId('story-tr-0').innerText()) === 'How are you?', 'tapping a line shows what it means');
+  ok(await page.getByTestId('story-finish').isDisabled(), 'the story is finished by answering its questions');
+  await page.getByTestId('story-q-0-option').first().click();
+  for (let q = 0; q < 2; q++) await page.getByTestId(`story-q-${q}-answer`).click();
+  await shot(page, `${label}-09b-story`);
+  await page.getByTestId('story-finish').click();
+  await page.getByTestId('story-done').waitFor();
+  ok(true, 'a story read to the end earns cowries');
+  await page.getByTestId('story-back').click();
+  await page.getByTestId('screen-practice').waitFor();
+
   // Phrasebook search
   await page.getByTestId('tab-dictionary').click();
   await page.getByTestId('dict-search').fill('ngenda');
@@ -234,7 +253,7 @@ async function run(viewport, label) {
   // Profile and settings
   await page.getByTestId('tab-profile').click();
   await page.getByTestId('screen-profile').waitFor();
-  ok((await page.getByTestId('tile-gems').getAttribute('aria-label')).includes('19'), 'profile shows total cowries (10 + 5 + 2 + 2)');
+  ok((await page.getByTestId('tile-gems').getAttribute('aria-label')).includes('21'), 'profile shows total cowries (10 + 5 + 2 + 2 + 2 for the story)');
   ok(/Phrases learned: [1-9]/.test(await page.getByTestId('tile-phrases').getAttribute('aria-label')), 'profile shows phrases learned');
   ok(await page.getByTestId('family-card').isVisible(), 'profile has the practise-with-family card');
   await shot(page, `${label}-12-profile`);

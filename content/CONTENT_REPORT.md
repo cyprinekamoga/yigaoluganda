@@ -130,3 +130,19 @@ Part 2 covers family, numbers, money and the market, food, time and days, direct
 - Words that only appear inside conversations: *Alabika bulungi* (she looks lovely), *basatu* (three, people), *ebiyembe* (mangoes), *ekibbo* (basket), *enkumi ttaano / nnya / ssatu* (5,000 / 4,000 / 3,000), *Komawo* (come back), *Oyagala kulya ki?*, *Ate okunywa?*, *Tulina* (we have), *Akatale kali wa?*, *okyuke ku ddyo*, *Kumpi wano*, *Oliwo?*, *Kiki ekikuluma?*, *Nja kukuwa eddagala*, *Enjala ekuluma?*, *Nkwagala nnyo*.
 - Time: the tip says the Luganda hour = clock hour minus six (essaawa emu = 7). Please confirm the wording, and the weekday names.
 - Culture tips (sibling words, family questions, luwombo, minibus taxis, being a guest, the village home) should be read by a Muganda reader.
+
+## Reading stories
+
+7 short stories, built from course sentences. Please read every line; the ones marked below join course pieces in new ways.
+
+| story | Luganda | Meaning | What to check |
+|---|---|---|---|
+| `st-nakato` | Nze Nakato. Nsanyuse okukulaba! | I'm Nakato. Nice to meet you! | Two course sentences joined: Nze Nakato + Nsanyuse okukulaba. |
+| `st-mpola` | Ndi bulungi, weebale. | I'm fine, thank you. | Two course pieces joined: Ndi bulungi + weebale. |
+| `st-akatale` | Bulungi. Oyagala ki, mukwano gwange? | Fine. What would you like, my friend? | Two course pieces joined: Bulungi + Oyagala ki, mukwano gwange? |
+| `st-akatale` | Kale, nja kukitwala. Weebale nnyo! | Okay, I'll take it. Thank you very much! | Two course sentences joined: Kale, nja kukitwala + Weebale nnyo. |
+| `st-ekkubo` | Akatale kali wa? | Where is the market? | New sentence from course words: akatale + kali wa (ka-class agreement). |
+| `st-ekkubo` | Tekiri wala. Kiri kumpi. | It isn't far. It's near. | Two course sentences joined: Tekiri wala + Kiri kumpi. |
+| `st-ekkubo` | Weebale nnyo, ssebo! | Thank you very much, sir! | Course pieces joined: Weebale nnyo + ssebo. |
+| `st-jjajja` | Bulungi. Abaana bali bulungi? | Fine. Are the children well? | Abaana bali bulungi as a question (by intonation). |
+| `st-kyalo` | Kale, tulabagane wiiki ejja! | Okay, see you next week! | Course pieces joined: Kale + Tulabagane wiiki ejja. |

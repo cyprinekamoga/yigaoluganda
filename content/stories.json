@@ -1,0 +1,162 @@
+[
+  {
+    "id": "st-nakato",
+    "after": "c07",
+    "lgTitle": "Nsanyuse okukulaba",
+    "title": { "en": "Meeting Nakato", "sv": "Du träffar Nakato" },
+    "setting": { "en": "Your first morning in Kampala. A young woman smiles at you outside the shop.", "sv": "Din första morgon i Kampala. En ung kvinna ler mot dig utanför affären." },
+    "cast": { "nakato": { "name": "Nakato" }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "nakato", "lg": "Oli otya?", "tr": { "en": "How are you?", "sv": "Hur mår du?" } },
+      { "who": "you", "lg": "Gyendi, naawe?", "tr": { "en": "I'm fine, and you?", "sv": "Jag mår bra, och du?" } },
+      { "who": "nakato", "lg": "Bulungi, weebale.", "tr": { "en": "Fine, thanks.", "sv": "Bra, tack." } },
+      { "who": "nakato", "lg": "Erinnya lyo ggwe ani?", "tr": { "en": "What's your name?", "sv": "Vad heter du?" } },
+      { "who": "you", "lg": "Erinnya lyange nze {name}.", "tr": { "en": "My name is {name}.", "sv": "Jag heter {name}." } },
+      { "who": "you", "lg": "Erinnya lyo ggwe ani?", "tr": { "en": "What's your name?", "sv": "Vad heter du?" } },
+      { "who": "nakato", "lg": "Nze Nakato. Nsanyuse okukulaba!", "tr": { "en": "I'm Nakato. Nice to meet you!", "sv": "Jag är Nakato. Trevligt att träffas!" }, "check": "Two course sentences joined: Nze Nakato + Nsanyuse okukulaba." },
+      { "who": "you", "lg": "Nange nsanyuse okukulaba.", "tr": { "en": "Nice to meet you too.", "sv": "Trevligt att träffas, detsamma." } }
+    ],
+    "questions": [
+      { "q": { "en": "How is Nakato?", "sv": "Hur mår Nakato?" }, "options": [{ "en": "Fine", "sv": "Bra" }, { "en": "Tired", "sv": "Trött" }, { "en": "Hungry", "sv": "Hungrig" }], "answer": 0 },
+      { "q": { "en": "What does “Erinnya lyo ggwe ani?” ask?", "sv": "Vad frågar ”Erinnya lyo ggwe ani?”?" }, "options": [{ "en": "Where you live", "sv": "Var du bor" }, { "en": "Your name", "sv": "Vad du heter" }, { "en": "How old you are", "sv": "Hur gammal du är" }], "answer": 1 }
+    ]
+  },
+  {
+    "id": "st-mpola",
+    "after": "c10",
+    "lgTitle": "Yogera mpola",
+    "title": { "en": "Slowly, please", "sv": "Långsamt, tack" },
+    "setting": { "en": "On a taxi to town, a man starts talking to you very fast.", "sv": "I en taxi in till stan börjar en man prata väldigt snabbt med dig." },
+    "cast": { "man": { "name": { "en": "The man", "sv": "Mannen" } }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "man", "lg": "Ki kati, mukwano gwange?", "tr": { "en": "What's up, my friend?", "sv": "Läget, min vän?" } },
+      { "who": "you", "lg": "Nsonyiwa, sitegeera.", "tr": { "en": "Sorry, I don't understand.", "sv": "Förlåt, jag förstår inte." } },
+      { "who": "you", "lg": "Yogera mpola, mwattu.", "tr": { "en": "Please speak slowly.", "sv": "Prata långsamt, är du snäll." } },
+      { "who": "man", "lg": "Oli otya?", "tr": { "en": "How are you?", "sv": "Hur mår du?" } },
+      { "who": "you", "lg": "Ndi bulungi, weebale.", "tr": { "en": "I'm fine, thank you.", "sv": "Jag mår bra, tack." }, "check": "Two course pieces joined: Ndi bulungi + weebale." },
+      { "who": "you", "lg": "Mmanyi Oluganda katono.", "tr": { "en": "I know a little Luganda.", "sv": "Jag kan lite luganda." } },
+      { "who": "man", "lg": "Kirungi nnyo!", "tr": { "en": "Very good!", "sv": "Jättebra!" } },
+      { "who": "man", "lg": "Ogenda wa?", "tr": { "en": "Where are you going?", "sv": "Vart ska du?" } },
+      { "who": "you", "lg": "Ŋŋenda e Kampala.", "tr": { "en": "I'm going to Kampala.", "sv": "Jag ska till Kampala." } }
+    ],
+    "questions": [
+      { "q": { "en": "What do you ask the man to do?", "sv": "Vad ber du mannen göra?" }, "options": [{ "en": "Say his name", "sv": "Säga vad han heter" }, { "en": "Speak slowly", "sv": "Prata långsamt" }, { "en": "Stop the taxi", "sv": "Stanna taxin" }], "answer": 1 },
+      { "q": { "en": "How much Luganda do you know?", "sv": "Hur mycket luganda kan du?" }, "options": [{ "en": "A little", "sv": "Lite" }, { "en": "None", "sv": "Ingen alls" }, { "en": "A lot", "sv": "Mycket" }], "answer": 0 },
+      { "q": { "en": "Where are you going?", "sv": "Vart ska du?" }, "options": [{ "en": "Home", "sv": "Hem" }, { "en": "To the village", "sv": "Till byn" }, { "en": "To Kampala", "sv": "Till Kampala" }], "answer": 2 }
+    ]
+  },
+  {
+    "id": "st-akatale",
+    "after": "c15",
+    "lgTitle": "Ku katale",
+    "title": { "en": "At the market", "sv": "På marknaden" },
+    "setting": { "en": "You want to buy something at the market, and the price sounds high.", "sv": "Du vill köpa något på marknaden, och priset låter högt." },
+    "cast": { "seller": { "name": { "en": "The seller", "sv": "Försäljaren" } }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "you", "lg": "Wasuze otya, nnyabo?", "tr": { "en": "Good morning, madam.", "sv": "God morgon, frun." } },
+      { "who": "seller", "lg": "Bulungi. Oyagala ki, mukwano gwange?", "tr": { "en": "Fine. What would you like, my friend?", "sv": "Bra. Vad vill du ha, min vän?" }, "check": "Two course pieces joined: Bulungi + Oyagala ki, mukwano gwange?" },
+      { "who": "you", "lg": "Kino ssente mmeka?", "tr": { "en": "How much is this?", "sv": "Hur mycket kostar den här?" } },
+      { "who": "seller", "lg": "Siringi lukumi.", "tr": { "en": "A thousand shillings.", "sv": "Tusen shilling." } },
+      { "who": "you", "lg": "Kya bbeeyi nnyo!", "tr": { "en": "That's very expensive!", "sv": "Det är jättedyrt!" } },
+      { "who": "you", "lg": "Kendeezaako, nnyabo.", "tr": { "en": "Lower it a little, madam.", "sv": "Sänk lite, frun." } },
+      { "who": "seller", "lg": "Kale.", "tr": { "en": "Okay.", "sv": "Okej." } },
+      { "who": "you", "lg": "Kale, nja kukitwala. Weebale nnyo!", "tr": { "en": "Okay, I'll take it. Thank you very much!", "sv": "Okej, jag tar den. Tack så mycket!" }, "check": "Two course sentences joined: Kale, nja kukitwala + Weebale nnyo." }
+    ],
+    "questions": [
+      { "q": { "en": "What did it cost at first?", "sv": "Vad kostade det först?" }, "options": [{ "en": "A hundred shillings", "sv": "Hundra shilling" }, { "en": "A thousand shillings", "sv": "Tusen shilling" }, { "en": "Ten shillings", "sv": "Tio shilling" }], "answer": 1 },
+      { "q": { "en": "What does “Kendeezaako” ask for?", "sv": "Vad ber man om med ”Kendeezaako”?" }, "options": [{ "en": "A lower price", "sv": "Ett lägre pris" }, { "en": "A bag", "sv": "En påse" }, { "en": "The change", "sv": "Växeln" }], "answer": 0 }
+    ]
+  },
+  {
+    "id": "st-enjala",
+    "after": "c16",
+    "lgTitle": "Enjala ennuma!",
+    "title": { "en": "I'm hungry!", "sv": "Jag är hungrig!" },
+    "setting": { "en": "It's lunchtime at home, and Maama is in the kitchen.", "sv": "Det är lunchdags hemma, och mamma är i köket." },
+    "cast": { "maama": { "name": "Maama" }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "you", "lg": "Enjala ennuma nnyo!", "tr": { "en": "I'm really hungry!", "sv": "Jag är jättehungrig!" } },
+      { "who": "maama", "lg": "Oyagala ki?", "tr": { "en": "What would you like?", "sv": "Vad vill du ha?" } },
+      { "who": "you", "lg": "Matooke n'ebinyeebwa.", "tr": { "en": "Matooke with groundnut sauce.", "sv": "Matooke med jordnötssås." } },
+      { "who": "you", "lg": "Njagala amazzi, mwattu.", "tr": { "en": "I'd like water, please.", "sv": "Jag vill ha vatten, tack." } },
+      { "who": "maama", "lg": "Kale.", "tr": { "en": "Okay.", "sv": "Okej." } },
+      { "who": "you", "lg": "Emmere ewooma nnyo!", "tr": { "en": "The food is really tasty!", "sv": "Maten är jättegod!" } },
+      { "who": "you", "lg": "Nkkuse, weebale.", "tr": { "en": "I'm full, thank you.", "sv": "Jag är mätt, tack." } },
+      { "who": "you", "lg": "Weebale okufumba, maama.", "tr": { "en": "Thanks for cooking, Mum.", "sv": "Tack för maten, mamma." } }
+    ],
+    "questions": [
+      { "q": { "en": "What do you eat?", "sv": "Vad äter du?" }, "options": [{ "en": "Rice and beans", "sv": "Ris och bönor" }, { "en": "Matooke with groundnut sauce", "sv": "Matooke med jordnötssås" }, { "en": "Bread", "sv": "Bröd" }], "answer": 1 },
+      { "q": { "en": "What do you ask for to drink?", "sv": "Vad vill du dricka?" }, "options": [{ "en": "Tea", "sv": "Te" }, { "en": "Milk", "sv": "Mjölk" }, { "en": "Water", "sv": "Vatten" }], "answer": 2 },
+      { "q": { "en": "What does “Nkkuse” mean?", "sv": "Vad betyder ”Nkkuse”?" }, "options": [{ "en": "I'm full", "sv": "Jag är mätt" }, { "en": "I'm tired", "sv": "Jag är trött" }, { "en": "I'm cold", "sv": "Jag fryser" }], "answer": 0 }
+    ]
+  },
+  {
+    "id": "st-ekkubo",
+    "after": "c18",
+    "lgTitle": "Akatale kali wa?",
+    "title": { "en": "Finding the market", "sv": "Vägen till marknaden" },
+    "setting": { "en": "You're lost in town and ask a man the way to the market.", "sv": "Du har gått vilse i stan och frågar en man om vägen till marknaden." },
+    "cast": { "man": { "name": { "en": "The man", "sv": "Mannen" } }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "you", "lg": "Wasuze otya, ssebo?", "tr": { "en": "Good morning, sir.", "sv": "God morgon, herrn." } },
+      { "who": "man", "lg": "Bulungi.", "tr": { "en": "Fine.", "sv": "Bra." } },
+      { "who": "you", "lg": "Akatale kali wa?", "tr": { "en": "Where is the market?", "sv": "Var ligger marknaden?" }, "check": "New sentence from course words: akatale + kali wa (ka-class agreement)." },
+      { "who": "man", "lg": "Genda mu maaso.", "tr": { "en": "Go straight ahead.", "sv": "Gå rakt fram." } },
+      { "who": "man", "lg": "Kyuka ku ddyo.", "tr": { "en": "Turn right.", "sv": "Sväng höger." } },
+      { "who": "you", "lg": "Kiri wala?", "tr": { "en": "Is it far?", "sv": "Är det långt?" } },
+      { "who": "man", "lg": "Tekiri wala. Kiri kumpi.", "tr": { "en": "It isn't far. It's near.", "sv": "Det är inte långt. Det är nära." }, "check": "Two course sentences joined: Tekiri wala + Kiri kumpi." },
+      { "who": "you", "lg": "Weebale nnyo, ssebo!", "tr": { "en": "Thank you very much, sir!", "sv": "Tack så mycket, herrn!" }, "check": "Course pieces joined: Weebale nnyo + ssebo." }
+    ],
+    "questions": [
+      { "q": { "en": "Which way do you turn?", "sv": "Åt vilket håll svänger du?" }, "options": [{ "en": "Left", "sv": "Vänster" }, { "en": "Right", "sv": "Höger" }, { "en": "Back", "sv": "Tillbaka" }], "answer": 1 },
+      { "q": { "en": "Is the market far?", "sv": "Är marknaden långt bort?" }, "options": [{ "en": "Yes, very far", "sv": "Ja, väldigt långt" }, { "en": "No, it's near", "sv": "Nej, den är nära" }], "answer": 1 }
+    ]
+  },
+  {
+    "id": "st-jjajja",
+    "after": "c19",
+    "lgTitle": "Ewa jjajja",
+    "title": { "en": "Visiting Jjajja", "sv": "Hos jjajja" },
+    "setting": { "en": "You and your friend Kato visit Kato's grandmother.", "sv": "Du och din vän Kato hälsar på Katos mormor." },
+    "cast": { "kato": { "name": "Kato" }, "jjajja": { "name": "Jjajja" }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "kato", "lg": "Kkoodi! Oliwo?", "tr": { "en": "Knock knock! Are you there?", "sv": "Knack knack! Är du hemma?" } },
+      { "who": "jjajja", "lg": "Yingira otuule.", "tr": { "en": "Come in and sit down.", "sv": "Kom in och sätt dig." } },
+      { "who": "kato", "lg": "Osiibye otya, jjajja?", "tr": { "en": "Good afternoon, Jjajja.", "sv": "God eftermiddag, jjajja." } },
+      { "who": "jjajja", "lg": "Bulungi, mwana wange.", "tr": { "en": "Fine, my child.", "sv": "Bra, mitt barn." } },
+      { "who": "you", "lg": "Osiibye otya, jjajja?", "tr": { "en": "Good afternoon, Jjajja.", "sv": "God eftermiddag, jjajja." } },
+      { "who": "jjajja", "lg": "Bulungi. Abaana bali bulungi?", "tr": { "en": "Fine. Are the children well?", "sv": "Bra. Mår barnen bra?" }, "check": "Abaana bali bulungi as a question (by intonation)." },
+      { "who": "kato", "lg": "Bali bulungi, weebale.", "tr": { "en": "They're well, thank you.", "sv": "De mår bra, tack." } },
+      { "who": "you", "lg": "Emmere ewooma, jjajja!", "tr": { "en": "The food is delicious, Jjajja!", "sv": "Maten är jättegod, jjajja!" } },
+      { "who": "kato", "lg": "Ka ŋŋende, weebale nnyo.", "tr": { "en": "I'll be going now, thank you very much.", "sv": "Nu ska jag gå, tack så mycket." } },
+      { "who": "jjajja", "lg": "Kale, tulabagane!", "tr": { "en": "Okay, see you!", "sv": "Okej, vi ses!" } }
+    ],
+    "questions": [
+      { "q": { "en": "What does Jjajja say when you arrive?", "sv": "Vad säger jjajja när ni kommer?" }, "options": [{ "en": "Come in and sit down", "sv": "Kom in och sätt dig" }, { "en": "Goodbye", "sv": "Hej då" }, { "en": "Are you hungry?", "sv": "Är ni hungriga?" }], "answer": 0 },
+      { "q": { "en": "How do you greet Jjajja in the afternoon?", "sv": "Hur hälsar du på jjajja på eftermiddagen?" }, "options": [{ "en": "Wasuze otya?", "sv": "Wasuze otya?" }, { "en": "Osiibye otya?", "sv": "Osiibye otya?" }, { "en": "Sula bulungi.", "sv": "Sula bulungi." }], "answer": 1 }
+    ]
+  },
+  {
+    "id": "st-kyalo",
+    "after": "c21",
+    "lgTitle": "Ŋŋenda ku kyalo",
+    "title": { "en": "Off to the village", "sv": "Till byn" },
+    "setting": { "en": "Nakato calls you on Friday afternoon.", "sv": "Nakato ringer dig på fredagseftermiddagen." },
+    "cast": { "nakato": { "name": "Nakato" }, "you": { "name": "{name}" } },
+    "lines": [
+      { "who": "nakato", "lg": "Oli wa?", "tr": { "en": "Where are you?", "sv": "Var är du?" } },
+      { "who": "you", "lg": "Ŋŋenda ku kyalo.", "tr": { "en": "I'm going to the village.", "sv": "Jag ska till byn." } },
+      { "who": "nakato", "lg": "Ekyalo kiri wala?", "tr": { "en": "Is the village far?", "sv": "Är byn långt bort?" } },
+      { "who": "you", "lg": "Tekiri wala.", "tr": { "en": "It isn't far.", "sv": "Det är inte långt." } },
+      { "who": "you", "lg": "Jjajja ali ku kyalo.", "tr": { "en": "Jjajja is in the village.", "sv": "Jjajja är i byn." } },
+      { "who": "nakato", "lg": "Ojja ddi?", "tr": { "en": "When are you coming?", "sv": "När kommer du?" } },
+      { "who": "you", "lg": "Nja kujja wiiki ejja.", "tr": { "en": "I'll come next week.", "sv": "Jag kommer nästa vecka." } },
+      { "who": "nakato", "lg": "Kale, tulabagane wiiki ejja!", "tr": { "en": "Okay, see you next week!", "sv": "Okej, vi ses nästa vecka!" }, "check": "Course pieces joined: Kale + Tulabagane wiiki ejja." }
+    ],
+    "questions": [
+      { "q": { "en": "Where are you going?", "sv": "Vart ska du?" }, "options": [{ "en": "To the market", "sv": "Till marknaden" }, { "en": "To the village", "sv": "Till byn" }, { "en": "To school", "sv": "Till skolan" }], "answer": 1 },
+      { "q": { "en": "Who is in the village?", "sv": "Vem är i byn?" }, "options": [{ "en": "Jjajja", "sv": "Jjajja" }, { "en": "Maama", "sv": "Mamma" }, { "en": "Kato", "sv": "Kato" }], "answer": 0 },
+      { "q": { "en": "When will you come back?", "sv": "När kommer du tillbaka?" }, "options": [{ "en": "Tomorrow", "sv": "I morgon" }, { "en": "Today", "sv": "I dag" }, { "en": "Next week", "sv": "Nästa vecka" }], "answer": 2 }
+    ]
+  }
+]

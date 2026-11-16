@@ -129,3 +129,28 @@ describe.each(UNITS)('content of part $n', (unit) => {
     }
   });
 });
+
+describe('reading stories', () => {
+  it('are well formed and open after a real chapter', async () => {
+    const { STORIES, CHAPTERS } = await import('./index');
+    expect(STORIES.length).toBeGreaterThanOrEqual(6);
+    const ids = new Set<string>();
+    for (const st of STORIES) {
+      expect(ids.has(st.id), st.id).toBe(false);
+      ids.add(st.id);
+      expect(CHAPTERS[st.after], `${st.id} opens after ${st.after}`).toBeTruthy();
+      expect(st.title.en && st.title.sv && st.setting.en && st.setting.sv, st.id).toBeTruthy();
+      expect(st.lines.length).toBeGreaterThanOrEqual(5);
+      for (const l of st.lines) {
+        expect(st.cast[l.who], `${st.id}: speaker ${l.who}`).toBeTruthy();
+        expect(l.lg.trim() && l.tr.en.trim() && l.tr.sv.trim(), `${st.id}: ${l.lg}`).toBeTruthy();
+      }
+      expect(st.questions.length).toBeGreaterThanOrEqual(2);
+      for (const q of st.questions) {
+        expect(q.options.length).toBeGreaterThanOrEqual(2);
+        expect(q.answer >= 0 && q.answer < q.options.length, `${st.id}: ${q.q.en}`).toBe(true);
+        for (const o of q.options) expect(o.en && o.sv).toBeTruthy();
+      }
+    }
+  });
+});

@@ -176,3 +176,33 @@ export interface Unit {
   dialogues: Dialogue[];
   roots: Root[];
 }
+
+/** A short reading story (text only), built from course sentences. */
+export interface StoryLine {
+  /** Key into the story's cast. "you" is the learner. */
+  who: string;
+  lg: string;
+  tr: T;
+  /** Something a native speaker should confirm. Shown in CONTENT_REPORT, never in the app. */
+  check?: string;
+}
+
+export interface StoryQuestion {
+  q: T;
+  options: T[];
+  /** Index of the right option. */
+  answer: number;
+}
+
+export interface Story {
+  id: string;
+  /** The chapter that must be complete before the story opens. */
+  after: string;
+  lgTitle: string;
+  title: T;
+  setting: T;
+  /** Speakers: a name ("{name}" is the learner), or a name in each language. */
+  cast: Record<string, { name: string | T }>;
+  lines: StoryLine[];
+  questions: StoryQuestion[];
+}

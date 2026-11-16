@@ -70,5 +70,17 @@ for (const part of PARTS) {
     '',
   );
 }
+// Reading stories: every line, with the ones built from new combinations marked.
+const stories = JSON.parse(readFileSync(path.join(ROOT, 'content', 'stories.json'), 'utf8'));
+lines.push(
+  '## Reading stories',
+  '',
+  `${stories.length} short stories, built from course sentences. Please read every line; the ones marked below join course pieces in new ways.`,
+  '',
+  '| story | Luganda | Meaning | What to check |',
+  '|---|---|---|---|',
+  ...stories.flatMap((st) => st.lines.filter((l) => l.check).map((l) => `| \`${st.id}\` | ${l.lg} | ${l.tr.en} | ${l.check} |`)),
+  '',
+);
 writeFileSync(path.join(ROOT, 'content', 'CONTENT_REPORT.md'), lines.join('\n'));
 console.log('wrote content/CONTENT_REPORT.md');

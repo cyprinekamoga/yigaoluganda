@@ -1,4 +1,4 @@
-import type { Chapter, Dialogue, Fact, Lesson, Phrase, Root, Sentence, SoundPair, Tip, Unit } from './types';
+import type { Chapter, Dialogue, Fact, Lesson, Phrase, Root, Sentence, SoundPair, Story, Tip, Unit } from './types';
 
 import chapters from '../../content/unit-1/chapters.json';
 import phrases from '../../content/unit-1/phrases.json';
@@ -15,6 +15,7 @@ import tips2 from '../../content/unit-2/tips.json';
 import dialogues2 from '../../content/unit-2/dialogues.json';
 import roots2 from '../../content/unit-2/roots.json';
 import facts from '../../content/facts.json';
+import stories from '../../content/stories.json';
 
 export * from './types';
 
@@ -60,6 +61,9 @@ export const ALL_SENTENCES: Sentence[] = UNITS.flatMap((u) => u.sentences);
 export function unitOf(chapter: Chapter): Unit {
   return UNITS.find((u) => u.chapters.includes(chapter)) ?? UNIT_1;
 }
+
+/** Short reading stories, in the order they open. */
+export const STORIES = stories as unknown as Story[];
 
 /** Fun facts about Uganda and Buganda, shown in order so none repeats until all have been seen. */
 export const FACTS = facts as Fact[];
