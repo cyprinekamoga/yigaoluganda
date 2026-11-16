@@ -132,8 +132,10 @@ async function run(viewport, label) {
   await page.getByTestId('onb-go').click();
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('home-greeting').innerText()).includes('Sara'), 'home greets the learner by name');
-  ok((await page.getByTestId('tile-c01').getAttribute('aria-label')).includes('Ready to start'), 'chapter 1 is ready');
-  ok((await page.getByTestId('tile-c04').getAttribute('aria-label')).includes('Locked'), 'chapter 4 starts locked');
+  ok((await page.getByTestId('tile-c03').getAttribute('aria-label')).includes('Chapter 1. Informal Greetings'), 'chapter 1 is Greetings');
+  ok((await page.getByTestId('tile-c03').getAttribute('aria-label')).includes('Ready to start'), 'chapter 1 is ready');
+  ok((await page.getByTestId('tile-c22').getAttribute('aria-label')).includes('Chapter 3. Everyday Words'), 'chapter 3 is the new Everyday Words');
+  ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Locked'), 'chapter 4 starts locked');
   await shot(page, `${label}-02-home`);
 
   // iOS-style large title: hidden compact title at the top, shown in the bar after scrolling
@@ -148,19 +150,19 @@ async function run(viewport, label) {
   await page.waitForTimeout(400);
 
   // Locked tile explains itself
-  await page.getByTestId('tile-c04').click();
+  await page.getByTestId('tile-c02').click();
   ok(await page.getByText('This chapter is locked').isVisible(), 'locked tile shows why');
   await page.keyboard.press('Escape');
   await page.getByText('Close').last().click().catch(() => undefined);
 
-  // Chapter 2, lesson 1 — perfect run
-  await page.getByTestId('tile-c02').click();
+  // Chapter 2 (Introductions), lesson 1 — perfect run
+  await page.getByTestId('tile-c07').click();
   await page.getByTestId('screen-chapter').waitFor();
   await shot(page, `${label}-03-chapter`);
   await page.getByTestId('chapter-start').click();
   await page.getByTestId('lesson-player').waitFor();
   ok(await page.getByTestId('fun-fact').waitFor({ timeout: 3000 }).then(() => true, () => false), 'new-phrase screen shows a fun fact about Uganda');
-  ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c02-l1');
+  ok(await playLesson(page, { shotPrefix: `${label}-04` }), 'finished lesson c07-l1');
   ok((await page.getByTestId('done-cowries').innerText()).includes('+10'), 'perfect lesson gives 10 cowries');
   ok((await page.getByTestId('done-summary').innerText()).includes('new phrase'), 'completion lists the phrases learned');
   ok((await page.getByTestId('done-phrases').count()) > 0, 'completion shows the learned phrases');
@@ -171,13 +173,13 @@ async function run(viewport, label) {
   await page.getByTestId('screen-chapter').waitFor();
   await page.getByTestId('chapter-start').click();
   await page.getByTestId('lesson-player').waitFor();
-  ok(await playLesson(page, { wrongOnce: true, shotPrefix: `${label}-06` }), 'finished lesson c02-l2 with a mistake');
+  ok(await playLesson(page, { wrongOnce: true, shotPrefix: `${label}-06` }), 'finished lesson c07-l2 with a mistake');
   ok((await page.getByTestId('done-cowries').innerText()).includes('+5'), 'lesson with a mistake gives 5 cowries');
   await page.getByTestId('complete-continue').click();
   await page.getByTestId('back').click();
   await page.getByTestId('screen-home').waitFor();
-  ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Completed'), 'chapter 2 shows completed');
-  ok((await page.getByTestId('tile-c04').getAttribute('aria-label')).includes('Unlocked'), 'completing a chapter unlocks chapter 4');
+  ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Completed'), 'chapter 2 shows completed');
+  ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Unlocked'), 'completing a chapter unlocks chapter 4');
   ok((await page.getByTestId('stat-hearts').getAttribute('aria-label')).includes('4 of 5'), 'one water pot was spilled');
   await shot(page, `${label}-07-home-progress`);
 
@@ -189,7 +191,7 @@ async function run(viewport, label) {
   ok(await playLesson(page), 'finished a review round');
   ok(await page.getByText('Your water pots are full again').isVisible(), 'review fills the water pots');
   await page.getByTestId('complete-continue').click();
-  await page.getByTestId('convo-dlg-tea').click();
+  await page.getByTestId('convo-dlg-names').click();
   ok(await playLesson(page, { shotPrefix: `${label}-09` }), 'replayed a conversation');
   await page.getByTestId('complete-continue').click();
 
@@ -223,7 +225,7 @@ async function run(viewport, label) {
   // Progress survives a reload
   await page.reload();
   await page.getByTestId('screen-home').waitFor();
-  ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Klar'), 'progress persists after reload');
+  ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Klar'), 'progress persists after reload');
 
   // Reset erases progress and returns to onboarding
   await page.getByTestId('tab-profile').click();
@@ -255,8 +257,8 @@ async function placement() {
   await page.getByTestId('placement-open').click();
   await page.getByTestId('screen-placement').waitFor();
   await page.getByTestId('placement-start').click();
-  // Know all 11 chapters of Part 1, then miss Part 2's first chapter twice.
-  for (let i = 0; i < 11; i++) {
+  // Know all 12 chapters of Part 1, then miss Part 2's first chapter twice.
+  for (let i = 0; i < 12; i++) {
     await page.getByTestId('placement-answer').waitFor();
     if (i === 3) await shot(page, 'mobile-16-placement-question');
     await page.getByTestId('placement-answer').click();
@@ -268,7 +270,7 @@ async function placement() {
     await page.waitForTimeout(750);
   }
   await page.getByTestId('placement-result').waitFor();
-  ok((await page.getByTestId('placement-message').innerText()).includes('11 chapters'), 'the result says 11 chapters are known');
+  ok((await page.getByTestId('placement-message').innerText()).includes('12 chapters'), 'the result says 12 chapters are known');
   await shot(page, 'mobile-17-placement-result');
   await page.getByTestId('placement-skip').click();
   await page.getByTestId('screen-home').waitFor();

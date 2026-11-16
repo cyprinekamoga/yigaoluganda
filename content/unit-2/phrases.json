@@ -27,7 +27,6 @@
   {"id": "enjala-ennuma", "lg": "enjala ennuma", "tr": {"en": "I'm hungry", "sv": "jag är hungrig"}, "category": "table", "literal": {"en": "hunger bites me", "sv": "hungern biter mig"}},
   {"id": "ennyonta-ennuma", "lg": "ennyonta ennuma", "tr": {"en": "I'm thirsty", "sv": "jag är törstig"}, "category": "table", "literal": {"en": "thirst bites me", "sv": "törsten biter mig"}},
   {"id": "amazzi", "lg": "amazzi", "tr": {"en": "water", "sv": "vatten"}, "category": "table"},
-  {"id": "njagala", "lg": "njagala", "tr": {"en": "I'd like / I want", "sv": "jag vill ha"}, "category": "table", "note": {"en": "I don't want: sjagala.", "sv": "Jag vill inte ha: sjagala."}},
   {"id": "ennyama", "lg": "ennyama", "tr": {"en": "meat", "sv": "kött"}, "category": "table"},
   {"id": "enkoko", "lg": "enkoko", "tr": {"en": "chicken", "sv": "kyckling"}, "category": "table"},
   {"id": "omuceere", "lg": "omuceere", "tr": {"en": "rice", "sv": "ris"}, "category": "table"},

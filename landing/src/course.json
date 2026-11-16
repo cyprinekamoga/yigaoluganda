@@ -1,11 +1,11 @@
 {
   "counts": {
     "parts": 2,
-    "chapters": 21,
-    "lessons": 44,
-    "phrases": 160,
+    "chapters": 22,
+    "lessons": 47,
+    "phrases": 174,
     "conversations": 21,
-    "tips": 34
+    "tips": 37
   },
   "parts": [
     {
@@ -17,32 +17,6 @@
       "chapters": [
         {
           "n": 1,
-          "id": "c01",
-          "lg": "Ennukuta",
-          "title": {
-            "en": "Alphabet & Sounds",
-            "sv": "Alfabetet och ljuden"
-          },
-          "scenario": {
-            "en": "Hear the sounds",
-            "sv": "Lyssna på ljuden"
-          }
-        },
-        {
-          "n": 2,
-          "id": "c02",
-          "lg": "Obuntubulamu",
-          "title": {
-            "en": "Courtesy & Magic Words",
-            "sv": "Artighet och magiska ord"
-          },
-          "scenario": {
-            "en": "Be polite",
-            "sv": "Var artig"
-          }
-        },
-        {
-          "n": 3,
           "id": "c03",
           "lg": "Okulamusa",
           "title": {
@@ -55,7 +29,59 @@
           }
         },
         {
+          "n": 2,
+          "id": "c07",
+          "lg": "Erinnya",
+          "title": {
+            "en": "Introductions & Names",
+            "sv": "Presentationer och namn"
+          },
+          "scenario": {
+            "en": "Introduce yourself",
+            "sv": "Presentera dig"
+          }
+        },
+        {
+          "n": 3,
+          "id": "c22",
+          "lg": "Ebigambo Ebikulu",
+          "title": {
+            "en": "Everyday Words",
+            "sv": "Vardagsord"
+          },
+          "scenario": {
+            "en": "The words you’ll hear every day",
+            "sv": "Orden du hör varje dag"
+          }
+        },
+        {
           "n": 4,
+          "id": "c02",
+          "lg": "Obuntubulamu",
+          "title": {
+            "en": "Courtesy & Magic Words",
+            "sv": "Artighet och magiska ord"
+          },
+          "scenario": {
+            "en": "Be polite",
+            "sv": "Var artig"
+          }
+        },
+        {
+          "n": 5,
+          "id": "c10",
+          "lg": "Obubonero",
+          "title": {
+            "en": "Survival Expressions",
+            "sv": "Fraser som räddar dig"
+          },
+          "scenario": {
+            "en": "Take a boda-boda",
+            "sv": "Åk boda-boda"
+          }
+        },
+        {
+          "n": 6,
           "id": "c04",
           "lg": "Ekitiibwa",
           "title": {
@@ -68,7 +94,7 @@
           }
         },
         {
-          "n": 5,
+          "n": 7,
           "id": "c05",
           "lg": "Okulagana",
           "title": {
@@ -78,32 +104,6 @@
           "scenario": {
             "en": "Say goodbye",
             "sv": "Säg hej då"
-          }
-        },
-        {
-          "n": 6,
-          "id": "c06",
-          "lg": "Nze ne Ggwe",
-          "title": {
-            "en": "Personal Pronouns",
-            "sv": "Personliga pronomen"
-          },
-          "scenario": {
-            "en": "Me and you",
-            "sv": "Jag och du"
-          }
-        },
-        {
-          "n": 7,
-          "id": "c07",
-          "lg": "Erinnya",
-          "title": {
-            "en": "Introductions & Names",
-            "sv": "Presentationer och namn"
-          },
-          "scenario": {
-            "en": "Introduce yourself",
-            "sv": "Presentera dig"
           }
         },
         {
@@ -121,6 +121,32 @@
         },
         {
           "n": 9,
+          "id": "c01",
+          "lg": "Ennukuta",
+          "title": {
+            "en": "Alphabet & Sounds",
+            "sv": "Alfabetet och ljuden"
+          },
+          "scenario": {
+            "en": "Hear the sounds",
+            "sv": "Lyssna på ljuden"
+          }
+        },
+        {
+          "n": 10,
+          "id": "c06",
+          "lg": "Nze ne Ggwe",
+          "title": {
+            "en": "Personal Pronouns",
+            "sv": "Personliga pronomen"
+          },
+          "scenario": {
+            "en": "Me and you",
+            "sv": "Jag och du"
+          }
+        },
+        {
+          "n": 11,
           "id": "c09",
           "lg": "Okuba",
           "title": {
@@ -133,20 +159,7 @@
           }
         },
         {
-          "n": 10,
-          "id": "c10",
-          "lg": "Obubonero",
-          "title": {
-            "en": "Survival Expressions",
-            "sv": "Fraser som räddar dig"
-          },
-          "scenario": {
-            "en": "Take a boda-boda",
-            "sv": "Åk boda-boda"
-          }
-        },
-        {
-          "n": 11,
+          "n": 12,
           "id": "c11",
           "lg": "Okwebaza",
           "title": {
@@ -159,7 +172,7 @@
           }
         },
         {
-          "n": 12,
+          "n": 13,
           "id": "c12",
           "lg": "Olugendo Lwatandika",
           "title": {
@@ -181,7 +194,7 @@
       },
       "chapters": [
         {
-          "n": 13,
+          "n": 14,
           "id": "c13",
           "lg": "Ab'omu Maka",
           "title": {
@@ -194,7 +207,7 @@
           }
         },
         {
-          "n": 14,
+          "n": 15,
           "id": "c14",
           "lg": "Okubala",
           "title": {
@@ -204,19 +217,6 @@
           "scenario": {
             "en": "Count to ten",
             "sv": "Räkna till tio"
-          }
-        },
-        {
-          "n": 15,
-          "id": "c15",
-          "lg": "Ssente n'Akatale",
-          "title": {
-            "en": "Money & the Market",
-            "sv": "Pengar och marknaden"
-          },
-          "scenario": {
-            "en": "Shop at the market",
-            "sv": "Handla på marknaden"
           }
         },
         {
@@ -234,6 +234,19 @@
         },
         {
           "n": 17,
+          "id": "c15",
+          "lg": "Ssente n'Akatale",
+          "title": {
+            "en": "Money & the Market",
+            "sv": "Pengar och marknaden"
+          },
+          "scenario": {
+            "en": "Shop at the market",
+            "sv": "Handla på marknaden"
+          }
+        },
+        {
+          "n": 18,
           "id": "c17",
           "lg": "Ebiseera",
           "title": {
@@ -246,7 +259,7 @@
           }
         },
         {
-          "n": 18,
+          "n": 19,
           "id": "c18",
           "lg": "Okutambula",
           "title": {
@@ -259,7 +272,7 @@
           }
         },
         {
-          "n": 19,
+          "n": 20,
           "id": "c19",
           "lg": "Okukyala",
           "title": {
@@ -272,7 +285,7 @@
           }
         },
         {
-          "n": 20,
+          "n": 21,
           "id": "c20",
           "lg": "Omubiri n'Obulamu",
           "title": {
@@ -285,7 +298,7 @@
           }
         },
         {
-          "n": 21,
+          "n": 22,
           "id": "c21",
           "lg": "Okukyalira Jjajja",
           "title": {

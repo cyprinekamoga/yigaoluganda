@@ -10,6 +10,7 @@ export type T = Record<Lang, string>;
 /** Dictionary / phrasebook groups ("daily situations"). */
 export type Situation =
   | 'greet'
+  | 'everyday'
   | 'polite'
   | 'elders'
   | 'leaving'
@@ -107,6 +108,7 @@ export interface Lesson {
 }
 
 export type SceneId =
+  | 'words'
   | 'sounds'
   | 'courtesy'
   | 'wave'

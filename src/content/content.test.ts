@@ -6,9 +6,13 @@ import { normalize } from '../logic/text';
 const filled = (t: T | undefined) => Boolean(t && t.en.trim() && t.sv.trim());
 
 describe('course', () => {
-  it('has Part 1 (12 chapters) and Part 2 (9 chapters), numbered in order', () => {
-    expect(UNITS.map((u) => u.chapters.length)).toEqual([12, 9]);
+  it('has Part 1 (13 chapters) and Part 2 (9 chapters), numbered in order', () => {
+    expect(UNITS.map((u) => u.chapters.length)).toEqual([13, 9]);
     expect(ALL_CHAPTERS.map((c) => c.n)).toEqual(ALL_CHAPTERS.map((_, i) => i + 1));
+  });
+
+  it('starts with greetings, then introductions, then the everyday words', () => {
+    expect(ALL_CHAPTERS.slice(0, 3).map((c) => c.title.en)).toEqual(['Informal Greetings', 'Introductions & Names', 'Everyday Words']);
   });
 
   it('ends every part with its one final conversation', () => {

@@ -1,25 +1,6 @@
 [
   {
-    "id": "c01", "n": 1, "lgTitle": "Ennukuta", "scene": "sounds", "hue": "neon",
-    "title": { "en": "Alphabet & Sounds", "sv": "Alfabetet och ljuden" },
-    "scenario": { "en": "Hear the sounds", "sv": "Lyssna på ljuden" },
-    "lessons": [
-      { "id": "c01-l1", "title": { "en": "Five vowels", "sv": "Fem vokaler" }, "phrases": ["amata", "emmere", "omuti", "ekitabo", "omuntu"], "tip": "tip-vowels" },
-      { "id": "c01-l2", "title": { "en": "Long vowels", "sv": "Långa vokaler" }, "phrases": ["okusiba", "okusiiba", "okukola", "okukoola"], "sounds": ["sp-siba", "sp-kola"], "tip": "tip-length" },
-      { "id": "c01-l3", "title": { "en": "Doubles, ny and ŋ", "sv": "Dubbla, ny och ŋ" }, "phrases": ["okuba", "okubba", "nnya", "nnenda", "ennoma"], "sounds": ["sp-ba"], "tip": "tip-ng", "dialogue": "dlg-sounds" }
-    ]
-  },
-  {
-    "id": "c02", "n": 2, "lgTitle": "Obuntubulamu", "scene": "courtesy", "hue": "tomato",
-    "title": { "en": "Courtesy & Magic Words", "sv": "Artighet och magiska ord" },
-    "scenario": { "en": "Be polite", "sv": "Var artig" },
-    "lessons": [
-      { "id": "c02-l1", "title": { "en": "Magic words", "sv": "Magiska ord" }, "phrases": ["weebale", "weebale-nnyo", "mwattu", "kale"], "sentences": ["s-kale-weebale", "s-weebale-nnyo"], "tip": "tip-weebale" },
-      { "id": "c02-l2", "title": { "en": "Yes, no and sorry", "sv": "Ja, nej och förlåt" }, "phrases": ["yee", "nedda", "nsonyiwa", "bambi"], "review": ["weebale", "kale"], "sentences": ["s-yee-weebale", "s-nedda-weebale", "s-bambi-nsonyiwa"], "dialogue": "dlg-tea" }
-    ]
-  },
-  {
-    "id": "c03", "n": 3, "lgTitle": "Okulamusa", "scene": "wave", "hue": "blush",
+    "id": "c03", "n": 1, "lgTitle": "Okulamusa", "scene": "wave", "hue": "neon",
     "title": { "en": "Informal Greetings", "sv": "Vardagliga hälsningar" },
     "scenario": { "en": "Greet a friend", "sv": "Hälsa på en kompis" },
     "lessons": [
@@ -28,7 +9,44 @@
     ]
   },
   {
-    "id": "c04", "n": 4, "lgTitle": "Ekitiibwa", "scene": "bow", "hue": "neon",
+    "id": "c07", "n": 2, "lgTitle": "Erinnya", "scene": "nametag", "hue": "tomato",
+    "title": { "en": "Introductions & Names", "sv": "Presentationer och namn" },
+    "scenario": { "en": "Introduce yourself", "sv": "Presentera dig" },
+    "lessons": [
+      { "id": "c07-l1", "title": { "en": "My name is…", "sv": "Jag heter…" }, "phrases": ["erinnya", "erinnya-lyange", "mpitibwa"], "review": ["nze"], "sentences": ["s-erinnya-lyange", "s-mpitibwa"], "tip": "tip-twins" },
+      { "id": "c07-l2", "title": { "en": "Nice to meet you", "sv": "Trevligt att träffas" }, "phrases": ["erinnya-lyo", "ggwe-ani", "nsanyuse-okukulaba", "tukusanyukidde"], "sentences": ["s-erinnya-lyo", "s-nange-nsanyuse"], "tip": "tip-clan", "dialogue": "dlg-names" }
+    ]
+  },
+  {
+    "id": "c22", "n": 3, "lgTitle": "Ebigambo Ebikulu", "scene": "words", "hue": "blush",
+    "title": { "en": "Everyday Words", "sv": "Vardagsord" },
+    "scenario": { "en": "The words you’ll hear every day", "sv": "Orden du hör varje dag" },
+    "lessons": [
+      { "id": "c22-l1", "title": { "en": "Good, bad, very, a little", "sv": "Bra, dåligt, mycket, lite" }, "phrases": ["kirungi", "kibi", "nnyo", "katono", "naye"], "sentences": ["s-ew-kirungi-nnyo", "s-ew-kibi-nnyo", "s-ew-bulungi-naye-mukoowu"], "tip": "tip-kirungi" },
+      { "id": "c22-l2", "title": { "en": "This, that, here, there", "sv": "Den här, den där, här, där" }, "phrases": ["kino", "ekyo", "ekintu", "wano", "eyo"], "review": ["kirungi", "kibi"], "sentences": ["s-ew-kino-kirungi", "s-ew-ekyo-kibi", "s-ew-ali-wano", "s-ew-maama-ali-eyo"], "tip": "tip-kino-ekyo" },
+      { "id": "c22-l3", "title": { "en": "I want, I have, there is", "sv": "Jag vill, jag har, det finns" }, "phrases": ["njagala", "saagala", "nnina", "sirina", "waliwo"], "review": ["nnyo", "naye"], "sentences": ["s-ew-njagala-ekyo", "s-ew-saagala-caayi", "s-ew-nnina-ssente", "s-ew-sirina-ssente", "s-ew-waliwo-amazzi", "s-ew-weebale-naye-saagala"], "tip": "tip-si-not" }
+    ]
+  },
+  {
+    "id": "c02", "n": 4, "lgTitle": "Obuntubulamu", "scene": "courtesy", "hue": "neon",
+    "title": { "en": "Courtesy & Magic Words", "sv": "Artighet och magiska ord" },
+    "scenario": { "en": "Be polite", "sv": "Var artig" },
+    "lessons": [
+      { "id": "c02-l1", "title": { "en": "Magic words", "sv": "Magiska ord" }, "phrases": ["weebale", "weebale-nnyo", "mwattu", "kale"], "sentences": ["s-kale-weebale", "s-weebale-nnyo"], "tip": "tip-weebale" },
+      { "id": "c02-l2", "title": { "en": "Yes, no and sorry", "sv": "Ja, nej och förlåt" }, "phrases": ["yee", "nedda", "nsonyiwa", "bambi"], "review": ["weebale", "kale"], "sentences": ["s-yee-weebale", "s-nedda-weebale", "s-bambi-nsonyiwa"], "dialogue": "dlg-tea" }
+    ]
+  },
+  {
+    "id": "c10", "n": 5, "lgTitle": "Obubonero", "scene": "boda", "hue": "tomato",
+    "title": { "en": "Survival Expressions", "sv": "Fraser som räddar dig" },
+    "scenario": { "en": "Take a boda-boda", "sv": "Åk boda-boda" },
+    "lessons": [
+      { "id": "c10-l1", "title": { "en": "When you're stuck", "sv": "När du kör fast" }, "phrases": ["sitegeera", "simanyi", "yogera-mpola", "ddamu"], "review": ["mwattu", "nsonyiwa"], "sentences": ["s-nsonyiwa-sitegeera", "s-yogera-mpola-mwattu", "s-ddamu-mwattu"], "tip": "tip-si" },
+      { "id": "c10-l2", "title": { "en": "On the road", "sv": "På vägen" }, "phrases": ["mmanyi-oluganda-katono", "ogenda-wa"], "review": ["nnenda", "yogera-mpola"], "sentences": ["s-nnenda-kampala", "s-mmanyi-katono"], "tip": "tip-boda", "dialogue": "dlg-boda" }
+    ]
+  },
+  {
+    "id": "c04", "n": 6, "lgTitle": "Ekitiibwa", "scene": "bow", "hue": "blush",
     "title": { "en": "Respect & Formal Titles", "sv": "Respekt och artiga titlar" },
     "scenario": { "en": "Greet an elder", "sv": "Hälsa på en äldre" },
     "lessons": [
@@ -37,30 +55,12 @@
     ]
   },
   {
-    "id": "c05", "n": 5, "lgTitle": "Okulagana", "scene": "night", "hue": "tomato",
+    "id": "c05", "n": 7, "lgTitle": "Okulagana", "scene": "night", "hue": "neon",
     "title": { "en": "Goodbyes & Well Wishes", "sv": "Hej då och lyckönskningar" },
     "scenario": { "en": "Say goodbye", "sv": "Säg hej då" },
     "lessons": [
       { "id": "c05-l1", "title": { "en": "Bye for now", "sv": "Hej så länge" }, "phrases": ["weeraba", "mweraba", "tulabagane"], "review": ["kale", "jjajja"], "sentences": ["s-kale-weeraba", "s-weeraba-jjajja", "s-kale-tulabagane"], "tip": "tip-w-mw" },
       { "id": "c05-l2", "title": { "en": "Day and night", "sv": "Dag och natt" }, "phrases": ["siiba-bulungi", "sula-bulungi", "maama", "taata", "enkya"], "sentences": ["s-sula-maama", "s-siiba-taata"], "tip": "tip-siiba-sula", "dialogue": "dlg-night" }
-    ]
-  },
-  {
-    "id": "c06", "n": 6, "lgTitle": "Nze ne Ggwe", "scene": "pointing", "hue": "blush",
-    "title": { "en": "Personal Pronouns", "sv": "Personliga pronomen" },
-    "scenario": { "en": "Me and you", "sv": "Jag och du" },
-    "lessons": [
-      { "id": "c06-l1", "title": { "en": "Me, you, him, her", "sv": "Jag, du, han, hon" }, "phrases": ["nze", "ggwe", "ye", "nze-ne-ggwe"], "sentences": ["s-nze-name", "s-nze-ne-ggwe"], "tip": "tip-ye" },
-      { "id": "c06-l2", "title": { "en": "Us and them", "sv": "Vi och de" }, "phrases": ["ffe", "mmwe", "bo", "nange"], "review": ["nze", "ggwe"], "sentences": ["s-ffe-ne-mmwe"], "dialogue": "dlg-pronouns" }
-    ]
-  },
-  {
-    "id": "c07", "n": 7, "lgTitle": "Erinnya", "scene": "nametag", "hue": "neon",
-    "title": { "en": "Introductions & Names", "sv": "Presentationer och namn" },
-    "scenario": { "en": "Introduce yourself", "sv": "Presentera dig" },
-    "lessons": [
-      { "id": "c07-l1", "title": { "en": "My name is…", "sv": "Jag heter…" }, "phrases": ["erinnya", "erinnya-lyange", "mpitibwa"], "review": ["nze"], "sentences": ["s-erinnya-lyange", "s-mpitibwa"], "tip": "tip-twins" },
-      { "id": "c07-l2", "title": { "en": "Nice to meet you", "sv": "Trevligt att träffas" }, "phrases": ["erinnya-lyo", "ggwe-ani", "nsanyuse-okukulaba", "tukusanyukidde"], "sentences": ["s-erinnya-lyo", "s-nange-nsanyuse"], "tip": "tip-clan", "dialogue": "dlg-names" }
     ]
   },
   {
@@ -73,7 +73,26 @@
     ]
   },
   {
-    "id": "c09", "n": 9, "lgTitle": "Okuba", "scene": "feelings", "hue": "blush",
+    "id": "c01", "n": 9, "lgTitle": "Ennukuta", "scene": "sounds", "hue": "blush",
+    "title": { "en": "Alphabet & Sounds", "sv": "Alfabetet och ljuden" },
+    "scenario": { "en": "Hear the sounds", "sv": "Lyssna på ljuden" },
+    "lessons": [
+      { "id": "c01-l1", "title": { "en": "Five vowels", "sv": "Fem vokaler" }, "phrases": ["amata", "emmere", "omuti", "ekitabo", "omuntu"], "tip": "tip-vowels" },
+      { "id": "c01-l2", "title": { "en": "Long vowels", "sv": "Långa vokaler" }, "phrases": ["okusiba", "okusiiba", "okukola", "okukoola"], "sounds": ["sp-siba", "sp-kola"], "tip": "tip-length" },
+      { "id": "c01-l3", "title": { "en": "Doubles, ny and ŋ", "sv": "Dubbla, ny och ŋ" }, "phrases": ["okuba", "okubba", "nnya", "nnenda", "ennoma"], "sounds": ["sp-ba"], "tip": "tip-ng", "dialogue": "dlg-sounds" }
+    ]
+  },
+  {
+    "id": "c06", "n": 10, "lgTitle": "Nze ne Ggwe", "scene": "pointing", "hue": "neon",
+    "title": { "en": "Personal Pronouns", "sv": "Personliga pronomen" },
+    "scenario": { "en": "Me and you", "sv": "Jag och du" },
+    "lessons": [
+      { "id": "c06-l1", "title": { "en": "Me, you, him, her", "sv": "Jag, du, han, hon" }, "phrases": ["nze", "ggwe", "ye", "nze-ne-ggwe"], "sentences": ["s-nze-name", "s-nze-ne-ggwe"], "tip": "tip-ye" },
+      { "id": "c06-l2", "title": { "en": "Us and them", "sv": "Vi och de" }, "phrases": ["ffe", "mmwe", "bo", "nange"], "review": ["nze", "ggwe"], "sentences": ["s-ffe-ne-mmwe"], "dialogue": "dlg-pronouns" }
+    ]
+  },
+  {
+    "id": "c09", "n": 11, "lgTitle": "Okuba", "scene": "feelings", "hue": "tomato",
     "title": { "en": "To Be", "sv": "Att vara" },
     "scenario": { "en": "Say how you feel", "sv": "Säg hur du mår" },
     "lessons": [
@@ -83,16 +102,7 @@
     ]
   },
   {
-    "id": "c10", "n": 10, "lgTitle": "Obubonero", "scene": "boda", "hue": "neon",
-    "title": { "en": "Survival Expressions", "sv": "Fraser som räddar dig" },
-    "scenario": { "en": "Take a boda-boda", "sv": "Åk boda-boda" },
-    "lessons": [
-      { "id": "c10-l1", "title": { "en": "When you're stuck", "sv": "När du kör fast" }, "phrases": ["sitegeera", "simanyi", "yogera-mpola", "ddamu"], "review": ["mwattu", "nsonyiwa"], "sentences": ["s-nsonyiwa-sitegeera", "s-yogera-mpola-mwattu", "s-ddamu-mwattu"], "tip": "tip-si" },
-      { "id": "c10-l2", "title": { "en": "On the road", "sv": "På vägen" }, "phrases": ["mmanyi-oluganda-katono", "ogenda-wa"], "review": ["nnenda", "yogera-mpola"], "sentences": ["s-nnenda-kampala", "s-mmanyi-katono"], "tip": "tip-boda", "dialogue": "dlg-boda" }
-    ]
-  },
-  {
-    "id": "c11", "n": 11, "lgTitle": "Okwebaza", "scene": "meal", "hue": "tomato",
+    "id": "c11", "n": 12, "lgTitle": "Okwebaza", "scene": "meal", "hue": "blush",
     "title": { "en": "Daily Thanks & Appreciation", "sv": "Tack och uppskattning" },
     "scenario": { "en": "Thank the cook", "sv": "Tacka för maten" },
     "lessons": [
@@ -101,7 +111,7 @@
     ]
   },
   {
-    "id": "c12", "n": 12, "lgTitle": "Olugendo Lwatandika", "scene": "journey", "hue": "blush", "checkpoint": true,
+    "id": "c12", "n": 13, "lgTitle": "Olugendo Lwatandika", "scene": "journey", "hue": "neon", "checkpoint": true,
     "title": { "en": "Final Conversation", "sv": "Slutsamtal" },
     "scenario": { "en": "First day in Kampala", "sv": "Första dagen i Kampala" },
     "lessons": [

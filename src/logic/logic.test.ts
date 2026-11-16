@@ -160,24 +160,26 @@ describe('non-linear unlocking', () => {
   it('opens three chapters at the start', () => {
     const s = chapters.map((c) => tileStatus(UNIT_1, c, view({})));
     expect(s.slice(0, 3)).toEqual(['ready', 'ready', 'ready']);
-    expect(s.slice(3)).toEqual(Array(9).fill('locked'));
+    expect(s.slice(3)).toEqual(Array(chapters.length - 3).fill('locked'));
   });
   it('opens the next locked chapter for each one completed, in any order', () => {
-    const done = finish('c03');
+    const done = finish(chapters[2].id);
     expect(tileStatus(UNIT_1, chapters[2], view(done))).toBe('completed');
     expect(tileStatus(UNIT_1, chapters[3], view(done))).toBe('unlocked');
-    expect(tileStatus(UNIT_1, chapters[3], view(done, { c04: true }))).toBe('ready');
+    expect(tileStatus(UNIT_1, chapters[3], view(done, { [chapters[3].id]: true }))).toBe('ready');
     expect(tileStatus(UNIT_1, chapters[4], view(done))).toBe('locked');
   });
   it('marks the chapter in progress as active and others as unfinished', () => {
-    const done = { 'c01-l1': true, 'c02-l1': true } as Record<string, true>;
-    expect(tileStatus(UNIT_1, chapters[0], view(done, {}, 'c01'))).toBe('active');
-    expect(tileStatus(UNIT_1, chapters[1], view(done, {}, 'c01'))).toBe('unfinished');
+    const done = { [chapters[0].lessons[0].id]: true, [chapters[1].lessons[0].id]: true } as Record<string, true>;
+    expect(tileStatus(UNIT_1, chapters[0], view(done, {}, chapters[0].id))).toBe('active');
+    expect(tileStatus(UNIT_1, chapters[1], view(done, {}, chapters[0].id))).toBe('unfinished');
   });
-  it('opens the checkpoint only when chapters 1–11 are complete', () => {
-    const ids = chapters.slice(0, 11).map((c) => c.id);
-    expect(isAvailable(UNIT_1, chapters[11], finish(...ids.slice(0, 10)))).toBe(false);
-    expect(isAvailable(UNIT_1, chapters[11], finish(...ids))).toBe(true);
+  it('opens the final conversation only when every other chapter of the part is complete', () => {
+    const final = chapters[chapters.length - 1];
+    const ids = chapters.slice(0, -1).map((c) => c.id);
+    expect(final.checkpoint).toBe(true);
+    expect(isAvailable(UNIT_1, final, finish(...ids.slice(0, -1)))).toBe(false);
+    expect(isAvailable(UNIT_1, final, finish(...ids))).toBe(true);
   });
 });
 

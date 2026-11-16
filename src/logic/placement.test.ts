@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { PHRASES } from '../content';
+import { PHRASES, UNIT_1 } from '../content';
 import { answer, chaptersToSkip, questionFor, START, stop, TESTED, type PlacementState } from './placement';
 
 const run = (answers: boolean[]): PlacementState => answers.reduce((s, a) => answer(s, a), START);
 
 describe('placement test', () => {
   it('asks about every chapter that teaches phrases, in order, but not the final conversations', () => {
-    expect(TESTED[0].id).toBe('c01');
+    expect(TESTED[0].id).toBe(UNIT_1.chapters[0].id);
     expect(TESTED.map((c) => c.id)).not.toContain('c12');
     expect(TESTED.map((c) => c.id)).not.toContain('c21');
-    expect(TESTED).toHaveLength(19);
+    expect(TESTED).toHaveLength(20);
   });
 
   it('builds fair questions: three different options, one of them right', () => {
@@ -27,16 +27,17 @@ describe('placement test', () => {
   });
 
   it('gives a second chance on the same chapter, and stops after two misses', () => {
+    const [first, second] = TESTED.map((c) => c.id);
     let s = run([true]);
-    expect(s.passed).toEqual(['c01']);
+    expect(s.passed).toEqual([first]);
     s = answer(s, false);
     expect(s).toMatchObject({ index: 1, attempt: 1, finished: false });
-    expect(questionFor(s, 'en').chapterId).toBe('c02');
+    expect(questionFor(s, 'en').chapterId).toBe(second);
     s = answer(s, true);
-    expect(s.passed).toEqual(['c01', 'c02']);
+    expect(s.passed).toEqual([first, second]);
     s = answer(answer(s, false), false);
     expect(s.finished).toBe(true);
-    expect(s.passed).toEqual(['c01', 'c02']);
+    expect(s.passed).toEqual([first, second]);
   });
 
   it('a beginner skips nothing', () => {
@@ -46,10 +47,11 @@ describe('placement test', () => {
   });
 
   it('knowing all of Part 1 also completes its final conversation, which opens Part 2', () => {
-    const s = run(Array(11).fill(true));
-    expect(s.passed).toHaveLength(11);
+    const regular = UNIT_1.chapters.filter((c) => !c.checkpoint);
+    const s = run(Array(regular.length).fill(true));
+    expect(s.passed).toHaveLength(regular.length);
     const skip = chaptersToSkip(s.passed);
-    expect(skip).toContain('c11');
+    expect(skip).toContain(regular[regular.length - 1].id);
     expect(skip).toContain('c12');
     expect(skip).not.toContain('c13');
   });
@@ -57,7 +59,7 @@ describe('placement test', () => {
   it('can be stopped at any time, keeping what was passed', () => {
     const s = stop(run([true, true, true]));
     expect(s.finished).toBe(true);
-    expect(chaptersToSkip(s.passed)).toEqual(['c01', 'c02', 'c03']);
+    expect(chaptersToSkip(s.passed)).toEqual(TESTED.slice(0, 3).map((c) => c.id));
   });
 
   it('finishes after the last chapter when everything is known', () => {

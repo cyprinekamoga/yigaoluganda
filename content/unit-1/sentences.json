@@ -57,5 +57,18 @@
   { "id": "s-weebale-nnyo-jjajja", "lg": "Weebale nnyo, jjajja.", "tr": { "en": "Thank you very much, Grandma.", "sv": "Tack så mycket, farmor." } },
 
   { "id": "s-olugendo-lwatandika", "lg": "Olugendo lwatandika!", "tr": { "en": "The journey has begun!", "sv": "Resan har börjat!" }, "check": "Chapter 12 title from the PRD. Confirm grammar." },
-  { "id": "s-nnenda-ewaka", "lg": "Ŋŋenda ewaka.", "tr": { "en": "I'm going home.", "sv": "Jag går hem." } }
+  { "id": "s-nnenda-ewaka", "lg": "Ŋŋenda ewaka.", "tr": { "en": "I'm going home.", "sv": "Jag går hem." } },
+  { "id": "s-ew-kirungi-nnyo", "lg": "Kirungi nnyo!", "tr": { "en": "Very good!", "sv": "Jättebra!" } },
+  { "id": "s-ew-kibi-nnyo", "lg": "Kibi nnyo.", "tr": { "en": "That’s really bad.", "sv": "Det är jättedåligt." } },
+  { "id": "s-ew-bulungi-naye-mukoowu", "lg": "Ndi bulungi, naye ndi mukoowu.", "tr": { "en": "I’m fine, but I’m tired.", "sv": "Jag mår bra, men jag är trött." } },
+  { "id": "s-ew-kino-kirungi", "lg": "Kino kirungi.", "tr": { "en": "This is good.", "sv": "Den här är bra." } },
+  { "id": "s-ew-ekyo-kibi", "lg": "Ekyo kibi.", "tr": { "en": "That’s bad.", "sv": "Det där är dåligt." } },
+  { "id": "s-ew-ali-wano", "lg": "Ali wano.", "tr": { "en": "He’s here. / She’s here.", "sv": "Han är här. / Hon är här." } },
+  { "id": "s-ew-maama-ali-eyo", "lg": "Maama ali eyo.", "tr": { "en": "Mum is over there.", "sv": "Mamma är där borta." } },
+  { "id": "s-ew-njagala-ekyo", "lg": "Njagala ekyo.", "tr": { "en": "I’d like that one.", "sv": "Jag vill ha den där." } },
+  { "id": "s-ew-saagala-caayi", "lg": "Saagala caayi.", "tr": { "en": "I don’t want tea.", "sv": "Jag vill inte ha te." } },
+  { "id": "s-ew-nnina-ssente", "lg": "Nnina ssente.", "tr": { "en": "I have money.", "sv": "Jag har pengar." } },
+  { "id": "s-ew-sirina-ssente", "lg": "Sirina ssente.", "tr": { "en": "I don’t have any money.", "sv": "Jag har inga pengar." } },
+  { "id": "s-ew-waliwo-amazzi", "lg": "Waliwo amazzi?", "tr": { "en": "Is there any water?", "sv": "Finns det vatten?" } },
+  { "id": "s-ew-weebale-naye-saagala", "lg": "Weebale nnyo, naye saagala.", "tr": { "en": "Thank you very much, but I don’t want any.", "sv": "Tack så mycket, men jag vill inte ha." } }
 ]

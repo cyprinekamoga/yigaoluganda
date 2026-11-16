@@ -12,7 +12,7 @@ import { LargeTitleScreen } from '@/ui/LargeTitleScreen';
 import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
-const ORDER: Situation[] = ['greet', 'polite', 'elders', 'leaving', 'intro', 'me', 'family', 'asking', 'feelings', 'stuck', 'around', 'table', 'numbers', 'time', 'home', 'health', 'sounds'];
+const ORDER: Situation[] = ['greet', 'everyday', 'polite', 'elders', 'leaving', 'intro', 'me', 'family', 'asking', 'feelings', 'stuck', 'around', 'table', 'numbers', 'time', 'home', 'health', 'sounds'];
 
 export default function Dictionary() {
   const { t, tr, lang } = useT();

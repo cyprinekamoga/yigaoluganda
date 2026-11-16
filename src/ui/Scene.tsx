@@ -289,6 +289,27 @@ const SCENES: Record<SceneId, Spec> = {
       </G>
     ),
   },
+  words: {
+    // Everyday Words: Ngaali points at a stack of word cards.
+    art: { pose: 'point', face: 'happy', speaking: true },
+    x: 4, y: 22,
+    back: (h) => (
+      <G>
+        {[
+          { y: 16, r: -7, word: 'kino', fill: C.ink, ink: C.onNeon },
+          { y: 44, r: 5, word: 'wano', fill: h.base, ink: h.on },
+          { y: 72, r: -4, word: 'nnyo', fill: C.ink, ink: C.onNeon },
+        ].map((c) => (
+          <G key={c.word} transform={`rotate(${c.r} 89 ${c.y + 11})`}>
+            <Rect x={67} y={c.y} width={44} height={22} rx={6} fill={c.fill} />
+            <SvgText x={89} y={c.y + 15.5} fontSize={12} fontFamily={SYSTEM_FONT} fontWeight="800" fill={c.ink} textAnchor="middle">
+              {c.word}
+            </SvgText>
+          </G>
+        ))}
+      </G>
+    ),
+  },
   question: {
     art: { pose: 'think', face: 'up' },
     x: 14, y: 22,

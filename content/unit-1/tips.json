@@ -196,5 +196,8 @@
       "en": "This checkpoint mixes everything from Unit 1. Take your time: you can replay any conversation later in the Practice Lab.",
       "sv": "Den här kontrollpunkten blandar allt från del 1. Ta god tid på dig: du kan spela upp alla samtal igen senare i Övningslabbet."
     }
-  }
+  },
+  { "id": "tip-kirungi", "icon": "heart", "title": { "en": "Kirungi: the all-purpose “good”", "sv": "Kirungi: ett ”bra” för allt" }, "body": { "en": "Kirungi means “it’s good”, and you’ll hear it for “OK”, “great” and “that’s fine” too. Add nnyo for “very”: kirungi nnyo. The opposite is kibi, “it’s bad”.", "sv": "Kirungi betyder ”det är bra”, och du hör det också för ”okej”, ”toppen” och ”det går bra”. Lägg till nnyo för ”väldigt”: kirungi nnyo. Motsatsen är kibi, ”det är dåligt”." } },
+  { "id": "tip-kino-ekyo", "icon": "star", "title": { "en": "“This” and “that” change with the word", "sv": "”Den här” och ”den där” ändras efter ordet" }, "body": { "en": "Luganda sorts nouns into groups, and little words like “this” and “that” change to match. Kino (this) and ekyo (that) go with ki- words such as ekintu (thing) and ekitabo (book). For a person you say ono, “this person”.", "sv": "Luganda delar in substantiv i grupper, och små ord som ”den här” och ”den där” ändras efter dem. Kino (den här) och ekyo (den där) hör till ki-ord som ekintu (sak) och ekitabo (bok). Om en person säger du ono, ”den här personen”." } },
+  { "id": "tip-si-not", "icon": "chat", "title": { "en": "Si- means “not”", "sv": "Si- betyder ”inte”" }, "body": { "en": "Put si- in front and “I …” becomes “I don’t …”: nnina (I have) → sirina (I don’t have), mmanyi (I know) → simanyi (I don’t know). Njagala (I want) becomes saagala (I don’t want).", "sv": "Sätt si- först så blir ”jag …” till ”jag … inte”: nnina (jag har) → sirina (jag har inte), mmanyi (jag vet) → simanyi (jag vet inte). Njagala (jag vill) blir saagala (jag vill inte)." } }
 ]

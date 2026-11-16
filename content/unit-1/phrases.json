@@ -103,5 +103,20 @@
   { "id": "caayi", "lg": "caayi", "tr": { "en": "tea", "sv": "te" }, "category": "table" },
 
   { "id": "olugendo", "lg": "olugendo", "tr": { "en": "journey, trip", "sv": "resa" }, "category": "around" },
-  { "id": "ewaka", "lg": "ewaka", "tr": { "en": "home, at home", "sv": "hem, hemma" }, "category": "around" }
+  { "id": "ewaka", "lg": "ewaka", "tr": { "en": "home, at home", "sv": "hem, hemma" }, "category": "around" },
+  { "id": "kirungi", "lg": "kirungi", "tr": { "en": "good / it’s good", "sv": "bra / det är bra" }, "category": "everyday", "note": { "en": "Also means “OK, that’s fine”.", "sv": "Betyder också ”okej, det går bra”." }, "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "kibi", "lg": "kibi", "tr": { "en": "bad / it’s bad", "sv": "dåligt / det är dåligt" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "nnyo", "lg": "nnyo", "tr": { "en": "very, a lot", "sv": "mycket, väldigt" }, "category": "everyday", "note": { "en": "It comes after the word: kirungi nnyo, weebale nnyo.", "sv": "Det kommer efter ordet: kirungi nnyo, weebale nnyo." }, "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "katono", "lg": "katono", "tr": { "en": "a little", "sv": "lite" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "naye", "lg": "naye", "tr": { "en": "but", "sv": "men" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "kino", "lg": "kino", "tr": { "en": "this (thing)", "sv": "den här (saken)" }, "category": "everyday", "note": { "en": "This form goes with ki- words like ekintu (thing).", "sv": "Den här formen hör till ki-ord som ekintu (sak)." }, "check": "New in the Everyday Words chapter. Confirm spelling and meaning. Demonstrative for the ki-/bi- class." },
+  { "id": "ekyo", "lg": "ekyo", "tr": { "en": "that (thing)", "sv": "den där (saken)" }, "category": "everyday", "note": { "en": "That, near the person you’re talking to.", "sv": "Den där, nära den du pratar med." }, "check": "New in the Everyday Words chapter. Confirm spelling and meaning. Confirm ekyo (near the listener) as the first “that” to teach." },
+  { "id": "ekintu", "lg": "ekintu", "tr": { "en": "thing", "sv": "sak" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "wano", "lg": "wano", "tr": { "en": "here", "sv": "här" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "eyo", "lg": "eyo", "tr": { "en": "there, over there", "sv": "där, där borta" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning. Confirm eyo for “there” (vs. awo / eri)." },
+  { "id": "njagala", "lg": "njagala", "tr": { "en": "I'd like / I want", "sv": "jag vill ha" }, "category": "everyday", "note": { "en": "I don’t want: saagala.", "sv": "Jag vill inte ha: saagala." }, "check": "Moved from Food & Drink. The note used to say “sjagala”; confirm saagala as the negative." },
+  { "id": "saagala", "lg": "saagala", "tr": { "en": "I don’t want", "sv": "jag vill inte" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "nnina", "lg": "nnina", "tr": { "en": "I have", "sv": "jag har" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "sirina", "lg": "sirina", "tr": { "en": "I don’t have", "sv": "jag har inte" }, "category": "everyday", "check": "New in the Everyday Words chapter. Confirm spelling and meaning." },
+  { "id": "waliwo", "lg": "waliwo", "tr": { "en": "there is / is there?", "sv": "det finns / finns det?" }, "category": "everyday", "note": { "en": "Waliwo amazzi? Is there any water?", "sv": "Waliwo amazzi? Finns det vatten?" }, "check": "New in the Everyday Words chapter. Confirm spelling and meaning." }
 ]

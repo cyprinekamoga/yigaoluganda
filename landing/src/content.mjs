@@ -87,7 +87,7 @@ export const CONTENT = {
     faq: {
       title: 'Questions and answers',
       items: [
-        ['Do I need to know any Luganda?', 'No. Part 1 starts from the very beginning: sounds, greetings and polite words. If you already know some, take the short placement test and skip the chapters you know.'],
+        ['Do I need to know any Luganda?', 'No. Part 1 starts from the very beginning: greetings, introducing yourself and the words you’ll hear every day. If you already know some, take the short placement test and skip the chapters you know.'],
         ['How much does it cost?', 'One plan: {price}, billed every month in your local currency. VAT is included where it applies.'],
         ['How do I cancel?', 'Whenever you like, in the app under Me → Settings → Subscription. You keep access until the end of the month you have paid for.'],
         ['Can I change my mind after paying?', 'Yes. Within 14 days of subscribing you can withdraw from the contract in the app under Me → Settings → Subscription, and we refund your payment in full.'],
@@ -188,7 +188,7 @@ export const CONTENT = {
     faq: {
       title: 'Frågor och svar',
       items: [
-        ['Måste jag kunna någon luganda?', 'Nej. Del 1 börjar från början: ljud, hälsningar och artighetsord. Kan du redan lite gör du det korta nivåtestet och hoppar över kapitlen du kan.'],
+        ['Måste jag kunna någon luganda?', 'Nej. Del 1 börjar från början: hälsningar, att presentera sig och orden du hör varje dag. Kan du redan lite gör du det korta nivåtestet och hoppar över kapitlen du kan.'],
         ['Vad kostar det?', 'Ett abonnemang: {price}, som dras varje månad i din lokala valuta. Moms ingår där det gäller.'],
         ['Hur avslutar jag?', 'När du vill, i appen under Jag → Inställningar → Abonnemang. Du har kvar tillgången till slutet av månaden du har betalat för.'],
         ['Kan jag ångra mig efter att ha betalat?', 'Ja. Inom 14 dagar efter att du har tecknat abonnemanget kan du frånträda avtalet i appen under Jag → Inställningar → Abonnemang, och då får du hela beloppet tillbaka.'],

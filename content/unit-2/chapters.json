@@ -1,7 +1,7 @@
 [
   {
     "id": "c13",
-    "n": 13,
+    "n": 14,
     "lgTitle": "Ab'omu Maka",
     "scene": "family",
     "hue": "tomato",
@@ -65,7 +65,7 @@
   },
   {
     "id": "c14",
-    "n": 14,
+    "n": 15,
     "lgTitle": "Okubala",
     "scene": "numbers",
     "hue": "neon",
@@ -125,11 +125,69 @@
     ]
   },
   {
+    "id": "c16",
+    "n": 16,
+    "lgTitle": "Emmere n'Ebyokunywa",
+    "scene": "kitchen",
+    "hue": "blush",
+    "title": {
+      "en": "Food & Drink",
+      "sv": "Mat och dryck"
+    },
+    "scenario": {
+      "en": "Order a meal",
+      "sv": "Beställ mat"
+    },
+    "lessons": [
+      {
+        "id": "c16-l1",
+        "title": {
+          "en": "Hungry and thirsty",
+          "sv": "Hungrig och törstig"
+        },
+        "phrases": ["enjala-ennuma", "ennyonta-ennuma", "amazzi"],
+        "review": [
+          "emmere",
+          "caayi", "njagala"],
+        "sentences": [
+          "s-njagala-amazzi",
+          "s-enjala-ennuma-nnyo",
+          "s-njagala-caayi"
+        ],
+        "tip": "tip-bites"
+      },
+      {
+        "id": "c16-l2",
+        "title": {
+          "en": "What's for dinner?",
+          "sv": "Vad blir det till middag?"
+        },
+        "phrases": [
+          "ennyama",
+          "enkoko",
+          "omuceere",
+          "ebinyeebwa",
+          "nkkuse"
+        ],
+        "review": [
+          "matooke",
+          "emmere-ewooma"
+        ],
+        "sentences": [
+          "s-matooke-nebinyeebwa",
+          "s-nkkuse-weebale"
+        ],
+        "tip": "tip-luwombo",
+        "dialogue": "dlg-restaurant"
+      }
+    ]
+  },
+  {
     "id": "c15",
-    "n": 15,
+    "n": 17,
     "lgTitle": "Ssente n'Akatale",
     "scene": "market",
-    "hue": "blush",
+    "hue": "tomato",
     "title": {
       "en": "Money & the Market",
       "sv": "Pengar och marknaden"
@@ -187,72 +245,8 @@
     ]
   },
   {
-    "id": "c16",
-    "n": 16,
-    "lgTitle": "Emmere n'Ebyokunywa",
-    "scene": "kitchen",
-    "hue": "tomato",
-    "title": {
-      "en": "Food & Drink",
-      "sv": "Mat och dryck"
-    },
-    "scenario": {
-      "en": "Order a meal",
-      "sv": "Beställ mat"
-    },
-    "lessons": [
-      {
-        "id": "c16-l1",
-        "title": {
-          "en": "Hungry and thirsty",
-          "sv": "Hungrig och törstig"
-        },
-        "phrases": [
-          "enjala-ennuma",
-          "ennyonta-ennuma",
-          "amazzi",
-          "njagala"
-        ],
-        "review": [
-          "emmere",
-          "caayi"
-        ],
-        "sentences": [
-          "s-njagala-amazzi",
-          "s-enjala-ennuma-nnyo",
-          "s-njagala-caayi"
-        ],
-        "tip": "tip-bites"
-      },
-      {
-        "id": "c16-l2",
-        "title": {
-          "en": "What's for dinner?",
-          "sv": "Vad blir det till middag?"
-        },
-        "phrases": [
-          "ennyama",
-          "enkoko",
-          "omuceere",
-          "ebinyeebwa",
-          "nkkuse"
-        ],
-        "review": [
-          "matooke",
-          "emmere-ewooma"
-        ],
-        "sentences": [
-          "s-matooke-nebinyeebwa",
-          "s-nkkuse-weebale"
-        ],
-        "tip": "tip-luwombo",
-        "dialogue": "dlg-restaurant"
-      }
-    ]
-  },
-  {
     "id": "c17",
-    "n": 17,
+    "n": 18,
     "lgTitle": "Ebiseera",
     "scene": "clock",
     "hue": "neon",
@@ -315,7 +309,7 @@
   },
   {
     "id": "c18",
-    "n": 18,
+    "n": 19,
     "lgTitle": "Okutambula",
     "scene": "signpost",
     "hue": "blush",
@@ -377,7 +371,7 @@
   },
   {
     "id": "c19",
-    "n": 19,
+    "n": 20,
     "lgTitle": "Okukyala",
     "scene": "home",
     "hue": "tomato",
@@ -437,7 +431,7 @@
   },
   {
     "id": "c20",
-    "n": 20,
+    "n": 21,
     "lgTitle": "Omubiri n'Obulamu",
     "scene": "health",
     "hue": "neon",
@@ -498,7 +492,7 @@
   },
   {
     "id": "c21",
-    "n": 21,
+    "n": 22,
     "lgTitle": "Okukyalira Jjajja",
     "scene": "village",
     "hue": "blush",

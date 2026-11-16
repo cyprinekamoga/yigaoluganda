@@ -7,24 +7,25 @@ Items marked below are the least certain; everything else still needs a read-thr
 
 Part 1 follows the curriculum in the product requirements (12 chapters).
 
-**Totals:** 93 phrases, 49 sentences, 12 conversations, 26 lessons.
+**Totals:** 108 phrases, 62 sentences, 12 conversations, 29 lessons.
 
 ### Chapters
 
 | # | Luganda title | Title | Lessons | Phrases taught |
 |---|---|---|---|---|
-| 1 | Ennukuta | Alphabet & Sounds | 3 | amata, emmere, omuti, ekitabo, omuntu, okusiba, okusiiba, okukola, okukoola, okuba, okubba, nnya, ŋŋenda, eŋŋoma |
-| 2 | Obuntubulamu | Courtesy & Magic Words | 2 | weebale, weebale nnyo, mwattu, kale, yee, nedda, nsonyiwa, bambi |
-| 3 | Okulamusa | Informal Greetings | 2 | Oli otya?, gyendi, bulungi, naawe, Agandi?, Ki kati?, mukwano gwange |
-| 4 | Ekitiibwa | Respect & Formal Titles | 2 | ssebo, nnyabo, Wasuze otya?, jjajja, Osiibye otya?, gyebale ko, mwana wange |
-| 5 | Okulagana | Goodbyes & Well Wishes | 2 | weeraba, mweraba, tulabagane, siiba bulungi, sula bulungi, maama, taata, enkya |
-| 6 | Nze ne Ggwe | Personal Pronouns | 2 | nze, ggwe, ye, nze ne ggwe, ffe, mmwe, bo, nange |
-| 7 | Erinnya | Introductions & Names | 2 | erinnya, erinnya lyange, mpitibwa, Erinnya lyo ggwe ani?, Ggwe ani?, nsanyuse okukulaba, tukusanyukidde |
+| 1 | Okulamusa | Informal Greetings | 2 | Oli otya?, gyendi, bulungi, naawe, Agandi?, Ki kati?, mukwano gwange |
+| 2 | Erinnya | Introductions & Names | 2 | erinnya, erinnya lyange, mpitibwa, Erinnya lyo ggwe ani?, Ggwe ani?, nsanyuse okukulaba, tukusanyukidde |
+| 3 | Ebigambo Ebikulu | Everyday Words | 3 | kirungi, kibi, nnyo, katono, naye, kino, ekyo, ekintu, wano, eyo, njagala, saagala, nnina, sirina, waliwo |
+| 4 | Obuntubulamu | Courtesy & Magic Words | 2 | weebale, weebale nnyo, mwattu, kale, yee, nedda, nsonyiwa, bambi |
+| 5 | Obubonero | Survival Expressions | 2 | sitegeera, simanyi, yogera mpola, ddamu, mmanyi Oluganda katono, Ogenda wa? |
+| 6 | Ekitiibwa | Respect & Formal Titles | 2 | ssebo, nnyabo, Wasuze otya?, jjajja, Osiibye otya?, gyebale ko, mwana wange |
+| 7 | Okulagana | Goodbyes & Well Wishes | 2 | weeraba, mweraba, tulabagane, siiba bulungi, sula bulungi, maama, taata, enkya |
 | 8 | Ebibuuzo | Question Words | 2 | ani?, kiki?, wa?, Kino kiki?, Oli wa?, ddi?, lwaki?, Ssente mmeka?, Oyagala ki? |
-| 9 | Okuba | To Be | 3 | ndi, oli, ali, ndi bulungi, tuli, muli, bali, ndi musanyufu, ndi mukoowu, leero |
-| 10 | Obubonero | Survival Expressions | 2 | sitegeera, simanyi, yogera mpola, ddamu, mmanyi Oluganda katono, Ogenda wa? |
-| 11 | Okwebaza | Daily Thanks & Appreciation | 2 | weebale okufumba, weebale okujja, weebale okukyala, mwebale, emmere ewooma, matooke, caayi |
-| 12 | Olugendo Lwatandika | Final Conversation | 2 | olugendo, ewaka |
+| 9 | Ennukuta | Alphabet & Sounds | 3 | amata, emmere, omuti, ekitabo, omuntu, okusiba, okusiiba, okukola, okukoola, okuba, okubba, nnya, ŋŋenda, eŋŋoma |
+| 10 | Nze ne Ggwe | Personal Pronouns | 2 | nze, ggwe, ye, nze ne ggwe, ffe, mmwe, bo, nange |
+| 11 | Okuba | To Be | 3 | ndi, oli, ali, ndi bulungi, tuli, muli, bali, ndi musanyufu, ndi mukoowu, leero |
+| 12 | Okwebaza | Daily Thanks & Appreciation | 2 | weebale okufumba, weebale okujja, weebale okukyala, mwebale, emmere ewooma, matooke, caayi |
+| 13 | Olugendo Lwatandika | Final Conversation | 2 | olugendo, ewaka |
 
 ### Needs a native-speaker check
 
@@ -60,6 +61,21 @@ Part 1 follows the curriculum in the product requirements (12 chapters).
 | `weebale-okukyala` | weebale okukyala | thanks for visiting | Confirm okukyala = to visit. |
 | `emmere-ewooma` | emmere ewooma | the food is delicious | Confirm ewooma. |
 | `matooke` | matooke | matooke (cooked green bananas) | Taught as matooke; standard noun form may be amatooke. Confirm. |
+| `kirungi` | kirungi | good / it’s good | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `kibi` | kibi | bad / it’s bad | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `nnyo` | nnyo | very, a lot | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `katono` | katono | a little | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `naye` | naye | but | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `kino` | kino | this (thing) | New in the Everyday Words chapter. Confirm spelling and meaning. Demonstrative for the ki-/bi- class. |
+| `ekyo` | ekyo | that (thing) | New in the Everyday Words chapter. Confirm spelling and meaning. Confirm ekyo (near the listener) as the first “that” to teach. |
+| `ekintu` | ekintu | thing | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `wano` | wano | here | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `eyo` | eyo | there, over there | New in the Everyday Words chapter. Confirm spelling and meaning. Confirm eyo for “there” (vs. awo / eri). |
+| `njagala` | njagala | I'd like / I want | Moved from Food & Drink. The note used to say “sjagala”; confirm saagala as the negative. |
+| `saagala` | saagala | I don’t want | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `nnina` | nnina | I have | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `sirina` | sirina | I don’t have | New in the Everyday Words chapter. Confirm spelling and meaning. |
+| `waliwo` | waliwo | there is / is there? | New in the Everyday Words chapter. Confirm spelling and meaning. |
 | `s-bambi-nsonyiwa` | Bambi, nsonyiwa! | Oh, I'm so sorry! | Confirm this is natural. |
 | `s-mpitibwa` | Nze mpitibwa {name}. | I'm called {name}. | Confirm word order. |
 | `s-nange-nsanyuse` | Nange nsanyuse okukulaba. | Nice to meet you too. | Confirm this reply. |
@@ -77,21 +93,21 @@ Part 1 follows the curriculum in the product requirements (12 chapters).
 
 Part 2 covers family, numbers, money and the market, food, time and days, directions, visiting a home and health.
 
-**Totals:** 67 phrases, 45 sentences, 9 conversations, 18 lessons.
+**Totals:** 66 phrases, 45 sentences, 9 conversations, 18 lessons.
 
 ### Chapters
 
 | # | Luganda title | Title | Lessons | Phrases taught |
 |---|---|---|---|---|
-| 13 | Ab'omu Maka | Family | 2 | muganda wange, mwannyinaze, omwana, abaana, Ono ye ani?, Oli mufumbo?, ndi mufumbo, Olina abaana? |
-| 14 | Okubala | Numbers 1–10 | 2 | emu, bbiri, ssatu, ttaano, mukaaga, musanvu, munaana, mwenda, kkumi |
-| 15 | Ssente n'Akatale | Money & the Market | 2 | siringi, kikumi, lukumi, kya bbeeyi, akatale, mpa, kendeezaako, nja kukitwala |
-| 16 | Emmere n'Ebyokunywa | Food & Drink | 2 | enjala ennuma, ennyonta ennuma, amazzi, njagala, ennyama, enkoko, omuceere, ebinyeebwa, nkkuse |
-| 17 | Ebiseera | Time & Days | 2 | Essaawa mmeka?, essaawa emu, kati, jjo, Bbalaza, Lwakutaano, Lwamukaaga, Ssabbiiti |
-| 18 | Okutambula | Getting Around | 2 | kkono, ddyo, mu maaso, Yimirira wano., Kiri wala?, kumpi, wala, takisi |
-| 19 | Okukyala | Visiting a Home | 2 | Kkoodi!, yingira, tuula, tukwaniriza, Ab'ewaka bali batya?, bali bulungi, ka ŋŋende |
-| 20 | Omubiri n'Obulamu | Body & Health | 2 | omutwe, olubuto, omutwe gunnuma, olubuto lunnuma, ndwadde, omusawo, eddagala, wona mangu |
-| 21 | Okukyalira Jjajja | Final Conversation | 2 | ekyalo, wiiki ejja |
+| 14 | Ab'omu Maka | Family | 2 | muganda wange, mwannyinaze, omwana, abaana, Ono ye ani?, Oli mufumbo?, ndi mufumbo, Olina abaana? |
+| 15 | Okubala | Numbers 1–10 | 2 | emu, bbiri, ssatu, ttaano, mukaaga, musanvu, munaana, mwenda, kkumi |
+| 16 | Emmere n'Ebyokunywa | Food & Drink | 2 | enjala ennuma, ennyonta ennuma, amazzi, ennyama, enkoko, omuceere, ebinyeebwa, nkkuse |
+| 17 | Ssente n'Akatale | Money & the Market | 2 | siringi, kikumi, lukumi, kya bbeeyi, akatale, mpa, kendeezaako, nja kukitwala |
+| 18 | Ebiseera | Time & Days | 2 | Essaawa mmeka?, essaawa emu, kati, jjo, Bbalaza, Lwakutaano, Lwamukaaga, Ssabbiiti |
+| 19 | Okutambula | Getting Around | 2 | kkono, ddyo, mu maaso, Yimirira wano., Kiri wala?, kumpi, wala, takisi |
+| 20 | Okukyala | Visiting a Home | 2 | Kkoodi!, yingira, tuula, tukwaniriza, Ab'ewaka bali batya?, bali bulungi, ka ŋŋende |
+| 21 | Omubiri n'Obulamu | Body & Health | 2 | omutwe, olubuto, omutwe gunnuma, olubuto lunnuma, ndwadde, omusawo, eddagala, wona mangu |
+| 22 | Okukyalira Jjajja | Final Conversation | 2 | ekyalo, wiiki ejja |
 
 ### Needs a native-speaker check
 
