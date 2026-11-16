@@ -34,6 +34,8 @@ export interface Settings {
   reminderAsked: boolean;
   /** Daily goal: lessons or practice rounds a day (1, 2 or 3). */
   goal: number;
+  /** Tips and news by e-mail (welcome e-mails and the like); accounts only. */
+  tipsEmail: boolean;
 }
 
 export interface LessonRecord {
@@ -117,7 +119,7 @@ export type AppState = Data & Actions;
 
 const fresh = (): Data => ({
   profile: null,
-  settings: { sfx: true, haptics: true, reminder: { on: false, hour: DEFAULT_REMINDER_HOUR }, reminderAsked: false, goal: 1 },
+  settings: { sfx: true, haptics: true, reminder: { on: false, hour: DEFAULT_REMINDER_HOUR }, reminderAsked: false, goal: 1, tipsEmail: true },
   stats: initialStats(Date.now()),
   done: {},
   opened: {},

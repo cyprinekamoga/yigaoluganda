@@ -497,9 +497,12 @@ async function run() {
   await shot(page, '10-dashboard');
   backend.state.role = null;
 
-  // Settings: download my data, and change the e-mail address.
+  // Settings: tips by e-mail, download my data, and change the e-mail address.
   await page.goto(`${BASE}/settings`);
   await page.getByTestId('download-data').waitFor({ timeout: 15000 });
+  await page.getByTestId('settings-tips').click();
+  await page.waitForTimeout(2500);
+  ok(backend.state.profile?.tips_email === false, 'turning off "Tips by e-mail" is saved to the account');
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('download-data').click()]);
   const exported = JSON.parse(readFileSync(await download.path(), 'utf8'));
   ok(

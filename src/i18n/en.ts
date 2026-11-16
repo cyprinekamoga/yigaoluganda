@@ -569,6 +569,8 @@ export const en = {
   'dash.topReported': "Most reported",
   'dash.reportCount': "{n} ({open} open)",
   'dash.refresh': "Refresh",
+  'settings.tips': "Tips by e-mail",
+  'settings.tipsHint': "A few e-mails in your first week with tips for learning, and one if your subscription ends. Never more than one a day.",
 } as const;
 
 export type Key = keyof typeof en;

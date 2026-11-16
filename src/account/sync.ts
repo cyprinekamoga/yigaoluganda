@@ -81,6 +81,7 @@ function profileFields(data: Data) {
     reminder_hour: data.settings.reminder?.hour ?? 18,
     timezone: timeZone(),
     last_active_day: data.stats.lastActiveDay,
+    tips_email: data.settings.tipsEmail ?? true,
   };
 }
 

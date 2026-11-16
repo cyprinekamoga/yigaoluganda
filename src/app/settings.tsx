@@ -143,6 +143,26 @@ export default function Settings() {
 
       {!kid && <ReminderSettings />}
 
+      {ACCOUNTS && !kid && (
+        <Card style={{ gap: S.xs }}>
+          <View style={styles.switchRow}>
+            <Txt variant="strong" style={{ flex: 1 }}>
+              {t('settings.tips')}
+            </Txt>
+            <Switch
+              testID="settings-tips"
+              accessibilityLabel={t('settings.tips')}
+              value={settings.tipsEmail ?? true}
+              onValueChange={(v) => setSetting('tipsEmail', v)}
+              trackColor={{ true: C.tomato, false: C.line }}
+              thumbColor={C.ink}
+              {...WEB_SWITCH}
+            />
+          </View>
+          <Txt variant="small">{t('settings.tipsHint')}</Txt>
+        </Card>
+      )}
+
       {ACCOUNTS && (
         <View style={styles.section} testID="settings-account">
           <Txt variant="label">{t('settings.subscription')}</Txt>

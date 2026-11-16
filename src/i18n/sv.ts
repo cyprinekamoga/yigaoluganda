@@ -571,4 +571,6 @@ export const sv: Record<Key, string> = {
   'dash.topReported': "Mest rapporterat",
   'dash.reportCount': "{n} ({open} öppna)",
   'dash.refresh': "Uppdatera",
+  'settings.tips': "Tips via mejl",
+  'settings.tipsHint': "Några mejl första veckan med tips för att lära dig, och ett om ditt abonnemang tar slut. Aldrig mer än ett om dagen.",
 };
