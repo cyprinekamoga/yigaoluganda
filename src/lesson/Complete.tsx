@@ -72,6 +72,11 @@ export function Complete({
               <Txt style={[styles.pillText, { color: C.onNeon }]}>{t('done.perfect')}</Txt>
             </View>
           )}
+          {reward.goalReached && (
+            <View style={[styles.pill, styles.pillNeon]} testID="done-goal">
+              <Txt style={[styles.pillText, { color: C.onNeon }]}>{t('goal.doneToday')}</Txt>
+            </View>
+          )}
           {reward.heartsRefilled && (
             <View style={styles.pill}>
               <PotIcon size={20} />

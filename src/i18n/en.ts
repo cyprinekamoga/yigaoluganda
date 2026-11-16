@@ -509,6 +509,19 @@ export const en = {
   'type.engA11y': "Add the letter ŋ",
   'type.engHint': "No ŋ on your keyboard? Type ng' instead.",
   'type.typo': "Small slip, but we'll count it. It's spelt: {answer}",
+  'goal.title': "Today’s goal",
+  'goal.reached': "Goal reached! Weebale!",
+  'goal.progress': "{n} of {goal} done",
+  'goal.change': "Change the goal",
+  'goal.pick': "Your daily goal",
+  'goal.pickBody': "How many lessons or practice rounds a day? A little every day beats a lot once a week.",
+  'goal.one': "1 a day: relaxed",
+  'goal.oneHint': "About 5 minutes",
+  'goal.two': "2 a day: steady",
+  'goal.twoHint': "About 10 minutes",
+  'goal.three': "3 a day: serious",
+  'goal.threeHint': "About 15 minutes",
+  'goal.doneToday': "Daily goal reached!",
 } as const;
 
 export type Key = keyof typeof en;

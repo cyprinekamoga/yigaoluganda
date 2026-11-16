@@ -10,6 +10,7 @@ import { dueIds } from '@/logic/srs';
 import { chapterStatus, lockedReason, unitOpen } from '@/logic/course';
 import { isComplete, lessonsDone } from '@/logic/unlock';
 import { LearnerChip } from '@/learners/LearnerChip';
+import { DailyGoalCard } from '@/ui/DailyGoal';
 import { KIDS_MODE, useIsKid } from '@/learners/store';
 import { ReminderOffer } from '@/reminders/ReminderSettings';
 import { useApp } from '@/state/store';
@@ -99,6 +100,8 @@ export default function Home() {
           )}
         </View>
       </Card>
+
+      <DailyGoalCard />
 
       {!kid && <ReminderOffer />}
 

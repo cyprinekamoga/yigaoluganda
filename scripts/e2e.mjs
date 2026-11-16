@@ -185,6 +185,7 @@ async function run(viewport, label) {
   ok((await page.getByTestId('done-cowries').innerText()).includes('+10'), 'perfect lesson gives 10 cowries');
   ok((await page.getByTestId('done-summary').innerText()).includes('new phrase'), 'completion lists the phrases learned');
   ok((await page.getByTestId('done-phrases').count()) > 0, 'completion shows the learned phrases');
+  ok(await page.getByTestId('done-goal').isVisible(), 'the first lesson of the day reaches the daily goal (1 a day)');
   await shot(page, `${label}-05-complete`);
   await page.getByTestId('complete-continue').click();
 
@@ -194,12 +195,17 @@ async function run(viewport, label) {
   await page.getByTestId('lesson-player').waitFor();
   ok(await playLesson(page, { wrongOnce: true, shotPrefix: `${label}-06` }), 'finished lesson c07-l2 with a mistake');
   ok((await page.getByTestId('done-cowries').innerText()).includes('+5'), 'lesson with a mistake gives 5 cowries');
+  ok((await page.getByTestId('done-goal').count()) === 0, 'the goal is only celebrated once a day');
   await page.getByTestId('complete-continue').click();
   await page.getByTestId('back').click();
   await page.getByTestId('screen-home').waitFor();
   ok((await page.getByTestId('tile-c07').getAttribute('aria-label')).includes('Completed'), 'chapter 2 shows completed');
   ok((await page.getByTestId('tile-c02').getAttribute('aria-label')).includes('Unlocked'), 'completing a chapter unlocks chapter 4');
   ok((await page.getByTestId('stat-hearts').getAttribute('aria-label')).includes('4 of 5'), 'one water pot was spilled');
+  ok((await page.getByTestId('daily-goal-count').innerText()) === '1/1', 'home shows the daily goal reached');
+  await page.getByTestId('daily-goal').click();
+  await page.getByTestId('goal-3').click();
+  ok((await page.getByTestId('daily-goal-count').innerText()) === '2/3', 'a bigger goal counts today\'s two lessons: 2 of 3');
   await shot(page, `${label}-07-home-progress`);
 
   // Practice Lab: a review fills the water pots

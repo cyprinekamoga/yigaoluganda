@@ -15,6 +15,7 @@ import { useApp } from '@/state/store';
 import { BackBar } from '@/ui/BackBar';
 import { Button } from '@/ui/Button';
 import { Card } from '@/ui/Card';
+import { GoalPicker } from '@/ui/DailyGoal';
 import { Screen } from '@/ui/Screen';
 import { Sheet } from '@/ui/Sheet';
 import { C, F, R, S } from '@/ui/theme';
@@ -82,6 +83,11 @@ export default function Settings() {
             </Pressable>
           ))}
         </View>
+      </View>
+
+      <View style={styles.section}>
+        <Txt variant="label">{t('goal.title')}</Txt>
+        <GoalPicker />
       </View>
 
       <View style={styles.section}>

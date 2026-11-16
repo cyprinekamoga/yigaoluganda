@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { goalJustReached } from '../logic/goal';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { CHAPTERS, LESSONS, type Lang } from '../content';
@@ -31,6 +32,8 @@ export interface Settings {
   reminder: { on: boolean; hour: number };
   /** The "want a daily reminder?" offer has been answered. */
   reminderAsked: boolean;
+  /** Daily goal: lessons or practice rounds a day (1, 2 or 3). */
+  goal: number;
 }
 
 export interface LessonRecord {
@@ -53,6 +56,8 @@ export interface Reward {
   perfect: boolean;
   badges: string[];
   heartsRefilled?: boolean;
+  /** This round reached today's goal. */
+  goalReached?: boolean;
 }
 
 export interface Data {
@@ -108,7 +113,7 @@ export type AppState = Data & Actions;
 
 const fresh = (): Data => ({
   profile: null,
-  settings: { sfx: true, haptics: true, reminder: { on: false, hour: DEFAULT_REMINDER_HOUR }, reminderAsked: false },
+  settings: { sfx: true, haptics: true, reminder: { on: false, hour: DEFAULT_REMINDER_HOUR }, reminderAsked: false, goal: 1 },
   stats: initialStats(Date.now()),
   done: {},
   opened: {},
@@ -121,6 +126,11 @@ const fresh = (): Data => ({
 });
 
 export const STORE_KEY = 'yiga-oluganda-v2';
+
+/** Right after a finished round: did it make today's count reach the daily goal? */
+function reachedGoal(s: Data): boolean {
+  return goalJustReached(s.stats.activityByDay[dayKey()] ?? 0, s.settings.goal);
+}
 
 /** The saved part of the state: what goes to the device and, with an account, to the cloud. */
 export function snapshot(s: Data): Data {
@@ -214,7 +224,7 @@ export const useApp = create<AppState>()(
               opened: ref ? { ...s.opened, [ref.chapter.id]: true } : s.opened,
             };
           });
-          return { gems, perfect, badges: awardBadges() };
+          return { gems, perfect, badges: awardBadges(), goalReached: reachedGoal(get()) };
         },
 
         completePractice: (kind) => {
@@ -225,7 +235,7 @@ export const useApp = create<AppState>()(
             if (kind === 'dialogue') stats = { ...stats, dialoguesDone: stats.dialoguesDone + 1 };
             return { stats };
           });
-          return { gems: PRACTICE_GEMS, perfect: false, badges: awardBadges(), heartsRefilled: kind === 'review' };
+          return { gems: PRACTICE_GEMS, perfect: false, badges: awardBadges(), heartsRefilled: kind === 'review', goalReached: reachedGoal(get()) };
         },
 
         buyRefill: () => {
