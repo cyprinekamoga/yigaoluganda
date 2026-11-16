@@ -331,8 +331,8 @@ export const en = {
   'settings.manage': 'Manage subscription',
   'settings.manageHint': 'Cancel, change card or see receipts',
   'settings.withdraw': 'Withdraw from contract',
-  'settings.withdrawHint': '{n} days left to withdraw with a full refund',
-  'settings.withdrawBody': 'Your subscription ends now, your access stops, and we refund your payment in full.',
+  'settings.withdrawHint': '{n} days left to withdraw from the subscription',
+  'settings.withdrawBody': 'Your subscription ends now and your access stops. The first time you withdraw, we refund your payment in full; after that, we refund the part of the period you haven’t used.',
   'settings.withdrawConfirm': 'Withdraw and get a refund',
   'settings.privacyCloud': 'No ads and no tracking. Your account and progress are stored in the EU.',
   'settings.legal': 'Terms and privacy',
@@ -627,6 +627,13 @@ export const en = {
   'schools.errTeacher': "No account has that e-mail. Ask the teacher to create one first.",
   'schools.classLine': "{n} of {seats} places · until {date}",
   'schools.change': "Change places or date",
+  'delete.password': "Your password, to confirm",
+  'delete.googleHint': "For your safety: if you logged in more than 10 minutes ago, log out and log in again with Google first.",
+  'delete.reauth': "For your safety, log out and log in again, then delete the account within 10 minutes.",
+  'report.errLimit': "Thank you for all your reports today! You can send more tomorrow.",
+  'ask.errFull': "You’ve sent a lot of recordings recently. Try again in a few days.",
+  'sub.freeMonthUsed': "This card has already had a free month with another account, so the free month doesn’t apply. You can subscribe at the normal price.",
+  'captcha.wait': "Checking that you’re a person…",
 } as const;
 
 export type Key = keyof typeof en;

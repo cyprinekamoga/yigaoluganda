@@ -11,6 +11,7 @@ import { forgetInvite } from '@/account/invite';
 import { useGrownUpCheck } from '@/learners/ParentGate';
 import { useIsKid } from '@/learners/store';
 import { usePrice } from '@/account/price';
+import { hasAccess } from '@/account/access';
 import { refreshSubscriptions, useAccount } from '@/account/store';
 import { useT, type Key } from '@/i18n';
 import { priceLine } from '@/pricing/pricing';
@@ -64,11 +65,18 @@ export default function Subscribe() {
     const id = setInterval(async () => {
       tries += 1;
       const subs = await refreshSubscriptions();
+      const paid = hasAccess(subs);
       // Paid: an invite code has done its job.
-      if (subs.length) forgetInvite();
-      if (subs.length || tries >= 15) {
+      if (paid) forgetInvite();
+      // A free month on a card that another account already used is ended at once (one per card).
+      const refused = !paid && subs.some((s) => s.status === 'canceled' && Date.now() - Date.parse(s.created_at) < 3600_000);
+      if (paid || refused || tries >= 15) {
         clearInterval(id);
-        if (!subs.length) setSlow(true);
+        if (refused) {
+          forgetInvite();
+          setWaiting(false);
+          setError('sub.freeMonthUsed');
+        } else if (!paid) setSlow(true);
       }
     }, 2000);
     return () => clearInterval(id);

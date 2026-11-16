@@ -1,6 +1,7 @@
 // End-to-end check of the web build with Playwright (pre-installed Chromium).
 // Usage: EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_KIDS=1 npx expo export -p web && node scripts/e2e.mjs [--shots]
 import { createRequire } from 'node:module';
+import { cspFromNetlify, enforceCsp } from './csp.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
@@ -135,6 +136,7 @@ async function playLesson(page, { wrongOnce = false, shotPrefix = null } = {}) {
 async function run(viewport, label) {
   console.log(`\n${label} (${viewport.width}×${viewport.height})`);
   const browser = await chromium.launch();
+  const cspViolations = enforceCsp(browser, BASE, cspFromNetlify(ROOT));
   const page = await browser.newPage({ viewport, deviceScaleFactor: SHOTS ? 2 : 1 });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -319,6 +321,7 @@ async function run(viewport, label) {
   ok(await page.getByTestId('screen-onboarding').waitFor({ timeout: 5000 }).then(() => true, () => false), 'reset returns to onboarding');
 
   ok(errors.length === 0, `no page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
+  ok(cspViolations.length === 0, `the Content-Security-Policy blocks nothing${cspViolations.length ? `: ${[...new Set(cspViolations)].slice(0, 3).join(' | ')}` : ''}`);
   await browser.close();
 }
 
@@ -326,6 +329,7 @@ async function run(viewport, label) {
 async function placement() {
   console.log('\nplacement test and Part 2');
   const browser = await chromium.launch();
+  const cspViolations = enforceCsp(browser, BASE, cspFromNetlify(ROOT));
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1 });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -411,6 +415,7 @@ async function placement() {
   ok(await page.getByTestId('dict-mwannyinaze').isVisible(), 'the phrasebook finds Part 2 phrases');
 
   ok(errors.length === 0, `no page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
+  ok(cspViolations.length === 0, `the Content-Security-Policy blocks nothing${cspViolations.length ? `: ${[...new Set(cspViolations)].slice(0, 3).join(' | ')}` : ''}`);
   await browser.close();
 }
 

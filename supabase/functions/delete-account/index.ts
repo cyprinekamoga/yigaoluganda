@@ -1,6 +1,6 @@
 // POST /delete-account → ends any subscription (no refund) and deletes the user and their data.
 // Payment records stay in Stripe, as bookkeeping law requires.
-import { admin, callingUser, stripe } from '../_shared/clients.ts';
+import { admin, callingUser, lastLoginAt, stripe } from '../_shared/clients.ts';
 import { cors, json } from '../_shared/http.ts';
 
 const ACTIVE = ['active', 'trialing', 'past_due', 'unpaid', 'paused'];
@@ -9,6 +9,8 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   const user = await callingUser(req);
   if (!user) return json({ error: 'not_signed_in' }, 401);
+  // Deleting is final: the app asks for the password (or a fresh Google login) first.
+  if (Date.now() - lastLoginAt(req) > 10 * 60 * 1000) return json({ error: 'reauth_required' }, 403);
 
   const { data: subs } = await admin.from('subscriptions').select('id, status').eq('user_id', user.id);
   for (const s of subs ?? []) if (ACTIVE.includes(s.status)) await stripe.subscriptions.cancel(s.id);

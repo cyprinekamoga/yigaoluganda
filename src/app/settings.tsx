@@ -3,7 +3,8 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Linking, Pressable, StyleSheet, Switch, TextInput, View } from 'react-native';
 import { currentSubscription, subscriptionState, withdrawalDaysLeft } from '@/account/access';
-import { deleteAccount, openBillingPortal, signOut, withdraw } from '@/account/actions';
+import { openBillingPortal, signOut, withdraw } from '@/account/actions';
+import { DeleteAccountButton } from '@/account/DeleteAccount';
 import { FormMessage } from '@/account/AuthShell';
 import { ACCOUNTS, SITE_URL, SUPPORT_EMAIL } from '@/account/config';
 import { setRecovering, useAccount } from '@/account/store';
@@ -213,7 +214,7 @@ export default function Settings() {
             <Button kind="secondary" testID="change-password" label={t('settings.changePassword')} onPress={() => setRecovering(true)} />
             <Button kind="secondary" testID="logout" label={t('settings.logOut')} onPress={() => signOut()} />
             <DownloadDataButton />
-            <Button kind="ghost" testID="delete-account" label={t('settings.delete')} onPress={() => setSheet('delete')} />
+            <DeleteAccountButton />
           </Card>
         </View>
       )}
@@ -271,7 +272,7 @@ export default function Settings() {
           loading={busy}
           label={sheet === 'withdraw' ? t('settings.withdrawConfirm') : t('settings.deleteConfirm')}
           onPress={async () => {
-            const ok = await run(sheet === 'withdraw' ? withdraw : deleteAccount);
+            const ok = await run(withdraw);
             if (ok) setSheet(null);
           }}
         />

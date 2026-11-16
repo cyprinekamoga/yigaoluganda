@@ -34,14 +34,14 @@ function returnUrl(path: string): string | undefined {
   return undefined;
 }
 
-export async function signUp(name: string, email: string, password: string, lang: Lang): Promise<Outcome & { confirm?: boolean }> {
+export async function signUp(name: string, email: string, password: string, lang: Lang, captchaToken?: string): Promise<Outcome & { confirm?: boolean }> {
   if (!supabase) return fail('auth.errGeneric');
   if (!name.trim()) return fail('auth.errName');
   if (password.length < 8) return fail('auth.errWeak');
   const { data, error } = await supabase.auth.signUp({
     email: email.trim(),
     password,
-    options: { data: { name: name.trim(), ui_lang: lang }, emailRedirectTo: returnUrl('/subscribe') },
+    options: { data: { name: name.trim(), ui_lang: lang }, emailRedirectTo: returnUrl('/subscribe'), captchaToken },
   });
   if (error) return fail(explain(error));
   // An existing, confirmed address comes back with no identities (Supabase hides that it exists).
@@ -73,15 +73,15 @@ export async function confirmFromLink(tokenHash: string, kind: 'email' | 'recove
   return { ok: true };
 }
 
-export async function signIn(email: string, password: string): Promise<Outcome> {
+export async function signIn(email: string, password: string, captchaToken?: string): Promise<Outcome> {
   if (!supabase) return fail('auth.errGeneric');
-  const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+  const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password, options: { captchaToken } });
   return error ? fail(explain(error)) : { ok: true };
 }
 
-export async function sendPasswordReset(email: string): Promise<Outcome> {
+export async function sendPasswordReset(email: string, captchaToken?: string): Promise<Outcome> {
   if (!supabase) return fail('auth.errGeneric');
-  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: returnUrl('/reset-password') });
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: returnUrl('/reset-password'), captchaToken });
   // Don't reveal whether the address has an account; only report real failures.
   return error && explain(error) === 'auth.errNetwork' ? fail('auth.errNetwork') : { ok: true };
 }
@@ -171,9 +171,34 @@ export async function withdraw(): Promise<Outcome> {
 }
 
 /** Deletes the account and everything in it. */
-export async function deleteAccount(): Promise<Outcome> {
-  const { error } = await call<{ ok: boolean }>('delete-account');
-  if (error) return fail(error);
+/** The error code an Edge Function sent back with a refusal (e.g. "reauth_required"). */
+async function functionErrorCode(error: unknown): Promise<string | null> {
+  const res = (error as { context?: Response } | null)?.context;
+  if (!res || typeof res.json !== 'function') return null;
+  try {
+    return ((await res.clone().json()) as { error?: string }).error ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Deletes the account. Accounts with a password confirm it first; the server also refuses unless the
+ * person logged in within the last 10 minutes (so an open session alone can't delete the account).
+ */
+export async function deleteAccount(password?: string): Promise<Outcome> {
+  if (!supabase) return fail('auth.errGeneric');
+  if (password !== undefined) {
+    const email = useAccount.getState().session?.user.email;
+    if (!email || !password) return fail('auth.errWrong');
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    if (authError) return fail(explain(authError));
+  }
+  const { error } = await supabase.functions.invoke('delete-account', { body: {} });
+  if (error) {
+    if ((await functionErrorCode(error)) === 'reauth_required') return fail('delete.reauth');
+    return fail(explain(error));
+  }
   stopSync();
   await supabase?.auth.signOut({ scope: 'local' });
   useApp.getState().reset();

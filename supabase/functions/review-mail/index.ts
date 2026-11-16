@@ -105,6 +105,21 @@ async function daily() {
     }
   }
 
+  // 1b. Every file older than 30 days (also ones uploaded without a request), and recordings that
+  //     were answered more than 7 days ago: the learner has the rating and the tip.
+  const { data: stale } = await admin.rpc('recordings_older_than', { p_days: KEEP_DAYS });
+  const answeredCutoff = new Date(Date.now() - 7 * 864e5).toISOString();
+  const { data: answered } = await admin.from('feedback_requests').select('id, audio_path').eq('status', 'answered').lt('answered_at', answeredCutoff).not('audio_path', 'is', null).limit(1000);
+  const more = [...((stale ?? []) as string[]), ...(answered ?? []).map((r) => r.audio_path as string)];
+  if (more.length) {
+    const { error } = await admin.storage.from('recordings').remove([...new Set(more)]);
+    if (error) console.error('storage remove', error.message);
+    else {
+      removed += more.length;
+      if (answered?.length) await admin.from('feedback_requests').update({ audio_path: null }).in('id', answered.map((r) => r.id));
+    }
+  }
+
   // 2. What is waiting for the reviewers.
   const [{ count: recordings }, { count: reports }] = await Promise.all([
     admin.from('feedback_requests').select('id', { count: 'exact', head: true }).eq('status', 'open'),

@@ -6,6 +6,7 @@
 //   EXPO_PUBLIC_GOOGLE_CLIENT_ID=test-client.apps.googleusercontent.com \
 //   npx expo export -p web --output-dir dist-accounts && node scripts/e2e-accounts.mjs [--shots]
 import { createRequire } from 'node:module';
+import { cspFromNetlify, enforceCsp } from './csp.mjs';
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -243,6 +244,12 @@ function fakeBackend() {
       return json(route, { ok: true, refunded: 449, currency: 'usd' });
     }
     if (p === '/functions/v1/billing-portal') return json(route, { url: `${BASE}/settings` });
+    if (p === '/functions/v1/delete-account') {
+      // The real function refuses unless the person logged in within the last 10 minutes.
+      if (state.forceReauth) return json(route, { error: 'reauth_required' }, 403);
+      state.deleted = true;
+      return json(route, { ok: true });
+    }
     return json(route, { message: `not mocked: ${p}` }, 404);
   }
   return { state, handle };
@@ -253,6 +260,8 @@ async function run() {
   // A fake microphone, so Speak & compare can record.
   const browser = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: SHOTS ? 2 : 1, locale: 'en-US', permissions: ['microphone'] });
+  // Every page gets the production Content-Security-Policy; anything it blocks fails the test.
+  const cspViolations = enforceCsp(browser, BASE, cspFromNetlify(ROOT, 'mock.supabase.test'), context);
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -740,6 +749,38 @@ async function run() {
   ok((await student.getByTestId('licence-card').innerText()).includes('Luganda 4B'), 'settings show the school licence');
   await student.close();
 
+  // Deleting the account asks for the password again.
+  const del = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'en-US' });
+  const dBackend = fakeBackend();
+  dBackend.state.users.set('del@example.com', 'a-good-password');
+  dBackend.state.profile = { name: 'Del', ui_lang: 'en', created_at: new Date().toISOString() };
+  dBackend.state.subs = [{ id: 'sub_d', status: 'active', current_period_end: new Date(Date.now() + 20 * 864e5).toISOString(), cancel_at_period_end: false, created_at: new Date(Date.now() - 30 * 864e5).toISOString(), currency: 'eur' }];
+  await del.route(`${API}/**`, dBackend.handle);
+  await del.route('https://accounts.google.com/**', (route) => route.abort());
+  await del.goto(`${BASE}/sign-in`);
+  await del.getByTestId('signin-email').fill('del@example.com');
+  await del.getByTestId('signin-password').fill('a-good-password');
+  await del.getByTestId('signin-submit').click();
+  await del.getByTestId('screen-home').waitFor({ timeout: 20000 });
+  await del.goto(`${BASE}/settings`);
+  await del.getByTestId('delete-account').waitFor({ timeout: 15000 });
+  await del.getByTestId('delete-account').click();
+  ok(await del.getByTestId('delete-confirm').isDisabled(), 'deleting the account first asks for the password');
+  await del.getByTestId('delete-password').fill('wrong-password');
+  await del.getByTestId('delete-confirm').click();
+  await del.getByTestId('delete-sheet').getByTestId('form-error').waitFor({ timeout: 8000 });
+  ok(!dBackend.state.deleted && (await del.getByTestId('delete-sheet').getByTestId('form-error').innerText()).includes('Wrong e-mail or password'), 'a wrong password deletes nothing');
+  dBackend.state.forceReauth = true;
+  await del.getByTestId('delete-password').fill('a-good-password');
+  await del.getByTestId('delete-confirm').click();
+  await del.waitForTimeout(1500);
+  ok(!dBackend.state.deleted && (await del.getByTestId('delete-sheet').getByTestId('form-error').innerText()).includes('log in again'), 'when the server wants a fresh login, it says so');
+  dBackend.state.forceReauth = false;
+  await del.getByTestId('delete-confirm').click();
+  await del.getByTestId('screen-sign-in').waitFor({ timeout: 15000 });
+  ok(dBackend.state.deleted === true, 'with the right password, the account is deleted');
+  await del.close();
+
   // "Continue with Google" (Google's script replaced by a stand-in that hands back a signed-in token).
   const goog = await browser.newPage({ viewport: { width: 390, height: 844 }, locale: 'sv-SE' });
   const gBackend = fakeBackend();
@@ -788,6 +829,7 @@ async function run() {
   ok((await expired.getByTestId('form-error').innerText()).includes('expired'), 'an expired link says so and offers a new one');
   await expired.close();
 
+  ok(cspViolations.length === 0, `the Content-Security-Policy blocks nothing the app needs${cspViolations.length ? `: ${[...new Set(cspViolations)].slice(0, 3).join(' | ')}` : ''}`);
   await browser.close();
 }
 

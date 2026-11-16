@@ -44,14 +44,7 @@
       Works offline: the service worker (sw.js, made by scripts/postexport.mjs after the web export)
       keeps a copy of the app. Registered only in the exported app, never by the dev server.
     -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          if (!document.querySelector('script[src*="/_expo/static/js/web/"]')) return;
-          navigator.serviceWorker.register('/sw.js').catch(function () {});
-        });
-      }
-    </script>
+    <script src="/register-sw.js" defer></script>
   </head>
 
   <body>

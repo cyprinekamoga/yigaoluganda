@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import { useCaptcha } from '@/account/captcha';
 import { useEffect, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { resendConfirmation, signUp } from '@/account/actions';
@@ -18,6 +19,7 @@ import { C, F, R, S } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
 export default function SignUp() {
+  const captcha = useCaptcha();
   const { t, lang } = useT();
   const setLang = useApp((s) => s.setLang);
   const [name, setName] = useState(useApp.getState().profile?.name ?? '');
@@ -43,7 +45,8 @@ export default function SignUp() {
     setSuggestion(null);
     setBusy(true);
     setError(null);
-    const r = await signUp(name, typed, password, lang);
+    const r = await signUp(name, typed, password, lang, captcha.token);
+    captcha.reset();
     setBusy(false);
     if (!r.ok) setError(r.error);
     else if (r.confirm) {
@@ -161,7 +164,8 @@ export default function SignUp() {
         </Card>
       )}
       <FormMessage text={error ? t(error) : null} />
-      <Button testID="signup-submit" label={t('auth.create')} onPress={() => submit()} loading={busy} disabled={!name.trim() || !email.trim() || !password} />
+      {captcha.element}
+      <Button testID="signup-submit" label={t('auth.create')} onPress={() => submit()} loading={busy} disabled={!name.trim() || !email.trim() || !password || captcha.waiting} />
       <Card style={styles.legal}>
         <Txt variant="small">{t('auth.agree')}</Txt>
         <View style={styles.legalLinks}>

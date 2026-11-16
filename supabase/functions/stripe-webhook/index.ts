@@ -3,7 +3,7 @@
 import Stripe from 'npm:stripe@23.1.0';
 import { admin, saveSubscription, stripe } from '../_shared/clients.ts';
 import { env } from '../_shared/http.ts';
-import { onInvoicePaid, recordReferral } from '../_shared/referrals.ts';
+import { checkCard, onInvoicePaid, recordReferral } from '../_shared/referrals.ts';
 
 const crypto = Stripe.createSubtleCryptoProvider();
 
@@ -30,6 +30,8 @@ Deno.serve(async (req) => {
           await saveSubscription(await stripe.subscriptions.retrieve(id), session.client_reference_id ?? undefined);
           // A friend who came with someone's invite code.
           await recordReferral(session);
+          // One free month per card.
+          await checkCard(session, id);
         }
         break;
       }

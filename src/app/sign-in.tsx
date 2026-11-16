@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import { useCaptcha } from '@/account/captcha';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { resendConfirmation, signIn } from '@/account/actions';
@@ -11,6 +12,7 @@ import { C, F } from '@/ui/theme';
 import { Txt } from '@/ui/Txt';
 
 export default function SignIn() {
+  const captcha = useCaptcha();
   const { t } = useT();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +23,8 @@ export default function SignIn() {
   const submit = async () => {
     setBusy(true);
     setError(null);
-    const r = await signIn(email, password);
+    const r = await signIn(email, password, captcha.token);
+    captcha.reset();
     setBusy(false);
     if (!r.ok) setError(r.error);
   };
@@ -67,7 +70,8 @@ export default function SignIn() {
           />
         </>
       )}
-      <Button testID="signin-submit" label={t('auth.logIn')} onPress={submit} loading={busy} disabled={!email.trim() || !password} />
+      {captcha.element}
+      <Button testID="signin-submit" label={t('auth.logIn')} onPress={submit} loading={busy} disabled={!email.trim() || !password || captcha.waiting} />
       <Link href="/forgot-password" style={styles.link} testID="go-forgot">
         {t('auth.forgot')}
       </Link>

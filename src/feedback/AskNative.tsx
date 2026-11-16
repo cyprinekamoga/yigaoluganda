@@ -17,6 +17,7 @@ const ERR: Record<AskError, Key> = {
   too_many: 'ask.errTooMany',
   signed_out: 'ask.errSignedOut',
   too_big: 'ask.errTooBig',
+  full: 'ask.errFull',
 };
 
 /**

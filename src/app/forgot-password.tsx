@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import { useCaptcha } from '@/account/captcha';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { sendPasswordReset } from '@/account/actions';
@@ -9,6 +10,7 @@ import { TextField } from '@/ui/TextField';
 import { C, F } from '@/ui/theme';
 
 export default function ForgotPassword() {
+  const captcha = useCaptcha();
   const { t } = useT();
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
@@ -18,7 +20,8 @@ export default function ForgotPassword() {
   const submit = async () => {
     setBusy(true);
     setError(null);
-    const r = await sendPasswordReset(email);
+    const r = await sendPasswordReset(email, captcha.token);
+    captcha.reset();
     setBusy(false);
     if (r.ok) setSent(email.trim());
     else setError(r.error);
@@ -41,7 +44,8 @@ export default function ForgotPassword() {
       />
       <FormMessage text={error ? t(error) : null} />
       <FormMessage text={sent ? t('auth.resetSent', { email: sent }) : null} tone="ok" />
-      <Button testID="forgot-submit" label={t('auth.sendLink')} onPress={submit} loading={busy} disabled={!email.trim()} />
+      {captcha.element}
+      <Button testID="forgot-submit" label={t('auth.sendLink')} onPress={submit} loading={busy} disabled={!email.trim() || captcha.waiting} />
       <Link href="/sign-in" replace style={styles.link}>
         {t('auth.back')}
       </Link>

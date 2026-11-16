@@ -3,7 +3,7 @@
 // (Stripe Tax). The customer must accept the terms, which explain the 14-day right of withdrawal.
 import { admin, callingUser, customerFor, monthlyPrice, stripe } from '../_shared/clients.ts';
 import { appUrl, cors, json, siteUrl } from '../_shared/http.ts';
-import { promotionFor } from '../_shared/referrals.ts';
+import { cardUsedElsewhere, promotionFor } from '../_shared/referrals.ts';
 
 const ACTIVE = ['active', 'trialing', 'past_due'];
 
@@ -19,7 +19,9 @@ Deno.serve(async (req) => {
 
   const terms = sv ? `${siteUrl()}/sv/villkor/` : `${siteUrl()}/terms/`;
   // A friend's invite code (refer a friend) is applied for them; otherwise anyone can type a code.
-  const invite = await promotionFor(typeof ref === 'string' ? ref : undefined, user.id);
+  // A card that another account has used gets no free months: no invite and no codes.
+  const codesAllowed = !(await cardUsedElsewhere(user.id));
+  const invite = codesAllowed ? await promotionFor(typeof ref === 'string' ? ref : undefined, user.id) : null;
   const customer = await customerFor(user);
   const price = await monthlyPrice();
   const create = (withInvite: boolean) => stripe.checkout.sessions.create({
@@ -31,7 +33,7 @@ Deno.serve(async (req) => {
     automatic_tax: { enabled: true },
     // An invite applies itself; without one, people with a code from us (e.g. a free first month)
     // can enter it on the payment page. Stripe allows one or the other.
-    ...(withInvite && invite ? { discounts: [{ promotion_code: invite }] } : { allow_promotion_codes: true }),
+    ...(withInvite && invite ? { discounts: [{ promotion_code: invite }] } : codesAllowed ? { allow_promotion_codes: true } : {}),
     customer_update: { address: 'auto', name: 'auto' },
     billing_address_collection: 'auto',
     consent_collection: { terms_of_service: 'required' },

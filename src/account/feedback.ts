@@ -27,9 +27,9 @@ export interface ReportItem {
   lessonId?: string;
 }
 
-export async function sendReport(item: ReportItem, kind: ReportKind, note: string, lang: 'en' | 'sv'): Promise<boolean> {
+export async function sendReport(item: ReportItem, kind: ReportKind, note: string, lang: 'en' | 'sv'): Promise<'ok' | 'limit' | 'error'> {
   const me = await uid();
-  if (!supabase || !me) return false;
+  if (!supabase || !me) return 'error';
   const { error } = await supabase.from('reports').insert({
     user_id: me,
     kind,
@@ -41,7 +41,8 @@ export async function sendReport(item: ReportItem, kind: ReportKind, note: strin
     platform: Platform.OS.slice(0, 20),
     app_version: (Constants.expoConfig?.version ?? '').slice(0, 20) || null,
   });
-  return !error;
+  if (error) return error.message.includes('too_many_reports') ? 'limit' : 'error';
+  return 'ok';
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -62,7 +63,7 @@ export interface FeedbackRow {
   seen_at: string | null;
 }
 
-export type AskError = 'offline' | 'no_access' | 'too_many' | 'signed_out' | 'too_big';
+export type AskError = 'offline' | 'no_access' | 'too_many' | 'signed_out' | 'too_big' | 'full';
 /** The storage bucket takes up to 2 MB per recording (about two minutes of speech). */
 const MAX_BYTES = 2 * 1024 * 1024;
 
@@ -87,7 +88,8 @@ export async function askNativeSpeaker(phraseId: string, uri: string, lang: 'en'
   // "audio/webm;codecs=opus", which the bucket's list of audio types may not accept.
   const body = typeof blob.arrayBuffer === 'function' ? await blob.arrayBuffer() : new Blob([blob], { type });
   const up = await supabase.storage.from('recordings').upload(path, body, { contentType: type, upsert: false });
-  if (up.error) return { error: 'offline' };
+  // The storage rules allow 20 recordings per learner at a time (old ones are cleared daily).
+  if (up.error) return { error: /row-level security|policy|403|Unauthorized/i.test(up.error.message) ? 'full' : 'offline' };
   const { error } = await supabase.rpc('request_feedback', { p_phrase: phraseId, p_lang: lang, p_audio_path: path });
   if (error) {
     await supabase.storage.from('recordings').remove([path]);

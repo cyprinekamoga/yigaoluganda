@@ -30,6 +30,21 @@ export async function portalConfiguration(): Promise<string | undefined> {
   return data.find((c) => c.metadata?.app === PORTAL_TAG)?.id;
 }
 
+/**
+ * When the caller last really logged in (password, Google, an e-mail link), in ms. The token's
+ * "amr" claim keeps that time when the session is only refreshed, so a stolen or long-open session
+ * can't pass for a fresh login.
+ */
+export function lastLoginAt(req: Request): number {
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '';
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { amr?: { timestamp?: number }[] };
+    return Math.max(0, ...(payload.amr ?? []).map((a) => (a.timestamp ?? 0) * 1000));
+  } catch {
+    return 0;
+  }
+}
+
 /** The signed-in user who called the function, or null. */
 export async function callingUser(req: Request): Promise<User | null> {
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');

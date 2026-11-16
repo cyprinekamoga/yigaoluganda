@@ -46,3 +46,8 @@
     X-Frame-Options = "DENY"
     # The microphone is used by "Speak & compare"; nothing else is needed.
     Permissions-Policy = "camera=(), geolocation=(), microphone=(self)"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    # Only the app's own scripts run (no inline scripts), plus Google sign-in and the Cloudflare bot
+    # test. The app talks to its Supabase project; styles are inline because React Native Web writes
+    # them. Stripe is reached by leaving the page, which this doesn't restrict.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data: blob: https://*.googleusercontent.com https://accounts.google.com; font-src 'self' data:; connect-src 'self' blob: data: https://qbagcpemtsqaoykwqger.supabase.co wss://qbagcpemtsqaoykwqger.supabase.co https://accounts.google.com/gsi/ https://challenges.cloudflare.com; media-src 'self' blob: data: https://qbagcpemtsqaoykwqger.supabase.co; frame-src https://accounts.google.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"

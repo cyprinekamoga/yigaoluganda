@@ -3,7 +3,7 @@
 // a month after the free one, the learner earns REWARD_COUPON (one free month), applied to their
 // subscription one at a time. Coupons are created by scripts/stripe-setup.ts.
 import type Stripe from 'npm:stripe@23.1.0';
-import { admin, stripe } from './clients.ts';
+import { admin, saveSubscription, stripe } from './clients.ts';
 
 export const FRIEND_COUPON = 'yiga-referral-friend';
 export const REWARD_COUPON = 'yiga-referral-reward';
@@ -110,4 +110,38 @@ export async function applyReward(userId: string) {
   if ((live.discounts ?? []).length > 0) return; // a discount is still to be used: one at a time
   await stripe.subscriptions.update(sub.id, { discounts: [{ coupon: REWARD_COUPON }] });
   await admin.from('referrals').update({ status: 'rewarded', rewarded_at: new Date().toISOString() }).eq('id', waiting[0].id);
+}
+
+/**
+ * After checkout: remember the card by its fingerprint (Stripe's id for a card, not its number).
+ * A free first month (an invite, or a code like GYEBALEKO) goes to a card only once: when another
+ * account has already used this card, the free subscription is ended straight away, the invite earns
+ * nothing, and the account can still subscribe at the normal price.
+ */
+export async function checkCard(session: Stripe.Checkout.Session, subscriptionId: string) {
+  const uid = session.client_reference_id;
+  if (!uid) return;
+  const sub = await stripe.subscriptions.retrieve(subscriptionId, { expand: ['default_payment_method'] });
+  const pm = sub.default_payment_method;
+  const fingerprint = pm && typeof pm === 'object' ? pm.card?.fingerprint : undefined;
+  if (!fingerprint) return;
+  const { data: others } = await admin.from('card_fingerprints').select('user_id').eq('fingerprint', fingerprint).neq('user_id', uid).limit(1);
+  await admin.from('card_fingerprints').upsert({ fingerprint, user_id: uid }, { onConflict: 'fingerprint,user_id', ignoreDuplicates: true });
+  const free = (session.amount_total ?? 1) === 0;
+  if (!free || !others?.length) return;
+  const ended = await stripe.subscriptions.cancel(subscriptionId);
+  await saveSubscription(ended, uid);
+  await admin.from('referrals').update({ status: 'blocked' }).eq('friend_id', uid).eq('status', 'joined');
+}
+
+/** This account has a card that another account has used: no free months or codes for it. */
+export async function cardUsedElsewhere(userId: string): Promise<boolean> {
+  const { data: mine } = await admin.from('card_fingerprints').select('fingerprint').eq('user_id', userId);
+  if (!mine?.length) return false;
+  const { count } = await admin
+    .from('card_fingerprints')
+    .select('user_id', { count: 'exact', head: true })
+    .in('fingerprint', mine.map((f) => f.fingerprint))
+    .neq('user_id', userId);
+  return (count ?? 0) > 0;
 }

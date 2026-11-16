@@ -91,16 +91,16 @@ function ReportSheet({ item, onClose }: { item: ReportItem; onClose: () => void 
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<Key | null>(null);
 
   const send = async () => {
     if (!kind) return;
     setBusy(true);
-    setError(false);
-    const ok = await sendReport(item, kind, note, lang);
+    setError(null);
+    const r = await sendReport(item, kind, note, lang);
     setBusy(false);
-    if (ok) setSent(true);
-    else setError(true);
+    if (r === 'ok') setSent(true);
+    else setError(r === 'limit' ? 'report.errLimit' : 'auth.errNetwork');
   };
 
   return (
@@ -148,7 +148,7 @@ function ReportSheet({ item, onClose }: { item: ReportItem; onClose: () => void 
             accessibilityLabel={t('report.notePlaceholder')}
             style={styles.note}
           />
-          <FormMessage text={error ? t('auth.errNetwork') : null} />
+          <FormMessage text={error ? t(error) : null} />
           <Button testID="report-send" label={t('report.send')} disabled={!kind} loading={busy} onPress={send} />
           <Button kind="ghost" label={t('common.cancel')} onPress={onClose} />
         </View>
