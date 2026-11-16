@@ -101,8 +101,9 @@ function footer(t) {
 </footer>`;
 }
 
-function phone(src, alt, { eager = false } = {}) {
-  return `<div class="phone"><img src="/assets/screens/${src}.webp" alt="${esc(alt)}" width="390" height="844"${eager ? ' fetchpriority="high"' : ' loading="lazy"'}></div>`;
+/** A screenshot of the app in a phone frame, in the page's language (Swedish shots in screens/sv/). */
+function phone(src, alt, { eager = false, lang = 'en' } = {}) {
+  return `<div class="phone"><img src="/assets/screens/${lang === 'sv' ? 'sv/' : ''}${src}.webp" alt="${esc(alt)}" width="390" height="844"${eager ? ' fetchpriority="high"' : ' loading="lazy"'}></div>`;
 }
 
 const icon = (key) =>
@@ -138,7 +139,7 @@ ${header(t)}
         <p class="hero-price">${fill(esc(t.hero.price), { price })}</p>
       </div>
       <div class="hero-art">
-        ${phone('intro', t.hero.shot, { eager: true })}
+        ${phone('intro', t.hero.shot, { eager: true, lang: t.lang })}
         <img class="hero-crane" src="/assets/img/ngaali.svg" alt="" width="150" height="200">
       </div>
     </div>
@@ -161,7 +162,7 @@ ${header(t)}
         ${t.how.steps
           .map(
             ([shot, h, p], i) => `<li class="step">
-          ${phone(shot, h)}
+          ${phone(shot, h, { lang: t.lang })}
           <div class="step-text"><span class="bead" aria-hidden="true">${i + 1}</span><h3>${esc(h)}</h3><p>${esc(p)}</p></div>
         </li>`,
           )

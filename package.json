@@ -53,6 +53,7 @@
     "e2e": "node scripts/e2e.mjs",
     "doctor": "expo-doctor",
     "report": "node scripts/content-report.mjs",
+    "screens": "node scripts/screenshots.mjs && python3 scripts/screens-to-webp.py",
     "audio:prepare": "bash scripts/prepare-audio.sh",
     "lint": "expo lint",
     "sites:sync": "node scripts/sync-sites.mjs",
